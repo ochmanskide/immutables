@@ -1,0 +1,62 @@
+# Maven
+target/
+target-ide/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+# Gradle
+.gradle/
+build/
+#gradle/wrapper/gradle-wrapper.jar
+#gradlew
+#gradlew.bat
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# IntelliJ
+.idea
+*.ipr
+*.iml
+*.iws
+
+# NetBeans
+nb-configuration.xml
+
+# Visual Studio Code
+.vscode
+.factorypath
+
+# OSX
+.DS_Store
+
+# Vim
+*.swp
+*.swo
+
+# patch
+*.orig
+*.rej
+
+# Local environment
+.env
+logs
+export
+/diasexport-main/resources/properties
+
+# Python version from PYENV local
+.python-version
+
+# Ignore generated pom.xml
+/.git-versioned-pom.xml
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build

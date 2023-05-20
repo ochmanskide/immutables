@@ -12,7 +12,7 @@ class LibraryTest
     @Test
     void someLibraryMethodReturnsTrue()
     {
-        IList classUnderTest = IList.builder().build();
+        ImmutableList classUnderTest = ImmutableList.builder().build();
         Assertions.assertThat(classUnderTest).isNotNull();
     }
 

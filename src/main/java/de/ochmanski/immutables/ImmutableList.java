@@ -1,18 +1,57 @@
 package de.ochmanski.immutables;
 
+import lombok.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.validation.constraints.PositiveOrZero;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
-interface IList<E>
+@Value
+@Unmodifiable
+@ParametersAreNonnullByDefault
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(toBuilder = true)
+public class ImmutableList<E> implements IList<E>, Equalable<E>
 {
 
-  int size();
+  @NonNull
+  @NotNull
+  @javax.validation.constraints.NotNull
+  @PositiveOrZero
+  @Builder.Default
+  ArrayList<E> list = new ArrayList<>();
+
+  public static <S> IList<S> of(S s1, S... s)
+  {
+    final ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
+    return sImmutableListBuilder.build();
+  }
+
+  /**
+   * Returns the number of elements in this list.
+   *
+   * @return the number of elements in this list
+   */
+  @Override
+  public int size()
+  {
+    return list.size();
+  }
 
   /**
    * Returns {@code true} if this list contains no elements.
    *
    * @return {@code true} if this list contains no elements
    */
-  boolean isEmpty();
+  @Override
+  public boolean isEmpty()
+  {
+    return list.isEmpty();
+  }
 
   /**
    * Returns {@code true} if this list contains the specified element. More formally, returns {@code true} if and only
@@ -21,31 +60,47 @@ interface IList<E>
    * @param o element whose presence in this list is to be tested
    * @return {@code true} if this list contains the specified element
    */
-  boolean contains(E o);
+  @Override
+  public boolean contains(E o)
+  {
+    return list.contains(o);
+  }
 
   /**
    * Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not
    * contain the element. More formally, returns the lowest index {@code i} such that {@code Objects.equals(o, get(i))},
    * or -1 if there is no such index.
    */
-  int indexOf(E o);
+  @Override
+  public int indexOf(E o)
+  {
+    return list.indexOf(o);
+  }
 
   /**
    * Returns the index of the last occurrence of the specified element in this list, or -1 if this list does not contain
    * the element. More formally, returns the highest index {@code i} such that {@code Objects.equals(o, get(i))}, or -1
    * if there is no such index.
    */
-  int lastIndexOf(E o);
+  @Override
+  public int lastIndexOf(E o)
+  {
+    return list.lastIndexOf(o);
+  }
 
   /**
    * Returns a deep copy of this {@code ArrayList} instance.  (The elements themselves are also copied.)
    *
    * @return a clone of this {@code ArrayList} instance
    */
-  ImmutableList<E> deepClone();
+  @Override
+  public ImmutableList<E> deepClone()
+  {
+    return toBuilder().build();
+  }
 
   /**
-   * Returns an array containing all of the elements in this list in proper sequence (from first to last element).
+   * Returns an array containing all the elements in this list in proper sequence (from first to last element).
    *
    * <p>The returned array will be "safe" in that no references to it are
    * maintained by this list.  (In other words, this method must allocate a new array).  The caller is thus free to
@@ -56,7 +111,11 @@ interface IList<E>
    *
    * @return an array containing all of the elements in this list in proper sequence
    */
-  E[] toArray();
+  @Override
+  public E[] toArray()
+  {
+    return (E[])list.toArray();
+  }
 
   /**
    * Returns an array containing all of the elements in this list in proper sequence (from first to last element); the
@@ -76,7 +135,11 @@ interface IList<E>
    *     of every element in this list
    * @throws NullPointerException if the specified array is null
    */
-  E[] toArray(E[] a);
+  @Override
+  public E[] toArray(E[] a)
+  {
+    return list.toArray(a);
+  }
 
   /**
    * Returns the element at the specified position in this list.
@@ -85,8 +148,24 @@ interface IList<E>
    * @return the element at the specified position in this list
    * @throws IndexOutOfBoundsException {@inheritDoc}
    */
-  E get(int index);
+  @Override
+  public E get(int index)
+  {
+    return list.get(index);
+  }
 
-  Stream<E> stream();
+  /**
+   * Returns a sequential {@code Stream} with this collection as its source.
+   *
+   * @return a sequential {@code Stream} over the elements in this collection
+   * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
+   *     {@code Spliterator}.
+   * @since 1.8
+   */
+  @Override
+  public Stream<E> stream()
+  {
+    return List.copyOf(list).stream();
+  }
 
 }

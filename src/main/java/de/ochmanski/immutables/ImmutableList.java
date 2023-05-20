@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableList<E> implements IList<E>, Equalable<E>
+public class ImmutableList<E extends Equalable<E>> implements IList<E>, Equalable<E>
 {
 
   @NonNull
@@ -31,7 +31,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  public static <S> IList<@NotNull S> of(@NotNull S s1, @NotNull S... array)
+  public static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final S s1, @NotNull final S... array)
   {
     if(array.length == 0)
     {
@@ -54,7 +54,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  public static <S> IList<@NotNull S> of(@NotNull S s1)
+  public static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final S s1)
   {
     final ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
     return sImmutableListBuilder.list(List.of(s1)).build();
@@ -63,7 +63,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public static <S> IList<@NotNull S> of()
+  public static <S extends Equalable<S>> IList<@NotNull S> of()
   {
     final ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
     return sImmutableListBuilder.build();
@@ -99,7 +99,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    * @return {@code true} if this list contains the specified element
    */
   @Override
-  public boolean contains(@NotNull E o)
+  public boolean contains(@NotNull final E o)
   {
     return list.contains(o);
   }
@@ -110,7 +110,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    * or -1 if there is no such index.
    */
   @Override
-  public int indexOf(@NotNull E o)
+  public int indexOf(@NotNull final E o)
   {
     return list.indexOf(o);
   }
@@ -121,7 +121,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    * if there is no such index.
    */
   @Override
-  public int lastIndexOf(@NotNull E o)
+  public int lastIndexOf(@NotNull final E o)
   {
     return list.lastIndexOf(o);
   }
@@ -181,7 +181,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
   @Override
   @NotNull
   @Contract(value = " _ -> new", pure = true)
-  public E[] toArray(@NotNull E[] a)
+  public E[] toArray(@NotNull final E[] a)
   {
     return list.toArray(a);
   }
@@ -196,7 +196,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
   @Override
   @NotNull
   @Contract(pure = true)
-  public E get(int index)
+  public E get(final int index)
   {
     return list.get(index);
   }

@@ -9,9 +9,15 @@ import java.util.stream.Stream;
 interface IList<E>
 {
 
-  @SafeVarargs
   @NotNull
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = " -> new", pure = true)
+  static <S> IList<@NotNull S> of()
+  {
+    return ImmutableList.of();
+  }
+
+  @NotNull
+  @Contract(value = " _ -> new", pure = true)
   static <S> IList<@NotNull S> of(@NotNull S s1)
   {
     return ImmutableList.of(s1);
@@ -20,7 +26,7 @@ interface IList<E>
   @SafeVarargs
   @NotNull
   @Contract(value = " _, _ -> new", pure = true)
-  static <S> IList<@NotNull S> of(@NotNull S s1, S... s)
+  static <S> IList<@NotNull S> of(@NotNull S s1, @NotNull S... s)
   {
     return ImmutableList.of(s1, s);
   }

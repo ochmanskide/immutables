@@ -4,18 +4,16 @@ import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
 @Value
-@Unmodifiable
+@UnmodifiableView
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
@@ -27,12 +25,13 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
   @javax.validation.constraints.NotNull
   @PositiveOrZero
   @Builder.Default
-  List<E> list = new ArrayList<>();
+  List<@NonNull @NotNull E> list = List.of();
 
   @SafeVarargs
   @NotNull
+  @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  public static <S> IList<@NotNull S> of(@NotNull S s1, @Nullable S... array)
+  public static <S> IList<@NotNull S> of(@NotNull S s1, @NotNull S... array)
   {
     if(array.length == 0)
     {
@@ -40,17 +39,34 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
     }
     List<S> l = new LinkedList<>();
     l.add(s1);
-    Collections.addAll(l, array);
+    for(@Nullable S s : array)
+    {
+      if(null == s)
+      {
+        continue;
+      }
+      l.add(s);
+    }
     final ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
     return sImmutableListBuilder.list(l).build();
   }
 
   @NotNull
+  @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   public static <S> IList<@NotNull S> of(@NotNull S s1)
   {
     final ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
     return sImmutableListBuilder.list(List.of(s1)).build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public static <S> IList<@NotNull S> of()
+  {
+    final ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
+    return sImmutableListBuilder.build();
   }
 
   /**
@@ -117,6 +133,8 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    */
   @Override
   @NotNull
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
   public ImmutableList<@NotNull E> deepClone()
   {
     return toBuilder().build();
@@ -136,6 +154,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    */
   @Override
   @NotNull
+  @Contract(value = " -> new", pure = true)
   public E[] toArray()
   {
     return (E[])list.toArray();
@@ -161,6 +180,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    */
   @Override
   @NotNull
+  @Contract(value = " _ -> new", pure = true)
   public E[] toArray(@NotNull E[] a)
   {
     return list.toArray(a);
@@ -175,6 +195,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    */
   @Override
   @NotNull
+  @Contract(pure = true)
   public E get(int index)
   {
     return list.get(index);
@@ -190,6 +211,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    */
   @Override
   @NotNull
+  @Contract(value = " -> new", pure = true)
   public Stream<@NotNull E> stream()
   {
     return toList().stream();
@@ -197,6 +219,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
 
   @Override
   @NotNull
+  @Contract(value = " -> new", pure = true)
   public List<@NotNull E> toList()
   {
     return List.copyOf(list);

@@ -3,12 +3,17 @@
  */
 package de.ochmanski.immutables;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-class LibraryTest {
-    @Test void someLibraryMethodReturnsTrue() {
-        Library classUnderTest = new Library();
-        assertTrue(classUnderTest.someLibraryMethod(), "someLibraryMethod should return 'true'");
+class LibraryTest
+{
+
+    @Test
+    void someLibraryMethodReturnsTrue()
+    {
+        IList classUnderTest = IList.builder().build();
+        Assertions.assertThat(classUnderTest).isNotNull();
     }
+
 }

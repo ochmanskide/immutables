@@ -1,0 +1,31 @@
+plugins {
+    id "io.freefair.lombok" version "6.6.1"
+    id 'java-library'
+    id 'idea'
+    id 'eclipse'
+}
+
+dependencies {
+    implementation(
+            'javax.validation:validation-api:2.0.1.Final',
+            'org.jetbrains:annotations:24.0.1',
+            // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
+            'com.google.code.findbugs:jsr305:3.0.2'
+
+    )
+    testImplementation(
+            'org.mockito:mockito-core:4.10.0',
+            'org.mockito:mockito-junit-jupiter:4.10.0',
+            'org.assertj:assertj-core:3.23.1'
+    )
+}
+
+testing {
+    suites {
+        // Configure the built-in test suite
+        test {
+            // Use JUnit Jupiter test framework
+            useJUnitJupiter('5.8.2')
+        }
+    }
+}

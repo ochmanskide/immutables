@@ -93,7 +93,7 @@ class ImmutableListTest
     final Dummy s2 = Dummy.builder().s("b").build();
     final IList<Dummy> actual = IList.of(s1, new Dummy[2]);
     assertThat(actual).isInstanceOf(ImmutableList.class);
-    assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a", "b");
+    assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a");
   }
 
   @Test
@@ -104,7 +104,7 @@ class ImmutableListTest
     final Dummy s3 = Dummy.builder().s("c").build();
     final IList<Dummy> actual = IList.of(s1, s1, s2, s3);
     assertThat(actual).isInstanceOf(ImmutableList.class);
-    assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a", "b", "c");
+    assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a", "a", "b", "c");
   }
 
   @Value

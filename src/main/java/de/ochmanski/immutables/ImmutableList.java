@@ -1,12 +1,16 @@
 package de.ochmanski.immutables;
 
 import lombok.*;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -23,12 +27,30 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
   @javax.validation.constraints.NotNull
   @PositiveOrZero
   @Builder.Default
-  ArrayList<E> list = new ArrayList<>();
+  List<E> list = new ArrayList<>();
 
-  public static <S> IList<S> of(S s1, S... s)
+  @SafeVarargs
+  @NotNull
+  @Contract(value = " _, _ -> new", pure = true)
+  public static <S> IList<@NotNull S> of(@NotNull S s1, @Nullable S... array)
+  {
+    if(array.length == 0)
+    {
+      return ImmutableList.of(s1);
+    }
+    List<S> l = new LinkedList<>();
+    l.add(s1);
+    Collections.addAll(l, array);
+    final ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
+    return sImmutableListBuilder.list(l).build();
+  }
+
+  @NotNull
+  @Contract(value = " _ -> new", pure = true)
+  public static <S> IList<@NotNull S> of(@NotNull S s1)
   {
     final ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
-    return sImmutableListBuilder.build();
+    return sImmutableListBuilder.list(List.of(s1)).build();
   }
 
   /**
@@ -61,7 +83,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    * @return {@code true} if this list contains the specified element
    */
   @Override
-  public boolean contains(E o)
+  public boolean contains(@NotNull E o)
   {
     return list.contains(o);
   }
@@ -72,7 +94,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    * or -1 if there is no such index.
    */
   @Override
-  public int indexOf(E o)
+  public int indexOf(@NotNull E o)
   {
     return list.indexOf(o);
   }
@@ -83,7 +105,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    * if there is no such index.
    */
   @Override
-  public int lastIndexOf(E o)
+  public int lastIndexOf(@NotNull E o)
   {
     return list.lastIndexOf(o);
   }
@@ -94,7 +116,8 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    * @return a clone of this {@code ArrayList} instance
    */
   @Override
-  public ImmutableList<E> deepClone()
+  @NotNull
+  public ImmutableList<@NotNull E> deepClone()
   {
     return toBuilder().build();
   }
@@ -112,6 +135,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    * @return an array containing all of the elements in this list in proper sequence
    */
   @Override
+  @NotNull
   public E[] toArray()
   {
     return (E[])list.toArray();
@@ -136,7 +160,8 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    * @throws NullPointerException if the specified array is null
    */
   @Override
-  public E[] toArray(E[] a)
+  @NotNull
+  public E[] toArray(@NotNull E[] a)
   {
     return list.toArray(a);
   }
@@ -149,6 +174,7 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    * @throws IndexOutOfBoundsException {@inheritDoc}
    */
   @Override
+  @NotNull
   public E get(int index)
   {
     return list.get(index);
@@ -163,9 +189,17 @@ public class ImmutableList<E> implements IList<E>, Equalable<E>
    * @since 1.8
    */
   @Override
-  public Stream<E> stream()
+  @NotNull
+  public Stream<@NotNull E> stream()
   {
-    return List.copyOf(list).stream();
+    return toList().stream();
+  }
+
+  @Override
+  @NotNull
+  public List<@NotNull E> toList()
+  {
+    return List.copyOf(list);
   }
 
 }

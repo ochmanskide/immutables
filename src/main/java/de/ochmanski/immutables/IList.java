@@ -1,11 +1,26 @@
 package de.ochmanski.immutables;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 import java.util.stream.Stream;
 
 interface IList<E>
 {
 
-  public static <S> IList<S> of(S s1, S... s)
+  @SafeVarargs
+  @NotNull
+  @Contract(value = " _, _ -> new", pure = true)
+  static <S> IList<@NotNull S> of(@NotNull S s1)
+  {
+    return ImmutableList.of(s1);
+  }
+
+  @SafeVarargs
+  @NotNull
+  @Contract(value = " _, _ -> new", pure = true)
+  static <S> IList<@NotNull S> of(@NotNull S s1, S... s)
   {
     return ImmutableList.of(s1, s);
   }
@@ -26,28 +41,29 @@ interface IList<E>
    * @param o element whose presence in this list is to be tested
    * @return {@code true} if this list contains the specified element
    */
-  boolean contains(E o);
+  boolean contains(@NotNull E o);
 
   /**
    * Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not
    * contain the element. More formally, returns the lowest index {@code i} such that {@code Objects.equals(o, get(i))},
    * or -1 if there is no such index.
    */
-  int indexOf(E o);
+  int indexOf(@NotNull E o);
 
   /**
    * Returns the index of the last occurrence of the specified element in this list, or -1 if this list does not contain
    * the element. More formally, returns the highest index {@code i} such that {@code Objects.equals(o, get(i))}, or -1
    * if there is no such index.
    */
-  int lastIndexOf(E o);
+  int lastIndexOf(@NotNull E o);
 
   /**
    * Returns a deep copy of this {@code ArrayList} instance.  (The elements themselves are also copied.)
    *
    * @return a clone of this {@code ArrayList} instance
    */
-  ImmutableList<E> deepClone();
+  @NotNull
+  ImmutableList<@NotNull E> deepClone();
 
   /**
    * Returns an array containing all of the elements in this list in proper sequence (from first to last element).
@@ -61,6 +77,7 @@ interface IList<E>
    *
    * @return an array containing all of the elements in this list in proper sequence
    */
+  @NotNull
   E[] toArray();
 
   /**
@@ -81,7 +98,8 @@ interface IList<E>
    *     of every element in this list
    * @throws NullPointerException if the specified array is null
    */
-  E[] toArray(E[] a);
+  @NotNull
+  E[] toArray(@NotNull E[] a);
 
   /**
    * Returns the element at the specified position in this list.
@@ -90,8 +108,13 @@ interface IList<E>
    * @return the element at the specified position in this list
    * @throws IndexOutOfBoundsException {@inheritDoc}
    */
+  @NotNull
   E get(int index);
 
-  Stream<E> stream();
+  @NotNull
+  Stream<@NotNull E> stream();
+
+  @NotNull
+  List<@NotNull E> toList();
 
 }

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
 class ImmutableListTest
@@ -17,9 +18,7 @@ class ImmutableListTest
   @Test
   void ofNull()
   {
-    final IList<Dummy> actual = IList.of(null);
-    assertThat(actual).isInstanceOf(ImmutableList.class);
-    assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a", "b");
+    assertThatThrownBy(() -> IList.of(null)).isInstanceOfAny(NullPointerException.class);
   }
 
   @Test
@@ -64,9 +63,8 @@ class ImmutableListTest
   void ofArrayNull()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
-    final IList<Dummy> actual = IList.of(s1, (Dummy[])null);
-    assertThat(actual).isInstanceOf(ImmutableList.class);
-    assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a", "b");
+    assertThatThrownBy(() -> IList.of(s1, (Dummy[])null))
+        .hasMessage("Cannot read the array length because \"array\" is null");
   }
 
   @Test

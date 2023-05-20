@@ -5,6 +5,11 @@ import java.util.stream.Stream;
 interface IList<E>
 {
 
+  public static <S> IList<S> of(S s1, S... s)
+  {
+    return ImmutableList.of(s1, s);
+  }
+
   int size();
 
   /**

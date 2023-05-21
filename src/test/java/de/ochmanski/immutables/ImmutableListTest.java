@@ -4,9 +4,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.function.IntFunction;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -18,13 +21,15 @@ class ImmutableListTest
   @Test
   void ofNullClass()
   {
-    assertThatThrownBy(() -> IList.of((Class)null)).isInstanceOfAny(NullPointerException.class);
+    assertThatThrownBy(() -> IList.of((IntFunction)null)).isInstanceOfAny(NullPointerException.class);
   }
 
   @Test
   void of0()
   {
-    final IList<Dummy> actual = IList.of(Dummy.class);
+    @NotNull
+    final IntFunction<@NotNull Dummy[]> generator = Dummy[]::new;
+    final IList<Dummy> actual = IList.of(generator);
     assertThat(actual).isInstanceOf(ImmutableList.class);
     assertThat(actual.toList()).isEmpty();
     assertThat(actual.isEmpty()).isTrue();
@@ -119,13 +124,14 @@ class ImmutableListTest
   @Test
   void toArrayNullClass()
   {
-    assertThatThrownBy(() -> IList.of((Class)null)).isInstanceOfAny(NullPointerException.class);
+    assertThatThrownBy(() -> IList.of((IntFunction)null)).isInstanceOfAny(NullPointerException.class);
   }
 
   @Test
   void toArrayClass()
   {
-    final IList<Dummy> actual = IList.of(Dummy.class);
+    final IntFunction<@NotNull Dummy[]> generator = Dummy[]::new;
+    final IList<Dummy> actual = IList.of(generator);
     assertThat(actual.toArray().get()).isEmpty();
   }
 

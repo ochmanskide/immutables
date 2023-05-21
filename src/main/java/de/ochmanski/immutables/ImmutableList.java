@@ -3,6 +3,7 @@ package de.ochmanski.immutables;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -32,15 +33,23 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  Class<@NonNull @NotNull E> keyType = (Class<E>)Empty.class;
+  IntFunction<@NotNull E[]> generator = createDefaultGenerator();
 
-  private interface Empty extends Equalable<Empty>
+  @NotNull
+  private static <S extends Equalable<S>> IntFunction<@NotNull S[]> createDefaultGenerator()
+  {
+    final IntFunction aNew = Empty[]::new;
+    return aNew;
+  }
+
+  private static class Empty implements Equalable<Empty>
   {
   }
 
   public boolean isKeyTypeEmpty()
   {
-    return Empty.class == keyType;
+    final IntFunction b = createDefaultGenerator();
+    return generator == b;
   }
 
   /**
@@ -130,7 +139,7 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @NotNull
   @SuppressWarnings("unchecked")
   @Contract(value = " -> new", pure = true)
-  public Optional<E[]> toArray()
+  public Optional<@Nullable E[]> toArray()
   {
     return isKeyTypeEmpty() && list.isEmpty()
         ? Optional.empty()
@@ -140,16 +149,19 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @NotNull
   @SuppressWarnings("unchecked")
   @Contract(value = "_ -> new", pure = true)
-  private E[] toArray(@NotNull @NotEmpty final List<@NotNull E> e)
+  private E[] toArray(@NotNull final List<@NotNull E> e)
   {
-    final E[] array = newArrayNative(e);
-    return e.toArray(array);
+    return e.isEmpty()
+        ? getGenerator().apply(0)
+        : e.toArray(newArrayNative(e));
   }
 
   @NotNull
-  private E[] newArrayNative(final @NotNull List<@NotNull E> e)
+  @SuppressWarnings("unchecked")
+  @Contract(value = "_ -> new", pure = true)
+  private E[] newArrayNative(@NotNull @NotEmpty final List<@NotNull E> e)
   {
-    final Class<E> componentType = e.isEmpty() ? getKeyType() : (Class<E>)e.get(0).getClass();
+    final Class<E> componentType = (Class<E>)e.get(0).getClass();
     final int size = e.size();
     final Object a = Array.newInstance(componentType, size);
     return (E[])a;

@@ -22,9 +22,9 @@ interface IList<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final Class<@NotNull S> keyType)
+  static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final IntFunction<@NotNull S[]> keyType)
   {
-    return ImmutableList.<S>builder().keyType(keyType).build();
+    return ImmutableList.<S>builder().generator(keyType).build();
   }
 
   @NotNull

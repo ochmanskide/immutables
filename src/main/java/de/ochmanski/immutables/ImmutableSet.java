@@ -245,5 +245,4 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   {
     return Set.copyOf(set);
   }
-
 }

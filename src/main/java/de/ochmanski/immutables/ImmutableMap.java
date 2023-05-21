@@ -133,8 +133,7 @@ public class ImmutableMap<K extends Equalable<@NotNull K>, V extends Equalable<@
   @Contract(value = " -> new", pure = true)
   public ISet<@NotNull K> keySet()
   {
-    final Set<@NotNull K> ks = toMap().keySet();
-    return ISet.copyOf(ks);
+    return ISet.copyOf(toMap().keySet());
   }
 
   @Override
@@ -143,8 +142,6 @@ public class ImmutableMap<K extends Equalable<@NotNull K>, V extends Equalable<@
   @Contract(value = " -> new", pure = true)
   public IList<@NotNull V> value()
   {
-    final Collection<@NotNull V> values = toMap().values();
-    return IList.copyOf(valuse);
+    return IList.copyOf(toMap().values());
   }
-
 }

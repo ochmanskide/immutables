@@ -5,9 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
@@ -91,6 +89,14 @@ interface ISet<E extends Equalable<@NotNull E>>
       @NotNull final S s4)
   {
     return ImmutableSet.<S>builder().set(Set.of(s1, s2, s3, s4)).build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  static <K extends Equalable<@NotNull K>> ISet<@NotNull K> copyOf(@NotNull final Collection<@NotNull K> keys)
+  {
+    return ImmutableSet.<K>builder().set(Set.copyOf(keys)).build();
   }
 
   int size();

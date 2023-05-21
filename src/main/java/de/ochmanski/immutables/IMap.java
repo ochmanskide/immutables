@@ -14,7 +14,7 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(IntFunction)} instead.
+   * <p>use method: {@link #ofGenerator(IntFunction,IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code

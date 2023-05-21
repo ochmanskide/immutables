@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.IntFunction;
@@ -90,6 +91,14 @@ interface IList<E extends Equalable<@NotNull E>>
       @NotNull final S s4)
   {
     return ImmutableList.<S>builder().list(List.of(s1, s2, s3, s4)).build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  static <V extends Equalable<@NotNull V>> IList<@NotNull V> copyOf(@NotNull final Collection<@NotNull V> values)
+  {
+    return ImmutableList.<V>builder().list(List.copyOf(values)).build();
   }
 
   int size();

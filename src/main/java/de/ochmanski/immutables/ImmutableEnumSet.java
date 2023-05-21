@@ -7,6 +7,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Array;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.function.IntFunction;
@@ -66,9 +67,9 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
    * Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = ISet.ofGenerator(Dummy[]::new);
-   *   final ISet<String> actual = ISet.ofGenerator(String[]::new);
-   *   final ISet<Integer> actual = ISet.ofGenerator(Integer[]::new);
+   *   final ISet<Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
+   *   final ISet<String> actual = ImmutableEnumSet.ofGenerator(String[]::new);
+   *   final ISet<Integer> actual = ImmutableEnumSet.ofGenerator(Integer[]::new);
    *   }
    * </pre>
    */
@@ -78,7 +79,18 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
   static <S extends Enum<@NotNull S> & Equalable<@NotNull S>> ImmutableEnumSet<@NotNull S> ofGenerator(
       @NotNull final IntFunction<@NotNull S[]> constructor)
   {
-    return ImmutableEnumSet.<S>builder().constructor(constructor).build();
+    final Class<S> componentType = getComponentTypeFromConstructor(constructor);
+    return ImmutableEnumSet.<S>builder().constructor(constructor).set(EnumSet.noneOf(componentType)).build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  @SuppressWarnings("unchecked")
+  private static <S extends Enum<@NotNull S> & Equalable<@NotNull S>> Class<S> getComponentTypeFromConstructor(
+      final @NotNull IntFunction<@NotNull S[]> constructor)
+  {
+    return (Class<S>)constructor.apply(0).getClass().getComponentType();
   }
 
   @NotNull
@@ -86,7 +98,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
   @Contract(value = " _ -> new", pure = true)
   static <S extends Enum<@NotNull S> & Equalable<@NotNull S>> ImmutableEnumSet<@NotNull S> of(@NotNull final S s1)
   {
-    return ImmutableEnumSet.<S>builder().set(Set.of(s1)).build();
+    return ImmutableEnumSet.<S>builder().set(EnumSet.of(s1)).build();
   }
 
   @NotNull
@@ -96,7 +108,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
       @NotNull final S s1,
       @NotNull final S s2)
   {
-    return ImmutableEnumSet.<S>builder().set(Set.of(s1, s2)).build();
+    return ImmutableEnumSet.<S>builder().set(EnumSet.of(s1, s2)).build();
   }
 
   @NotNull
@@ -107,7 +119,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
       @NotNull final S s2,
       @NotNull final S s3)
   {
-    return ImmutableEnumSet.<S>builder().set(Set.of(s1, s2, s3)).build();
+    return ImmutableEnumSet.<S>builder().set(EnumSet.of(s1, s2, s3)).build();
   }
 
   @NotNull
@@ -119,17 +131,18 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
       @NotNull final S s3,
       @NotNull final S s4)
   {
-    return ImmutableEnumSet.<S>builder().set(Set.of(s1, s2, s3, s4)).build();
+    return ImmutableEnumSet.<S>builder().set(EnumSet.of(s1, s2, s3, s4)).build();
   }
 
   @NotNull
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()
+  private static <S extends Enum<@NotNull S> & Equalable<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()
   {
-    return (IntFunction)ImmutableEnumSet.Empty[]::new;
+    final IntFunction<@NotNull S[]> aNew = (IntFunction<S[]>)Empty[]::new;
+    return aNew;
   }
 
-  private static class Empty implements Equalable<ImmutableEnumSet.@NotNull Empty>
+  private enum Empty implements Equalable<ImmutableEnumSet.@NotNull Empty>
   {
   }
 

@@ -2,12 +2,14 @@ package de.ochmanski.immutables;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-interface IList<E extends Equalable<E>>
+interface IList<E extends Equalable<@NotNull E>>
 {
 
   @NotNull
@@ -70,6 +72,7 @@ interface IList<E extends Equalable<E>>
    * @return a clone of this {@code ArrayList} instance
    */
   @NotNull
+  @Contract(value = " -> new", pure = true)
   ImmutableList<@NotNull E> deepClone();
 
   /**
@@ -85,7 +88,8 @@ interface IList<E extends Equalable<E>>
    * @return an array containing all of the elements in this list in proper sequence
    */
   @NotNull
-  E[] toArray();
+  @Contract(value = " -> new", pure = true)
+  Optional<@Nullable E[]> toArray();
 
   /**
    * Returns an array containing all of the elements in this list in proper sequence (from first to last element); the
@@ -106,10 +110,11 @@ interface IList<E extends Equalable<E>>
    * @throws NullPointerException if the specified array is null
    */
   @NotNull
+  @Contract(value = " _ -> new", pure = true)
   E[] toArray(@NotNull final E[] a);
 
   /**
-   * Returns an array containing all of the elements in this collection, using the provided {@code generator} function
+   * Returns an array containing all the elements in this collection, using the provided {@code generator} function
    * to allocate the returned array.
    *
    * <p>If this collection makes any guarantees as to what order its elements
@@ -150,9 +155,11 @@ interface IList<E extends Equalable<E>>
   E get(final int index);
 
   @NotNull
+  @Contract(value = " -> new", pure = true)
   Stream<@NotNull E> stream();
 
   @NotNull
+  @Contract(value = " -> new", pure = true)
   List<@NotNull E> toList();
 
 }

@@ -8,12 +8,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.PositiveOrZero;
 import java.lang.reflect.Array;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -164,32 +159,22 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @Override
   @NotNull
   @Contract(value = " -> new", pure = true)
-  @SuppressWarnings("unchecked")
-  public E[] toArray()
+  public Optional<E[]> toArray()
   {
     if(list.isEmpty())
     {
-      return createGenericArray();
+      return Optional.empty();
     }
     if(list.size() == 1)
     {
-      return createGenericArray(list.get(0));
+      return Optional.of(createGenericArray(list.get(0)));
     }
-    return concatWithArrayCopy(list.get(0), getRest());
+    return Optional.of(concatWithArrayCopy(list.get(0), getRest()));
   }
 
   private Object[] getRest()
   {
     return list.subList(1, list.size()).toArray();
-  }
-
-  @NotNull
-  @SafeVarargs
-  private E[] toArray(
-      @NotNull final E e0,
-      @NotNull final E... array)
-  {
-    return null == array || 0 == array.length ? createGenericArray(e0) : concatWithArrayCopy(e0, array);
   }
 
   @NotNull
@@ -211,23 +196,6 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
     final E[] array = (E[])Array.newInstance(e.getClass(), 1);
     array[0] = e;
     return array;
-  }
-
-  @NotNull
-  @SuppressWarnings("unchecked")
-  @Contract(value = "-> new", pure = true)
-  private E[] createGenericArray()
-  {
-    return (E[])Array.newInstance(inferClass(), 0);
-  }
-
-  private <E extends @NotNull Equalable<@NotNull E>> Class<E> inferClass()
-  {
-    final ParameterizedType genericSuperclass = (ParameterizedType)this.getClass().getGenericSuperclass();
-    Type[] actualTypeArguments = genericSuperclass.getActualTypeArguments();
-    Type clazz = actualTypeArguments[0];
-    final Class<? extends Type> theClass = clazz.getClass();
-    return (Class<@NotNull E>)theClass;
   }
 
   /**

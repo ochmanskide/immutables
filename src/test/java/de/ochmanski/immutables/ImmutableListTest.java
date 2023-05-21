@@ -16,18 +16,19 @@ class ImmutableListTest
 {
 
   @Test
-  void ofNull()
+  void ofNullClass()
   {
-    assertThatThrownBy(() -> IList.of(null)).isInstanceOfAny(NullPointerException.class);
+    assertThatThrownBy(() -> IList.of((Class)null)).isInstanceOfAny(NullPointerException.class);
   }
 
   @Test
   void of0()
   {
-    final IList<Dummy> actual = IList.of();
+    final IList<Dummy> actual = IList.of(Dummy.class);
     assertThat(actual).isInstanceOf(ImmutableList.class);
     assertThat(actual.toList()).isEmpty();
     assertThat(actual.isEmpty()).isTrue();
+    assertThat(actual.toArray().get()).isEmpty();
   }
 
   @Test
@@ -61,41 +62,6 @@ class ImmutableListTest
   }
 
   @Test
-  void ofArrayNull()
-  {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    assertThatThrownBy(() -> IList.of(s1, (Dummy[])null))
-        .hasMessage("Cannot read the array length because \"array\" is null");
-  }
-
-  @Test
-  void ofArray0()
-  {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    final IList<Dummy> actual = IList.of(s1, new Dummy[0]);
-    assertThat(actual).isInstanceOf(ImmutableList.class);
-    assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a");
-  }
-
-  @Test
-  void ofArray1()
-  {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    final IList<Dummy> actual = IList.of(s1, new Dummy[1]);
-    assertThat(actual).isInstanceOf(ImmutableList.class);
-    assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a");
-  }
-
-  @Test
-  void ofArray2()
-  {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    final IList<Dummy> actual = IList.of(s1, new Dummy[2]);
-    assertThat(actual).isInstanceOf(ImmutableList.class);
-    assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a");
-  }
-
-  @Test
   void ofArray3()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
@@ -110,15 +76,16 @@ class ImmutableListTest
   void toArrayNull()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
-    assertThatThrownBy(() -> IList.of(s1, (Dummy[])null))
-        .hasMessage("Cannot read the array length because \"array\" is null");
+    assertThatThrownBy(() -> IList.of((Dummy)null))
+        .isExactlyInstanceOf(NullPointerException.class)
+        .hasMessage(null);
   }
 
   @Test
   void toArrayEmpty()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
-    final IList<Dummy> actual = IList.of(s1, new Dummy[0]);
+    final IList<Dummy> actual = IList.of(s1);
     assertThat(actual.toArray().get()).containsExactly(s1);
   }
 
@@ -127,30 +94,47 @@ class ImmutableListTest
   {
     final Dummy s1 = Dummy.builder().s("a").build();
     assertThatThrownBy(() -> IList.of(s1, null))
-        .hasMessage("Cannot read the array length because \"array\" is null");
+        .isExactlyInstanceOf(NullPointerException.class)
+        .hasMessage(null);
   }
 
   @Test
   void toArrayEmpty2()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
-    final IList<Dummy> actual = IList.of(s1, null, null);
-    assertThat(actual.toArray().get()).containsExactly(s1);
+    assertThatThrownBy(() -> IList.of(s1, null, null))
+        .isExactlyInstanceOf(NullPointerException.class)
+        .hasMessage(null);
   }
 
   @Test
-  void toArrayEmpty10()
+  void toArrayEmpty3()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
-    final IList<Dummy> actual = IList.of(s1, new Dummy[10]);
-    assertThat(actual.toArray().get()).containsExactly(s1);
+    assertThatThrownBy(() -> IList.of(s1, null, null, null))
+        .isExactlyInstanceOf(NullPointerException.class)
+        .hasMessage(null);
+  }
+
+  @Test
+  void toArrayNullClass()
+  {
+    assertThatThrownBy(() -> IList.of((Class)null)).isInstanceOfAny(NullPointerException.class);
+  }
+
+  @Test
+  void toArrayClass()
+  {
+    final IList<Dummy> actual = IList.of(Dummy.class);
+    assertThat(actual.toArray().get()).isEmpty();
   }
 
   @Test
   void toArray0()
   {
-    final IList<Dummy> actual = IList.of();
-    assertThat(actual.toArray()).isEmpty();
+    assertThatThrownBy(() -> IList.of((Dummy)null))
+        .isExactlyInstanceOf(NullPointerException.class)
+        .hasMessage(null);
   }
 
   @Test

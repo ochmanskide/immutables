@@ -6,9 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.validation.constraints.PositiveOrZero;
 import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.IntFunction;
@@ -22,12 +20,28 @@ import java.util.stream.Stream;
 public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@NotNull E>, Equalable<@NotNull E>
 {
 
+  @UnmodifiableView
   @NonNull
-  @NotNull
-  @javax.validation.constraints.NotNull
-  @PositiveOrZero
+  @NotNull("Given list cannot be null.")
+  @javax.validation.constraints.NotNull(message = "Given list cannot be null.")
   @Builder.Default
   List<@NonNull @NotNull E> list = List.of();
+
+  @NonNull
+  @NotNull("Given keyType cannot be null.")
+  @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
+  @Builder.Default
+  Class<? extends @NonNull @NotNull Equalable<?>> keyType = Empty.class;
+
+
+  private interface Empty extends Equalable<Empty>
+  {
+  }
+
+  public boolean isKeyTypeEmpty()
+  {
+    return Empty.class == keyType;
+  }
 
   /**
    * Returns the number of elements in this list.
@@ -114,44 +128,29 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
    */
   @Override
   @NotNull
+  @SuppressWarnings("unchecked")
   @Contract(value = " -> new", pure = true)
   public Optional<E[]> toArray()
   {
-    if(list.isEmpty())
+    if(isKeyTypeEmpty())
     {
       return Optional.empty();
     }
-    if(list.size() == 1)
+    if(list.isEmpty())
     {
-      return Optional.of(createGenericArray(list.get(0)));
+      return Optional.of((E[])Array.newInstance(getKeyType(), 0));
     }
-    return Optional.of(concatWithArrayCopy(list.get(0), getRest()));
-  }
+    return Optional.of(toArray(list));
 
-  private Object[] getRest()
-  {
-    return list.subList(1, list.size()).toArray();
-  }
-
-  @NotNull
-  private E[] concatWithArrayCopy(
-      final @NotNull E e0,
-      final @NotNull Object[] array2)
-  {
-    E[] array1 = createGenericArray(e0);
-    E[] result = Arrays.copyOf(array1, array1.length + array2.length);
-    System.arraycopy(array2, 0, result, array1.length, array2.length);
-    return result;
   }
 
   @NotNull
   @SuppressWarnings("unchecked")
   @Contract(value = "_ -> new", pure = true)
-  private E[] createGenericArray(final @NotNull E e)
+  private E[] toArray(final @NotNull List<E> e)
   {
-    final E[] array = (E[])Array.newInstance(e.getClass(), 1);
-    array[0] = e;
-    return array;
+    final E[] array = (E[])Array.newInstance(e.getClass().getComponentType(), e.size());
+    return e.toArray(array);
   }
 
   /**

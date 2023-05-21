@@ -5,20 +5,26 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.IntFunction;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 interface IList<E extends Equalable<@NotNull E>>
 {
 
+  @Contract(value = "-> fail", pure = true)
+  static void of()
+  {
+    throw new UnsupportedOperationException("Please pass Class<E> type to the method.");
+  }
+
   @NotNull
   @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  static <S extends Equalable<S>> IList<@NotNull S> of()
+  @Contract(value = "_ -> new", pure = true)
+  static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final Class<@NotNull S> keyType)
   {
-    return ImmutableList.<S>builder().build();
+    return ImmutableList.<S>builder().keyType(keyType).build();
   }
 
   @NotNull
@@ -29,27 +35,37 @@ interface IList<E extends Equalable<@NotNull E>>
     return ImmutableList.<S>builder().list(List.of(s1)).build();
   }
 
-  @SafeVarargs
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final S s1, @NotNull final S... array)
+  static <S extends Equalable<S>> IList<@NotNull S> of(
+      @NotNull final S s1,
+      @NotNull final S s2)
   {
-    return array.length == 0
-        ? IList.of(s1)
-        : ImmutableList.<S>builder().list(filterNonNullElements(s1, array)).build();
+    return ImmutableList.<S>builder().list(List.of(s1, s2)).build();
   }
 
   @NotNull
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
-  private static <S extends Equalable<S>> List<S> filterNonNullElements(@NotNull final S s1, @NotNull final S[] array)
+  @Contract(value = " _, _, _ -> new", pure = true)
+  static <S extends Equalable<S>> IList<@NotNull S> of(
+      @NotNull final S s1,
+      @NotNull final S s2,
+      @NotNull final S s3)
   {
-    final LinkedList<@NotNull S> collect = Arrays.stream(array)
-        .filter(Objects::nonNull)
-        .collect(Collectors.toCollection(LinkedList::new));
-    collect.addFirst(s1);
-    return List.copyOf(collect);
+    return ImmutableList.<S>builder().list(List.of(s1, s2, s3)).build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _, _, _ -> new", pure = true)
+  static <S extends Equalable<S>> IList<@NotNull S> of(
+      @NotNull final S s1,
+      @NotNull final S s2,
+      @NotNull final S s3,
+      @NotNull final S s4)
+  {
+    return ImmutableList.<S>builder().list(List.of(s1, s2, s3, s4)).build();
   }
 
   int size();

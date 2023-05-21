@@ -13,16 +13,31 @@ import java.util.stream.Stream;
 interface IList<E extends Equalable<@NotNull E>>
 {
 
+  /**
+   * This method is not supported.
+   * <p>You must provide a generic type for an empty collection.
+   * <p>use {@link #ofGenerator(IntFunction)} instead.
+   */
   @Contract(value = "-> fail", pure = true)
   static void of()
   {
     throw new UnsupportedOperationException("Please pass Class<E> type to the method.");
   }
 
+  /**
+   * Example usage:
+   * <pre>
+   *   {@code
+   *   final IList<Dummy> actual = IList.ofGenerator(Dummy[]::new);
+   *   final IList<String> actual = IList.ofGenerator(String[]::new);
+   *   final IList<Integer> actual = IList.ofGenerator(Integer[]::new);
+   *   }
+   * </pre>
+   */
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final IntFunction<@NotNull S[]> keyType)
+  static <S extends Equalable<S>> IList<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S[]> keyType)
   {
     return ImmutableList.<S>builder().generator(keyType).build();
   }

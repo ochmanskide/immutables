@@ -38,18 +38,16 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @NotNull
   private static <S extends Equalable<S>> IntFunction<@NotNull S[]> createDefaultGenerator()
   {
-    final IntFunction aNew = Empty[]::new;
-    return aNew;
+    return (IntFunction)Empty[]::new;
   }
 
   private static class Empty implements Equalable<Empty>
   {
   }
 
-  public boolean isKeyTypeEmpty()
+  private boolean isKeyTypeEmpty()
   {
-    final IntFunction b = createDefaultGenerator();
-    return generator == b;
+    return Equalable.areEqual(generator, createDefaultGenerator());
   }
 
   /**
@@ -137,7 +135,6 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
    */
   @Override
   @NotNull
-  @SuppressWarnings("unchecked")
   @Contract(value = " -> new", pure = true)
   public Optional<@Nullable E[]> toArray()
   {
@@ -147,7 +144,6 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   }
 
   @NotNull
-  @SuppressWarnings("unchecked")
   @Contract(value = "_ -> new", pure = true)
   private E[] toArray(@NotNull final List<@NotNull E> e)
   {

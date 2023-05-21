@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.function.IntFunction;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -21,15 +19,14 @@ class ImmutableListTest
   @Test
   void ofNullClass()
   {
-    assertThatThrownBy(() -> IList.of((IntFunction)null)).isInstanceOfAny(NullPointerException.class);
+    assertThatThrownBy(() -> IList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class);
   }
 
   @Test
   void of0()
   {
     @NotNull
-    final IntFunction<@NotNull Dummy[]> generator = Dummy[]::new;
-    final IList<Dummy> actual = IList.of(generator);
+    final IList<Dummy> actual = IList.ofGenerator(Dummy[]::new);
     assertThat(actual).isInstanceOf(ImmutableList.class);
     assertThat(actual.toList()).isEmpty();
     assertThat(actual.isEmpty()).isTrue();
@@ -124,14 +121,13 @@ class ImmutableListTest
   @Test
   void toArrayNullClass()
   {
-    assertThatThrownBy(() -> IList.of((IntFunction)null)).isInstanceOfAny(NullPointerException.class);
+    assertThatThrownBy(() -> IList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class);
   }
 
   @Test
   void toArrayClass()
   {
-    final IntFunction<@NotNull Dummy[]> generator = Dummy[]::new;
-    final IList<Dummy> actual = IList.of(generator);
+    final IList<Dummy> actual = IList.ofGenerator(Dummy[]::new);
     assertThat(actual.toArray().get()).isEmpty();
   }
 

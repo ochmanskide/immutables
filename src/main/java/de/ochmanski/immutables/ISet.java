@@ -49,7 +49,7 @@ interface ISet<E extends Equalable<@NotNull E>>
   @Contract(value = "_ -> new", pure = true)
   static <S extends Equalable<S>> ISet<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S[]> keyType)
   {
-    return ImmutableSet.<S>builder().generator(keyType).build();
+    return ImmutableSet.<S>builder().constructor(keyType).build();
   }
 
   @NotNull

@@ -34,7 +34,7 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E[]> generator = defaultConstructor();
+  IntFunction<@NotNull E[]> constructor = defaultConstructor();
 
   @NotNull
   private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()
@@ -48,7 +48,7 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
 
   private boolean isKeyTypeEmpty()
   {
-    return Equalable.areEqual(generator, defaultConstructor());
+    return Equalable.areEqual(constructor, defaultConstructor());
   }
 
   /**
@@ -127,7 +127,7 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   private E[] toArray(@NotNull final Set<@NotNull E> e)
   {
     return e.isEmpty()
-        ? getGenerator().apply(0)
+        ? getConstructor().apply(0)
         : e.toArray(newArrayNative(e));
   }
 

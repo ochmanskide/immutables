@@ -48,7 +48,7 @@ interface IList<E extends Equalable<@NotNull E>>
   @Contract(value = "_ -> new", pure = true)
   static <S extends Equalable<S>> IList<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S[]> keyType)
   {
-    return ImmutableList.<S>builder().generator(keyType).build();
+    return ImmutableList.<S>builder().constructor(keyType).build();
   }
 
   @NotNull

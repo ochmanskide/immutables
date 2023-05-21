@@ -37,7 +37,7 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   @SuppressWarnings({ "unchecked", "rawtypes" })
   private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()
   {
-    return (IntFunction)Empty[]::new;
+    return (IntFunction)value -> new Empty[value];
   }
 
   private static class Empty implements Equalable<@NotNull Empty>

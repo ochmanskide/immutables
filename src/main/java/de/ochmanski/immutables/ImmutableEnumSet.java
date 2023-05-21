@@ -138,12 +138,14 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
   @SuppressWarnings({ "unchecked", "rawtypes" })
   private static <S extends Enum<@NotNull S> & Equalable<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()
   {
-    final IntFunction<@NotNull S[]> aNew = (IntFunction<S[]>)Empty[]::new;
-    return aNew;
+    return (IntFunction)Empty[]::new;
   }
 
   private enum Empty implements Equalable<ImmutableEnumSet.@NotNull Empty>
   {
+    A,
+    B,
+    C;
   }
 
   /**

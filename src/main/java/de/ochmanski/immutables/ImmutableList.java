@@ -8,9 +8,10 @@ import org.jetbrains.annotations.UnmodifiableView;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.PositiveOrZero;
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.IntFunction;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Value
@@ -27,51 +28,6 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @PositiveOrZero
   @Builder.Default
   List<@NonNull @NotNull E> list = List.of();
-
-  @SafeVarargs
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
-  public static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final S s1, @NotNull final S... array)
-  {
-    if(array.length == 0)
-    {
-      return ImmutableList.of(s1);
-    }
-    List<S> l = filterNonNullElements(s1, array);
-    final ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
-    return sImmutableListBuilder.list(l).build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
-  private static <S extends Equalable<S>> List<S> filterNonNullElements(@NotNull final S s1, @NotNull final S[] array)
-  {
-    final LinkedList<@NotNull S> collect = Arrays.stream(array)
-        .filter(Objects::nonNull)
-        .collect(Collectors.toCollection(LinkedList::new));
-    collect.addFirst(s1);
-    return List.copyOf(collect);
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  public static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final S s1)
-  {
-    final ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
-    return sImmutableListBuilder.list(List.of(s1)).build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  public static <S extends Equalable<S>> IList<@NotNull S> of()
-  {
-    final ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
-    return sImmutableListBuilder.build();
-  }
 
   /**
    * Returns the number of elements in this list.

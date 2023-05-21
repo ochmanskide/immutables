@@ -120,7 +120,7 @@ class ImmutableListTest
   {
     final Dummy s1 = Dummy.builder().s("a").build();
     final IList<Dummy> actual = IList.of(s1, new Dummy[0]);
-    assertThat(actual.toArray()).containsExactly(s1);
+    assertThat(actual.toArray().get()).containsExactly(s1);
   }
 
   @Test
@@ -128,7 +128,7 @@ class ImmutableListTest
   {
     final Dummy s1 = Dummy.builder().s("a").build();
     final IList<Dummy> actual = IList.of(s1, new Dummy[10]);
-    assertThat(actual.toArray()).containsExactly(s1);
+    assertThat(actual.toArray().get()).containsExactly(s1);
   }
 
   @Test
@@ -143,7 +143,7 @@ class ImmutableListTest
   {
     final Dummy s1 = Dummy.builder().s("a").build();
     final IList<Dummy> actual = IList.of(s1);
-    assertThat(actual.toArray()).containsExactly(s1);
+    assertThat(actual.toArray().get()).containsExactly(s1);
   }
 
   @Test
@@ -152,7 +152,7 @@ class ImmutableListTest
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
     final IList<Dummy> actual = IList.of(s1, s2);
-    assertThat(actual.toArray()).containsExactly(s1, s2);
+    assertThat(actual.toArray().get()).containsExactly(s1, s2);
   }
 
   @Test
@@ -162,7 +162,7 @@ class ImmutableListTest
     final Dummy s2 = Dummy.builder().s("b").build();
     final Dummy s3 = Dummy.builder().s("c").build();
     final IList<Dummy> actual = IList.of(s1, s1, s2, s3);
-    assertThat(actual.toArray()).containsExactly(s1, s1, s2, s3);
+    assertThat(actual.toArray().get()).containsExactly(s1, s1, s2, s3);
   }
 
   @Test

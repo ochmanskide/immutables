@@ -129,7 +129,7 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  ISet<IMap.Entry<@NotNull K, @NotNull V>> entrySet();
+  ISet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet();
 
   @NotNull
   @UnmodifiableView
@@ -144,7 +144,7 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Builder(toBuilder = true)
-  class Entry<K, V> implements Equalable<Entry<K, V>>
+  class Entry<@NotNull K, @NotNull V> implements Equalable<@NotNull Entry<@NotNull K, @NotNull V>>
   {
 
     @NonNull

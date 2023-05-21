@@ -7,9 +7,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.IntFunction;
-import java.util.stream.Collectors;
 
 @Value
 @UnmodifiableView
@@ -40,6 +38,7 @@ public class ImmutableMap<K extends Equalable<@NotNull K>, V extends Equalable<@
   IntFunction<@NotNull V[]> value = defaultConstructor();
 
   @NotNull
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()
   {
     return (IntFunction)Empty[]::new;
@@ -102,7 +101,7 @@ public class ImmutableMap<K extends Equalable<@NotNull K>, V extends Equalable<@
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ISet<IMap.Entry<@NotNull K, @NotNull V>> entrySet()
+  public ISet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet()
   {
     return ISet.copyOfEntries(toMap().entrySet());
   }

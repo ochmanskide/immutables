@@ -33,6 +33,7 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   IntFunction<@NotNull E[]> constructor = defaultConstructor();
 
   @NotNull
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()
   {
     return (IntFunction)Empty[]::new;
@@ -140,10 +141,17 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @Contract(value = "-> new", pure = true)
   private E[] newArrayNative()
   {
-    final Class<E> componentType = (Class<E>)get(0).getClass();
+    final Class<E> componentType = getComponentType();
     final int size = size();
     final Object a = Array.newInstance(componentType, size);
     return (E[])a;
+  }
+
+  @NotNull
+  @SuppressWarnings("unchecked")
+  private Class<E> getComponentType()
+  {
+    return (Class<E>)get(0).getClass();
   }
 
   // Positional Access Operations

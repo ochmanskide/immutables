@@ -130,7 +130,7 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @Contract(value = " -> new", pure = true)
   public E[] toArray()
   {
-    return list.isEmpty()
+    return isEmpty()
         ? list.toArray(getConstructor())
         : list.toArray(newArrayNative());
   }
@@ -140,8 +140,8 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @Contract(value = "-> new", pure = true)
   private E[] newArrayNative()
   {
-    final Class<E> componentType = (Class<E>)list.get(0).getClass();
-    final int size = list.size();
+    final Class<E> componentType = (Class<E>)get(0).getClass();
+    final int size = size();
     final Object a = Array.newInstance(componentType, size);
     return (E[])a;
   }
@@ -188,5 +188,4 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   {
     return List.copyOf(list);
   }
-
 }

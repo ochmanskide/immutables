@@ -2,11 +2,13 @@ package de.ochmanski.immutables;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 interface ISet<E extends Equalable<@NotNull E>>
@@ -94,9 +96,22 @@ interface ISet<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  static <K extends Equalable<@NotNull K>> ISet<@NotNull K> copyOf(@NotNull final Collection<@NotNull K> keys)
+  static <K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>> ISet<IMap.Entry<K, V>>
+  copyOf(Set<Map.Entry<K, V>> collect)
   {
-    return ImmutableSet.<K>builder().set(Set.copyOf(keys)).build();
+    final Set<Map.Entry<K, V>> entries = Set.copyOf(collect);
+    final Set<IMap.Entry<K, V>> set = entries.stream()
+        .map(ISet::toImmutableEntry)
+        .collect(Collectors.toUnmodifiableSet());
+    return ImmutableSet.<IMap.Entry<K, V>>builder().set(set).build();
+  }
+
+  @NotNull
+  @Contract(value = " _ -> new", pure = true)
+  static <V extends Equalable<@NotNull V>, K extends Equalable<@NotNull K>> IMap.Entry<K, V> toImmutableEntry(
+      Map.Entry<K, V> p)
+  {
+    return IMap.Entry.<K, V>builder().key(p.getKey()).value(p.getValue()).build();
   }
 
   int size();
@@ -140,58 +155,7 @@ interface ISet<E extends Equalable<@NotNull E>>
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  Optional<@Nullable E[]> toArray();
-
-  /**
-   * Returns an array containing all the elements in this set in proper sequence (from first to last element); the
-   * runtime type of the returned array is that of the specified array.  If the set fits in the specified array, it is
-   * returned therein.  Otherwise, a new array is allocated with the runtime type of the specified array and the size of
-   * this set.
-   *
-   * <p>If the set fits in the specified array with room to spare
-   * (i.e., the array has more elements than the set), the element in the array immediately following the end of the
-   * collection is set to {@code null}.  (This is useful in determining the length of the set <i>only</i> if the caller
-   * knows that the set does not contain any null elements.)
-   *
-   * @param a the array into which the elements of the set are to be stored, if it is big enough; otherwise, a new
-   *     array of the same runtime type is allocated for this purpose.
-   * @return an array containing the elements of the set
-   * @throws ArrayStoreException if the runtime type of the specified array is not a supertype of the runtime type
-   *     of every element in this set
-   * @throws NullPointerException if the specified array is null
-   */
-  @NotNull
-  @Contract(value = " _ -> new", pure = true)
-  E[] toArray(@NotNull final E[] a);
-
-  /**
-   * Returns an array containing all the elements in this collection, using the provided {@code generator} function to
-   * allocate the returned array.
-   *
-   * <p>If this collection makes any guarantees as to what order its elements
-   * are returned by its iterator, this method must return the elements in the same order.
-   *
-   * @param generator a function which produces a new array of the desired type and the provided length
-   * @return an array containing all the elements in this collection
-   * @throws ArrayStoreException if the runtime type of any element in this collection is not assignable to the
-   *     {@linkplain Class#getComponentType runtime component type} of the generated array
-   * @throws NullPointerException if the generator function is null
-   * @apiNote This method acts as a bridge between array-based and collection-based APIs. It allows creation of an
-   *     array of a particular runtime type. Use {@link #toArray()} to create an array whose runtime type is
-   *     {@code Object[]}, or use {@link #toArray(E[])} to reuse an existing array.
-   *
-   *     <p>Suppose {@code x} is a collection known to contain only strings.
-   *     The following code can be used to dump the collection into a newly allocated array of {@code String}:
-   *
-   *     <pre>
-   *             String[] y = x.toArray(String[]::new);</pre>
-   * @implSpec The default implementation calls the generator function with zero and then passes the resulting array
-   *     to {@link #toArray(E[])}.
-   * @since 11
-   */
-  @NotNull
-  @Contract(value = " _ -> new", pure = true)
-  E[] toArray(@NotNull final IntFunction<@NotNull E[]> generator);
+  E[] toArray();
 
   /**
    * Returns an iterator over the elements in this set.  The elements are returned in no particular order (unless this
@@ -210,5 +174,4 @@ interface ISet<E extends Equalable<@NotNull E>>
   @NotNull
   @Contract(value = " -> new", pure = true)
   Set<@NotNull E> toSet();
-
 }

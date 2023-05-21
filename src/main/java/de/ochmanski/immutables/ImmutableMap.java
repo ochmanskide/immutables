@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.IntFunction;
@@ -48,16 +47,6 @@ public class ImmutableMap<K extends Equalable<@NotNull K>, V extends Equalable<@
 
   private static class Empty implements Equalable<@NotNull Empty>
   {
-  }
-
-  private boolean isKeyEmpty()
-  {
-    return Equalable.areEqual(key, defaultConstructor());
-  }
-
-  private boolean isValueEmpty()
-  {
-    return Equalable.areEqual(value, defaultConstructor());
   }
 
   /**
@@ -122,9 +111,12 @@ public class ImmutableMap<K extends Equalable<@NotNull K>, V extends Equalable<@
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public Set<Map.Entry<@NotNull K, @NotNull V>> entrySet()
+  public ISet<IMap.Entry<@NotNull K, @NotNull V>> entrySet()
   {
-    return toMap().entrySet().stream().map(Map.Entry::copyOf).collect(Collectors.toUnmodifiableSet());
+    final Set<Map.Entry<@NotNull K, @NotNull V>> collect = toMap().entrySet().stream()
+        .map(Map.Entry::copyOf)
+        .collect(Collectors.toUnmodifiableSet());
+    return ISet.copyOf(collect);
   }
 
   @Override

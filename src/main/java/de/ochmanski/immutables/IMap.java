@@ -1,11 +1,14 @@
 package de.ochmanski.immutables;
 
+import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Map;
-import java.util.Set;
+import java.util.Objects;
 import java.util.function.IntFunction;
 
 interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
@@ -126,7 +129,7 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  Set<Map.Entry<@NotNull K, @NotNull V>> entrySet();
+  ISet<IMap.Entry<@NotNull K, @NotNull V>> entrySet();
 
   @NotNull
   @UnmodifiableView
@@ -137,5 +140,97 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   IList<@NotNull V> value();
+
+  @Value
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  @Builder(toBuilder = true)
+  class Entry<K, V> implements Equalable<Entry<K, V>>
+  {
+
+    @NonNull
+    @NotNull("Given keyType cannot be null.")
+    @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
+    K key;
+
+    @NonNull
+    @NotNull("Given valueType cannot be null.")
+    @javax.validation.constraints.NotNull(message = "Given valueType cannot be null.")
+    V value;
+
+    /**
+     * Returns a comparator that compares {@link IMap.Entry} in natural order on key.
+     *
+     * <p>The returned comparator is serializable and throws {@link
+     * NullPointerException} when comparing an entry with a null key.
+     *
+     * @param <K> the {@link Comparable} type of then map keys
+     * @param <V> the type of the map values
+     * @return a comparator that compares {@link IMap.Entry} in natural order on key.
+     * @see Comparable
+     * @since 1.8
+     */
+    static <K extends Comparable<? super K>, V> Comparator<IMap.Entry<K, V>> comparingByKey()
+    {
+      return (Comparator<IMap.Entry<K, V>> & Serializable)
+          (c1, c2) -> c1.getKey().compareTo(c2.getKey());
+    }
+
+    /**
+     * Returns a comparator that compares {@link IMap.Entry} in natural order on value.
+     *
+     * <p>The returned comparator is serializable and throws {@link
+     * NullPointerException} when comparing an entry with null values.
+     *
+     * @param <K> the type of the map keys
+     * @param <V> the {@link Comparable} type of the map values
+     * @return a comparator that compares {@link IMap.Entry} in natural order on value.
+     * @see Comparable
+     * @since 1.8
+     */
+    static <K, V extends Comparable<? super V>> Comparator<IMap.Entry<K, V>> comparingByValue()
+    {
+      return (Comparator<IMap.Entry<K, V>> & Serializable)
+          (c1, c2) -> c1.getValue().compareTo(c2.getValue());
+    }
+
+    /**
+     * Returns a comparator that compares {@link IMap.Entry} by key using the given {@link Comparator}.
+     *
+     * <p>The returned comparator is serializable if the specified comparator
+     * is also serializable.
+     *
+     * @param <K> the type of the map keys
+     * @param <V> the type of the map values
+     * @param cmp the key {@link Comparator}
+     * @return a comparator that compares {@link IMap.Entry} by the key.
+     * @since 1.8
+     */
+    static <K, V> Comparator<IMap.Entry<K, V>> comparingByKey(Comparator<? super K> cmp)
+    {
+      Objects.requireNonNull(cmp);
+      return (Comparator<IMap.Entry<K, V>> & Serializable)
+          (c1, c2) -> cmp.compare(c1.getKey(), c2.getKey());
+    }
+
+    /**
+     * Returns a comparator that compares {@link IMap.Entry} by value using the given {@link Comparator}.
+     *
+     * <p>The returned comparator is serializable if the specified comparator
+     * is also serializable.
+     *
+     * @param <K> the type of the map keys
+     * @param <V> the type of the map values
+     * @param cmp the value {@link Comparator}
+     * @return a comparator that compares {@link IMap.Entry} by the value.
+     * @since 1.8
+     */
+    public static <K, V> Comparator<IMap.Entry<K, V>> comparingByValue(Comparator<? super V> cmp)
+    {
+      Objects.requireNonNull(cmp);
+      return (Comparator<IMap.Entry<K, V>> & Serializable)
+          (c1, c2) -> cmp.compare(c1.getValue(), c2.getValue());
+    }
+
+  }
 
 }

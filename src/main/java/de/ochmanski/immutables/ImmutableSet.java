@@ -3,14 +3,11 @@ package de.ochmanski.immutables;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.validation.constraints.NotEmpty;
 import java.lang.reflect.Array;
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
@@ -44,11 +41,6 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
 
   private static class Empty implements Equalable<@NotNull Empty>
   {
-  }
-
-  private boolean isConstructorEmpty()
-  {
-    return Equalable.areEqual(constructor, defaultConstructor());
   }
 
   /**
@@ -114,97 +106,23 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
    */
   @Override
   @NotNull
-  @Contract(value = " -> new", pure = true)
-  public Optional<@Nullable E[]> toArray()
-  {
-    return isConstructorEmpty() && set.isEmpty()
-        ? Optional.empty()
-        : Optional.of(toArray(set));
-  }
-
-  @NotNull
-  @Contract(value = "_ -> new", pure = true)
-  private E[] toArray(@NotNull final Set<@NotNull E> e)
-  {
-    return e.isEmpty()
-        ? createEmptyArray()
-        : e.toArray(newArrayNative(e));
-  }
-
-  @NotNull
   @Contract(value = "-> new", pure = true)
-  private E[] createEmptyArray()
+  public E[] toArray()
   {
-    return getConstructor().apply(0);
+    return isEmpty()
+        ? set.toArray(getConstructor())
+        : set.toArray(newArrayNative());
   }
 
   @NotNull
   @SuppressWarnings("unchecked")
-  @Contract(value = "_ -> new", pure = true)
-  private E[] newArrayNative(@NotNull @NotEmpty final Set<@NotNull E> e)
+  @Contract(value = "-> new", pure = true)
+  private E[] newArrayNative()
   {
-    final Class<E> componentType = (Class<E>)e.iterator().next().getClass();
-    final int size = e.size();
+    final Class<E> componentType = (Class<E>)iterator().next().getClass();
+    final int size = size();
     final Object a = Array.newInstance(componentType, size);
     return (E[])a;
-  }
-
-  /**
-   * Returns an array containing all the elements in this set in proper sequence (from first to last element); the
-   * runtime type of the returned array is that of the specified array.  If the set fits in the specified array, it is
-   * returned therein.  Otherwise, a new array is allocated with the runtime type of the specified array and the size of
-   * this set.
-   *
-   * <p>If the set fits in the specified array with room to spare
-   * (i.e., the array has more elements than the set), the element in the array immediately following the end of the
-   * collection is set to {@code null}.  (This is useful in determining the length of the set <i>only</i> if the caller
-   * knows that the set does not contain any null elements.)
-   *
-   * @param a the array into which the elements of the set are to be stored, if it is big enough; otherwise, a new
-   *     array of the same runtime type is allocated for this purpose.
-   * @return an array containing the elements of the set
-   * @throws ArrayStoreException if the runtime type of the specified array is not a supertype of the runtime type
-   *     of every element in this set
-   * @throws NullPointerException if the specified array is null
-   */
-  @Override
-  @NotNull
-  @Contract(value = " _ -> new", pure = true)
-  public E[] toArray(@NotNull final E[] a)
-  {
-    return set.toArray(a);
-  }
-
-  /**
-   * Returns an array containing all the elements in this collection, using the provided {@code generator} function to
-   * allocate the returned array.
-   *
-   * <p>If this collection makes any guarantees as to what order its elements
-   * are returned by its iterator, this method must return the elements in the same order.
-   *
-   * @param generator a function which produces a new array of the desired type and the provided length
-   * @return an array containing all the elements in this collection
-   * @throws ArrayStoreException if the runtime type of any element in this collection is not assignable to the
-   *     {@linkplain Class#getComponentType runtime component type} of the generated array
-   * @throws NullPointerException if the generator function is null
-   * @apiNote This method acts as a bridge between array-based and collection-based APIs. It allows creation of an
-   *     array of a particular runtime type. Use {@link #toArray()} to create an array whose runtime type is
-   *     {@code Object[]}, or use {@link #toArray(E[])} to reuse an existing array.
-   *
-   *     <p>Suppose {@code x} is a collection known to contain only strings.
-   *     The following code can be used to dump the collection into a newly allocated array of {@code String}:
-   *
-   *     <pre>String[] y = x.toArray(String[]::new);</pre>
-   * @implSpec The default implementation calls the generator function with zero and then passes the resulting array
-   *     to {@link #toArray(E[])}.
-   * @since 11
-   */
-  @Override
-  @NotNull
-  @Contract(value = " _ -> new", pure = true)
-  public E[] toArray(@NotNull final IntFunction<@NotNull E[]> generator)
-  {
-    return set.toArray(generator);
   }
 
   /**
@@ -217,7 +135,7 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   @Contract(pure = true)
   public Iterator<@NotNull E> iterator()
   {
-    return Set.copyOf(set).iterator();
+    return toSet().iterator();
   }
 
   /**

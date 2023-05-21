@@ -3,6 +3,8 @@ package de.ochmanski.immutables;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.IntFunction;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,7 +18,8 @@ class ImmutableEnumSetTest
   {
     assertThatThrownBy(ImmutableEnumSet::of)
         .isExactlyInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("sadfa");
+        .hasMessage("Please pass array generator type to the method. "
+            + "For example: ImmutableEnumSet.ofGenerator(Day[]::new)");
   }
 
   @Test
@@ -28,7 +31,10 @@ class ImmutableEnumSetTest
     assertThat(actual.size()).isZero();
     assertThat(actual.getSet()).isEmpty();
     assertThat(actual.toArray()).isEmpty();
-    assertThat(actual.toArray().getClass().getComponentType()).isExactlyInstanceOf(Dummy.class);
+    assertThat(actual.toArray().getClass().getComponentType()).isEqualTo(Dummy.class);
+    final List<Dummy> expected = Arrays.asList(Dummy.values());
+    final Object[] enumConstants = actual.toArray().getClass().getComponentType().getEnumConstants();
+    assertThat(enumConstants).containsExactlyElementsOf(expected);
   }
 
   @Test
@@ -68,7 +74,7 @@ class ImmutableEnumSetTest
     final Dummy s3 = Dummy.C;
     final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.of(s1, s1, s2, s3);
     assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
-    assertThat(actual.toSet()).containsExactlyInAnyOrder(Dummy.A, Dummy.A, Dummy.B, Dummy.C);
+    assertThat(actual.toSet()).containsExactlyInAnyOrder(Dummy.A, Dummy.B, Dummy.C);
   }
 
   @Test
@@ -84,7 +90,7 @@ class ImmutableEnumSetTest
   {
     final Dummy s1 = Dummy.A;
     final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
-    assertThat(actual.toArray()).containsExactly(s1);
+    assertThat(actual.toArray()).isEmpty();
   }
 
   @Test
@@ -132,7 +138,7 @@ class ImmutableEnumSetTest
   {
     assertThatThrownBy(() -> ImmutableEnumSet.of((Dummy)null))
         .isExactlyInstanceOf(NullPointerException.class)
-        .hasMessage(null);
+        .hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null");
   }
 
   @Test
@@ -159,14 +165,14 @@ class ImmutableEnumSetTest
     final Dummy s2 = Dummy.B;
     final Dummy s3 = Dummy.C;
     final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.of(s1, s1, s2, s3);
-    assertThat(actual.toArray()).containsExactly(s1, s1, s2, s3);
+    assertThat(actual.toArray()).containsExactly(s1, s2, s3);
   }
 
   @Test
   void equalable()
   {
     final Dummy a = Dummy.A;
-    final Dummy b = Dummy.B;
+    final Dummy b = Dummy.A;
     assertThat(a).isEqualTo(b);
     assertThat(a.isEqualTo(b)).isTrue();
     assertThat(a.equals(b)).isTrue();

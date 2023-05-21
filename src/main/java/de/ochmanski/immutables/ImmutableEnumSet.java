@@ -60,7 +60,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
   static void of()
   {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-        + "For example: ImmutableEnumSet.ofGenerator(String[]::new)");
+        + "For example: ImmutableEnumSet.ofGenerator(Day[]::new)");
   }
 
   /**

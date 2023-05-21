@@ -35,7 +35,13 @@ public class ImmutableMap<K extends Equalable<@NotNull K>, V extends Equalable<@
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E[]> constructor = defaultConstructor();
+  IntFunction<@NotNull K[]> key = defaultKey();
+
+  @NonNull
+  @NotNull("Given valueType cannot be null.")
+  @javax.validation.constraints.NotNull(message = "Given valueType cannot be null.")
+  @Builder.Default
+  IntFunction<@NotNull V[]> value = defaultValue();
 
   @NotNull
   private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()

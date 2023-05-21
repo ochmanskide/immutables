@@ -3,13 +3,16 @@ package de.ochmanski.immutables;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Value
@@ -17,7 +20,7 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableList<E extends Equalable<E>> implements IList<E>, Equalable<E>
+public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@NotNull E>, Equalable<@NotNull E>
 {
 
   @NonNull
@@ -37,18 +40,21 @@ public class ImmutableList<E extends Equalable<E>> implements IList<E>, Equalabl
     {
       return ImmutableList.of(s1);
     }
-    List<S> l = new LinkedList<>();
-    l.add(s1);
-    for(@Nullable S s : array)
-    {
-      if(null == s)
-      {
-        continue;
-      }
-      l.add(s);
-    }
+    List<S> l = filterNonNullElements(s1, array);
     final ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
     return sImmutableListBuilder.list(l).build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _ -> new", pure = true)
+  private static <S extends Equalable<S>> List<S> filterNonNullElements(@NotNull final S s1, @NotNull final S[] array)
+  {
+    final LinkedList<@NotNull S> collect = Arrays.stream(array)
+        .filter(Objects::nonNull)
+        .collect(Collectors.toCollection(LinkedList::new));
+    collect.addFirst(s1);
+    return List.copyOf(collect);
   }
 
   @NotNull
@@ -150,7 +156,7 @@ public class ImmutableList<E extends Equalable<E>> implements IList<E>, Equalabl
    * <p>This method acts as bridge between array-based and collection-based
    * APIs.
    *
-   * @return an array containing all of the elements in this list in proper sequence
+   * @return an array containing all the elements in this list in proper sequence
    */
   @Override
   @NotNull
@@ -161,7 +167,7 @@ public class ImmutableList<E extends Equalable<E>> implements IList<E>, Equalabl
   }
 
   /**
-   * Returns an array containing all of the elements in this list in proper sequence (from first to last element); the
+   * Returns an array containing all the elements in this list in proper sequence (from first to last element); the
    * runtime type of the returned array is that of the specified array.  If the list fits in the specified array, it is
    * returned therein.  Otherwise, a new array is allocated with the runtime type of the specified array and the size of
    * this list.
@@ -187,11 +193,45 @@ public class ImmutableList<E extends Equalable<E>> implements IList<E>, Equalabl
   }
 
   /**
+   * Returns an array containing all of the elements in this collection, using the provided {@code generator} function
+   * to allocate the returned array.
+   *
+   * <p>If this collection makes any guarantees as to what order its elements
+   * are returned by its iterator, this method must return the elements in the same order.
+   *
+   * @param generator a function which produces a new array of the desired type and the provided length
+   * @return an array containing all the elements in this collection
+   * @throws ArrayStoreException if the runtime type of any element in this collection is not assignable to the
+   *     {@linkplain Class#getComponentType runtime component type} of the generated array
+   * @throws NullPointerException if the generator function is null
+   * @apiNote This method acts as a bridge between array-based and collection-based APIs. It allows creation of an
+   *     array of a particular runtime type. Use {@link #toArray()} to create an array whose runtime type is
+   *     {@code Object[]}, or use {@link #toArray(E[])} to reuse an existing array.
+   *
+   *     <p>Suppose {@code x} is a collection known to contain only strings.
+   *     The following code can be used to dump the collection into a newly allocated array of {@code String}:
+   *
+   *     <pre>String[] y = x.toArray(String[]::new);</pre>
+   * @implSpec The default implementation calls the generator function with zero and then passes the resulting array
+   *     to {@link #toArray(E[])}.
+   * @since 11
+   */
+  @Override
+  @NotNull
+  @Contract(value = " _ -> new", pure = true)
+  public E[] toArray(@NotNull final IntFunction<@NotNull E[]> generator)
+  {
+    return list.toArray(generator);
+  }
+
+  // Positional Access Operations
+
+  /**
    * Returns the element at the specified position in this list.
    *
    * @param index index of the element to return
    * @return the element at the specified position in this list
-   * @throws IndexOutOfBoundsException {@inheritDoc}
+   * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index >= size()})
    */
   @Override
   @NotNull
@@ -211,6 +251,7 @@ public class ImmutableList<E extends Equalable<E>> implements IList<E>, Equalabl
    */
   @Override
   @NotNull
+  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public Stream<@NotNull E> stream()
   {
@@ -219,6 +260,7 @@ public class ImmutableList<E extends Equalable<E>> implements IList<E>, Equalabl
 
   @Override
   @NotNull
+  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public List<@NotNull E> toList()
   {

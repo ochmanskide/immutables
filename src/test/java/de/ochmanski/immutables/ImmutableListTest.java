@@ -107,10 +107,24 @@ class ImmutableListTest
     assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a", "a", "b", "c");
   }
 
+  @Test
+  void equalable()
+  {
+    final Dummy a = Dummy.builder().s("a").build();
+    final Dummy b = Dummy.builder().s("a").build();
+    assertThat(a).isEqualTo(b);
+    assertThat(a.isEqualTo(b)).isTrue();
+    assertThat(a.equals(b)).isTrue();
+    final Dummy c = Dummy.builder().s("c").build();
+    assertThat(a).isNotEqualTo(c);
+    assertThat(a.isEqualTo(c)).isFalse();
+    assertThat(a.equals(c)).isFalse();
+  }
+
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Builder(toBuilder = true)
-  private static class Dummy
+  private static class Dummy implements Equalable<Dummy>
   {
     @Builder.Default
     String s = "dummy";

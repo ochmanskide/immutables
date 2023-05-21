@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
 interface IList<E extends Equalable<E>>
@@ -108,11 +109,42 @@ interface IList<E extends Equalable<E>>
   E[] toArray(@NotNull final E[] a);
 
   /**
+   * Returns an array containing all of the elements in this collection, using the provided {@code generator} function
+   * to allocate the returned array.
+   *
+   * <p>If this collection makes any guarantees as to what order its elements
+   * are returned by its iterator, this method must return the elements in the same order.
+   *
+   * @param generator a function which produces a new array of the desired type and the provided length
+   * @return an array containing all the elements in this collection
+   * @throws ArrayStoreException if the runtime type of any element in this collection is not assignable to the
+   *     {@linkplain Class#getComponentType runtime component type} of the generated array
+   * @throws NullPointerException if the generator function is null
+   * @apiNote This method acts as a bridge between array-based and collection-based APIs. It allows creation of an
+   *     array of a particular runtime type. Use {@link #toArray()} to create an array whose runtime type is
+   *     {@code Object[]}, or use {@link #toArray(E[])} to reuse an existing array.
+   *
+   *     <p>Suppose {@code x} is a collection known to contain only strings.
+   *     The following code can be used to dump the collection into a newly allocated array of {@code String}:
+   *
+   *     <pre>
+   *         String[] y = x.toArray(String[]::new);</pre>
+   * @implSpec The default implementation calls the generator function with zero and then passes the resulting array
+   *     to {@link #toArray(E[])}.
+   * @since 11
+   */
+  @NotNull
+  @Contract(value = " _ -> new", pure = true)
+  E[] toArray(@NotNull final IntFunction<@NotNull E[]> generator);
+
+  // Positional Access Operations
+
+  /**
    * Returns the element at the specified position in this list.
    *
    * @param index index of the element to return
    * @return the element at the specified position in this list
-   * @throws IndexOutOfBoundsException {@inheritDoc}
+   * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index >= size()})
    */
   @NotNull
   E get(final int index);

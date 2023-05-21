@@ -132,7 +132,7 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @Contract(value = " -> new", pure = true)
   public Optional<E[]> toArray()
   {
-    if(isKeyTypeEmpty())
+    if(isKeyTypeEmpty() && list.isEmpty())
     {
       return Optional.empty();
     }
@@ -147,7 +147,7 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @NotNull
   @SuppressWarnings("unchecked")
   @Contract(value = "_ -> new", pure = true)
-  private E[] toArray(final @NotNull List<E> e)
+  private E[] toArray(@NotNull final List<E> e)
   {
     final E[] array = (E[])Array.newInstance(e.getClass().getComponentType(), e.size());
     return e.toArray(array);

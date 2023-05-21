@@ -47,9 +47,9 @@ interface ISet<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends Equalable<S>> ISet<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S[]> keyType)
+  static <S extends Equalable<S>> ISet<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S[]> constructor)
   {
-    return ImmutableSet.<S>builder().constructor(keyType).build();
+    return ImmutableSet.<S>builder().constructor(constructor).build();
   }
 
   @NotNull

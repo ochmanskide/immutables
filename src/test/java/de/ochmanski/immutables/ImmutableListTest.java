@@ -108,6 +108,16 @@ class ImmutableListTest
   }
 
   @Test
+  void toArray()
+  {
+    final Dummy s1 = Dummy.builder().s("a").build();
+    final Dummy s2 = Dummy.builder().s("b").build();
+    final Dummy s3 = Dummy.builder().s("c").build();
+    final IList<Dummy> actual = IList.of(s1, s1, s2, s3);
+    assertThat(actual.toArray()).containsExactly(s1, s1, s2, s3);
+  }
+
+  @Test
   void equalable()
   {
     final Dummy a = Dummy.builder().s("a").build();

@@ -7,6 +7,9 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.PositiveOrZero;
+import java.lang.reflect.Array;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -161,9 +164,70 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @Override
   @NotNull
   @Contract(value = " -> new", pure = true)
+  @SuppressWarnings("unchecked")
   public E[] toArray()
   {
-    return (E[])list.toArray();
+    if(list.isEmpty())
+    {
+      return createGenericArray();
+    }
+    if(list.size() == 1)
+    {
+      return createGenericArray(list.get(0));
+    }
+    return concatWithArrayCopy(list.get(0), getRest());
+  }
+
+  private Object[] getRest()
+  {
+    return list.subList(1, list.size()).toArray();
+  }
+
+  @NotNull
+  @SafeVarargs
+  private E[] toArray(
+      @NotNull final E e0,
+      @NotNull final E... array)
+  {
+    return null == array || 0 == array.length ? createGenericArray(e0) : concatWithArrayCopy(e0, array);
+  }
+
+  @NotNull
+  private E[] concatWithArrayCopy(
+      final @NotNull E e0,
+      final @NotNull Object[] array2)
+  {
+    E[] array1 = createGenericArray(e0);
+    E[] result = Arrays.copyOf(array1, array1.length + array2.length);
+    System.arraycopy(array2, 0, result, array1.length, array2.length);
+    return result;
+  }
+
+  @NotNull
+  @SuppressWarnings("unchecked")
+  @Contract(value = "_ -> new", pure = true)
+  private E[] createGenericArray(final @NotNull E e)
+  {
+    final E[] array = (E[])Array.newInstance(e.getClass(), 1);
+    array[0] = e;
+    return array;
+  }
+
+  @NotNull
+  @SuppressWarnings("unchecked")
+  @Contract(value = "-> new", pure = true)
+  private E[] createGenericArray()
+  {
+    return (E[])Array.newInstance(inferClass(), 0);
+  }
+
+  private <E extends @NotNull Equalable<@NotNull E>> Class<E> inferClass()
+  {
+    final ParameterizedType genericSuperclass = (ParameterizedType)this.getClass().getGenericSuperclass();
+    Type[] actualTypeArguments = genericSuperclass.getActualTypeArguments();
+    Type clazz = actualTypeArguments[0];
+    final Class<? extends Type> theClass = clazz.getClass();
+    return (Class<@NotNull E>)theClass;
   }
 
   /**
@@ -193,7 +257,7 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   }
 
   /**
-   * Returns an array containing all of the elements in this collection, using the provided {@code generator} function
+   * Returns an array containing all the elements in this collection, using the provided {@code generator} function
    * to allocate the returned array.
    *
    * <p>If this collection makes any guarantees as to what order its elements

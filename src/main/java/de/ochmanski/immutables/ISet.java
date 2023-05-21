@@ -1,5 +1,6 @@
 package de.ochmanski.immutables;
 
+import lombok.NonNull;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -97,13 +98,21 @@ interface ISet<E extends Equalable<@NotNull E>>
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   static <K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>> ISet<IMap.Entry<K, V>>
-  copyOf(Set<Map.Entry<K, V>> collect)
+  copyOfEntries(Set<Map.Entry<K, V>> entrySet)
   {
-    final Set<Map.Entry<K, V>> entries = Set.copyOf(collect);
-    final Set<IMap.Entry<K, V>> set = entries.stream()
+    final Set<IMap.Entry<K, V>> set = entrySet.stream()
         .map(ISet::toImmutableEntry)
         .collect(Collectors.toUnmodifiableSet());
-    return ImmutableSet.<IMap.Entry<K, V>>builder().set(set).build();
+    return copyOf(set);
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  static <K extends Equalable<@NotNull K>> ISet<K> copyOf(Set<K> keySet)
+  {
+    final Set<K> set = Set.copyOf(keySet);
+    return ImmutableSet.<K>builder().set(set).build();
   }
 
   @NotNull

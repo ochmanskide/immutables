@@ -102,21 +102,9 @@ public class ImmutableMap<K extends Equalable<@NotNull K>, V extends Equalable<@
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public Map<@NotNull K, @NotNull V> toMap()
-  {
-    return Map.copyOf(map);
-  }
-
-  @Override
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
   public ISet<IMap.Entry<@NotNull K, @NotNull V>> entrySet()
   {
-    final Set<Map.Entry<@NotNull K, @NotNull V>> collect = toMap().entrySet().stream()
-        .map(Map.Entry::copyOf)
-        .collect(Collectors.toUnmodifiableSet());
-    return ISet.copyOf(collect);
+    return ISet.copyOfEntries(toMap().entrySet());
   }
 
   @Override
@@ -135,5 +123,14 @@ public class ImmutableMap<K extends Equalable<@NotNull K>, V extends Equalable<@
   public IList<@NotNull V> value()
   {
     return IList.copyOf(toMap().values());
+  }
+
+  @Override
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public Map<@NotNull K, @NotNull V> toMap()
+  {
+    return Map.copyOf(map);
   }
 }

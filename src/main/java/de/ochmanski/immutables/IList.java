@@ -16,12 +16,21 @@ interface IList<E extends Equalable<@NotNull E>>
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use {@link #ofGenerator(IntFunction)} instead.
+   * <p>use method: {@link #ofGenerator(IntFunction)} instead.
+   * <p>Example usage:
+   * <pre>
+   *   {@code
+   *   final IList<Dummy> actual = IList.ofGenerator(Dummy[]::new);
+   *   final IList<String> actual = IList.ofGenerator(String[]::new);
+   *   final IList<Integer> actual = IList.ofGenerator(Integer[]::new);
+   *   }
+   * </pre>
    */
   @Contract(value = "-> fail", pure = true)
   static void of()
   {
-    throw new UnsupportedOperationException("Please pass Class<E> type to the method.");
+    throw new UnsupportedOperationException("Please pass array generator type to the method. "
+        + "For example: IList.ofGenerator(String[]::new)");
   }
 
   /**

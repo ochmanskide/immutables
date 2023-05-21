@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.validation.constraints.NotEmpty;
 import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +32,7 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  Class<? extends @NonNull @NotNull Equalable<?>> keyType = Empty.class;
-
+  Class<@NonNull @NotNull E> keyType = (Class<E>)Empty.class;
 
   private interface Empty extends Equalable<Empty>
   {
@@ -132,28 +132,27 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @Contract(value = " -> new", pure = true)
   public Optional<E[]> toArray()
   {
-    if(isKeyTypeEmpty() && list.isEmpty())
-    {
-      return Optional.empty();
-    }
-    if(list.isEmpty())
-    {
-      return Optional.of((E[])Array.newInstance(getKeyType(), 0));
-    }
-    return Optional.of(toArray(list));
-
+    return isKeyTypeEmpty() && list.isEmpty()
+        ? Optional.empty()
+        : Optional.of(toArray(list));
   }
 
   @NotNull
   @SuppressWarnings("unchecked")
   @Contract(value = "_ -> new", pure = true)
-  private E[] toArray(@NotNull final List<@NotNull E> e)
+  private E[] toArray(@NotNull @NotEmpty final List<@NotNull E> e)
   {
-    final Class<?> componentType = e.getClass().getComponentType();
+    final E[] array = newArrayNative(e);
+    return e.toArray(array);
+  }
+
+  @NotNull
+  private E[] newArrayNative(final @NotNull List<@NotNull E> e)
+  {
+    final Class<E> componentType = e.isEmpty() ? getKeyType() : (Class<E>)e.get(0).getClass();
     final int size = e.size();
     final Object a = Array.newInstance(componentType, size);
-    final E[] array = (E[])a;
-    return e.toArray(array);
+    return (E[])a;
   }
 
   /**

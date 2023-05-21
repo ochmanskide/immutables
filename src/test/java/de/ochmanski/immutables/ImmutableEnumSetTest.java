@@ -32,48 +32,148 @@ class ImmutableEnumSetTest
   }
 
   @Test
-  void testOf()
+  void of1()
   {
-    //when(dependency.testOf(any())).thenReturn(dummy());
-    //actual = unitUnderTest.testOf();
-    //expected = "expectedValue";
-    //assertThat(actual).isEqualTo(expected);
+    final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.of(Dummy.A);
+    assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
+    assertThat(actual.toSet()).containsExactly(Dummy.A);
   }
 
   @Test
-  void testOf1()
+  void of2()
   {
-    //when(dependency.testOf1(any())).thenReturn(dummy());
-    //actual = unitUnderTest.testOf1();
-    //expected = "expectedValue";
-    //assertThat(actual).isEqualTo(expected);
+    final Dummy s1 = Dummy.A;
+    final Dummy s2 = Dummy.B;
+    final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.of(s1, s2);
+    assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
+    assertThat(actual.toSet()).containsExactlyInAnyOrder(Dummy.A, Dummy.B);
   }
 
   @Test
-  void testOf2()
+  void of3()
   {
-    //when(dependency.testOf2(any())).thenReturn(dummy());
-    //actual = unitUnderTest.testOf2();
-    //expected = "expectedValue";
-    //assertThat(actual).isEqualTo(expected);
+    final Dummy s1 = Dummy.A;
+    final Dummy s2 = Dummy.B;
+    final Dummy s3 = Dummy.C;
+    final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.of(s1, s2, s3);
+    assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
+    assertThat(actual.toSet()).containsExactlyInAnyOrder(Dummy.A, Dummy.B, Dummy.C);
   }
 
   @Test
-  void testOf3()
+  void ofArray3()
   {
-    //when(dependency.testOf3(any())).thenReturn(dummy());
-    //actual = unitUnderTest.testOf3();
-    //expected = "expectedValue";
-    //assertThat(actual).isEqualTo(expected);
+    final Dummy s1 = Dummy.A;
+    final Dummy s2 = Dummy.B;
+    final Dummy s3 = Dummy.C;
+    final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.of(s1, s1, s2, s3);
+    assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
+    assertThat(actual.toSet()).containsExactlyInAnyOrder(Dummy.A, Dummy.A, Dummy.B, Dummy.C);
   }
 
   @Test
-  void toArray()
+  void toArrayNull()
   {
-    //when(dependency.toArray(any())).thenReturn(dummy());
-    //actual = unitUnderTest.toArray();
-    //expected = "expectedValue";
-    //assertThat(actual).isEqualTo(expected);
+    assertThatThrownBy(() -> ImmutableEnumSet.of((Dummy)null))
+        .isExactlyInstanceOf(NullPointerException.class)
+        .hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null");
+  }
+
+  @Test
+  void toArrayEmpty()
+  {
+    final Dummy s1 = Dummy.A;
+    final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
+    assertThat(actual.toArray()).containsExactly(s1);
+  }
+
+  @Test
+  void toArrayEmpty1()
+  {
+    final Dummy s1 = Dummy.A;
+    assertThatThrownBy(() -> ImmutableEnumSet.of(s1, null))
+        .isExactlyInstanceOf(NullPointerException.class)
+        .hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null");
+  }
+
+  @Test
+  void toArrayEmpty2()
+  {
+    final Dummy s1 = Dummy.A;
+    assertThatThrownBy(() -> ImmutableEnumSet.of(s1, null, null))
+        .isExactlyInstanceOf(NullPointerException.class)
+        .hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null");
+  }
+
+  @Test
+  void toArrayEmpty3()
+  {
+    final Dummy s1 = Dummy.A;
+    assertThatThrownBy(() -> ImmutableEnumSet.of(s1, null, null, null))
+        .isExactlyInstanceOf(NullPointerException.class)
+        .hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null");
+  }
+
+  @Test
+  void toArrayNullClass()
+  {
+    assertThatThrownBy(() -> ImmutableEnumSet.ofGenerator(null)).isInstanceOfAny(NullPointerException.class);
+  }
+
+  @Test
+  void toArrayClass()
+  {
+    final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
+    assertThat(actual.toArray()).isEmpty();
+  }
+
+  @Test
+  void toArray0()
+  {
+    assertThatThrownBy(() -> ImmutableEnumSet.of((Dummy)null))
+        .isExactlyInstanceOf(NullPointerException.class)
+        .hasMessage(null);
+  }
+
+  @Test
+  void toArray1()
+  {
+    final Dummy s1 = Dummy.A;
+    final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.of(s1);
+    assertThat(actual.toArray()).containsExactly(s1);
+  }
+
+  @Test
+  void toArray2()
+  {
+    final Dummy s1 = Dummy.A;
+    final Dummy s2 = Dummy.B;
+    final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.of(s1, s2);
+    assertThat(actual.toArray()).containsExactly(s1, s2);
+  }
+
+  @Test
+  void toArray3()
+  {
+    final Dummy s1 = Dummy.A;
+    final Dummy s2 = Dummy.B;
+    final Dummy s3 = Dummy.C;
+    final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.of(s1, s1, s2, s3);
+    assertThat(actual.toArray()).containsExactly(s1, s1, s2, s3);
+  }
+
+  @Test
+  void equalable()
+  {
+    final Dummy a = Dummy.A;
+    final Dummy b = Dummy.B;
+    assertThat(a).isEqualTo(b);
+    assertThat(a.isEqualTo(b)).isTrue();
+    assertThat(a.equals(b)).isTrue();
+    final Dummy c = Dummy.C;
+    assertThat(a).isNotEqualTo(c);
+    assertThat(a.isEqualTo(c)).isFalse();
+    assertThat(a.equals(c)).isFalse();
   }
 
   private enum Dummy implements Equalable<Dummy>

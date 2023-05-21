@@ -13,6 +13,22 @@ import java.util.stream.Stream;
 interface IList<E extends Equalable<@NotNull E>>
 {
 
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  static <S extends Equalable<S>> IList<@NotNull S> of()
+  {
+    return ImmutableList.<S>builder().build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final S s1)
+  {
+    return ImmutableList.<S>builder().list(List.of(s1)).build();
+  }
+
   @SafeVarargs
   @NotNull
   @UnmodifiableView
@@ -34,22 +50,6 @@ interface IList<E extends Equalable<@NotNull E>>
         .collect(Collectors.toCollection(LinkedList::new));
     collect.addFirst(s1);
     return List.copyOf(collect);
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final S s1)
-  {
-    return ImmutableList.<S>builder().list(List.of(s1)).build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  static <S extends Equalable<S>> IList<@NotNull S> of()
-  {
-    return ImmutableList.<S>builder().build();
   }
 
   int size();

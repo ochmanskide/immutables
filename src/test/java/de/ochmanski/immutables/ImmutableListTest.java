@@ -123,6 +123,22 @@ class ImmutableListTest
   }
 
   @Test
+  void toArrayEmpty1()
+  {
+    final Dummy s1 = Dummy.builder().s("a").build();
+    assertThatThrownBy(() -> IList.of(s1, null))
+        .hasMessage("Cannot read the array length because \"array\" is null");
+  }
+
+  @Test
+  void toArrayEmpty2()
+  {
+    final Dummy s1 = Dummy.builder().s("a").build();
+    final IList<Dummy> actual = IList.of(s1, null, null);
+    assertThat(actual.toArray().get()).containsExactly(s1);
+  }
+
+  @Test
   void toArrayEmpty10()
   {
     final Dummy s1 = Dummy.builder().s("a").build();

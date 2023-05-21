@@ -50,9 +50,9 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = ISet.ofGenerator(Dummy[]::new);
-   *   final ISet<String> actual = ISet.ofGenerator(String[]::new);
-   *   final ISet<Integer> actual = ISet.ofGenerator(Integer[]::new);
+   *   final ISet<Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
+   *   final ISet<DayOfWeek> actual = ImmutableEnumSet.ofGenerator(DayOfWeek[]::new);
+   *   final ISet<Month> actual = ImmutableEnumSet.ofGenerator(Month[]::new);
    *   }
    * </pre>
    */
@@ -68,8 +68,8 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
    * <pre>
    *   {@code
    *   final ISet<Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
-   *   final ISet<String> actual = ImmutableEnumSet.ofGenerator(String[]::new);
-   *   final ISet<Integer> actual = ImmutableEnumSet.ofGenerator(Integer[]::new);
+   *   final ISet<DayOfWeek> actual = ImmutableEnumSet.ofGenerator(DayOfWeek[]::new);
+   *   final ISet<Month> actual = ImmutableEnumSet.ofGenerator(Month[]::new);
    *   }
    * </pre>
    */

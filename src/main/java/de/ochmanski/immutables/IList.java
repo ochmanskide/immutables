@@ -45,7 +45,8 @@ interface IList<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends Equalable<S>> IList<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S[]> constructor)
+  static <S extends Equalable<@NotNull S>> IList<@NotNull S> ofGenerator(
+      @NotNull final IntFunction<@NotNull S[]> constructor)
   {
     return ImmutableList.<S>builder().constructor(constructor).build();
   }
@@ -53,7 +54,7 @@ interface IList<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final S s1)
+  static <S extends Equalable<@NotNull S>> IList<@NotNull S> of(@NotNull final S s1)
   {
     return ImmutableList.<S>builder().list(List.of(s1)).build();
   }
@@ -61,7 +62,7 @@ interface IList<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends Equalable<S>> IList<@NotNull S> of(
+  static <S extends Equalable<@NotNull S>> IList<@NotNull S> of(
       @NotNull final S s1,
       @NotNull final S s2)
   {
@@ -71,7 +72,7 @@ interface IList<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  static <S extends Equalable<S>> IList<@NotNull S> of(
+  static <S extends Equalable<@NotNull S>> IList<@NotNull S> of(
       @NotNull final S s1,
       @NotNull final S s2,
       @NotNull final S s3)
@@ -82,7 +83,7 @@ interface IList<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <S extends Equalable<S>> IList<@NotNull S> of(
+  static <S extends Equalable<@NotNull S>> IList<@NotNull S> of(
       @NotNull final S s1,
       @NotNull final S s2,
       @NotNull final S s3,

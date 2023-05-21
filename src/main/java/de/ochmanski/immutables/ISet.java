@@ -47,7 +47,8 @@ interface ISet<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends Equalable<S>> ISet<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S[]> constructor)
+  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> ofGenerator(
+      @NotNull final IntFunction<@NotNull S[]> constructor)
   {
     return ImmutableSet.<S>builder().constructor(constructor).build();
   }
@@ -55,7 +56,7 @@ interface ISet<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  static <S extends Equalable<S>> ISet<@NotNull S> of(@NotNull final S s1)
+  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> of(@NotNull final S s1)
   {
     return ImmutableSet.<S>builder().set(Set.of(s1)).build();
   }
@@ -63,7 +64,7 @@ interface ISet<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends Equalable<S>> ISet<@NotNull S> of(
+  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> of(
       @NotNull final S s1,
       @NotNull final S s2)
   {
@@ -73,7 +74,7 @@ interface ISet<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  static <S extends Equalable<S>> ISet<@NotNull S> of(
+  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> of(
       @NotNull final S s1,
       @NotNull final S s2,
       @NotNull final S s3)
@@ -84,7 +85,7 @@ interface ISet<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <S extends Equalable<S>> ISet<@NotNull S> of(
+  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> of(
       @NotNull final S s1,
       @NotNull final S s2,
       @NotNull final S s3,
@@ -150,7 +151,7 @@ interface ISet<E extends Equalable<@NotNull E>>
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  ImmutableSet<@NotNull E> deepClone();
+  ISet<@NotNull E> deepClone();
 
   /**
    * Returns an array containing all the elements in this set in proper sequence (from first to last element).

@@ -213,10 +213,9 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
    *
    * @return an iterator over the elements in this set
    */
-  @Override
   @NotNull
   @Contract(pure = true)
-  public Iterator<@NotNull E> get(final int index)
+  public Iterator<@NotNull E> iterator()
   {
     return Set.copyOf(set).iterator();
   }

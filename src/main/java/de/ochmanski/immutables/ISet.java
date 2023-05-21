@@ -195,7 +195,7 @@ interface ISet<E extends Equalable<@NotNull E>>
    */
   @NotNull
   @Contract(pure = true)
-  Iterator<@NotNull E> get(final int index);
+  Iterator<@NotNull E> iterator();
 
   @NotNull
   @Contract(value = " -> new", pure = true)

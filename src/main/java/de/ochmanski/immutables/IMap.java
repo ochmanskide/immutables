@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.function.IntFunction;
 
 interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
@@ -107,7 +108,7 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
    * @param o element whose presence in this map is to be tested
    * @return {@code true} if this map contains the specified element
    */
-  boolean contains(@NotNull final K o);
+  boolean containsKey(@NotNull final K o);
 
   /**
    * Returns a deep copy of this {@code ArrayMap} instance.  (The elements themselves are also copied.)
@@ -121,5 +122,20 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
   @NotNull
   @Contract(value = " -> new", pure = true)
   Map<@NotNull K, @NotNull V> toMap();
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  Set<Map.Entry<@NotNull K, @NotNull V>> entrySet();
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  ISet<@NotNull K> keySet();
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  IList<@NotNull V> value();
 
 }

@@ -147,9 +147,12 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @NotNull
   @SuppressWarnings("unchecked")
   @Contract(value = "_ -> new", pure = true)
-  private E[] toArray(@NotNull final List<E> e)
+  private E[] toArray(@NotNull final List<@NotNull E> e)
   {
-    final E[] array = (E[])Array.newInstance(e.getClass().getComponentType(), e.size());
+    final Class<?> componentType = e.getClass().getComponentType();
+    final int size = e.size();
+    final Object a = Array.newInstance(componentType, size);
+    final E[] array = (E[])a;
     return e.toArray(array);
   }
 

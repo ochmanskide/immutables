@@ -134,7 +134,7 @@ interface IList<E extends Equalable<@NotNull E>>
   ImmutableList<@NotNull E> deepClone();
 
   /**
-   * Returns an array containing all of the elements in this list in proper sequence (from first to last element).
+   * Returns an array containing all the elements in this list in proper sequence (from first to last element).
    *
    * <p>The returned array will be "safe" in that no references to it are
    * maintained by this list.  (In other words, this method must allocate a new array).  The caller is thus free to
@@ -143,14 +143,14 @@ interface IList<E extends Equalable<@NotNull E>>
    * <p>This method acts as bridge between array-based and collection-based
    * APIs.
    *
-   * @return an array containing all of the elements in this list in proper sequence
+   * @return an array containing all the elements in this list in proper sequence
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
   Optional<@Nullable E[]> toArray();
 
   /**
-   * Returns an array containing all of the elements in this list in proper sequence (from first to last element); the
+   * Returns an array containing all the elements in this list in proper sequence (from first to last element); the
    * runtime type of the returned array is that of the specified array.  If the list fits in the specified array, it is
    * returned therein.  Otherwise, a new array is allocated with the runtime type of the specified array and the size of
    * this list.

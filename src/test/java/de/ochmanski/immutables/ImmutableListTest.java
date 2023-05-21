@@ -187,7 +187,5 @@ class ImmutableListTest
   {
     @Builder.Default
     String s = "dummy";
-
   }
-
 }

@@ -46,7 +46,7 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   {
   }
 
-  private boolean isKeyTypeEmpty()
+  private boolean isConstructorEmpty()
   {
     return Equalable.areEqual(constructor, defaultConstructor());
   }
@@ -117,7 +117,7 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   @Contract(value = " -> new", pure = true)
   public Optional<@Nullable E[]> toArray()
   {
-    return isKeyTypeEmpty() && set.isEmpty()
+    return isConstructorEmpty() && set.isEmpty()
         ? Optional.empty()
         : Optional.of(toArray(set));
   }
@@ -127,8 +127,15 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   private E[] toArray(@NotNull final Set<@NotNull E> e)
   {
     return e.isEmpty()
-        ? getConstructor().apply(0)
+        ? createEmptyArray()
         : e.toArray(newArrayNative(e));
+  }
+
+  @NotNull
+  @Contract(value = "-> new", pure = true)
+  private E[] createEmptyArray()
+  {
+    return getConstructor().apply(0);
   }
 
   @NotNull

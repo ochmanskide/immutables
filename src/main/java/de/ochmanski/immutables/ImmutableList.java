@@ -45,7 +45,7 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   {
   }
 
-  private boolean isKeyTypeEmpty()
+  private boolean isConstructorEmpty()
   {
     return Equalable.areEqual(constructor, defaultConstructor());
   }
@@ -138,7 +138,7 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @Contract(value = " -> new", pure = true)
   public Optional<@Nullable E[]> toArray()
   {
-    return isKeyTypeEmpty() && list.isEmpty()
+    return isConstructorEmpty() && list.isEmpty()
         ? Optional.empty()
         : Optional.of(toArray(list));
   }
@@ -148,8 +148,15 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   private E[] toArray(@NotNull final List<@NotNull E> e)
   {
     return e.isEmpty()
-        ? getConstructor().apply(0)
+        ? createEmptyArray()
         : e.toArray(newArrayNative(e));
+  }
+
+  @NotNull
+  @Contract(value = "-> new", pure = true)
+  private E[] createEmptyArray()
+  {
+    return getConstructor().apply(0);
   }
 
   @NotNull

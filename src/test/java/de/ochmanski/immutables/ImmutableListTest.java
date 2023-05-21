@@ -108,7 +108,55 @@ class ImmutableListTest
   }
 
   @Test
-  void toArray()
+  void toArrayNull()
+  {
+    final Dummy s1 = Dummy.builder().s("a").build();
+    assertThatThrownBy(() -> IList.of(s1, (Dummy[])null))
+        .hasMessage("Cannot read the array length because \"array\" is null");
+  }
+
+  @Test
+  void toArrayEmpty()
+  {
+    final Dummy s1 = Dummy.builder().s("a").build();
+    final IList<Dummy> actual = IList.of(s1, new Dummy[0]);
+    assertThat(actual.toArray()).containsExactly(s1);
+  }
+
+  @Test
+  void toArrayEmpty10()
+  {
+    final Dummy s1 = Dummy.builder().s("a").build();
+    final IList<Dummy> actual = IList.of(s1, new Dummy[10]);
+    assertThat(actual.toArray()).containsExactly(s1);
+  }
+
+  @Test
+  void toArray0()
+  {
+    final IList<Dummy> actual = IList.of();
+    assertThat(actual.toArray()).isEmpty();
+  }
+
+  @Test
+  void toArray1()
+  {
+    final Dummy s1 = Dummy.builder().s("a").build();
+    final IList<Dummy> actual = IList.of(s1);
+    assertThat(actual.toArray()).containsExactly(s1);
+  }
+
+  @Test
+  void toArray2()
+  {
+    final Dummy s1 = Dummy.builder().s("a").build();
+    final Dummy s2 = Dummy.builder().s("b").build();
+    final IList<Dummy> actual = IList.of(s1, s2);
+    assertThat(actual.toArray()).containsExactly(s1, s2);
+  }
+
+  @Test
+  void toArray3()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();

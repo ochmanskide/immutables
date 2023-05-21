@@ -90,7 +90,6 @@ class ImmutableListTest
   void ofArray2()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
-    final Dummy s2 = Dummy.builder().s("b").build();
     final IList<Dummy> actual = IList.of(s1, new Dummy[2]);
     assertThat(actual).isInstanceOf(ImmutableList.class);
     assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a");

@@ -17,15 +17,11 @@ interface IList<E extends Equalable<@NotNull E>>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  public static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final S s1, @NotNull final S... array)
+  static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final S s1, @NotNull final S... array)
   {
-    if(array.length == 0)
-    {
-      return IList.of(s1);
-    }
-    List<S> l = filterNonNullElements(s1, array);
-    final ImmutableList.ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
-    return sImmutableListBuilder.list(l).build();
+    return array.length == 0
+        ? IList.of(s1)
+        : ImmutableList.<S>builder().list(filterNonNullElements(s1, array)).build();
   }
 
   @NotNull
@@ -45,8 +41,7 @@ interface IList<E extends Equalable<@NotNull E>>
   @Contract(value = " _ -> new", pure = true)
   static <S extends Equalable<S>> IList<@NotNull S> of(@NotNull final S s1)
   {
-    final ImmutableList.ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
-    return sImmutableListBuilder.list(List.of(s1)).build();
+    return ImmutableList.<S>builder().list(List.of(s1)).build();
   }
 
   @NotNull
@@ -54,8 +49,7 @@ interface IList<E extends Equalable<@NotNull E>>
   @Contract(value = " -> new", pure = true)
   static <S extends Equalable<S>> IList<@NotNull S> of()
   {
-    final ImmutableList.ImmutableListBuilder<S> sImmutableListBuilder = ImmutableList.builder();
-    return sImmutableListBuilder.build();
+    return ImmutableList.<S>builder().build();
   }
 
   int size();

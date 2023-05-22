@@ -30,13 +30,13 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Equalable<@NotNull K>
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull K[]> key = defaultConstructor();
+  IntFunction<@NotNull K[]> generator = defaultConstructor();
 
   @NonNull
-  @NotNull("Given valueType cannot be null.")
-  @javax.validation.constraints.NotNull(message = "Given valueType cannot be null.")
+  @NotNull("Given keyType cannot be null.")
+  @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull V[]> value = defaultValueConstructor();
+  Class<@NotNull K> keyType = (Class<K>)Empty.class;
 
   @NotNull
   @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -45,20 +45,10 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Equalable<@NotNull K>
     return (IntFunction)Empty[]::new;
   }
 
-  private static class Empty implements Equalable<@NotNull Empty>
+  private enum Empty implements Equalable<@NotNull Empty>
   {
   }
 
-  @NotNull
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S[]> defaultValueConstructor()
-  {
-    return (IntFunction)EmptyValue[]::new;
-  }
-
-  private static class EmptyValue implements Equalable<ImmutableEnumMap.@NotNull EmptyValue>
-  {
-  }
 
   /**
    * This method is not supported.
@@ -96,7 +86,11 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Equalable<@NotNull K>
   static <K extends Enum<@NotNull K> & Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V>
   ofGenerator(@NotNull final IntFunction<@NotNull K[]> key, @NotNull final IntFunction<@NotNull V[]> value)
   {
-    return ImmutableEnumMap.<K, V>builder().key(key).value(value).build();
+    return ImmutableEnumMap.<K, V>builder()
+        .generator(key)
+        .keyType(keyType)
+        .map(value)
+        .build();
   }
 
   @NotNull
@@ -107,7 +101,11 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Equalable<@NotNull K>
   {
     final Map<@NonNull @NotNull K, V> map = new EnumMap<K, V>(k1, v1);
     map.put(k1, v1);
-    return ImmutableEnumMap.<K, V>builder().map(map).build();
+    return ImmutableEnumMap.<K, V>builder()
+        .generator(key)
+        .keyType(keyType)
+        .map(map)
+        .build();
   }
 
   @NotNull
@@ -117,7 +115,11 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Equalable<@NotNull K>
       @NotNull final K k1, @NotNull final V v1,
       @NotNull final K k2, @NotNull final V v2)
   {
-    return ImmutableEnumMap.<K, V>builder().map(EnumMap.of(k1, v1, k2, v2)).build();
+    return ImmutableEnumMap.<K, V>builder()
+        .generator(key)
+        .keyType(keyType)
+        .map(EnumMap.of(k1, v1, k2, v2))
+        .build();
   }
 
   @NotNull
@@ -128,7 +130,11 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Equalable<@NotNull K>
       @NotNull final K k2, @NotNull final V v2,
       @NotNull final K k3, @NotNull final V v3)
   {
-    return ImmutableEnumMap.<K, V>builder().map(EnumMap.of(k1, v1, k2, v2, k3, v3)).build();
+    return ImmutableEnumMap.<K, V>builder()
+        .generator(key)
+        .keyType(keyType)
+        .map(EnumMap.of(k1, v1, k2, v2, k3, v3))
+        .build();
   }
 
   @NotNull
@@ -140,7 +146,11 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Equalable<@NotNull K>
       @NotNull final K k3, @NotNull final V v3,
       @NotNull final K k4, @NotNull final V v4)
   {
-    return ImmutableEnumMap.<K, V>builder().map(EnumMap.of(k1, v1, k2, v2, k3, v3, k4, v4)).build();
+    return ImmutableEnumMap.<K, V>builder()
+        .generator(key)
+        .keyType(keyType)
+        .map(EnumMap.of(k1, v1, k2, v2, k3, v3, k4, v4))
+        .build();
   }
 
   /**

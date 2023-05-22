@@ -139,7 +139,7 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  IList<@NotNull V> value();
+  IList<@NotNull V> values();
 
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

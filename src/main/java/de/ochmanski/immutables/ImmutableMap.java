@@ -119,7 +119,7 @@ public class ImmutableMap<K extends Equalable<@NotNull K>, V extends Equalable<@
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public IList<@NotNull V> value()
+  public IList<@NotNull V> values()
   {
     return IList.copyOf(toMap().values());
   }

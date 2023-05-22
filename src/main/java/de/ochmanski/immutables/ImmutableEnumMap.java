@@ -240,7 +240,7 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Equalable<@NotNull K>
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public IList<@NotNull V> value()
+  public IList<@NotNull V> values()
   {
     return IList.copyOf(toMap().values());
   }

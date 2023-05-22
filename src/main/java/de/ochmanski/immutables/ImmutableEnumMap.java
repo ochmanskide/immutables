@@ -84,25 +84,26 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Equalable<@NotNull K>
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   static <K extends Enum<@NotNull K> & Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V>
-  ofGenerator(@NotNull final IntFunction<@NotNull K[]> key, @NotNull final IntFunction<@NotNull V[]> value)
+  ofGenerator(@NotNull final IntFunction<@NotNull K[]> constructor, @NotNull final Class<@NotNull K> keyType)
   {
     return ImmutableEnumMap.<K, V>builder()
-        .generator(key)
+        .generator(constructor)
         .keyType(keyType)
-        .map(value)
+        .map(new EnumMap<>(keyType))
         .build();
   }
 
   @NotNull
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = " _, _ , _, _ -> new", pure = true)
   static <K extends Enum<@NotNull K> & Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V> of(
-      @NotNull final K k1, @NotNull final V v1)
+      @NotNull final K k1, @NotNull final V v1,
+      @NotNull final IntFunction<@NotNull K[]> constructor, @NotNull final Class<@NotNull K> keyType)
   {
-    final Map<@NonNull @NotNull K, V> map = new EnumMap<K, V>(k1, v1);
+    final Map<@NonNull @NotNull K, V> map = new EnumMap<>(keyType);
     map.put(k1, v1);
     return ImmutableEnumMap.<K, V>builder()
-        .generator(key)
+        .generator(constructor)
         .keyType(keyType)
         .map(map)
         .build();
@@ -110,46 +111,61 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Equalable<@NotNull K>
 
   @NotNull
   @UnmodifiableView
-  @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <K extends Enum<@NotNull K> & Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V> of(
-      @NotNull final K k1, @NotNull final V v1,
-      @NotNull final K k2, @NotNull final V v2)
-  {
-    return ImmutableEnumMap.<K, V>builder()
-        .generator(key)
-        .keyType(keyType)
-        .map(EnumMap.of(k1, v1, k2, v2))
-        .build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = " _, _, _, _ , _, _ -> new", pure = true)
   static <K extends Enum<@NotNull K> & Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V> of(
       @NotNull final K k1, @NotNull final V v1,
       @NotNull final K k2, @NotNull final V v2,
-      @NotNull final K k3, @NotNull final V v3)
+      @NotNull final IntFunction<@NotNull K[]> constructor, @NotNull final Class<@NotNull K> keyType)
   {
+    final Map<@NonNull @NotNull K, V> map = new EnumMap<>(keyType);
+    map.put(k1, v1);
+    map.put(k2, v2);
     return ImmutableEnumMap.<K, V>builder()
-        .generator(key)
+        .generator(constructor)
         .keyType(keyType)
-        .map(EnumMap.of(k1, v1, k2, v2, k3, v3))
+        .map(map)
         .build();
   }
 
   @NotNull
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = " _, _, _, _, _, _ , _, _ -> new", pure = true)
   static <K extends Enum<@NotNull K> & Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V> of(
       @NotNull final K k1, @NotNull final V v1,
       @NotNull final K k2, @NotNull final V v2,
       @NotNull final K k3, @NotNull final V v3,
-      @NotNull final K k4, @NotNull final V v4)
+      @NotNull final IntFunction<@NotNull K[]> constructor, @NotNull final Class<@NotNull K> keyType)
   {
+    final Map<@NonNull @NotNull K, V> map = new EnumMap<>(keyType);
+    map.put(k1, v1);
+    map.put(k2, v2);
+    map.put(k3, v3);
     return ImmutableEnumMap.<K, V>builder()
-        .generator(key)
+        .generator(constructor)
         .keyType(keyType)
-        .map(EnumMap.of(k1, v1, k2, v2, k3, v3, k4, v4))
+        .map(map)
+        .build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _, _, _, _, _, _, _ , _, _ -> new", pure = true)
+  static <K extends Enum<@NotNull K> & Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V> of(
+      @NotNull final K k1, @NotNull final V v1,
+      @NotNull final K k2, @NotNull final V v2,
+      @NotNull final K k3, @NotNull final V v3,
+      @NotNull final K k4, @NotNull final V v4,
+      @NotNull final IntFunction<@NotNull K[]> constructor, @NotNull final Class<@NotNull K> keyType)
+  {
+    final Map<@NonNull @NotNull K, V> map = new EnumMap<>(keyType);
+    map.put(k1, v1);
+    map.put(k2, v2);
+    map.put(k3, v3);
+    map.put(k4, v4);
+    return ImmutableEnumMap.<K, V>builder()
+        .generator(constructor)
+        .keyType(keyType)
+        .map(map)
         .build();
   }
 

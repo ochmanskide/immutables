@@ -120,7 +120,7 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  ImmutableMap<@NotNull K, @NotNull V> deepClone();
+  IMap<@NotNull K, @NotNull V> deepClone();
 
   @NotNull
   @Contract(value = " -> new", pure = true)

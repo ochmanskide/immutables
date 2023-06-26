@@ -35,7 +35,7 @@ public interface Fluent<@NotNull E extends Enum<@NotNull E>> extends Equalable<@
   default Stream<@NotNull E> stream()
   {
 
-    return Arrays.stream(getGenericSuperClass().getEnumConstants());
+    return Arrays.stream(getEnumConstants());
   }
 
   default void forEach(@NotNull final Consumer<@NotNull E> consumer)

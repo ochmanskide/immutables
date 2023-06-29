@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public interface Fluent<@NotNull E extends Enum<@NotNull E>> extends Equalable<@NotNull E>
+public interface Fluent<E extends Enum<@NotNull E>> extends Equalable<@NotNull E>
 {
   default boolean isNotIn(@NotNull final E... states)
   {
@@ -32,10 +32,10 @@ public interface Fluent<@NotNull E extends Enum<@NotNull E>> extends Equalable<@
   }
 
   @NotNull
-  default Stream<@NotNull E> stream()
+  static <E> Stream<@NotNull E> stream(@NotNull final Class<@NotNull E> clazz)
   {
 
-    return Arrays.stream(getEnumConstants());
+    return Arrays.stream(getEnumConstants(clazz));
   }
 
   default void forEach(@NotNull final Consumer<@NotNull E> consumer)
@@ -52,7 +52,13 @@ public interface Fluent<@NotNull E extends Enum<@NotNull E>> extends Equalable<@
   @NotNull
   default E @NotNull [] getEnumConstants()
   {
-    return getGenericSuperClass().getEnumConstants();
+    return getEnumConstants(getGenericSuperClass());
+  }
+
+  @NotNull
+  static <E> E @NotNull [] getEnumConstants(@NotNull final Class<@NotNull E> enumClass)
+  {
+    return enumClass.getEnumConstants();
   }
 
   @NotNull

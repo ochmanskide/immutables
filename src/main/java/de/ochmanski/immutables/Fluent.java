@@ -24,7 +24,7 @@ public interface Fluent<E extends Enum<@NotNull E>> extends Equalable<@NotNull E
 
   default boolean anyMatch(@NotNull final E @NotNull ... array)
   {
-    return isIn(array);
+    return isIn((E[])array);
   }
 
   default boolean anyMatch(@NotNull final List<@NotNull E> elements)
@@ -73,6 +73,7 @@ public interface Fluent<E extends Enum<@NotNull E>> extends Equalable<@NotNull E
   }
 
   //@MustBeInvokedByOverriders
+  @Contract(value = "_ -> new")
   @NotNull
   static <E> Stream<@NotNull E> createStream(@NotNull final Class<@NotNull E> clazz)
   {

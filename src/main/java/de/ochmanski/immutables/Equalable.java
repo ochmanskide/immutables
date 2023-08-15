@@ -20,9 +20,16 @@ public interface Equalable<T>
     return areEqual(this, other);
   }
 
-  @Contract(value = "null, !null -> false; !null, null -> false", pure = true)
+  @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
+  static <S> boolean areNotEqual(@Nullable final S a, @Nullable final S b)
+  {
+    return !areEqual(a, b);
+  }
+
+  @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
   static <S> boolean areEqual(@Nullable final S a, @Nullable final S b)
   {
     return Objects.equals(a, b);
   }
+
 }

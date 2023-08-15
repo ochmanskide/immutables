@@ -26,8 +26,8 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@NotNull E>>
-    implements ISet<@NotNull E>, Equalable<@NotNull E>
+public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull E>>
+    implements ISet<@NotNull E>, Fluent<@NotNull E>
 {
 
   @UnmodifiableView
@@ -76,7 +76,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Equalable<@NotNull S>> ImmutableEnumSet<@NotNull S> ofGenerator(
+  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> ofGenerator(
       @NotNull final IntFunction<@NotNull S[]> constructor)
   {
     final Class<S> componentType = getComponentTypeFromConstructor(constructor);
@@ -87,7 +87,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings("unchecked")
-  private static <S extends Enum<@NotNull S> & Equalable<@NotNull S>> Class<S> getComponentTypeFromConstructor(
+  private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> Class<S> getComponentTypeFromConstructor(
       final @NotNull IntFunction<@NotNull S[]> constructor)
   {
     return (Class<S>)constructor.apply(0).getClass().getComponentType();
@@ -96,7 +96,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Equalable<@NotNull S>> ImmutableEnumSet<@NotNull S> of(@NotNull final S s1)
+  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> of(@NotNull final S s1)
   {
     return ImmutableEnumSet.<S>builder().set(EnumSet.of(s1)).build();
   }
@@ -104,7 +104,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Equalable<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
+  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
       @NotNull final S s1,
       @NotNull final S s2)
   {
@@ -114,7 +114,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Equalable<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
+  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
       @NotNull final S s1,
       @NotNull final S s2,
       @NotNull final S s3)
@@ -125,7 +125,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Equalable<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
+  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
       @NotNull final S s1,
       @NotNull final S s2,
       @NotNull final S s3,
@@ -136,12 +136,12 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
 
   @NotNull
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private static <S extends Enum<@NotNull S> & Equalable<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()
+  private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()
   {
     return (IntFunction)Empty[]::new;
   }
 
-  private enum Empty implements Equalable<ImmutableEnumSet.@NotNull Empty>
+  private enum Empty implements Fluent<ImmutableEnumSet.@NotNull Empty>
   {
     A,
     B,

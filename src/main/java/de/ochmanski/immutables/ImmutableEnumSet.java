@@ -271,9 +271,9 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Equalable<@N
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public Set<@NotNull E> toSet()
+  public EnumSet<@NotNull E> toSet()
   {
-    return Set.copyOf(set);
+    return EnumSet.copyOf(set);
   }
 
 }

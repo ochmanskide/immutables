@@ -24,25 +24,25 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Fluent<@NotNull K>, V
   @NotNull("Given map cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given map cannot be null.")
   @Builder.Default
-  Map<@NonNull @NotNull K, V> map = Map.of();
+  Map<@NonNull @NotNull K, @NonNull @NotNull V> map = Map.of();
 
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull K @NotNull []> generator = defaultConstructor();
+  IntFunction<@NonNull @NotNull K @NonNull @NotNull []> generator = defaultConstructor();
 
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  Class<@NotNull K> keyType = (Class<K>)Empty.class;
+  Class<@NonNull @NotNull K> keyType = (Class<@NonNull @NotNull K>)Empty.class;
 
   @NotNull
   @SuppressWarnings({ "unchecked", "rawtypes" })
   private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
-    return (IntFunction)Empty[]::new;
+    return (IntFunction)Empty @NonNull []::new;
   }
 
   private enum Empty implements Fluent<@NotNull Empty>
@@ -83,7 +83,7 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Fluent<@NotNull K>, V
   @NotNull
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  static <K extends Enum<@NotNull K> & Fluent<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V>
+  static <@NotNull K extends Enum<@NotNull K> & Fluent<@NotNull K>, @NotNull V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V>
   ofGenerator(@NotNull final IntFunction<@NotNull K @NotNull []> constructor, @NotNull final Class<@NotNull K> keyType)
   {
     return ImmutableEnumMap.<@NonNull @NotNull K, @NonNull @NotNull V>builder()
@@ -96,7 +96,7 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Fluent<@NotNull K>, V
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ , _, _ -> new", pure = true)
-  static <K extends Enum<@NotNull K> & Fluent<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V> of(
+  static <@NotNull K extends Enum<@NotNull K> & Fluent<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V> of(
       @NotNull final K k1, @NotNull final V v1,
       @NotNull final IntFunction<@NotNull K @NotNull []> constructor, @NotNull final Class<@NotNull K> keyType)
   {
@@ -213,7 +213,7 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Fluent<@NotNull K>, V
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ImmutableEnumMap<K, V> deepClone()
+  public ImmutableEnumMap<@NotNull K, @NotNull V> deepClone()
   {
     return toBuilder().build();
   }
@@ -249,9 +249,9 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Fluent<@NotNull K>, V
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public Map<@NotNull K, @NotNull V> toMap()
+  public EnumMap<@NotNull K, @NotNull V> toMap()
   {
-    return Map.copyOf(map);
+    return new EnumMap<>(map);
   }
 
 }

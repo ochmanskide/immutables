@@ -31,13 +31,13 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E[]> constructor = defaultConstructor();
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultConstructor();
 
   @NotNull
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()
+  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
-    return (IntFunction)value -> new Empty[value];
+    return (IntFunction)Empty @NonNull []::new;
   }
 
   private static class Empty implements Equalable<@NotNull Empty>
@@ -108,7 +108,7 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   @Override
   @NotNull
   @Contract(value = "-> new", pure = true)
-  public E[] toArray()
+  public E @NotNull [] toArray()
   {
     return isEmpty()
         ? set.toArray(getConstructor())
@@ -118,7 +118,7 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   @NotNull
   @SuppressWarnings("unchecked")
   @Contract(value = "-> new", pure = true)
-  private E[] newArrayNative()
+  private E @NotNull [] newArrayNative()
   {
     final Class<E> componentType = getComponentType();
     final int size = size();

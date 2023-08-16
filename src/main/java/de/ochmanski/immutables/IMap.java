@@ -48,7 +48,8 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   static <K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V>
-  ofGenerator(@NotNull final IntFunction<@NotNull K[]> key, @NotNull final IntFunction<@NotNull V[]> value)
+  ofGenerator(@NotNull final IntFunction<@NotNull K @NotNull []> key,
+      @NotNull final IntFunction<@NotNull V @NotNull []> value)
   {
     return ImmutableMap.<@NotNull K, @NotNull V>builder().key(key).value(value).build();
   }

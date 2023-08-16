@@ -41,7 +41,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E[]> constructor = defaultConstructor();
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultConstructor();
 
   /**
    * This method is not supported.
@@ -77,20 +77,20 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> ofGenerator(
-      @NotNull final IntFunction<@NotNull S[]> constructor)
+      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    final Class<S> componentType = getComponentTypeFromConstructor(constructor);
-    return ImmutableEnumSet.<S>builder().constructor(constructor).set(EnumSet.noneOf(componentType)).build();
+    final Class<@NotNull S> componentType = getComponentTypeFromConstructor(constructor);
+    return ImmutableEnumSet.<@NotNull S>builder().constructor(constructor).set(EnumSet.noneOf(componentType)).build();
   }
 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings("unchecked")
-  private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> Class<S> getComponentTypeFromConstructor(
-      final @NotNull IntFunction<@NotNull S[]> constructor)
+  private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
+      final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return (Class<S>)constructor.apply(0).getClass().getComponentType();
+    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
   }
 
   @NotNull
@@ -98,7 +98,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
   @Contract(value = " _ -> new", pure = true)
   static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> of(@NotNull final S s1)
   {
-    return ImmutableEnumSet.<S>builder().set(EnumSet.of(s1)).build();
+    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1)).build();
   }
 
   @NotNull
@@ -108,7 +108,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
       @NotNull final S s1,
       @NotNull final S s2)
   {
-    return ImmutableEnumSet.<S>builder().set(EnumSet.of(s1, s2)).build();
+    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2)).build();
   }
 
   @NotNull
@@ -119,7 +119,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
       @NotNull final S s2,
       @NotNull final S s3)
   {
-    return ImmutableEnumSet.<S>builder().set(EnumSet.of(s1, s2, s3)).build();
+    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3)).build();
   }
 
   @NotNull
@@ -131,14 +131,14 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
       @NotNull final S s3,
       @NotNull final S s4)
   {
-    return ImmutableEnumSet.<S>builder().set(EnumSet.of(s1, s2, s3, s4)).build();
+    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3, s4)).build();
   }
 
   @NotNull
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()
+  private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
-    return (IntFunction)Empty[]::new;
+    return (IntFunction)Empty @NotNull []::new;
   }
 
   private enum Empty implements Fluent<ImmutableEnumSet.@NotNull Empty>
@@ -212,7 +212,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
   @Override
   @NotNull
   @Contract(value = "-> new", pure = true)
-  public E[] toArray()
+  public E @NotNull [] toArray()
   {
     return isEmpty()
         ? set.toArray(getConstructor())
@@ -222,9 +222,9 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
   @NotNull
   @SuppressWarnings("unchecked")
   @Contract(value = "-> new", pure = true)
-  private E[] newArrayNative()
+  private E @NotNull [] newArrayNative()
   {
-    final Class<E> componentType = getComponentType();
+    final Class<@NotNull E> componentType = getComponentType();
     final int size = size();
     final Object a = Array.newInstance(componentType, size);
     return (E[])a;
@@ -232,7 +232,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
 
   @NotNull
   @SuppressWarnings("unchecked")
-  private Class<E> getComponentType()
+  private Class<@NotNull E> getComponentType()
   {
     return (Class<E>)iterator().next().getClass();
   }

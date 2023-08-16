@@ -29,19 +29,19 @@ public class ImmutableMap<K extends Equalable<@NotNull K>, V extends Equalable<@
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull K[]> key = defaultConstructor();
+  IntFunction<@NotNull K @NotNull []> key = defaultConstructor();
 
   @NonNull
   @NotNull("Given valueType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given valueType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull V[]> value = defaultConstructor();
+  IntFunction<@NotNull V @NotNull []> value = defaultConstructor();
 
   @NotNull
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()
+  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
-    return (IntFunction)Empty[]::new;
+    return (IntFunction)Empty @NotNull []::new;
   }
 
   private static class Empty implements Equalable<@NotNull Empty>

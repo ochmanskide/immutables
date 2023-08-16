@@ -46,7 +46,7 @@ interface IList<E extends Equalable<@NotNull E>>
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   static <S extends Equalable<@NotNull S>> IList<@NotNull S> ofGenerator(
-      @NotNull final IntFunction<@NotNull S[]> constructor)
+      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return ImmutableList.<S>builder().constructor(constructor).build();
   }
@@ -155,7 +155,7 @@ interface IList<E extends Equalable<@NotNull E>>
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  E[] toArray();
+  E @NotNull [] toArray();
 
   /**
    * Returns the element at the specified position in this list.

@@ -48,7 +48,7 @@ interface ISet<E extends Equalable<@NotNull E>>
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   static <S extends Equalable<@NotNull S>> ISet<@NotNull S> ofGenerator(
-      @NotNull final IntFunction<@NotNull S[]> constructor)
+      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return ImmutableSet.<S>builder().constructor(constructor).build();
   }
@@ -167,7 +167,7 @@ interface ISet<E extends Equalable<@NotNull E>>
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  E[] toArray();
+  E @NotNull [] toArray();
 
   /**
    * Returns an iterator over the elements in this set.  The elements are returned in no particular order (unless this

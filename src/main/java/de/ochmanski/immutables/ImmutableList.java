@@ -30,13 +30,13 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E[]> constructor = defaultConstructor();
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultConstructor();
 
   @NotNull
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S[]> defaultConstructor()
+  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
-    return (IntFunction)Empty[]::new;
+    return (IntFunction)Empty @NotNull []::new;
   }
 
   private static class Empty implements Equalable<@NotNull Empty>
@@ -129,7 +129,7 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @Override
   @NotNull
   @Contract(value = " -> new", pure = true)
-  public E[] toArray()
+  public E @NotNull [] toArray()
   {
     return isEmpty()
         ? list.toArray(getConstructor())
@@ -139,7 +139,7 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @NotNull
   @SuppressWarnings("unchecked")
   @Contract(value = "-> new", pure = true)
-  private E[] newArrayNative()
+  private E @NotNull [] newArrayNative()
   {
     final Class<E> componentType = getComponentType();
     final int size = size();

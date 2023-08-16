@@ -182,7 +182,7 @@ class ImmutableEnumSetTest
     assertThat(a.equals(c)).isFalse();
   }
 
-  private enum Dummy implements Equalable<Dummy>
+  private enum Dummy implements Fluent<Dummy>
   {
     A,
     B,

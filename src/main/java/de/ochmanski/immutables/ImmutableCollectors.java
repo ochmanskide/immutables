@@ -110,14 +110,15 @@ public interface ImmutableCollectors
     };
     final Function<@NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> finisher = (HashSet<@NotNull T> set) -> Set.of(
         set.toArray(tGenerator()));
-    final Set<Collector.@NotNull Characteristics> characteristics = CH_UNORDERED_NOID;
 
-    return new ImmutableCollectors.CollectorImpl<>(
-        supplier,
-        accumulator,
-        combiner,
-        finisher,
-        characteristics);
+    final CollectorImpl.CollectorImplBuilder<T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> builder = CollectorImpl.builder();
+    return builder
+        .supplier(supplier)
+        .accumulator(accumulator)
+        .combiner(combiner)
+        .finisher(finisher)
+        .characteristics(CH_UNORDERED_NOID)
+        .build();
   }
 
   @NotNull
@@ -143,18 +144,19 @@ public interface ImmutableCollectors
     BinaryOperator<@NotNull A> combiner;
 
     @NotNull
-    Function<@NotNull A, @NotNull R> finisher;
+    @Builder.Default
+    Function<@NotNull A, @NotNull R> finisher = castingIdentity();
 
     @NotNull
     Set<@NotNull Characteristics> characteristics;
 
-    CollectorImpl(@NotNull final Supplier<@NotNull A> supplier,
-        @NotNull final BiConsumer<@NotNull A, @NotNull T> accumulator,
-        @NotNull final BinaryOperator<@NotNull A> combiner,
-        @NotNull final Set<@NotNull Characteristics> characteristics)
-    {
-      this(supplier, accumulator, combiner, castingIdentity(), characteristics);
-    }
+    //    CollectorImpl(@NotNull final Supplier<@NotNull A> supplier,
+    //        @NotNull final BiConsumer<@NotNull A, @NotNull T> accumulator,
+    //        @NotNull final BinaryOperator<@NotNull A> combiner,
+    //        @NotNull final Set<@NotNull Characteristics> characteristics)
+    //    {
+    //      this(supplier, accumulator, combiner, castingIdentity(), characteristics);
+    //    }
 
     @NotNull
     @Override

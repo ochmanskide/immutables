@@ -32,4 +32,46 @@ public interface Equalable<T>
     return Objects.equals(a, b);
   }
 
+  @Contract(pure = true)
+  static boolean areEqual(final double a, final double b)
+  {
+    return a == b;
+  }
+
+  @Contract(pure = true)
+  static boolean areEqual(final float a, final float b)
+  {
+    return a == b;
+  }
+
+  @Contract(pure = true)
+  static boolean areEqual(final long a, final long b)
+  {
+    return a == b;
+  }
+
+  @Contract(pure = true)
+  static boolean areEqual(final int a, final int b)
+  {
+    return a == b;
+  }
+
+  @Contract(pure = true)
+  static boolean areEqual(final short a, final short b)
+  {
+    return a == b;
+  }
+
+  @Contract(pure = true)
+  static boolean areEqual(final byte a, final byte b)
+  {
+    return a == b;
+  }
+
+  @Contract(pure = true)
+  static boolean areEqual(final char a, final char b)
+  {
+    return a == b;
+  }
+
 }

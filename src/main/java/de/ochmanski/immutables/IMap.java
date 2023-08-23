@@ -145,7 +145,8 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Builder(toBuilder = true)
-  class Entry<@NotNull K, @NotNull V> implements Equalable<@NotNull Entry<@NotNull K, @NotNull V>>
+  class Entry<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
+      implements Equalable<@NotNull Entry<@NotNull K, @NotNull V>>
   {
 
     @NonNull
@@ -170,7 +171,7 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
      * @see Comparable
      * @since 1.8
      */
-    static <K extends Comparable<? super K>, V> Comparator<IMap.@NotNull Entry<@NotNull K, @NotNull V>> comparingByKey()
+    static <K extends Comparable<? super K> & Equalable<@NotNull K>, V extends Equalable<@NotNull V>> Comparator<IMap.@NotNull Entry<@NotNull K, @NotNull V>> comparingByKey()
     {
       return (Comparator<IMap.Entry<@NotNull K, @NotNull V>> & Serializable)
           (c1, c2) -> c1.getKey().compareTo(c2.getKey());
@@ -188,7 +189,7 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
      * @see Comparable
      * @since 1.8
      */
-    static <K, V extends Comparable<? super V>> Comparator<IMap.@NotNull Entry<@NotNull K, @NotNull V>> comparingByValue()
+    static <K extends Equalable<@NotNull K>, V extends Comparable<? super V> & Equalable<@NotNull V>> Comparator<IMap.@NotNull Entry<@NotNull K, @NotNull V>> comparingByValue()
     {
       return (Comparator<IMap.Entry<@NotNull K, @NotNull V>> & Serializable)
           (c1, c2) -> c1.getValue().compareTo(c2.getValue());
@@ -206,7 +207,7 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
      * @return a comparator that compares {@link IMap.Entry} by the key.
      * @since 1.8
      */
-    static <@NotNull K, @NotNull V> Comparator<IMap.Entry<@NotNull K, @NotNull V>> comparingByKey(
+    static <@NotNull K extends Equalable<@NotNull K>, @NotNull V extends Equalable<@NotNull V>> Comparator<IMap.Entry<@NotNull K, @NotNull V>> comparingByKey(
         Comparator<? super K> cmp)
     {
       Objects.requireNonNull(cmp);
@@ -226,7 +227,7 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
      * @return a comparator that compares {@link IMap.Entry} by the value.
      * @since 1.8
      */
-    public static <@NotNull K, @NotNull V> Comparator<IMap.Entry<@NotNull K, @NotNull V>> comparingByValue(
+    public static <@NotNull K extends Equalable<@NotNull K>, @NotNull V extends Equalable<@NotNull V>> Comparator<IMap.Entry<@NotNull K, @NotNull V>> comparingByValue(
         Comparator<? super V> cmp)
     {
       Objects.requireNonNull(cmp);

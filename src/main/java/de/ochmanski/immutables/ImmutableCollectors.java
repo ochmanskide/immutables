@@ -1,5 +1,10 @@
 package de.ochmanski.immutables;
 
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -40,7 +45,9 @@ public interface ImmutableCollectors
    * @param <T> the type of the input elements
    * @return a {@code Collector} which collects all the input elements into a {@code Set}
    */
-  static <T> Collector<T, ?, Set<T>> toMutableSet()
+  @NotNull
+  @Contract(" -> new")
+  static <T> Collector<@NotNull T, ?, @NotNull Set<@NotNull T>> toMutableSet()
   {
     return new CollectorImpl<>(HashSet::new, Set::add,
         (left, right) ->
@@ -73,8 +80,10 @@ public interface ImmutableCollectors
    *     <a href="../Set.html#unmodifiable">unmodifiable Set</a>
    * @since 10
    */
+  @NotNull
+  @Contract(value = " -> new", pure = true)
   @SuppressWarnings("unchecked")
-  static <T> Collector<T, ?, Set<T>> toSet()
+  static <T> Collector<@NotNull T, ?, @NotNull Set<@NotNull T>> toSet()
   {
     return new ImmutableCollectors.CollectorImpl<>(HashSet::new, Set::add,
         (left, right) ->
@@ -94,69 +103,74 @@ public interface ImmutableCollectors
         CH_UNORDERED_NOID);
   }
 
-  class CollectorImpl<T, A, R> implements Collector<T, A, R>
+  @Value
+  @RequiredArgsConstructor
+  class CollectorImpl<T, A, R> implements Collector<@NotNull T, @NotNull A, @NotNull R>
   {
-    private final Supplier<A> supplier;
-    private final BiConsumer<A, T> accumulator;
-    private final BinaryOperator<A> combiner;
-    private final Function<A, R> finisher;
-    private final Set<Characteristics> characteristics;
+    @NotNull
+    Supplier<@NotNull A> supplier;
 
-    CollectorImpl(Supplier<A> supplier,
-        BiConsumer<A, T> accumulator,
-        BinaryOperator<A> combiner,
-        Function<A, R> finisher,
-        Set<Characteristics> characteristics)
-    {
-      this.supplier = supplier;
-      this.accumulator = accumulator;
-      this.combiner = combiner;
-      this.finisher = finisher;
-      this.characteristics = characteristics;
-    }
+    @NotNull
+    BiConsumer<@NotNull A, @NotNull T> accumulator;
 
-    CollectorImpl(Supplier<A> supplier,
-        BiConsumer<A, T> accumulator,
-        BinaryOperator<A> combiner,
-        Set<Characteristics> characteristics)
+    @NotNull
+    BinaryOperator<@NotNull A> combiner;
+
+    @NotNull
+    Function<@NotNull A, @NotNull R> finisher;
+
+    @NotNull
+    Set<@NotNull Characteristics> characteristics;
+
+    CollectorImpl(@NotNull final Supplier<@NotNull A> supplier,
+        @NotNull final BiConsumer<@NotNull A, @NotNull T> accumulator,
+        @NotNull final BinaryOperator<@NotNull A> combiner,
+        @NotNull final Set<@NotNull Characteristics> characteristics)
     {
       this(supplier, accumulator, combiner, castingIdentity(), characteristics);
     }
 
+    @NotNull
     @Override
-    public BiConsumer<A, T> accumulator()
+    public BiConsumer<@NotNull A, @NotNull T> accumulator()
     {
       return accumulator;
     }
 
+    @NotNull
     @Override
-    public Supplier<A> supplier()
+    public Supplier<@NotNull A> supplier()
     {
       return supplier;
     }
 
+    @NotNull
     @Override
-    public BinaryOperator<A> combiner()
+    public BinaryOperator<@NotNull A> combiner()
     {
       return combiner;
     }
 
+    @NotNull
     @Override
-    public Function<A, R> finisher()
+    public Function<@NotNull A, @NotNull R> finisher()
     {
       return finisher;
     }
 
+    @NotNull
     @Override
-    public Set<Characteristics> characteristics()
+    public Set<@NotNull Characteristics> characteristics()
     {
       return characteristics;
     }
 
   }
 
+  @NotNull
+  @Contract(pure = true)
   @SuppressWarnings("unchecked")
-  private static <I, R> Function<I, R> castingIdentity()
+  private static <I, R> Function<@NotNull I, @NotNull R> castingIdentity()
   {
     return i -> (R)i;
   }

@@ -39,6 +39,7 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Fluent<@NotNull K>, V
   Class<@NonNull @NotNull K> keyType = (Class<K>)Empty.class;
 
   @NotNull
+  @Contract(pure = true)
   @SuppressWarnings({ "unchecked", "rawtypes" })
   private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {

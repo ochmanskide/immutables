@@ -7,9 +7,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Array;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
@@ -132,6 +130,25 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
       @NotNull final S s4)
   {
     return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3, s4)).build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> ImmutableEnumSet<S> of(
+      @NotNull final S @NotNull [] array)
+  {
+    final List<@NotNull S> list = Arrays.asList(array);
+    return ImmutableEnumSet.<@NotNull S>of(list);
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> ImmutableEnumSet<S> of(
+      @NotNull final Collection<@NotNull S> collection)
+  {
+    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.copyOf(collection)).build();
   }
 
   @NotNull

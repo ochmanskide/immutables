@@ -56,7 +56,7 @@ public interface FluentCollectors
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  static <T extends Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
+  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
   {
     return CollectorImpl.<T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
         .supplier(HashSet::new)
@@ -94,9 +94,9 @@ public interface FluentCollectors
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  static <T extends Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toSet()
+  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>> toSet()
   {
-    return CollectorImpl.<T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
+    return CollectorImpl.<T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>>builder()
         .supplier(HashSet::new)
         .accumulator(Set::add)
         .combiner((left, right) ->
@@ -112,11 +112,7 @@ public interface FluentCollectors
             return left;
           }
         })
-        .finisher(set ->
-        {
-          final IntFunction<@NotNull T @NotNull []> intFunction = tGenerator();
-          return Set.of(set.toArray(intFunction));
-        })
+        .finisher(ImmutableEnumSet::of)
         .characteristics(CH_UNORDERED_NOID)
         .build();
   }
@@ -124,7 +120,7 @@ public interface FluentCollectors
   @NotNull
   @Contract(pure = true)
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  static <T extends Enum<@NotNull T> & Fluent<@NotNull T>> IntFunction<@NotNull T @NotNull []> tGenerator()
+  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> IntFunction<@NotNull T @NotNull []> tGenerator()
   {
     return (IntFunction)Object @NotNull []::new;
   }
@@ -132,7 +128,7 @@ public interface FluentCollectors
   @Value
   @RequiredArgsConstructor
   @Builder
-  class CollectorImpl<T extends Enum<@NotNull T> & Fluent<@NotNull T>, A, R>
+  class CollectorImpl<T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>, A, R>
       implements Collector<@NotNull T, @NotNull A, @NotNull R>
   {
     @NotNull

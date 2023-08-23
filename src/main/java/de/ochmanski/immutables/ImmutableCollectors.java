@@ -9,10 +9,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collector;
 
 public interface ImmutableCollectors
@@ -82,7 +79,6 @@ public interface ImmutableCollectors
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  @SuppressWarnings("unchecked")
   static <T> Collector<@NotNull T, ?, @NotNull Set<@NotNull T>> toSet()
   {
     return new ImmutableCollectors.CollectorImpl<>(HashSet::new, Set::add,
@@ -99,8 +95,16 @@ public interface ImmutableCollectors
             return left;
           }
         },
-        set -> (Set<T>)Set.of(set.toArray()),
+        set -> Set.of(set.toArray(tGenerator())),
         CH_UNORDERED_NOID);
+  }
+
+  @NotNull
+  @Contract(pure = true)
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  static <T> IntFunction<@NotNull T @NotNull []> tGenerator()
+  {
+    return (IntFunction)Object @NotNull []::new;
   }
 
   @Value

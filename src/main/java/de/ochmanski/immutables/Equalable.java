@@ -33,9 +33,21 @@ public interface Equalable<T>
   }
 
   @Contract(pure = true)
+  static boolean areNotEqual(final double a, final double b)
+  {
+    return !areEqual(a, b);
+  }
+
+  @Contract(pure = true)
   static boolean areEqual(final double a, final double b)
   {
     return a == b;
+  }
+
+  @Contract(pure = true)
+  static boolean areNotEqual(final float a, final float b)
+  {
+    return !areEqual(a, b);
   }
 
   @Contract(pure = true)
@@ -45,9 +57,21 @@ public interface Equalable<T>
   }
 
   @Contract(pure = true)
+  static boolean areNotEqual(final long a, final long b)
+  {
+    return !areEqual(a, b);
+  }
+
+  @Contract(pure = true)
   static boolean areEqual(final long a, final long b)
   {
     return a == b;
+  }
+
+  @Contract(pure = true)
+  static boolean areNotEqual(final int a, final int b)
+  {
+    return !areEqual(a, b);
   }
 
   @Contract(pure = true)
@@ -57,15 +81,33 @@ public interface Equalable<T>
   }
 
   @Contract(pure = true)
+  static boolean areNotEqual(final short a, final short b)
+  {
+    return !areEqual(a, b);
+  }
+
+  @Contract(pure = true)
   static boolean areEqual(final short a, final short b)
   {
     return a == b;
   }
 
   @Contract(pure = true)
+  static boolean areNotEqual(final byte a, final byte b)
+  {
+    return !areEqual(a, b);
+  }
+
+  @Contract(pure = true)
   static boolean areEqual(final byte a, final byte b)
   {
     return a == b;
+  }
+
+  @Contract(pure = true)
+  static boolean areNotEqual(final char a, final char b)
+  {
+    return !areEqual(a, b);
   }
 
   @Contract(pure = true)

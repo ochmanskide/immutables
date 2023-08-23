@@ -155,7 +155,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
   @SuppressWarnings({ "unchecked", "rawtypes" })
   private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
-    return (IntFunction)Empty @NotNull []::new;
+    return (IntFunction)Object @NotNull []::new;
   }
 
   private enum Empty implements Fluent<ImmutableEnumSet.@NotNull Empty>

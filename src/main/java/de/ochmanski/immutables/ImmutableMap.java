@@ -41,7 +41,7 @@ public class ImmutableMap<K extends Equalable<@NotNull K>, V extends Equalable<@
   @SuppressWarnings({ "unchecked", "rawtypes" })
   private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
-    return (IntFunction)Empty @NotNull []::new;
+    return (IntFunction)Object @NotNull []::new;
   }
 
   private static class Empty implements Equalable<@NotNull Empty>

@@ -36,7 +36,7 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
   @SuppressWarnings({ "unchecked", "rawtypes" })
   private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
-    return (IntFunction)Empty @NotNull []::new;
+    return (IntFunction)Object @NotNull []::new;
   }
 
   private static class Empty implements Equalable<@NotNull Empty>

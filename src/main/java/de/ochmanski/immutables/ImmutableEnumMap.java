@@ -43,7 +43,7 @@ public class ImmutableEnumMap<K extends Enum<@NotNull K> & Fluent<@NotNull K>, V
   @SuppressWarnings({ "unchecked", "rawtypes" })
   private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
-    return (IntFunction)Empty @NotNull []::new;
+    return (IntFunction)Object @NotNull []::new;
   }
 
   private enum Empty implements Fluent<@NotNull Empty>

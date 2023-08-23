@@ -55,11 +55,13 @@ public interface ImmutableCollectors
    * @return a {@code Collector} which collects all the input elements into a {@code Set}
    */
   @NotNull
-  @Contract(" -> new")
-  static <T> Collector<@NotNull T, ?, @NotNull Set<@NotNull T>> toMutableSet()
+  @Contract(value = " -> new", pure = true)
+  static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
   {
-    return new CollectorImpl<>(HashSet::new, Set::add,
-        (left, right) ->
+    return CollectorImpl.<T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
+        .supplier(HashSet::new)
+        .accumulator(Set::add)
+        .combiner((left, right) ->
         {
           if(left.size() < right.size())
           {
@@ -71,8 +73,9 @@ public interface ImmutableCollectors
             left.addAll(right);
             return left;
           }
-        },
-        CH_UNORDERED_ID);
+        })
+        .characteristics(CH_UNORDERED_ID)
+        .build();
   }
 
   /**
@@ -91,32 +94,25 @@ public interface ImmutableCollectors
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  static <T> Collector<@NotNull T, ?, @NotNull Set<@NotNull T>> toSet()
+  static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toSet()
   {
-    final Supplier<@NotNull HashSet<@NotNull T>> supplier = HashSet::new;
-    final BiConsumer<@NotNull HashSet<@NotNull T>, @NotNull T> accumulator = Set::add;
-    final BinaryOperator<@NotNull HashSet<@NotNull T>> combiner = (left, right) ->
-    {
-      if(left.size() < right.size())
-      {
-        right.addAll(left);
-        return right;
-      }
-      else
-      {
-        left.addAll(right);
-        return left;
-      }
-    };
-    final Function<@NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> finisher = (HashSet<@NotNull T> set) -> Set.of(
-        set.toArray(tGenerator()));
-
-    final CollectorImpl.CollectorImplBuilder<T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> builder = CollectorImpl.builder();
-    return builder
-        .supplier(supplier)
-        .accumulator(accumulator)
-        .combiner(combiner)
-        .finisher(finisher)
+    return CollectorImpl.<T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
+        .supplier(HashSet::new)
+        .accumulator(Set::add)
+        .combiner((left, right) ->
+        {
+          if(left.size() < right.size())
+          {
+            right.addAll(left);
+            return right;
+          }
+          else
+          {
+            left.addAll(right);
+            return left;
+          }
+        })
+        .finisher(set -> Set.of(set.toArray(tGenerator())))
         .characteristics(CH_UNORDERED_NOID)
         .build();
   }
@@ -149,14 +145,6 @@ public interface ImmutableCollectors
 
     @NotNull
     Set<@NotNull Characteristics> characteristics;
-
-    //    CollectorImpl(@NotNull final Supplier<@NotNull A> supplier,
-    //        @NotNull final BiConsumer<@NotNull A, @NotNull T> accumulator,
-    //        @NotNull final BinaryOperator<@NotNull A> combiner,
-    //        @NotNull final Set<@NotNull Characteristics> characteristics)
-    //    {
-    //      this(supplier, accumulator, combiner, castingIdentity(), characteristics);
-    //    }
 
     @NotNull
     @Override

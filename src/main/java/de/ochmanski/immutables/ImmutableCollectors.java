@@ -16,20 +16,31 @@ import java.util.stream.Collector;
 public interface ImmutableCollectors
 {
 
-  Set<Collector.Characteristics> CH_CONCURRENT_ID
+  @NotNull
+  Set<Collector.@NotNull Characteristics> CH_CONCURRENT_ID
       = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
       Collector.Characteristics.UNORDERED,
       Collector.Characteristics.IDENTITY_FINISH));
-  Set<Collector.Characteristics> CH_CONCURRENT_NOID
+
+  @NotNull
+  Set<Collector.@NotNull Characteristics> CH_CONCURRENT_NOID
       = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
       Collector.Characteristics.UNORDERED));
-  Set<Collector.Characteristics> CH_ID
+
+  @NotNull
+  Set<Collector.@NotNull Characteristics> CH_ID
       = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
-  Set<Collector.Characteristics> CH_UNORDERED_ID
+
+  @NotNull
+  Set<Collector.@NotNull Characteristics> CH_UNORDERED_ID
       = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED,
       Collector.Characteristics.IDENTITY_FINISH));
-  Set<Collector.Characteristics> CH_NOID = Collections.emptySet();
-  Set<Collector.Characteristics> CH_UNORDERED_NOID
+
+  @NotNull
+  Set<Collector.@NotNull Characteristics> CH_NOID = Collections.emptySet();
+
+  @NotNull
+  Set<Collector.@NotNull Characteristics> CH_UNORDERED_NOID
       = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED));
 
   /**
@@ -82,22 +93,31 @@ public interface ImmutableCollectors
   @Contract(value = " -> new", pure = true)
   static <T> Collector<@NotNull T, ?, @NotNull Set<@NotNull T>> toSet()
   {
-    return new ImmutableCollectors.CollectorImpl<>(HashSet::new, Set::add,
-        (left, right) ->
-        {
-          if(left.size() < right.size())
-          {
-            right.addAll(left);
-            return right;
-          }
-          else
-          {
-            left.addAll(right);
-            return left;
-          }
-        },
-        (HashSet<T> set) -> Set.of(set.toArray(tGenerator())),
-        CH_UNORDERED_NOID);
+    final Supplier<@NotNull HashSet<@NotNull T>> supplier = HashSet::new;
+    final BiConsumer<@NotNull HashSet<@NotNull T>, @NotNull T> accumulator = Set::add;
+    final BinaryOperator<@NotNull HashSet<@NotNull T>> combiner = (left, right) ->
+    {
+      if(left.size() < right.size())
+      {
+        right.addAll(left);
+        return right;
+      }
+      else
+      {
+        left.addAll(right);
+        return left;
+      }
+    };
+    final Function<@NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> finisher = (HashSet<@NotNull T> set) -> Set.of(
+        set.toArray(tGenerator()));
+    final Set<Collector.@NotNull Characteristics> characteristics = CH_UNORDERED_NOID;
+
+    return new ImmutableCollectors.CollectorImpl<>(
+        supplier,
+        accumulator,
+        combiner,
+        finisher,
+        characteristics);
   }
 
   @NotNull

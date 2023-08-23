@@ -96,6 +96,12 @@ interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
     return ImmutableMap.<@NotNull K, @NotNull V>builder().map(Map.of(k1, v1, k2, v2, k3, v3, k4, v4)).build();
   }
 
+  @NotNull
+  V get(@NotNull final K key);
+
+  @NotNull
+  K findByValue(@NotNull final V key);
+
   int size();
 
   /**

@@ -1,5 +1,6 @@
 package de.ochmanski.immutables;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.jetbrains.annotations.Contract;
@@ -95,7 +96,7 @@ public interface ImmutableCollectors
             return left;
           }
         },
-        set -> Set.of(set.toArray(tGenerator())),
+        (HashSet<T> set) -> Set.of(set.toArray(tGenerator())),
         CH_UNORDERED_NOID);
   }
 
@@ -109,6 +110,7 @@ public interface ImmutableCollectors
 
   @Value
   @RequiredArgsConstructor
+  @Builder
   class CollectorImpl<T, A, R> implements Collector<@NotNull T, @NotNull A, @NotNull R>
   {
     @NotNull

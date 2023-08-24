@@ -249,7 +249,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
   @SuppressWarnings("unchecked")
   private Class<@NotNull E> getComponentType()
   {
-    return (Class<E>)iterator().next().getClass();
+    return isEmpty() ? getComponentTypeFromConstructor(getConstructor()) : (Class<E>)iterator().next().getClass();
   }
 
   /**

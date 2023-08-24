@@ -16,7 +16,7 @@
 * remove @SuppressWarning
 * return V instead of Object
 * accept K for map.get() instead of object
-* resolve known problems with Reflection type erasure, by forcing the programmer to provde K, V instances at
+* resolve known problems with Reflection type erasure, by forcing the programmer to provide K, V instances at
   compile/build
   time, which makes it easier to work later (they are now available at run-time),
 * toArray() returns an array of K[] instead of an array of Object[]

@@ -149,7 +149,7 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
 
   @NotNull
   @SuppressWarnings("unchecked")
-  private Class<E> getComponentType()
+  private Class<@NotNull E> getComponentType()
   {
     return (Class<E>)get(0).getClass();
   }

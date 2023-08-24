@@ -128,7 +128,7 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
 
   @NotNull
   @SuppressWarnings("unchecked")
-  private Class<E> getComponentType()
+  private Class<@NotNull E> getComponentType()
   {
     return (Class<E>)iterator().next().getClass();
   }

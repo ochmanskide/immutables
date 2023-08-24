@@ -231,9 +231,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
-    return isEmpty()
-        ? set.toArray(getConstructor())
-        : set.toArray(newArrayNative());
+   return set.toArray(getConstructor());
   }
 
   @NotNull

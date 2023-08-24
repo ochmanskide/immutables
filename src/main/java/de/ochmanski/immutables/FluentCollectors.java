@@ -58,7 +58,7 @@ public interface FluentCollectors
   @Contract(value = " -> new", pure = true)
   static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
   {
-    return CollectorImpl.<T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
+    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
         .supplier(HashSet::new)
         .accumulator(Set::add)
         .combiner((left, right) ->
@@ -96,7 +96,7 @@ public interface FluentCollectors
   @Contract(value = " -> new", pure = true)
   static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>> toSet()
   {
-    return CollectorImpl.<T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>>builder()
+    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>>builder()
         .supplier(HashSet::new)
         .accumulator(Set::add)
         .combiner((left, right) ->

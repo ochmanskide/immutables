@@ -58,7 +58,7 @@ public interface ImmutableCollectors
   @Contract(value = " -> new", pure = true)
   static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
   {
-    return CollectorImpl.<T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
+    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
         .supplier(HashSet::new)
         .accumulator(Set::add)
         .combiner((left, right) ->
@@ -96,7 +96,7 @@ public interface ImmutableCollectors
   @Contract(value = " -> new", pure = true)
   static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toSet()
   {
-    return CollectorImpl.<T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
+    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
         .supplier(HashSet::new)
         .accumulator(Set::add)
         .combiner((left, right) ->

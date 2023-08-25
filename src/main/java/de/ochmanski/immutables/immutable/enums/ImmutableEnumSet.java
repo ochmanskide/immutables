@@ -1,8 +1,10 @@
-package de.ochmanski.immutables;
+package de.ochmanski.immutables.immutable.enums;
 
+import de.ochmanski.immutables.fluent.Fluent;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -24,8 +26,7 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull E>>
-    implements ISet<@NotNull E>, Fluent<@NotNull E>
+public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements ISet<@NotNull E>
 {
 
   @UnmodifiableView
@@ -38,8 +39,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
-  @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultConstructor();
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor;
 
   /**
    * This method is not supported.
@@ -85,7 +85,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings("unchecked")
-  private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
+  private static <S extends Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
       final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
     return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
@@ -133,9 +133,16 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
   }
 
   @NotNull
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
+  {
+    return (IntFunction)Object @NotNull []::new;
+  }
+
+  @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> ImmutableEnumSet<S> of(
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<S> of(
       @NotNull final S @NotNull [] array)
   {
     final List<@NotNull S> list = Arrays.asList(array);
@@ -145,24 +152,10 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> ImmutableEnumSet<S> of(
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<S> of(
       @NotNull final Collection<@NotNull S> collection)
   {
     return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.copyOf(collection)).build();
-  }
-
-  @NotNull
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
-  {
-    return (IntFunction)Object @NotNull []::new;
-  }
-
-  private enum Empty implements Fluent<ImmutableEnumSet.@NotNull Empty>
-  {
-    A,
-    B,
-    C;
   }
 
   /**
@@ -170,7 +163,6 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
    *
    * @return the number of elements in this set
    */
-  @Override
   public int size()
   {
     return set.size();
@@ -181,7 +173,6 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
    *
    * @return {@code true} if this set contains no elements
    */
-  @Override
   public boolean isEmpty()
   {
     return set.isEmpty();
@@ -194,7 +185,6 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
    * @param o element whose presence in this set is to be tested
    * @return {@code true} if this set contains the specified element
    */
-  @Override
   public boolean contains(@NotNull final E o)
   {
     return set.contains(o);
@@ -205,7 +195,6 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
    *
    * @return a clone of this {@code ArraySet} instance
    */
-  @Override
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
@@ -226,7 +215,6 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
    *
    * @return an array containing all the elements in this set in proper sequence
    */
-  @Override
   @NotNull
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
@@ -262,7 +250,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
   @Contract(pure = true)
   public Iterator<@NotNull E> iterator()
   {
-    return toSet().iterator();
+    return unwrap().iterator();
   }
 
   /**
@@ -273,22 +261,27 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotN
    *     {@code Spliterator}.
    * @since 1.8
    */
-  @Override
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public Stream<@NotNull E> stream()
   {
-    return toSet().stream();
+    return unwrap().stream();
   }
 
-  @Override
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public EnumSet<@NotNull E> toSet()
+  public EnumSet<@NotNull E> unwrap()
   {
     return EnumSet.copyOf(set);
+  }
+
+  @NotNull
+  @Contract(pure = true)
+  public Optional<@Nullable E> findFirst()
+  {
+    return stream().findFirst();
   }
 
 }

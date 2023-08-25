@@ -1,4 +1,4 @@
-package de.ochmanski.immutables;
+package de.ochmanski.immutables.fluent;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -6,10 +6,7 @@ import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 
@@ -93,10 +90,11 @@ public interface FluentCollectors
    * @since 10
    */
   @NotNull
-  @Contract(value = " -> new", pure = true)
-  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>> toSet()
+  @Contract(value = "_ -> new", pure = true)
+  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<@NotNull T>> toSet(
+      @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
   {
-    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>>builder()
+    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<@NotNull T>>builder()
         .supplier(HashSet::new)
         .accumulator(Set::add)
         .combiner((left, right) ->
@@ -112,7 +110,32 @@ public interface FluentCollectors
             return left;
           }
         })
-        .finisher(ImmutableEnumSet::of)
+        .finisher(set -> FluentEnumSet.<@NotNull T>of(set, constructor))
+        .characteristics(CH_UNORDERED_NOID)
+        .build();
+  }
+
+  @NotNull
+  @Contract(value = " -> new", pure = true)
+  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull FluentEnumList<@NotNull T>> toList()
+  {
+    return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull FluentEnumList<@NotNull T>>builder()
+        .supplier(ArrayList::new)
+        .accumulator(List::add)
+        .combiner((left, right) ->
+        {
+          if(left.size() < right.size())
+          {
+            right.addAll(left);
+            return right;
+          }
+          else
+          {
+            left.addAll(right);
+            return left;
+          }
+        })
+        .finisher(FluentEnumList::of)
         .characteristics(CH_UNORDERED_NOID)
         .build();
   }

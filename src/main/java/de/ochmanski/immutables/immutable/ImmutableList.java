@@ -1,13 +1,16 @@
-package de.ochmanski.immutables;
+package de.ochmanski.immutables.immutable;
 
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Array;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
@@ -16,7 +19,7 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@NotNull E>, Equalable<@NotNull E>
+public class ImmutableList<E>// extends Immutable<@NotNull E>> implements IList<@NotNull E>, Immutable<@NotNull E>
 {
 
   @UnmodifiableView
@@ -34,13 +37,9 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
 
   @NotNull
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
     return (IntFunction)Object @NotNull []::new;
-  }
-
-  private static class Empty implements Equalable<@NotNull Empty>
-  {
   }
 
   /**
@@ -48,7 +47,6 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
    *
    * @return the number of elements in this list
    */
-  @Override
   public int size()
   {
     return list.size();
@@ -59,7 +57,6 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
    *
    * @return {@code true} if this list contains no elements
    */
-  @Override
   public boolean isEmpty()
   {
     return list.isEmpty();
@@ -72,7 +69,6 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
    * @param o element whose presence in this list is to be tested
    * @return {@code true} if this list contains the specified element
    */
-  @Override
   public boolean contains(@NotNull final E o)
   {
     return list.contains(o);
@@ -83,7 +79,6 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
    * contain the element. More formally, returns the lowest index {@code i} such that {@code Objects.equals(o, get(i))},
    * or -1 if there is no such index.
    */
-  @Override
   public int indexOf(@NotNull final E o)
   {
     return list.indexOf(o);
@@ -94,7 +89,6 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
    * the element. More formally, returns the highest index {@code i} such that {@code Objects.equals(o, get(i))}, or -1
    * if there is no such index.
    */
-  @Override
   public int lastIndexOf(@NotNull final E o)
   {
     return list.lastIndexOf(o);
@@ -105,7 +99,6 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
    *
    * @return a clone of this {@code ArrayList} instance
    */
-  @Override
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
@@ -126,7 +119,6 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
    *
    * @return an array containing all the elements in this list in proper sequence
    */
-  @Override
   @NotNull
   @Contract(value = " -> new", pure = true)
   public E @NotNull [] toArray()
@@ -163,7 +155,6 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
    * @return the element at the specified position in this list
    * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index >= size()})
    */
-  @Override
   @NotNull
   @Contract(pure = true)
   public E get(final int index)
@@ -179,21 +170,36 @@ public class ImmutableList<E extends Equalable<@NotNull E>> implements IList<@No
    *     {@code Spliterator}.
    * @since 1.8
    */
-  @Override
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public Stream<@NotNull E> stream()
   {
-    return toList().stream();
+    return unwrap().stream();
   }
 
-  @Override
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public List<@NotNull E> toList()
+  public List<@NotNull E> unwrap()
   {
     return List.copyOf(list);
   }
+
+  @NotNull
+  @Contract(pure = true)
+  public Optional<@Nullable E> findFirst()
+  {
+    return stream().findFirst();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S> ImmutableList<S> of(
+      @NotNull final Collection<@NotNull S> collection)
+  {
+    return ImmutableList.<@NotNull S>builder().list(List.copyOf(collection)).build();
+  }
+
 }

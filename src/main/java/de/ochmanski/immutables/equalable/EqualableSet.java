@@ -1,13 +1,17 @@
-package de.ochmanski.immutables;
+package de.ochmanski.immutables.equalable;
 
+import de.ochmanski.immutables.ISet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Array;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
@@ -17,7 +21,7 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotNull E>, Equalable<@NotNull E>
+public class EqualableSet<E extends Equalable<@NotNull E>> implements ISet<@NotNull E>, Equalable<@NotNull E>
 {
 
   @UnmodifiableView
@@ -30,18 +34,16 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
-  @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultConstructor();
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor;
 
   @NotNull
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  @SuppressWarnings("unchecked")
+  private static <S extends Equalable<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
+      final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return (IntFunction)Empty @NonNull []::new;
-  }
-
-  private static class Empty implements Equalable<@NotNull Empty>
-  {
+    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
   }
 
   /**
@@ -88,7 +90,7 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ImmutableSet<@NotNull E> deepClone()
+  public EqualableSet<@NotNull E> deepClone()
   {
     return toBuilder().build();
   }
@@ -116,7 +118,7 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   @NotNull
   @SuppressWarnings("unchecked")
   @Contract(value = "-> new", pure = true)
-  private E @NotNull [] newArrayNative()
+  public E @NotNull [] newArrayNative()
   {
     final Class<E> componentType = getComponentType();
     final int size = size();
@@ -141,7 +143,7 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   @Contract(pure = true)
   public Iterator<@NotNull E> iterator()
   {
-    return toSet().iterator();
+    return unwrap().iterator();
   }
 
   /**
@@ -158,15 +160,34 @@ public class ImmutableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   @Contract(value = " -> new", pure = true)
   public Stream<@NotNull E> stream()
   {
-    return toSet().stream();
+    return unwrap().stream();
   }
 
   @Override
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public Set<@NotNull E> toSet()
+  public Set<@NotNull E> unwrap()
   {
     return Set.copyOf(set);
   }
+
+  @NotNull
+  @Override
+  @Contract(pure = true)
+  public Optional<@Nullable E> findFirst()
+  {
+    return stream().findFirst();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_,_ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<S> of(
+      @NotNull final Collection<@NotNull S> collection,
+      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSet.<@NotNull S>builder().set(Set.copyOf(collection)).constructor(constructor).build();
+  }
+
 }

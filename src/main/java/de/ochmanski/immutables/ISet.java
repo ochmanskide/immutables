@@ -1,17 +1,21 @@
 package de.ochmanski.immutables;
 
+import de.ochmanski.immutables.equalable.Equalable;
+import de.ochmanski.immutables.equalable.EqualableSet;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-interface ISet<E extends Equalable<@NotNull E>>
+public interface ISet<E extends Equalable<@NotNull E>>
 {
 
   /**
@@ -28,7 +32,7 @@ interface ISet<E extends Equalable<@NotNull E>>
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
-  static void of()
+  private static void of()
   {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
         + "For example: ISet.ofGenerator(String[]::new)");
@@ -50,25 +54,16 @@ interface ISet<E extends Equalable<@NotNull E>>
   static <S extends Equalable<@NotNull S>> ISet<@NotNull S> ofGenerator(
       @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableSet.<S>builder().constructor(constructor).build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> of(@NotNull final S s1)
-  {
-    return ImmutableSet.<S>builder().set(Set.of(s1)).build();
+    return EqualableSet.<@NotNull S>builder().constructor(constructor).build();
   }
 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2)
+  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> of(@NotNull final S s1,
+      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableSet.<S>builder().set(Set.of(s1, s2)).build();
+    return EqualableSet.<@NotNull S>builder().set(Set.of(s1)).constructor(constructor).build();
   }
 
   @NotNull
@@ -77,9 +72,9 @@ interface ISet<E extends Equalable<@NotNull E>>
   static <S extends Equalable<@NotNull S>> ISet<@NotNull S> of(
       @NotNull final S s1,
       @NotNull final S s2,
-      @NotNull final S s3)
+      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableSet.<S>builder().set(Set.of(s1, s2, s3)).build();
+    return EqualableSet.<@NotNull S>builder().set(Set.of(s1, s2)).constructor(constructor).build();
   }
 
   @NotNull
@@ -89,9 +84,22 @@ interface ISet<E extends Equalable<@NotNull E>>
       @NotNull final S s1,
       @NotNull final S s2,
       @NotNull final S s3,
-      @NotNull final S s4)
+      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableSet.<S>builder().set(Set.of(s1, s2, s3, s4)).build();
+    return EqualableSet.<@NotNull S>builder().set(Set.of(s1, s2, s3)).constructor(constructor).build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _, _, _, _ -> new", pure = true)
+  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> of(
+      @NotNull final S s1,
+      @NotNull final S s2,
+      @NotNull final S s3,
+      @NotNull final S s4,
+      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSet.<@NotNull S>builder().set(Set.of(s1, s2, s3, s4)).constructor(constructor).build();
   }
 
   @NotNull
@@ -101,29 +109,42 @@ interface ISet<E extends Equalable<@NotNull E>>
   ISet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
       @NotNull final Set<Map.@NotNull Entry<@NotNull K, @NotNull V>> entrySet)
   {
-    final Set<IMap.Entry<K, V>> set = entrySet.stream()
-        .map(ISet::toImmutableEntry)
+    @NotNull
+    final Set<IMap.@NotNull Entry<@NotNull K, @NotNull V>> set = entrySet.stream()
+        .map(ISet::toEqualableEntry)
         .collect(Collectors.toUnmodifiableSet());
-    return copyOf(set);
+    final IntFunction<IMap.Entry<@NotNull K, @NotNull V> @NotNull []> constructor = IMap.Entry[]::new;
+    return copyOf(set, constructor);
   }
 
   @NotNull
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  static <K extends Equalable<@NotNull K>> ISet<@NotNull K> copyOf(
-      @NotNull final Set<@NotNull K> keySet)
+  @Contract(value = "_ -> new", pure = true)
+  static <S extends Equalable<@NotNull S>> EqualableSet<@NotNull S> empty(
+      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    final Set<K> set = Set.copyOf(keySet);
-    return ImmutableSet.<K>builder().set(set).build();
+    final Set<@NotNull S> of = Set.of();
+    return copyOf(of, constructor);
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _ -> new", pure = true)
+  static <S extends Equalable<@NotNull S>> EqualableSet<@NotNull S> copyOf(
+      @NotNull final Set<@NotNull S> keySet,
+      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    final Set<@NotNull S> set = Set.copyOf(keySet);
+    return EqualableSet.<@NotNull S>builder().set(set).constructor(constructor).build();
   }
 
   @NotNull
   @Contract(value = " _ -> new", pure = true)
   static <V extends Equalable<@NotNull V>, K extends Equalable<@NotNull K>>
-  IMap.@NotNull Entry<@NotNull K, @NotNull V> toImmutableEntry(
+  IMap.@NotNull Entry<@NotNull K, @NotNull V> toEqualableEntry(
       @NotNull final Map.@NotNull Entry<@NotNull K, @NotNull V> p)
   {
-    return IMap.Entry.<K, V>builder().key(p.getKey()).value(p.getValue()).build();
+    return IMap.Entry.<@NotNull K, @NotNull V>builder().key(p.getKey()).value(p.getValue()).build();
   }
 
   int size();
@@ -185,5 +206,10 @@ interface ISet<E extends Equalable<@NotNull E>>
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  Set<@NotNull E> toSet();
+  Set<@NotNull E> unwrap();
+
+  @NotNull
+  @Contract(pure = true)
+  Optional<@Nullable E> findFirst();
+
 }

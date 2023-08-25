@@ -1,5 +1,6 @@
-package de.ochmanski.immutables;
+package de.ochmanski.immutables.fluent;
 
+import de.ochmanski.immutables.equalable.Equalable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +25,7 @@ public interface Fluent<E extends Enum<@NotNull E>> extends Equalable<@NotNull E
 
   default boolean anyMatch(@NotNull final E @NotNull ... array)
   {
-    return isIn((E[])array);
+    return isIn(array);
   }
 
   default boolean anyMatch(@NotNull final List<@NotNull E> elements)

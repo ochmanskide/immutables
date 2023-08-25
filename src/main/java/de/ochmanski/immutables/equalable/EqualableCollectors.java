@@ -1,4 +1,4 @@
-package de.ochmanski.immutables;
+package de.ochmanski.immutables.equalable;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -6,14 +6,11 @@ import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 
-public interface ImmutableCollectors
+public interface EqualableCollectors
 {
 
   @NotNull
@@ -56,7 +53,7 @@ public interface ImmutableCollectors
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
+  static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
   {
     return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
         .supplier(HashSet::new)
@@ -93,10 +90,11 @@ public interface ImmutableCollectors
    * @since 10
    */
   @NotNull
-  @Contract(value = " -> new", pure = true)
-  static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toSet()
+  @Contract(value = " _ -> new", pure = true)
+  static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSet<@NotNull T>> toSet(
+      @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
   {
-    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
+    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSet<@NotNull T>>builder()
         .supplier(HashSet::new)
         .accumulator(Set::add)
         .combiner((left, right) ->
@@ -112,7 +110,32 @@ public interface ImmutableCollectors
             return left;
           }
         })
-        .finisher(set -> Set.of(set.toArray(tGenerator())))
+        .finisher(set -> EqualableSet.of(set, constructor))
+        .characteristics(CH_UNORDERED_NOID)
+        .build();
+  }
+
+  @NotNull
+  @Contract(value = " -> new", pure = true)
+  static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>> toList()
+  {
+    return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>>builder()
+        .supplier(ArrayList::new)
+        .accumulator(List::add)
+        .combiner((left, right) ->
+        {
+          if(left.size() < right.size())
+          {
+            right.addAll(left);
+            return right;
+          }
+          else
+          {
+            left.addAll(right);
+            return left;
+          }
+        })
+        .finisher(EqualableList::of)
         .characteristics(CH_UNORDERED_NOID)
         .build();
   }
@@ -128,7 +151,8 @@ public interface ImmutableCollectors
   @Value
   @RequiredArgsConstructor
   @Builder
-  class CollectorImpl<T, A, R> implements Collector<@NotNull T, @NotNull A, @NotNull R>
+  class CollectorImpl<T extends @NotNull Equalable<@NotNull T>, A, R>
+      implements Collector<@NotNull T, @NotNull A, @NotNull R>
   {
     @NotNull
     Supplier<@NotNull A> supplier;

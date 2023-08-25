@@ -1,15 +1,19 @@
 package de.ochmanski.immutables;
 
+import de.ochmanski.immutables.equalable.Equalable;
+import de.ochmanski.immutables.equalable.EqualableList;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-interface IList<E extends Equalable<@NotNull E>>
+public interface IList<E extends Equalable<@NotNull E>>
 {
 
   /**
@@ -48,7 +52,7 @@ interface IList<E extends Equalable<@NotNull E>>
   static <S extends Equalable<@NotNull S>> IList<@NotNull S> ofGenerator(
       @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableList.<S>builder().constructor(constructor).build();
+    return EqualableList.<@NotNull S>builder().constructor(constructor).build();
   }
 
   @NotNull
@@ -56,7 +60,7 @@ interface IList<E extends Equalable<@NotNull E>>
   @Contract(value = " _ -> new", pure = true)
   static <S extends Equalable<@NotNull S>> IList<@NotNull S> of(@NotNull final S s1)
   {
-    return ImmutableList.<S>builder().list(List.of(s1)).build();
+    return EqualableList.<@NotNull S>builder().list(List.of(s1)).build();
   }
 
   @NotNull
@@ -66,7 +70,7 @@ interface IList<E extends Equalable<@NotNull E>>
       @NotNull final S s1,
       @NotNull final S s2)
   {
-    return ImmutableList.<S>builder().list(List.of(s1, s2)).build();
+    return EqualableList.<@NotNull S>builder().list(List.of(s1, s2)).build();
   }
 
   @NotNull
@@ -77,7 +81,7 @@ interface IList<E extends Equalable<@NotNull E>>
       @NotNull final S s2,
       @NotNull final S s3)
   {
-    return ImmutableList.<S>builder().list(List.of(s1, s2, s3)).build();
+    return EqualableList.<@NotNull S>builder().list(List.of(s1, s2, s3)).build();
   }
 
   @NotNull
@@ -89,15 +93,24 @@ interface IList<E extends Equalable<@NotNull E>>
       @NotNull final S s3,
       @NotNull final S s4)
   {
-    return ImmutableList.<S>builder().list(List.of(s1, s2, s3, s4)).build();
+    return EqualableList.<@NotNull S>builder().list(List.of(s1, s2, s3, s4)).build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "-> new", pure = true)
+  static <S extends Equalable<@NotNull S>> IList<@NotNull S> empty()
+  {
+    final List<@NotNull S> of = List.of();
+    return copyOf(of);
   }
 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  static <V extends Equalable<@NotNull V>> IList<@NotNull V> copyOf(@NotNull final Collection<@NotNull V> values)
+  static <S extends Equalable<@NotNull S>> IList<@NotNull S> copyOf(@NotNull final Collection<@NotNull S> values)
   {
-    return ImmutableList.<V>builder().list(List.copyOf(values)).build();
+    return EqualableList.<@NotNull S>builder().list(List.copyOf(values)).build();
   }
 
   int size();
@@ -139,7 +152,7 @@ interface IList<E extends Equalable<@NotNull E>>
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  ImmutableList<@NotNull E> deepClone();
+  IList<@NotNull E> deepClone();
 
   /**
    * Returns an array containing all the elements in this list in proper sequence (from first to last element).
@@ -173,6 +186,10 @@ interface IList<E extends Equalable<@NotNull E>>
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  List<@NotNull E> toList();
+  List<@NotNull E> unwrap();
+
+  @NotNull
+  @Contract(pure = true)
+  Optional<@Nullable E> findFirst();
 
 }

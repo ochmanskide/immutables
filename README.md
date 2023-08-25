@@ -42,6 +42,10 @@ SDKMan can be used via the command line, which can make the process easier for d
 
 ### TODO:
 
+* uncomment all code that was not implemented yet,
+* add special collector for Collectors.toUnmodifiableMap()
+* allow passing a constructor to the toArray(constructor) and marks as unsafe
+* create overload variants for all .of() methods without the .of(construct) 
 * mark methods as @UmodifiableView
 * each method in interface should not have public modifier
 * all other classes should have public static methods (I forgot to change it, after copying from interface)
@@ -110,4 +114,4 @@ private Map<@NotNull JobSettingPropertyKey, @NotNull StringWrapper> toMap(
 
 * split project into Fluent and not Fluent,
 * provide some Utility/Factory classes for EqualableWrappers
-* 
+* create a new variant of ImmutableStream<> stream() instead of Stream<> stream() 

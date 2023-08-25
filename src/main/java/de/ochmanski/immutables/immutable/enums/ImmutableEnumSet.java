@@ -219,7 +219,9 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
-   return set.toArray(getConstructor());
+    return isEmpty()
+        ? set.toArray(getConstructor())
+        : set.toArray(newArrayNative());
   }
 
   @NotNull

@@ -115,7 +115,9 @@ public class ImmutableSet<E> // extends Equalable<@NotNull E>> implements ISet<@
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
-    return set.toArray(getConstructor());
+    return isEmpty()
+        ? set.toArray(getConstructor())
+        : set.toArray(newArrayNative());
   }
 
   @NotNull

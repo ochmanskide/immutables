@@ -112,7 +112,9 @@ public class EqualableSet<E extends Equalable<@NotNull E>> implements ISet<@NotN
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
-   return set.toArray(getConstructor());
+    return isEmpty()
+        ? set.toArray(getConstructor())
+        : set.toArray(newArrayNative());
   }
 
   @NotNull

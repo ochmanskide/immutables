@@ -2,6 +2,8 @@
 
 ## Features
 
+* keyType is redundant because you get the type directly from the constructor, so remove keyType
+* remove default constructor
 * not NULL values allowed,
 * compile time check for NULLs,
 * improved IDE assistance, by adding Java annotations, such as @Contract, @NotNull, @Nullable

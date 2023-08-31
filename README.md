@@ -29,6 +29,9 @@
   String[] a = stream.toArray();
 * no more equals(Object) comparison, now you can compare with .isEqualTo()
 * more fluent API such as .isEqualTo(), .isNotEqualTo(), .areEqualTo(), .areNotEqualTo(), .isIn(), .isNotIn(), etc.
+* fully implemented method toString(), which calls p -> p.toString()
+* prettyPrint() method which prints JSON
+* prettyPrint(Function f) method which overwrites default p.toString() method
 
 * improved Stream Collectors
 * new types for storing Enums in Maps, Sets
@@ -44,14 +47,23 @@ SDKMan can be used via the command line, which can make the process easier for d
 
 ### TODO:
 
+*
+  * fully implemented method toString(), which calls p -> p.toString()
+* prettyPrint() method which prints JSON
+* prettyPrint(Function f) method which overwrites default p.toString() method
+* rename Fluent into FluentEnum
+* create a new interface Fluent
+* create a new package for .fluent. interfaces/classes
+* make FluentEnum interface extends Fluent
 * uncomment all code that was not implemented yet,
 * add special collector for Collectors.toUnmodifiableMap()
 * allow passing a constructor to the toArray(constructor) and marks as unsafe
-* create overload variants for all .of() methods without the .of(construct) 
+* create overload variants for all .of() methods without the .of(construct)
 * mark methods as @UmodifiableView
 * each method in interface should not have public modifier
 * all other classes should have public static methods (I forgot to change it, after copying from interface)
-* create a Collector for advanced map for example:
+* add ImmutableSortedSet class
+* create a Collector for advanced Set/Map/List for example:
 
 ```java
   @NotNull
@@ -83,7 +95,7 @@ final SortedSet<OidDto> sorted=new TreeSet<>(collection);
 should be:
 
 ```java
-.collect(Collectors.toEnumMap(this::jobSettingPropertyKey,this::getValueWrapper));
+.collect(FluentCollectors.toMap(this::jobSettingPropertyKey,this::getValueWrapper));
 ```
 
 ```java
@@ -93,7 +105,7 @@ return ImmutableEnumMap.of(toMap(properties),JobSettingPropertyKey[]::new,JobSet
 should be:
 
 ```java
-return ImmutableEnumMap.of(properties,JobSettingPropertyKey[]::new,JobSettingPropertyKey.class);
+return ImmutableEnumMap.of(properties,JobSettingPropertyKey[]::new);
 ```
 
 ```java
@@ -109,9 +121,9 @@ private Map<@NotNull JobSettingPropertyKey, @NotNull StringWrapper> toMap(
 @NotNull final List<@NotNull JobProperty> properties)
     {
     return properties.stream()
-    .filter(this::matchingKeyPropertyExists)
-    .collect(Collectors.toMap(this::jobSettingPropertyKey,this::getValueWrapper));
-    }
+  .filter(this::matchingKeyPropertyExists)
+  .collect(FluentCollectors.toMap(this::jobSettingPropertyKey,this::getValueWrapper));
+  }
 ```
 
 * split project into Fluent and not Fluent,

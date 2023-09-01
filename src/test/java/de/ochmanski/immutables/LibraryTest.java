@@ -3,6 +3,7 @@
  */
 package de.ochmanski.immutables;
 
+import de.ochmanski.immutables.immutable.ImmutableList;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

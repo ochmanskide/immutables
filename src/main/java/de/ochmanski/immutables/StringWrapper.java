@@ -1,6 +1,5 @@
 package de.ochmanski.immutables;
 
-import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
@@ -10,6 +9,9 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+
+import static de.ochmanski.immutables.constants.Constants.BLANK;
 
 @Value
 @UnmodifiableView
@@ -20,7 +22,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
   @NonNull
   @NotNull
   @Builder.Default
-  String raw = Constants.BLANK;
+  String raw = BLANK;
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
@@ -29,16 +31,43 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
     return StringWrapper.builder().raw(raw).build();
   }
 
+  /**
+   * This method is Null-safe. It cannot throw {@link NullPointerException}
+   */
   @Contract(value = "null -> true", pure = true)
   public boolean isNotEqualToIgnoreCase(@Nullable final String other)
   {
     return !isEqualToIgnoreCase(other);
   }
 
+  /**
+   * This method is Null-safe. It cannot throw {@link NullPointerException}
+   */
   @Contract(value = "null -> false", pure = true)
   public boolean isEqualToIgnoreCase(@Nullable final String other)
   {
+    if(Objects.equals(raw, other))
+    {
+      return true;
+    }
+    if(null == other)
+    {
+      return false;
+    }
+    if(raw.isBlank() && other.isBlank())
+    {
+      return true;
+    }
+    if(raw.isBlank() || other.isBlank())
+    {
+      return false;
+    }
     return raw.equalsIgnoreCase(other);
+  }
+
+  public boolean isNotBlank()
+  {
+    return !raw.isBlank();
   }
 
   public boolean anyMatch(@NotNull final StringWrapper @NotNull ... array)

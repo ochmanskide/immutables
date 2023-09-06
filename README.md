@@ -128,4 +128,7 @@ private Map<@NotNull JobSettingPropertyKey, @NotNull StringWrapper> toMap(
 
 * split project into Fluent and not Fluent,
 * provide some Utility/Factory classes for EqualableWrappers
-* create a new variant of ImmutableStream<> stream() instead of Stream<> stream() 
+* create a new variant of ImmutableStream<> stream() instead of Stream<> stream()
+* add Optional.empty() "-like" API, and delegate calls to .of() methods, so that both are available.
+* add .map() method to shorten the .stream().map() syntax.
+* 

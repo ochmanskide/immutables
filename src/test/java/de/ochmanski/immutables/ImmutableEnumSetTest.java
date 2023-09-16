@@ -1,5 +1,6 @@
 package de.ochmanski.immutables;
 
+import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +27,7 @@ class ImmutableEnumSetTest
   void ofGenerator()
   {
     final @NotNull IntFunction<@NotNull Dummy[]> constructor = Dummy[]::new;
-    final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.ofGenerator(constructor);
+    final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.ofGenerator(constructor);
     assertThat(actual.isEmpty()).isTrue();
     assertThat(actual.size()).isZero();
     assertThat(actual.getSet()).isEmpty();

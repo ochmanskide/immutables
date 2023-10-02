@@ -78,7 +78,8 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     final Class<@NotNull S> componentType = getComponentTypeFromConstructor(constructor);
-    return ImmutableEnumSet.<@NotNull S>builder().constructor(constructor).set(EnumSet.noneOf(componentType)).build();
+    return ImmutableEnumSet.<@NotNull S>builder().constructor(constructor).set(EnumSet.noneOf(componentType))
+      .constructor(constructor).build();
   }
 
   @NotNull
@@ -96,7 +97,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   @Contract(value = " _ -> new", pure = true)
   static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> of(@NotNull final S s1)
   {
-    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1)).build();
+    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1)).constructor(constructor).build();
   }
 
   @NotNull
@@ -106,7 +107,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
       @NotNull final S s1,
       @NotNull final S s2)
   {
-    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2)).build();
+    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2)).constructor(constructor).build();
   }
 
   @NotNull
@@ -117,7 +118,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
       @NotNull final S s2,
       @NotNull final S s3)
   {
-    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3)).build();
+    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3)).constructor(constructor).build();
   }
 
   @NotNull
@@ -129,7 +130,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
       @NotNull final S s3,
       @NotNull final S s4)
   {
-    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3, s4)).build();
+    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3, s4)).constructor(constructor).build();
   }
 
   @NotNull
@@ -155,7 +156,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<S> of(
       @NotNull final Collection<@NotNull S> collection)
   {
-    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.copyOf(collection)).build();
+    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.copyOf(collection)).constructor(constructor).build();
   }
 
   /**
@@ -200,7 +201,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   @Contract(value = " -> new", pure = true)
   public ImmutableEnumSet<@NotNull E> deepClone()
   {
-    return toBuilder().build();
+    return toBuilder().constructor(constructor).build();
   }
 
   /**

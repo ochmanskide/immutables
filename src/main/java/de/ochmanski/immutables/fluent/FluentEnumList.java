@@ -137,7 +137,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNul
   @SuppressWarnings({ "unchecked", "rawtypes" })
   private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
-    return (IntFunction)Object @NotNull []::new;
+    return (IntFunction)Enum @NotNull []::new;
   }
 
   @NotNull

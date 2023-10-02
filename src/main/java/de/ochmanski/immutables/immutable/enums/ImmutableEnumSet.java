@@ -74,8 +74,8 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> ofGenerator(
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  public static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> ofGenerator(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     final Class<@NotNull S> componentType = getComponentTypeFromConstructor(constructor);
     return ImmutableEnumSet.<@NotNull S>builder().constructor(constructor).set(EnumSet.noneOf(componentType)).build();

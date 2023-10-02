@@ -145,7 +145,7 @@ public interface FluentCollectors
   @SuppressWarnings({ "unchecked", "rawtypes" })
   static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> IntFunction<@NotNull T @NotNull []> tGenerator()
   {
-    return (IntFunction)Object @NotNull []::new;
+    return (IntFunction)Enum @NotNull []::new;
   }
 
   @Value

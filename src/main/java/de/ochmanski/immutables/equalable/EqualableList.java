@@ -40,7 +40,7 @@ public class EqualableList<E extends Equalable<@NotNull E>> implements IList<@No
   @SuppressWarnings({ "unchecked", "rawtypes" })
   private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
-    return (IntFunction)Object @NotNull []::new;
+    return (IntFunction)Equalable @NotNull []::new;
   }
 
   /**

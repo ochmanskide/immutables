@@ -6,11 +6,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public interface Fluent<E extends Enum<@NotNull E>> extends Equalable<@NotNull E>
+public interface Fluent<E extends Enum<@NotNull E>> extends Equalable<@NotNull Fluent<@NotNull E>>
 {
 
   /**
@@ -18,78 +18,66 @@ public interface Fluent<E extends Enum<@NotNull E>> extends Equalable<@NotNull E
    */
   @Override
   @Contract(value = "null -> false", pure = true)
-  default boolean isEqualTo(@Nullable final E other)
+  default boolean isEqualTo(@Nullable final Fluent<@NotNull E> other)
   {
     return this == other;
   }
 
-  default boolean anyMatch(@NotNull final E @NotNull ... array)
+  //@MustBeInvokedByOverriders
+  @NotNull
+  @Contract(value = "_ -> new", pure = true)
+  static <E extends Enum<@NotNull E>, F extends Fluent<@NotNull E>> Stream<@NotNull F> createStream(
+    @NotNull final Class<@NotNull F> clazz)
   {
-    return isIn(array);
-  }
-
-  default boolean anyMatch(@NotNull final List<@NotNull E> elements)
-  {
-    return isIn(elements);
-  }
-
-  default boolean allMatch(@NotNull final E @NotNull ... array)
-  {
-    return allMatch(Arrays.asList(array));
-  }
-
-  default boolean allMatch(@NotNull final List<@NotNull E> elements)
-  {
-    return elements.stream().allMatch(this::isEqualTo);
-  }
-
-  default boolean noneMatch(@NotNull final E @NotNull ... array)
-  {
-    return isNotIn(array);
-  }
-
-  default boolean noneMatch(@NotNull final List<@NotNull E> elements)
-  {
-    return isNotIn(elements);
-  }
-
-  default boolean isNotIn(@NotNull final E @NotNull ... array)
-  {
-    return !isIn(array);
-  }
-
-  default boolean isNotIn(@NotNull final List<@NotNull E> elements)
-  {
-    return !isIn(elements);
-  }
-
-  default boolean isIn(@NotNull final E @NotNull ... array)
-  {
-    return isIn(Arrays.asList(array));
-  }
-
-  default boolean isIn(@NotNull final List<@NotNull E> elements)
-  {
-    return elements.contains(this);
+    final @NotNull F @NotNull [] enumConstants = getEnumConstants(clazz);
+    return Arrays.stream(enumConstants);
   }
 
   //@MustBeInvokedByOverriders
-  @Contract(value = "_ -> new")
   @NotNull
-  static <E> Stream<@NotNull E> createStream(@NotNull final Class<@NotNull E> clazz)
+  @Contract(value = "_ -> new", pure = true)
+  static <E extends Enum<@NotNull E>, F extends Fluent<@NotNull E>> Stream<@NotNull E> createStream(
+    @NotNull final E @NotNull [] entries)
   {
-    return Arrays.stream(getEnumConstants(clazz));
+    return Arrays.stream(entries);
   }
 
   //@MustBeInvokedByOverriders
-  static <E> void forEachHelper(@NotNull final Class<@NotNull E> clazz, @NotNull final Consumer<@NotNull E> consumer)
+  @Contract(pure = true)
+  static <E extends Enum<@NotNull E>, F extends Fluent<@NotNull E>> void forEachHelper(
+    @NotNull final Class<@NotNull F> clazz, @NotNull final Consumer<@NotNull F> consumer)
   {
-    Arrays.asList(getEnumConstants(clazz)).forEach(consumer);
+    final @NotNull F @NotNull [] enumConstants = getEnumConstants(clazz);
+    forEach(enumConstants, consumer);
+  }
+
+  @Contract(pure = true)
+  static <E extends Enum<@NotNull E>, F extends Fluent<@NotNull E>> void forEach(@NotNull final F @NotNull [] entries,
+    @NotNull final Consumer<@NotNull F> consumer)
+  {
+    Arrays.asList(entries).forEach(consumer);
   }
 
   @NotNull
-  static <E> E @NotNull [] getEnumConstants(@NotNull final Class<@NotNull E> enumClass)
+  @Contract(pure = true)
+  static <E extends Enum<@NotNull E>, F extends Fluent<@NotNull E>> F @NotNull [] getEnumConstants(
+    @NotNull final Class<@NotNull F> enumClass)
   {
     return enumClass.getEnumConstants();
   }
+
+  @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
+  static <E extends Enum<@NotNull E>, F extends Fluent<@NotNull E>> boolean areNotEqual(@Nullable final F a,
+    @Nullable final F b)
+  {
+    return !areEqual(a, b);
+  }
+
+  @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
+  static <E extends Enum<@NotNull E>, F extends Fluent<@NotNull E>> boolean areEqual(@Nullable final F a,
+    @Nullable final F b)
+  {
+    return Objects.equals(a, b);
+  }
+
 }

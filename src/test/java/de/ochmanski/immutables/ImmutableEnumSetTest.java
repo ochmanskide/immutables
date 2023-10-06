@@ -1,5 +1,6 @@
 package de.ochmanski.immutables;
 
+import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;

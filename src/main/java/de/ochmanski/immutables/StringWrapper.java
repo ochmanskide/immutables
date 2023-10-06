@@ -75,7 +75,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
     return isIn(array);
   }
 
-  public boolean anyMatch(@NotNull final List<@NotNull StringWrapper> elements)
+  public boolean anyMatch(@NotNull final List<? extends @NotNull StringWrapper> elements)
   {
     return isIn(elements);
   }
@@ -85,7 +85,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
     return allMatch(Arrays.asList(array));
   }
 
-  public boolean allMatch(@NotNull final List<@NotNull StringWrapper> elements)
+  public boolean allMatch(@NotNull final List<? extends @NotNull StringWrapper> elements)
   {
     return elements.stream().allMatch(this::isEqualTo);
   }
@@ -95,7 +95,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
     return isNotIn(array);
   }
 
-  public boolean noneMatch(@NotNull final List<@NotNull StringWrapper> elements)
+  public boolean noneMatch(@NotNull final List<? extends @NotNull StringWrapper> elements)
   {
     return isNotIn(elements);
   }
@@ -105,7 +105,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
     return !isIn(array);
   }
 
-  public boolean isNotIn(@NotNull final List<@NotNull StringWrapper> elements)
+  public boolean isNotIn(@NotNull final List<? extends @NotNull StringWrapper> elements)
   {
     return !isIn(elements);
   }
@@ -115,7 +115,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
     return isIn(Arrays.asList(array));
   }
 
-  public boolean isIn(@NotNull final List<@NotNull StringWrapper> elements)
+  public boolean isIn(@NotNull final List<? extends @NotNull StringWrapper> elements)
   {
     return elements.contains(this);
   }

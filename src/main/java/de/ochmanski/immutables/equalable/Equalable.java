@@ -30,7 +30,7 @@ public interface Equalable<T>
   }
 
   @Contract(pure = true)
-  default boolean anyMatch(@NotNull final List<@NotNull T> elements)
+  default boolean anyMatch(@NotNull final List<? extends @NotNull T> elements)
   {
     return isIn(elements);
   }
@@ -42,19 +42,19 @@ public interface Equalable<T>
   }
 
   @Contract(pure = true)
-  default boolean allMatch(@NotNull final List<@NotNull T> elements)
+  default boolean allMatch(@NotNull final List<? extends @NotNull T> elements)
   {
     return elements.stream().allMatch(this::isEqualTo);
   }
 
   @Contract(pure = true)
-  default boolean noneMatch(@NotNull final T @NotNull ... array)
+  default boolean noneMatchElements(@NotNull final T @NotNull ... array)
   {
     return isNotIn(array);
   }
 
   @Contract(pure = true)
-  default boolean noneMatch(@NotNull final List<@NotNull T> elements)
+  default boolean noneMatch(@NotNull final List<? extends @NotNull T> elements)
   {
     return isNotIn(elements);
   }
@@ -66,7 +66,7 @@ public interface Equalable<T>
   }
 
   @Contract(pure = true)
-  default boolean isNotIn(@NotNull final List<@NotNull T> elements)
+  default boolean isNotIn(@NotNull final List<? extends @NotNull T> elements)
   {
     return !isIn(elements);
   }
@@ -78,7 +78,7 @@ public interface Equalable<T>
   }
 
   @Contract(pure = true)
-  default boolean isIn(@NotNull final List<@NotNull T> elements)
+  default boolean isIn(@NotNull final List<? extends @NotNull T> elements)
   {
     return elements.contains(this);
   }

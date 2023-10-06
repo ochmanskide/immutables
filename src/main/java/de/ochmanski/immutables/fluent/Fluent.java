@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public interface Fluent<E extends Enum<@NotNull E>> extends Equalable<@NotNull Fluent<@NotNull E>>
+public interface Fluent<F extends Enum<@NotNull F> & Fluent<@NotNull F>> extends Equalable<@NotNull Fluent<@NotNull F>>
 {
 
   //@MustBeInvokedByOverriders
@@ -75,11 +75,9 @@ public interface Fluent<E extends Enum<@NotNull E>> extends Equalable<@NotNull F
    */
   @Override
   @Contract(value = "null -> false", pure = true)
-  default boolean isEqualTo(@Nullable final Fluent<@NotNull E> other)
+  default boolean isEqualTo(@Nullable final Fluent<@NotNull F> other)
   {
     return this == other;
   }
-
-}
 
 }

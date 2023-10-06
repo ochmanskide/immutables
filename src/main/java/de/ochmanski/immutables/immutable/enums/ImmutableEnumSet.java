@@ -1,6 +1,5 @@
 package de.ochmanski.immutables.immutable.enums;
 
-import de.ochmanski.immutables.fluent.Fluent;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -74,7 +73,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> ofGenerator(
+  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> ofGenerator(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     final Class<@NotNull S> componentType = getComponentTypeFromConstructor(constructor);
@@ -95,7 +94,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> of(@NotNull final S s1)
+  static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(@NotNull final S s1)
   {
     return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1)).constructor(constructor).build();
   }
@@ -103,9 +102,9 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2)
+  static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2)
   {
     return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2)).constructor(constructor).build();
   }
@@ -113,10 +112,10 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2,
-      @NotNull final S s3)
+  static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3)
   {
     return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3)).constructor(constructor).build();
   }
@@ -124,11 +123,11 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2,
-      @NotNull final S s3,
-      @NotNull final S s4)
+  static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3,
+    @NotNull final S s4)
   {
     return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3, s4)).constructor(constructor).build();
   }

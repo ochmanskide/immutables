@@ -40,7 +40,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V>
   @NotNull
   @SuppressWarnings({ "unchecked", "rawtypes" })
   @Contract(value = " -> new", pure = true)
-  private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
+  private static <S extends Enum<? extends @NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
     return (IntFunction)Enum @NotNull []::new;
   }
@@ -297,9 +297,9 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V>
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public EnumMap<@NotNull K, @NotNull V> toMap()
+  public EnumMap<K, @NotNull V> toMap()
   {
-    return new EnumMap<>(map);
+    return new EnumMap<K, ? extends V>(map);
   }
 
   @Value

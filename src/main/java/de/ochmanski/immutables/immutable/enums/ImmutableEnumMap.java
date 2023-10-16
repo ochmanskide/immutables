@@ -16,7 +16,7 @@ import java.util.function.IntFunction;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V>
+public class ImmutableEnumMap<K extends @NotNull Enum<? extends @NotNull K>, V>
 {
 
   @UnmodifiableView

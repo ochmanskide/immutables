@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-public interface IMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
+public interface IMap<K, V>
 {
 
   /**

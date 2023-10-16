@@ -15,7 +15,7 @@ import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public interface ISet<E extends Equalable<@NotNull E>>
+public interface ISet<E>
 {
 
   /**

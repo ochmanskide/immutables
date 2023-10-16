@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements ISet<@NotNull E>
+public class ImmutableEnumSet<E extends @NotNull Enum<? extends @NotNull E>>// implements ISet<@NotNull E>
 {
 
   @UnmodifiableView

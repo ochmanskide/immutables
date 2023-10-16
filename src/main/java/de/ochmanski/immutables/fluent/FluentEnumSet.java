@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull E>> implements ISet<@NotNull E>
+public class FluentEnumSet<E extends @NotNull Enum<? extends @NotNull E> & Fluent<? extends @NotNull E>> implements ISet<? extends Fluent<E extends @NotNull Enum<? extends @NotNull E>>>
 {
 
   @UnmodifiableView

@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-public interface IList<E extends Equalable<@NotNull E>>
+public interface IList<E>
 {
 
   /**

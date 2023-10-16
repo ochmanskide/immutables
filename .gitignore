@@ -47,7 +47,6 @@ nb-configuration.xml
 .env
 logs
 export
-/diasexport-main/resources/properties
 
 # Python version from PYENV local
 .python-version

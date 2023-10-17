@@ -293,4 +293,10 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull
     return stream().findFirst();
   }
 
+  @NotNull
+  public FluentEnumSet<E>[] range(@NotNull final E from, @NotNull final E to)
+  {
+    return FluentEnumSet.<E>of(EnumSet.range(from, to), constructor);
+  }
+
 }

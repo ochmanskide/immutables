@@ -38,7 +38,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor;
+  IntFunction<? extends @NonNull @NotNull E @NonNull @NotNull []> constructor;
 
   /**
    * This method is not supported.
@@ -85,8 +85,8 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings("unchecked")
-  private static <S extends Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
-      final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
+  private static <S extends Enum<@NotNull S>> Class<? extends @NotNull S> getComponentTypeFromConstructor(
+    final @NotNull IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
     return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
   }
@@ -284,6 +284,12 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   public Optional<@Nullable E> findFirst()
   {
     return stream().findFirst();
+  }
+
+  @NotNull
+  public ImmutableEnumSet<E>[] range(@NotNull final E from, @NotNull final E to)
+  {
+    return ImmutableEnumSet.<E>of(EnumSet.range(from, to), constructor);
   }
 
 }

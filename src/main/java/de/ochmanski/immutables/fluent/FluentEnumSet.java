@@ -5,14 +5,20 @@ import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
+
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 /**
  * Immutable wrapper of <pre>{@code java.util.EnumSet<K,V>}</pre>
@@ -27,7 +33,8 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull E>> implements ISet<@NotNull E>
+public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extends @NotNull E>>
+  implements ISet<@NotNull E>
 {
 
   @UnmodifiableView
@@ -40,7 +47,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given constructor cannot be null.")
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor;
+  IntFunction<? extends @NonNull @NotNull E @NonNull @NotNull []> constructor;
 
   /**
    * This method is not supported.
@@ -49,113 +56,160 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
-   *   final ISet<DayOfWeek> actual = ImmutableEnumSet.ofGenerator(DayOfWeek[]::new);
-   *   final ISet<Month> actual = ImmutableEnumSet.ofGenerator(Month[]::new);
+   *   final ISet<Dummy> actual = FluentEnumSet.ofGenerator(Dummy[]::new);
+   *   final ISet<DayOfWeek> actual = FluentEnumSet.ofGenerator(DayOfWeek[]::new);
+   *   final ISet<Month> actual = FluentEnumSet.ofGenerator(Month[]::new);
    *   }
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
-  private static void of()
+  static void of()
   {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-        + "For example: ImmutableEnumSet.ofGenerator(Day[]::new)");
+      + "For example: FluentEnumSet.ofGenerator(Day[]::new)");
   }
 
   /**
    * Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
-   *   final ISet<DayOfWeek> actual = ImmutableEnumSet.ofGenerator(DayOfWeek[]::new);
-   *   final ISet<Month> actual = ImmutableEnumSet.ofGenerator(Month[]::new);
+   *   final ISet<Dummy> actual = FluentEnumSet.ofGenerator(Dummy[]::new);
+   *   final ISet<DayOfWeek> actual = FluentEnumSet.ofGenerator(DayOfWeek[]::new);
+   *   final ISet<Month> actual = FluentEnumSet.ofGenerator(Month[]::new);
    *   }
    * </pre>
    */
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> FluentEnumSet<@NotNull S> ofGenerator(
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> ofGenerator(
+    @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    final Class<@NotNull S> componentType = getComponentTypeFromConstructor(constructor);
-    return FluentEnumSet.<@NotNull S>builder().set(EnumSet.noneOf(componentType)).constructor(constructor).build();
+    final IntFunction c = (IntFunction)constructor;
+    return FluentEnumSet.<S>builder()
+      .set(FluentEnumSet.immutableEnumSetNoneOf(c))
+      .constructor(constructor)
+      .build();
   }
 
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  private static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> ImmutableEnumSet<? extends Enum> immutableEnumSetNoneOf(
+    final IntFunction<? extends S[]> c)
+  {
+    final IntFunction<Enum[]> constructor = (IntFunction<Enum[]>)c;
+    return ImmutableEnumSet.<Enum>noneOf(constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings(UNCHECKED)
-  private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
-      final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
+  private static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> Class<? extends Fluent<? extends @NotNull S>> getComponentTypeFromConstructor(
+    final @NotNull IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
+    return (Class<? extends Enum<@NotNull S>>)constructor.apply(0).getClass().getComponentType();
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> FluentEnumSet<@NotNull S> of(@NotNull final S s1,
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return FluentEnumSet.<@NotNull S>builder().set(EnumSet.of(s1)).constructor(constructor).build();
+    final ImmutableEnumSet<? extends @NotNull S> of = EnumSet.of(s1);
+    return FluentEnumSet.builder().set(of).constructor(constructor).build();
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> FluentEnumSet<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2,
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
     return FluentEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2)).constructor(constructor).build();
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> FluentEnumSet<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2,
-      @NotNull final S s3,
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3,
+    @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
     return FluentEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3)).constructor(constructor).build();
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> FluentEnumSet<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2,
-      @NotNull final S s3,
-      @NotNull final S s4,
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3,
+    @NotNull final S s4,
+    @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
     return FluentEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3, s4)).constructor(constructor).build();
   }
 
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public static <S extends Enum<@NotNull S>> FluentEnumSet<? extends @NotNull S> empty()
+  {
+    return (FluentEnumSet<? extends S>)EMPTY;
+  }
+
+  private static final FluentEnumSet<? extends Enum<?>> EMPTY = FluentEnumSet.ofGenerator(Enum @NotNull []::new);
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  private static <S extends Enum<@NotNull S>> IntFunction<? extends @NotNull S @NotNull []> defaultConstructor()
+  {
+    return (IntFunction)Enum @NotNull []::new;
+  }
+
+  @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumSet<S> of(
-      @NotNull final S @NotNull [] array,
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  public static <S extends @NotNull Enum<@NotNull S>> FluentEnumSet<? extends @NotNull S> of(
+    @NotNull final S @NotNull [] array,
+    @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    final List<@NotNull S> list = Arrays.asList(array);
+    final ImmutableEnumSet<? extends @NotNull S> set = ImmutableEnumSet.of(Arrays.asList(array));
     return FluentEnumSet.<@NotNull S>of(list, constructor);
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumSet<S> of(
-      @NotNull final Collection<@NotNull S> collection,
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  public static <S extends @NotNull Enum<@NotNull S> &> FluentEnumSet<? extends @NotNull S> of(
+    @NotNull final Collection<@NotNull S> collection,
+    @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return FluentEnumSet.<@NotNull S>builder().set(EnumSet.copyOf(collection)).constructor(constructor).build();
+    final ImmutableEnumSet<? extends @NotNull S> set = (ImmutableEnumSet<? extends S>)ImmutableEnumSet.copyOf(
+      collection, constructor);
+    return FluentEnumSet.<@NotNull S>builder().set(set).constructor(constructor).build();
   }
 
   /**
@@ -198,13 +252,13 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull
    *
    * @return a clone of this {@code ArraySet} instance
    */
-  @Override
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public FluentEnumSet<@NotNull E> deepClone()
+  public FluentEnumSet<? extends @NotNull E> deepClone()
   {
-    return toBuilder().build();
+    return toBuilder().constructor(constructor).build();
   }
 
   /**
@@ -219,32 +273,35 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull
    *
    * @return an array containing all the elements in this set in proper sequence
    */
-  @Override
   @NotNull
+  @Override
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
     return isEmpty()
-        ? set.toArray(getConstructor())
-        : set.toArray(newArrayNative());
+      ? set.toArray((IntFunction<E @NotNull []>)getConstructor())
+      : set.toArray(newArrayNative());
   }
 
   @NotNull
   @SuppressWarnings(UNCHECKED)
   @Contract(value = "-> new", pure = true)
-  public E @NotNull [] newArrayNative()
+  private E @NotNull [] newArrayNative()
   {
-    final Class<@NotNull E> componentType = getComponentType();
+    final Class<? extends Enum<? extends E>> componentType = getComponentType();
     final int size = size();
     final Object a = Array.newInstance(componentType, size);
     return (E[])a;
   }
 
   @NotNull
+  @Override
   @SuppressWarnings(UNCHECKED)
-  private Class<@NotNull E> getComponentType()
+  public Class<? extends @NotNull E> getComponentType()
   {
-    return isEmpty() ? getComponentTypeFromConstructor(getConstructor()) : (Class<E>)iterator().next().getClass();
+    return isEmpty()
+      ? (Class<? extends E>)getComponentTypeFromConstructor(getConstructor())
+      : (Class<? extends E>)iterator().next().getClass();
   }
 
   /**
@@ -254,8 +311,9 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull
    * @return an iterator over the elements in this set
    */
   @NotNull
+  @Override
   @Contract(pure = true)
-  public Iterator<@NotNull E> iterator()
+  public Iterator<? extends @NotNull E> iterator()
   {
     return unwrap().iterator();
   }
@@ -268,36 +326,28 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull
    *     {@code Spliterator}.
    * @since 1.8
    */
-  @Override
   @NotNull
+  @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public Stream<@NotNull E> stream()
+  public Stream<? extends @NotNull E> stream()
   {
     return unwrap().stream();
   }
 
-  @Override
   @NotNull
+  @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public EnumSet<@NotNull E> unwrap()
+  public EnumSet<? extends @NotNull E> unwrap()
   {
-    return EnumSet.copyOf(set);
+    return EnumSet.<E>copyOf(getSet());
   }
 
-  @NotNull
-  @Override
-  @Contract(pure = true)
-  public Optional<@Nullable E> findFirst()
+  public FluentEnumSet<? extends @NotNull E> range(@NotNull final E from, @NotNull final E to)
   {
-    return stream().findFirst();
+    return FluentEnumSet.of(EnumSet.range(from, to), getConstructor());
   }
-
-  @NotNull
-  public FluentEnumSet<E>[] range(@NotNull final E from, @NotNull final E to)
-  {
-    return FluentEnumSet.<E>of(EnumSet.range(from, to), constructor);
-  }
-
 }

@@ -80,13 +80,15 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> ofGenerator(
+  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> ofGenerator(
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
     final Class<? extends Enum<? extends S>> componentType = getComponentTypeFromConstructor(constructor);
     final Class<@NotNull S> componentTypeE = (Class<S>)componentType;
-    return ImmutableEnumSet.<@NotNull S>builder().constructor(constructor).set(EnumSet.noneOf(componentTypeE))
-      .constructor(constructor).build();
+    return ImmutableEnumSet.<@NotNull S>builder()
+      .set(EnumSet.noneOf(componentTypeE))
+      .constructor(constructor)
+      .build();
   }
 
   @NotNull
@@ -153,8 +155,19 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
+  public static <S extends Enum<? extends @NotNull S>> ImmutableEnumSet<? extends @NotNull S> empty()
+  {
+    return (ImmutableEnumSet<? extends S>)EMPTY;
+  }
+
+  private static final ImmutableEnumSet<? extends Enum<?>> EMPTY = ImmutableEnumSet.ofGenerator(Enum @NotNull []::new);
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
+  private static <S extends Enum<? extends @NotNull S>> IntFunction<? extends @NotNull S @NotNull []> defaultConstructor()
   {
     return (IntFunction)Enum @NotNull []::new;
   }

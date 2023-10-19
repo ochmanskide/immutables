@@ -1,6 +1,7 @@
 package de.ochmanski.immutables.fluent;
 
 import de.ochmanski.immutables.ISet;
+import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +35,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull
   @NotNull("Given set cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given set cannot be null.")
   @Builder.Default
-  Set<@NonNull @NotNull E> set = Set.of();
+  ImmutableEnumSet<? extends @NonNull @NotNull E> set = ImmutableEnumSet.<@NotNull E>empty();
 
   @NonNull
   @NotNull("Given keyType cannot be null.")

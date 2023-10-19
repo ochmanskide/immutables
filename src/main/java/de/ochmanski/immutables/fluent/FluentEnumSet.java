@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
@@ -46,7 +45,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given constructor cannot be null.")
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor;
+  IntFunction<? extends @NonNull @NotNull E @NonNull @NotNull []> constructor;
 
   /**
    * This method is not supported.
@@ -276,20 +275,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
-    return isEmpty()
-      ? set.toArray((IntFunction<E @NotNull []>)getConstructor())
-      : set.toArray(newArrayNative());
-  }
-
-  @NotNull
-  @SuppressWarnings(UNCHECKED)
-  @Contract(value = "-> new", pure = true)
-  private E @NotNull [] newArrayNative()
-  {
-    final Class<? extends Enum<? extends E>> componentType = getComponentType();
-    final int size = size();
-    final Object a = Array.newInstance(componentType, size);
-    return (E[])a;
+    return set.toArray();
   }
 
   @NotNull
@@ -341,11 +327,17 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Contract(value = " -> new", pure = true)
   public EnumSet<? extends @NotNull E> unwrap()
   {
-    return EnumSet.<E>copyOf(getSet());
+    final EnumSet<? extends @NotNull E> unwrap = getSet().unwrap();
+    return EnumSet.<@NotNull E>copyOf((EnumSet<E>)unwrap);
   }
 
-  public FluentEnumSet<@NotNull E> range(@NotNull final E from, @NotNull final E to)
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public FluentEnumSet<? extends @NotNull E> range(@NotNull final E from, @NotNull final E to)
   {
-    return FluentEnumSet.of(EnumSet.range(from, to), getConstructor());
+    return FluentEnumSet.ofCollection(EnumSet.range(from, to), getConstructor());
   }
+
 }

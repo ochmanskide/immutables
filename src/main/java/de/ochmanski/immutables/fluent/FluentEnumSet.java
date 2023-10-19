@@ -100,8 +100,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   private static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> ImmutableEnumSet<? extends Enum> immutableEnumSetNoneOf(
     final IntFunction<? extends S[]> c)
   {
-    final IntFunction<Enum[]> constructor = (IntFunction<Enum[]>)c;
-    return ImmutableEnumSet.<Enum>noneOf(constructor);
+    return ImmutableEnumSet.<S>noneOf(c);
   }
 
   @NotNull
@@ -112,7 +111,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   private static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> Class<? extends Fluent<? extends @NotNull S>> getComponentTypeFromConstructor(
     final @NotNull IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return (Class<? extends Enum<@NotNull S>>)constructor.apply(0).getClass().getComponentType();
+    return (Class<? extends Fluent<? extends @NotNull S>>)constructor.apply(0).getClass().getComponentType();
   }
 
   @NotNull

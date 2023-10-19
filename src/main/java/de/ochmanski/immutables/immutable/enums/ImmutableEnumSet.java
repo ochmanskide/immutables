@@ -96,17 +96,18 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings(UNCHECKED)
-  private static <S extends Enum<? extends @NotNull S>> Class<? extends Enum<? extends @NotNull S>> getComponentTypeFromConstructor(
+  private static <S extends Enum<@NotNull S>> Class<? extends Enum<@NotNull S>> getComponentTypeFromConstructor(
     final @NotNull IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return (Class<? extends Enum<? extends @NotNull S>>)constructor.apply(0).getClass().getComponentType();
+    return (Class<? extends Enum<@NotNull S>>)constructor.apply(0).getClass().getComponentType();
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(@NotNull final S s1,
+  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(
+    @NotNull final S s1,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
     return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1)).constructor(constructor).build();
@@ -116,7 +117,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(
+  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
@@ -128,7 +129,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(
+  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
@@ -141,7 +142,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(
+  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
@@ -155,7 +156,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public static <S extends Enum<? extends @NotNull S>> ImmutableEnumSet<? extends @NotNull S> empty()
+  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> empty()
   {
     return (ImmutableEnumSet<? extends S>)EMPTY;
   }
@@ -167,7 +168,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  private static <S extends Enum<? extends @NotNull S>> IntFunction<? extends @NotNull S @NotNull []> defaultConstructor()
+  private static <S extends Enum<@NotNull S>> IntFunction<? extends @NotNull S @NotNull []> defaultConstructor()
   {
     return (IntFunction)Enum @NotNull []::new;
   }
@@ -352,7 +353,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> copyOf(
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> copyOf(
     @NotNull final Set<@NotNull S> keySet,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {

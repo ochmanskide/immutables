@@ -86,21 +86,10 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> ofGenerator(
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    final IntFunction c = (IntFunction)constructor;
-    return FluentEnumSet.<S>builder()
-      .set(FluentEnumSet.immutableEnumSetNoneOf(c))
+    return FluentEnumSet.<@NotNull S>builder()
+      .set(ImmutableEnumSet.<@NotNull S>noneOf(constructor))
       .constructor(constructor)
       .build();
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  private static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> ImmutableEnumSet<? extends @NotNull S> immutableEnumSetNoneOf(
-    final IntFunction<? extends S[]> c)
-  {
-    return ImmutableEnumSet.<@NotNull S>noneOf(c);
   }
 
   @NotNull
@@ -122,8 +111,11 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
     @NotNull final S s1,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    final ImmutableEnumSet<? extends @NotNull S> of = EnumSet.of(s1);
-    return FluentEnumSet.builder().set(of).constructor(constructor).build();
+    final ImmutableEnumSet<? extends @NotNull S> of = ImmutableEnumSet.<@NotNull S>of(s1, constructor);
+    return FluentEnumSet.<@NotNull S>builder()
+      .set(of)
+      .constructor(constructor)
+      .build();
   }
 
   @NotNull
@@ -135,7 +127,11 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
     @NotNull final S s2,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return FluentEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2)).constructor(constructor).build();
+    final ImmutableEnumSet<? extends @NotNull S> of = ImmutableEnumSet.<@NotNull S>of(s1, s2, constructor);
+    return FluentEnumSet.<@NotNull S>builder()
+      .set(of)
+      .constructor(constructor)
+      .build();
   }
 
   @NotNull
@@ -148,7 +144,11 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
     @NotNull final S s3,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return FluentEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3)).constructor(constructor).build();
+    final ImmutableEnumSet<? extends @NotNull S> of = ImmutableEnumSet.<@NotNull S>of(s1, s2, s3, constructor);
+    return FluentEnumSet.<@NotNull S>builder()
+      .set(of)
+      .constructor(constructor)
+      .build();
   }
 
   @NotNull
@@ -162,26 +162,31 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
     @NotNull final S s4,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return FluentEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3, s4)).constructor(constructor).build();
+    final ImmutableEnumSet<? extends @NotNull S> of = ImmutableEnumSet.<@NotNull S>of(s1, s2, s3, s4, constructor);
+    return FluentEnumSet.<@NotNull S>builder()
+      .set(of)
+      .constructor(constructor)
+      .build();
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public static <S extends Enum<@NotNull S>> FluentEnumSet<? extends @NotNull S> empty()
+  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> empty()
   {
     return (FluentEnumSet<? extends S>)EMPTY;
   }
 
-  private static final FluentEnumSet<? extends Enum<?>> EMPTY = FluentEnumSet.ofGenerator(Enum @NotNull []::new);
+  private static final FluentEnumSet<? extends Fluent<?>> EMPTY = FluentEnumSet.ofGenerator(
+    (IntFunction)Enum @NotNull []::new);
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  private static <S extends Enum<@NotNull S>> IntFunction<? extends @NotNull S @NotNull []> defaultConstructor()
+  private static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> IntFunction<? extends @NotNull S @NotNull []> defaultConstructor()
   {
     return (IntFunction)Enum @NotNull []::new;
   }

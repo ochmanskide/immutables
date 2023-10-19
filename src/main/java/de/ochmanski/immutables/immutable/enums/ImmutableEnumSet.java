@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.immutable.enums;
 
+import de.ochmanski.immutables.ISet;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -25,7 +26,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements ISet<@NotNull E>
+public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements ISet<E>
 {
 
   @UnmodifiableView
@@ -194,6 +195,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
    * @param o element whose presence in this set is to be tested
    * @return {@code true} if this set contains the specified element
    */
+  @Override
   public boolean contains(@NotNull final E o)
   {
     return set.contains(o);
@@ -207,7 +209,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>>// implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ImmutableEnumSet<@NotNull E> deepClone()
+  public ImmutableEnumSet<? extends @NotNull E> deepClone()
   {
     return toBuilder().constructor(constructor).build();
   }

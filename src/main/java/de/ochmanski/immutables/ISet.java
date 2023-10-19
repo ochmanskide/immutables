@@ -51,8 +51,8 @@ public interface ISet<E>
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> ofGenerator(
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  static <S extends Equalable<@NotNull S>> ISet<? extends @NotNull S> ofGenerator(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return EqualableSet.<@NotNull S>builder().constructor(constructor).build();
   }
@@ -60,8 +60,8 @@ public interface ISet<E>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> of(@NotNull final S s1,
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  static <S extends Equalable<@NotNull S>> ISet<? extends @NotNull S> of(@NotNull final S s1,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return EqualableSet.<@NotNull S>builder().set(Set.of(s1)).constructor(constructor).build();
   }
@@ -69,10 +69,10 @@ public interface ISet<E>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2,
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  static <S extends Equalable<@NotNull S>> ISet<? extends @NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return EqualableSet.<@NotNull S>builder().set(Set.of(s1, s2)).constructor(constructor).build();
   }
@@ -80,11 +80,11 @@ public interface ISet<E>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2,
-      @NotNull final S s3,
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  static <S extends Equalable<@NotNull S>> ISet<? extends @NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return EqualableSet.<@NotNull S>builder().set(Set.of(s1, s2, s3)).constructor(constructor).build();
   }
@@ -92,12 +92,12 @@ public interface ISet<E>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _ -> new", pure = true)
-  static <S extends Equalable<@NotNull S>> ISet<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2,
-      @NotNull final S s3,
-      @NotNull final S s4,
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  static <S extends Equalable<@NotNull S>> ISet<? extends @NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3,
+    @NotNull final S s4,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return EqualableSet.<@NotNull S>builder().set(Set.of(s1, s2, s3, s4)).constructor(constructor).build();
   }
@@ -106,13 +106,13 @@ public interface ISet<E>
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   static <K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
-  ISet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
-      @NotNull final Set<Map.@NotNull Entry<@NotNull K, @NotNull V>> entrySet)
+  ISet<? extends IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
+    @NotNull final Set<Map.@NotNull Entry<@NotNull K, @NotNull V>> entrySet)
   {
     @NotNull
     final Set<IMap.@NotNull Entry<@NotNull K, @NotNull V>> set = entrySet.stream()
-        .map(ISet::toEqualableEntry)
-        .collect(Collectors.toUnmodifiableSet());
+      .map(ISet::toEqualableEntry)
+      .collect(Collectors.toUnmodifiableSet());
     final IntFunction<IMap.Entry<@NotNull K, @NotNull V> @NotNull []> constructor = IMap.Entry[]::new;
     return copyOf(set, constructor);
   }
@@ -172,7 +172,7 @@ public interface ISet<E>
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  ISet<@NotNull E> deepClone();
+  ISet<? extends @NotNull E> deepClone();
 
   /**
    * Returns an array containing all the elements in this set in proper sequence (from first to last element).
@@ -198,18 +198,18 @@ public interface ISet<E>
    */
   @NotNull
   @Contract(pure = true)
-  Iterator<@NotNull E> iterator();
+  Iterator<? extends @NotNull E> iterator();
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  Stream<@NotNull E> stream();
+  Stream<? extends @NotNull E> stream();
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  Set<@NotNull E> unwrap();
+  Set<? extends @NotNull E> unwrap();
 
   @NotNull
   @Contract(pure = true)
-  Optional<@Nullable E> findFirst();
+  Optional<? extends @Nullable E> findFirst();
 
 }

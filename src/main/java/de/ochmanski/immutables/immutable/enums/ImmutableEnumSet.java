@@ -29,7 +29,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements ISet<E>
+public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements ISet<@NotNull E>
 {
 
   @Getter(AccessLevel.PRIVATE)
@@ -80,15 +80,11 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> ofGenerator(
+  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> ofGenerator(
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    final Class<? extends Enum<? extends S>> componentType = getComponentTypeFromConstructor(constructor);
-    final Class<@NotNull S> componentTypeE = (Class<S>)componentType;
-    return ImmutableEnumSet.<@NotNull S>builder()
-      .set(EnumSet.noneOf(componentTypeE))
-      .constructor(constructor)
-      .build();
+    final Class<@NotNull S> componentTypeE = (Class<S>)getComponentTypeFromConstructor(constructor);
+    return ImmutableEnumSet.<@NotNull S>of(EnumSet.noneOf(componentTypeE), constructor);
   }
 
   @NotNull
@@ -106,59 +102,59 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(
+  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1)).constructor(constructor).build();
+    return ImmutableEnumSet.<@NotNull S>of(EnumSet.of(s1), constructor);
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(
+  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2)).constructor(constructor).build();
+    return ImmutableEnumSet.<@NotNull S>of(EnumSet.of(s1, s2), constructor);
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(
+  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3)).constructor(constructor).build();
+    return ImmutableEnumSet.<@NotNull S>of(EnumSet.of(s1, s2, s3), constructor);
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(
+  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
     @NotNull final S s4,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.of(s1, s2, s3, s4)).constructor(constructor).build();
+    return ImmutableEnumSet.<@NotNull S>of(EnumSet.of(s1, s2, s3, s4), constructor);
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> empty()
+  public static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> empty()
   {
-    return (ImmutableEnumSet<? extends S>)EMPTY;
+    return (ImmutableEnumSet<S>)EMPTY;
   }
 
   private static final ImmutableEnumSet<? extends Enum<?>> EMPTY = ImmutableEnumSet.ofGenerator(Enum @NotNull []::new);
@@ -177,7 +173,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
     @NotNull final S @NotNull [] array,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
@@ -189,18 +185,18 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> of(
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
     @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return ImmutableEnumSet.<@NotNull S>builder().set(EnumSet.copyOf(collection)).constructor(constructor).build();
+    return ImmutableEnumSet.<@NotNull S>copyOf(collection, constructor);
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> noneOf(
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> noneOf(
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
     return ImmutableEnumSet.<@NotNull S>ofGenerator(constructor);
@@ -210,12 +206,11 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> ofArray(
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> ofArray(
     @NotNull final S @NotNull [] array,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    final List<@NotNull S> list = Arrays.asList(array);
-    return ImmutableEnumSet.<@NotNull S>of(list, constructor);
+    return ImmutableEnumSet.<@NotNull S>of(array, constructor);
   }
 
   /**
@@ -365,8 +360,8 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> copyOf(
-    @NotNull final Set<@NotNull S> keySet,
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> copyOf(
+    @NotNull final Collection<@NotNull S> keySet,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
     final EnumSet<@NotNull S> set = EnumSet.copyOf(keySet);

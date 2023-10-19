@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.immutable.enums;
 
+import de.ochmanski.immutables.IMap;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,7 @@ import java.util.function.IntFunction;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V>
+public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements IMap<@NotNull K, V>
 {
 
   @UnmodifiableView

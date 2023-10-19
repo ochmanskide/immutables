@@ -41,12 +41,12 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @NotNull("Given set cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given set cannot be null.")
   @Builder.Default
-  ImmutableEnumSet<? extends @NonNull @NotNull E> set = ImmutableEnumSet.<@NotNull E>empty();
+  ImmutableEnumSet<@NonNull @NotNull E> set = ImmutableEnumSet.<@NotNull E>empty();
 
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given constructor cannot be null.")
-  IntFunction<? extends @NonNull @NotNull E @NonNull @NotNull []> constructor;
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor;
 
   /**
    * This method is not supported.
@@ -82,13 +82,10 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> ofGenerator(
+  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> ofGenerator(
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return FluentEnumSet.<@NotNull S>builder()
-      .set(ImmutableEnumSet.<@NotNull S>noneOf(constructor))
-      .constructor(constructor)
-      .build();
+    return FluentEnumSet.<@NotNull S>ofSet(ImmutableEnumSet.<@NotNull S>noneOf(constructor), constructor);
   }
 
   @NotNull
@@ -106,15 +103,12 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
+  static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    final ImmutableEnumSet<? extends @NotNull S> of = ImmutableEnumSet.<@NotNull S>of(s1, constructor);
-    return FluentEnumSet.<@NotNull S>builder()
-      .set(of)
-      .constructor(constructor)
-      .build();
+    final ImmutableEnumSet<@NotNull S> of = ImmutableEnumSet.<@NotNull S>of(s1, constructor);
+    return FluentEnumSet.<@NotNull S>ofSet(of, constructor);
   }
 
   @NotNull
@@ -126,11 +120,8 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
     @NotNull final S s2,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    final ImmutableEnumSet<? extends @NotNull S> of = ImmutableEnumSet.<@NotNull S>of(s1, s2, constructor);
-    return FluentEnumSet.<@NotNull S>builder()
-      .set(of)
-      .constructor(constructor)
-      .build();
+    final ImmutableEnumSet<@NotNull S> of = ImmutableEnumSet.<@NotNull S>of(s1, s2, constructor);
+    return FluentEnumSet.<@NotNull S>ofSet(of, constructor);
   }
 
   @NotNull
@@ -143,11 +134,8 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
     @NotNull final S s3,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    final ImmutableEnumSet<? extends @NotNull S> of = ImmutableEnumSet.<@NotNull S>of(s1, s2, s3, constructor);
-    return FluentEnumSet.<@NotNull S>builder()
-      .set(of)
-      .constructor(constructor)
-      .build();
+    final ImmutableEnumSet<@NotNull S> of = ImmutableEnumSet.<@NotNull S>of(s1, s2, s3, constructor);
+    return FluentEnumSet.<@NotNull S>ofSet(of, constructor);
   }
 
   @NotNull
@@ -161,11 +149,8 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
     @NotNull final S s4,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    final ImmutableEnumSet<? extends @NotNull S> of = ImmutableEnumSet.<@NotNull S>of(s1, s2, s3, s4, constructor);
-    return FluentEnumSet.<@NotNull S>builder()
-      .set(of)
-      .constructor(constructor)
-      .build();
+    final ImmutableEnumSet<@NotNull S> of = ImmutableEnumSet.<@NotNull S>of(s1, s2, s3, s4, constructor);
+    return FluentEnumSet.<@NotNull S>ofSet(of, constructor);
   }
 
   @NotNull
@@ -194,24 +179,34 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
+  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> ofArray(
     @NotNull final S @NotNull [] array,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    final ImmutableEnumSet<? extends @NotNull S> set = ImmutableEnumSet.ofArray(array, constructor);
-    return FluentEnumSet.<@NotNull S>of(set, constructor);
+    final ImmutableEnumSet<@NotNull S> set = ImmutableEnumSet.ofArray(array, constructor);
+    return FluentEnumSet.<@NotNull S>ofSet(set, constructor);
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
+  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> ofCollection(
     @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    final ImmutableEnumSet<? extends @NotNull S> set = (ImmutableEnumSet<? extends S>)ImmutableEnumSet.copyOf(
-      collection, constructor);
+    final ImmutableEnumSet<@NotNull S> set = ImmutableEnumSet.<@NotNull S>of(collection, constructor);
+    return FluentEnumSet.<@NotNull S>ofSet(set, constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> ofSet(
+    @NotNull final ImmutableEnumSet<@NotNull S> set,
+    @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
+  {
     return FluentEnumSet.<@NotNull S>builder().set(set).constructor(constructor).build();
   }
 
@@ -349,7 +344,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
     return EnumSet.<E>copyOf(getSet());
   }
 
-  public FluentEnumSet<? extends @NotNull E> range(@NotNull final E from, @NotNull final E to)
+  public FluentEnumSet<@NotNull E> range(@NotNull final E from, @NotNull final E to)
   {
     return FluentEnumSet.of(EnumSet.range(from, to), getConstructor());
   }

@@ -97,10 +97,10 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  private static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> ImmutableEnumSet<? extends Enum> immutableEnumSetNoneOf(
+  private static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> ImmutableEnumSet<? extends @NotNull S> immutableEnumSetNoneOf(
     final IntFunction<? extends S[]> c)
   {
-    return ImmutableEnumSet.<S>noneOf(c);
+    return ImmutableEnumSet.<@NotNull S>noneOf(c);
   }
 
   @NotNull

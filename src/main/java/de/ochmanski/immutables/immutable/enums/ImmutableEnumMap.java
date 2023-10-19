@@ -78,6 +78,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
    * </pre>
    */
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V>
@@ -85,12 +86,13 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
       @NotNull final IntFunction<@NotNull K @NotNull []> constructor,
       @NotNull final Class<@NotNull V> valueType)
   {
-    final Class<? extends K> keyType = getComponentTypeFromConstructor(constructor);
-    final EnumMap<K, V> map = new EnumMap<>(keyType);
+    final Class<K> keyType = getComponentTypeFromConstructor(constructor);
+    final Map<@NotNull K, @NotNull V> map = new EnumMap<@NotNull K, @NotNull V>(keyType);
     return ImmutableEnumMap.<@NotNull K, @NotNull V>of(map, constructor, valueType);
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _ , _, _ -> new", pure = true)
   public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
@@ -98,13 +100,14 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
     @NotNull final IntFunction<@NotNull K @NotNull []> constructor,
     @NotNull final Class<@NotNull V> valueType)
   {
-    final Class<? extends K> keyType = getComponentTypeFromConstructor(constructor);
-    final Map<@NonNull @NotNull K, @NonNull @NotNull V> map = new EnumMap<>(keyType);
+    final Class<K> keyType = getComponentTypeFromConstructor(constructor);
+    final Map<@NotNull K, @NotNull V> map = new EnumMap<@NotNull K, @NotNull V>(keyType);
     map.put(k1, v1);
     return ImmutableEnumMap.<@NotNull K, @NotNull V>of(map, constructor, valueType);
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _ , _, _ -> new", pure = true)
   public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
@@ -113,14 +116,15 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
     @NotNull final IntFunction<@NotNull K @NotNull []> constructor,
     @NotNull final Class<@NotNull V> valueType)
   {
-    final Class<? extends K> keyType = getComponentTypeFromConstructor(constructor);
-    final Map<@NonNull @NotNull K, @NonNull @NotNull V> map = new EnumMap<>(keyType);
+    final Class<K> keyType = getComponentTypeFromConstructor(constructor);
+    final Map<@NotNull K, @NotNull V> map = new EnumMap<@NotNull K, @NotNull V>(keyType);
     map.put(k1, v1);
     map.put(k2, v2);
     return ImmutableEnumMap.<@NotNull K, @NotNull V>of(map, constructor, valueType);
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _, _ , _, _ -> new", pure = true)
   public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
@@ -130,8 +134,8 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
     @NotNull final IntFunction<@NotNull K @NotNull []> constructor,
     @NotNull final Class<@NotNull V> valueType)
   {
-    final Class<? extends K> keyType = getComponentTypeFromConstructor(constructor);
-    final Map<@NonNull @NotNull K, @NonNull @NotNull V> map = new EnumMap<>(keyType);
+    final Class<K> keyType = getComponentTypeFromConstructor(constructor);
+    final Map<@NotNull K, @NotNull V> map = new EnumMap<@NotNull K, @NotNull V>(keyType);
     map.put(k1, v1);
     map.put(k2, v2);
     map.put(k3, v3);
@@ -139,6 +143,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _, _, _, _ , _, _ -> new", pure = true)
   public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
@@ -149,8 +154,8 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
     @NotNull final IntFunction<@NotNull K @NotNull []> constructor,
     @NotNull final Class<@NotNull V> valueType)
   {
-    final Class<? extends K> keyType = getComponentTypeFromConstructor(constructor);
-    final Map<@NonNull @NotNull K, @NonNull @NotNull V> map = new EnumMap<>(keyType);
+    final Class<K> keyType = getComponentTypeFromConstructor(constructor);
+    final Map<@NotNull K, @NotNull V> map = new EnumMap<@NotNull K, @NotNull V>(keyType);
     map.put(k1, v1);
     map.put(k2, v2);
     map.put(k3, v3);
@@ -159,26 +164,28 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
   public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
-    @NotNull final Map<@NonNull @NotNull K, @NonNull @NotNull V> map,
+    @NotNull final Map<@NotNull K, @NotNull V> map,
     @NotNull final IntFunction<@NotNull K @NotNull []> constructor,
     @NotNull final Class<@NotNull V> valueType)
   {
-    final EnumMap<@NonNull @NotNull K, @NonNull @NotNull V> enumMap = new EnumMap<>(map);
+    final EnumMap<@NotNull K, @NotNull V> enumMap = new EnumMap<>(map);
     return ImmutableEnumMap.ofEnumMap(enumMap, constructor, valueType);
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _-> new", pure = true)
   public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> ofEnumMap(
-    @NotNull final EnumMap<@NonNull @NotNull K, @NonNull @NotNull V> map,
+    @NotNull final EnumMap<@NotNull K, @NotNull V> map,
     @NotNull final IntFunction<@NotNull K @NotNull []> constructor,
     @NotNull final Class<@NotNull V> valueType)
   {
-    return ImmutableEnumMap.<@NonNull @NotNull K, @NonNull @NotNull V>builder()
+    return ImmutableEnumMap.<@NotNull K, @NotNull V>builder()
       .generator(constructor)
       .valueType(valueType)
       .map(map)
@@ -384,10 +391,10 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings(UNCHECKED)
-  private static <S extends Enum<@NotNull S>> Class<? extends @NotNull S> getComponentTypeFromConstructor(
+  private static <S extends Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
     final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return (Class<? extends @NotNull S>)constructor.apply(0).getClass().getComponentType();
+    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
   }
 
 }

@@ -129,7 +129,7 @@ public class ImmutableList<E>// extends Immutable<@NotNull E>> implements IList<
   }
 
   @NotNull
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings(UNCHECKED)
   @Contract(value = "-> new", pure = true)
   private E @NotNull [] newArrayNative()
   {
@@ -140,7 +140,7 @@ public class ImmutableList<E>// extends Immutable<@NotNull E>> implements IList<
   }
 
   @NotNull
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings(UNCHECKED)
   private Class<@NotNull E> getComponentType()
   {
     return (Class<E>)get(0).getClass();

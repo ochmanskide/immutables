@@ -84,7 +84,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings(UNCHECKED)
   private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
       final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
@@ -229,7 +229,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull
   }
 
   @NotNull
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings(UNCHECKED)
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] newArrayNative()
   {
@@ -240,7 +240,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull
   }
 
   @NotNull
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings(UNCHECKED)
   private Class<@NotNull E> getComponentType()
   {
     return isEmpty() ? getComponentTypeFromConstructor(getConstructor()) : (Class<E>)iterator().next().getClass();

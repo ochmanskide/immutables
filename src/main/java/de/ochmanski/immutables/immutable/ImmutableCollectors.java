@@ -234,7 +234,7 @@ public interface ImmutableCollectors
 
   @NotNull
   @Contract(pure = true)
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings(UNCHECKED)
   private static <I, R> Function<@NotNull I, @NotNull R> castingIdentity()
   {
     return i -> (R)i;

@@ -137,7 +137,7 @@ public class EqualableList<E extends Equalable<@NotNull E>> implements IList<@No
   }
 
   @NotNull
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings(UNCHECKED)
   @Contract(value = "-> new", pure = true)
   private E @NotNull [] newArrayNative()
   {
@@ -148,7 +148,7 @@ public class EqualableList<E extends Equalable<@NotNull E>> implements IList<@No
   }
 
   @NotNull
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings(UNCHECKED)
   private Class<@NotNull E> getComponentType()
   {
     return (Class<E>)get(0).getClass();

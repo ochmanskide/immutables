@@ -47,7 +47,7 @@ public class ImmutableSet<E> // extends Equalable<@NotNull E>> implements ISet<@
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings(UNCHECKED)
   private static <S> Class<@NotNull S> getComponentTypeFromConstructor(
       final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
@@ -121,7 +121,7 @@ public class ImmutableSet<E> // extends Equalable<@NotNull E>> implements ISet<@
   }
 
   @NotNull
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings(UNCHECKED)
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] newArrayNative()
   {
@@ -132,7 +132,7 @@ public class ImmutableSet<E> // extends Equalable<@NotNull E>> implements ISet<@
   }
 
   @NotNull
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings(UNCHECKED)
   private Class<@NotNull E> getComponentType()
   {
     return isEmpty() ? getComponentTypeFromConstructor(getConstructor()) : (Class<E>)iterator().next().getClass();

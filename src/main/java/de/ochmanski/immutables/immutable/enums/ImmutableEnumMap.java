@@ -400,7 +400,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V>
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings(UNCHECKED)
   private static <S extends Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
     final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {

@@ -2,10 +2,7 @@ package de.ochmanski.immutables.immutable.enums;
 
 import de.ochmanski.immutables.IMap;
 import lombok.*;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
+import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.Serializable;
@@ -23,6 +20,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements IMap<@NotNull K, V>
 {
 
+  @Unmodifiable
   @UnmodifiableView
   @NonNull
   @NotNull("Given map cannot be null.")
@@ -39,7 +37,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @NonNull
   @NotNull("Given valueType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given valueType cannot be null.")
-  Class<@NonNull @NotNull V> valueType;
+  Class<? extends @NonNull @NotNull V> valueType;
 
   @NotNull
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
@@ -87,12 +85,9 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
       @NotNull final IntFunction<@NotNull K @NotNull []> constructor,
       @NotNull final Class<@NotNull V> valueType)
   {
-    final Class<K> keyType = getComponentTypeFromConstructor(constructor);
-    return ImmutableEnumMap.<@NonNull @NotNull K, @NonNull @NotNull V>builder()
-      .generator(constructor)
-      .valueType(valueType)
-        .map(new EnumMap<>(keyType))
-        .build();
+    final Class<? extends K> keyType = getComponentTypeFromConstructor(constructor);
+    final EnumMap<K, V> map = new EnumMap<>(keyType);
+    return ImmutableEnumMap.<@NotNull K, @NotNull V>of(map, constructor, valueType);
   }
 
   @NotNull
@@ -103,14 +98,10 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
     @NotNull final IntFunction<@NotNull K @NotNull []> constructor,
     @NotNull final Class<@NotNull V> valueType)
   {
-    final Class<K> keyType = getComponentTypeFromConstructor(constructor);
+    final Class<? extends K> keyType = getComponentTypeFromConstructor(constructor);
     final Map<@NonNull @NotNull K, @NonNull @NotNull V> map = new EnumMap<>(keyType);
     map.put(k1, v1);
-    return ImmutableEnumMap.<@NonNull @NotNull K, @NonNull @NotNull V>builder()
-      .generator(constructor)
-      .valueType(valueType)
-        .map(map)
-        .build();
+    return ImmutableEnumMap.<@NotNull K, @NotNull V>of(map, constructor, valueType);
   }
 
   @NotNull
@@ -122,15 +113,11 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
     @NotNull final IntFunction<@NotNull K @NotNull []> constructor,
     @NotNull final Class<@NotNull V> valueType)
   {
-    final Class<K> keyType = getComponentTypeFromConstructor(constructor);
+    final Class<? extends K> keyType = getComponentTypeFromConstructor(constructor);
     final Map<@NonNull @NotNull K, @NonNull @NotNull V> map = new EnumMap<>(keyType);
     map.put(k1, v1);
     map.put(k2, v2);
-    return ImmutableEnumMap.<@NonNull @NotNull K, @NonNull @NotNull V>builder()
-      .generator(constructor)
-      .valueType(valueType)
-        .map(map)
-        .build();
+    return ImmutableEnumMap.<@NotNull K, @NotNull V>of(map, constructor, valueType);
   }
 
   @NotNull
@@ -143,16 +130,12 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
     @NotNull final IntFunction<@NotNull K @NotNull []> constructor,
     @NotNull final Class<@NotNull V> valueType)
   {
-    final Class<K> keyType = getComponentTypeFromConstructor(constructor);
+    final Class<? extends K> keyType = getComponentTypeFromConstructor(constructor);
     final Map<@NonNull @NotNull K, @NonNull @NotNull V> map = new EnumMap<>(keyType);
     map.put(k1, v1);
     map.put(k2, v2);
     map.put(k3, v3);
-    return ImmutableEnumMap.<@NonNull @NotNull K, @NonNull @NotNull V>builder()
-      .generator(constructor)
-      .valueType(valueType)
-        .map(map)
-        .build();
+    return ImmutableEnumMap.<@NotNull K, @NotNull V>of(map, constructor, valueType);
   }
 
   @NotNull
@@ -166,17 +149,13 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
     @NotNull final IntFunction<@NotNull K @NotNull []> constructor,
     @NotNull final Class<@NotNull V> valueType)
   {
-    final Class<K> keyType = getComponentTypeFromConstructor(constructor);
+    final Class<? extends K> keyType = getComponentTypeFromConstructor(constructor);
     final Map<@NonNull @NotNull K, @NonNull @NotNull V> map = new EnumMap<>(keyType);
     map.put(k1, v1);
     map.put(k2, v2);
     map.put(k3, v3);
     map.put(k4, v4);
-    return ImmutableEnumMap.<@NonNull @NotNull K, @NonNull @NotNull V>builder()
-      .generator(constructor)
-      .valueType(valueType)
-        .map(map)
-        .build();
+    return ImmutableEnumMap.<@NotNull K, @NotNull V>of(map, constructor, valueType);
   }
 
   @NotNull
@@ -309,7 +288,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Builder(toBuilder = true)
-  public static class Entry<@NotNull K, @NotNull V>
+  public static class Entry<K, V>
   {
 
     @NonNull
@@ -334,10 +313,10 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
      * @see Comparable
      * @since 1.8
      */
-    static <K extends Comparable<? super @NotNull K>, @NotNull V> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByKey()
+    static <K extends Comparable<? super @NotNull K>, V> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByKey()
     {
       return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
-          (c1, c2) -> c1.getKey().compareTo(c2.getKey());
+        (c1, c2) -> c1.getKey().compareTo(c2.getKey());
     }
 
     /**
@@ -370,12 +349,12 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
      * @return a comparator that compares {@link Entry} by the key.
      * @since 1.8
      */
-    static <@NotNull K, @NotNull V> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByKey(
-        @NotNull final Comparator<? super @NotNull K> cmp)
+    static <K, V> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByKey(
+      @NotNull final Comparator<? super @NotNull K> cmp)
     {
       Objects.requireNonNull(cmp);
       return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
-          (c1, c2) -> cmp.compare(c1.getKey(), c2.getKey());
+        (c1, c2) -> cmp.compare(c1.getKey(), c2.getKey());
     }
 
     /**
@@ -390,7 +369,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
      * @return a comparator that compares {@link Entry} by the value.
      * @since 1.8
      */
-    public static <@NotNull K, @NotNull V> Comparator<Entry<@NotNull K, @NotNull V>> comparingByValue(
+    public static <K, V> Comparator<Entry<@NotNull K, @NotNull V>> comparingByValue(
       @NotNull final
       Comparator<? super @NotNull V> cmp)
     {
@@ -405,10 +384,10 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings(UNCHECKED)
-  private static <S extends Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
+  private static <S extends Enum<@NotNull S>> Class<? extends @NotNull S> getComponentTypeFromConstructor(
     final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
+    return (Class<? extends @NotNull S>)constructor.apply(0).getClass().getComponentType();
   }
 
 }

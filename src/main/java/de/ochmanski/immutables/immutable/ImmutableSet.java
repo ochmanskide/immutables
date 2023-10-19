@@ -26,6 +26,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 public class ImmutableSet<E extends @NotNull E> implements ISet<E>
 {
 
+  @Getter(AccessLevel.PRIVATE)
   @UnmodifiableView
   @NonNull
   @NotNull("Given set cannot be null.")
@@ -36,14 +37,13 @@ public class ImmutableSet<E extends @NotNull E> implements ISet<E>
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor;
+  IntFunction<? extends @NonNull @NotNull E @NonNull @NotNull []> constructor;
 
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   static <S> ImmutableSet<@NotNull S> ofGenerator(@NotNull final IntFunction<? extends S @NotNull []> constructor)
   {
-    final Class<? extends @NotNull S> componentType = getComponentTypeFromConstructor(constructor);
     return ImmutableSet.<@NotNull S>builder().constructor(constructor).set(Set.of()).build();
   }
 
@@ -136,7 +136,7 @@ public class ImmutableSet<E extends @NotNull E> implements ISet<E>
 
   @NotNull
   @SuppressWarnings(UNCHECKED)
-  private Class<? extends @NotNull E> getComponentType()
+  public Class<? extends @NotNull E> getComponentType()
   {
     return isEmpty()
       ? getComponentTypeFromConstructor(getConstructor())

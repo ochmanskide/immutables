@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public interface Fluent<F extends Enum<@NotNull F> & Fluent<? extends @NotNull F>>
-  extends Equalable<@NotNull Fluent<? extends @NotNull F>>
+public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
+  extends Equalable<@NotNull Fluent<@NotNull F>>
 {
 
   //@MustBeInvokedByOverriders
@@ -69,24 +69,28 @@ public interface Fluent<F extends Enum<@NotNull F> & Fluent<? extends @NotNull F
     @Nullable final Fluent<@NotNull F> a,
     @Nullable final Fluent<@NotNull F> b)
   {
-    return Fluent.<F>areTheSame(a, b);
+    return Fluent.<@NotNull F>areTheSame(a, b);
   }
 
   /**
    * Fast implementation of isEqualTo() for enums only
    */
-  @Override
   @Contract(value = "null -> false", pure = true)
   default boolean isEqualTo(@Nullable final Fluent<@NotNull F> other)
   {
     return isSameAs(other);
   }
 
-  @Override
+  @Contract(value = "null -> true", pure = true)
+  default boolean isNotSameAs(@Nullable final Fluent<@NotNull F> other)
+  {
+    return !isSameAs(other);
+  }
+
   @Contract(value = "null -> false", pure = true)
   default boolean isSameAs(@Nullable final Fluent<@NotNull F> other)
   {
-    return Fluent.<F>areTheSame(this, other);
+    return Fluent.<@NotNull F>areTheSame(this, other);
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
@@ -94,7 +98,7 @@ public interface Fluent<F extends Enum<@NotNull F> & Fluent<? extends @NotNull F
     @Nullable final Fluent<@NotNull F> a,
     @Nullable final Fluent<@NotNull F> b)
   {
-    return !Fluent.<F>areTheSame(a, b);
+    return !Fluent.<@NotNull F>areTheSame(a, b);
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
@@ -102,7 +106,6 @@ public interface Fluent<F extends Enum<@NotNull F> & Fluent<? extends @NotNull F
     @Nullable final Fluent<@NotNull F> a,
     @Nullable final Fluent<@NotNull F> b)
   {
-    return Equalable.<F>areTheSame(a, b);
+    return Equalable.<@Nullable Fluent<@NotNull F>>areTheSame(a, b);
   }
-
 }

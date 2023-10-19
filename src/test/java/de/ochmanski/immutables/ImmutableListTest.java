@@ -1,5 +1,7 @@
 package de.ochmanski.immutables;
 
+import de.ochmanski.immutables.equalable.Equalable;
+import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,7 @@ class ImmutableListTest
     @NotNull
     final IList<Dummy> actual = IList.ofGenerator(Dummy[]::new);
     assertThat(actual).isInstanceOf(ImmutableList.class);
-    assertThat(actual.toList()).isEmpty();
+    assertThat(actual.unwrap()).isEmpty();
     assertThat(actual.isEmpty()).isTrue();
     assertThat(actual.toArray()).isEmpty();
   }
@@ -39,7 +41,7 @@ class ImmutableListTest
     final Dummy s1 = Dummy.builder().s("a").build();
     final IList<Dummy> actual = IList.of(s1);
     assertThat(actual).isInstanceOf(ImmutableList.class);
-    assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a");
+    assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactly("a");
   }
 
   @Test
@@ -49,7 +51,7 @@ class ImmutableListTest
     final Dummy s2 = Dummy.builder().s("b").build();
     final IList<Dummy> actual = IList.of(s1, s2);
     assertThat(actual).isInstanceOf(ImmutableList.class);
-    assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a", "b");
+    assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactly("a", "b");
   }
 
   @Test
@@ -60,7 +62,7 @@ class ImmutableListTest
     final Dummy s3 = Dummy.builder().s("c").build();
     final IList<Dummy> actual = IList.of(s1, s2, s3);
     assertThat(actual).isInstanceOf(ImmutableList.class);
-    assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a", "b", "c");
+    assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactly("a", "b", "c");
   }
 
   @Test
@@ -71,7 +73,7 @@ class ImmutableListTest
     final Dummy s3 = Dummy.builder().s("c").build();
     final IList<Dummy> actual = IList.of(s1, s1, s2, s3);
     assertThat(actual).isInstanceOf(ImmutableList.class);
-    assertThat(actual.toList()).extracting(Dummy::getS).containsExactly("a", "a", "b", "c");
+    assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactly("a", "a", "b", "c");
   }
 
   @Test

@@ -92,7 +92,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings(UNCHECKED)
-  private static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> Class<? extends Fluent<? extends @NotNull S>> getComponentTypeFromConstructor(
+  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> Class<? extends Fluent<? extends @NotNull S>> getComponentTypeFromConstructor(
     final @NotNull IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
     return (Class<? extends Fluent<? extends @NotNull S>>)constructor.apply(0).getClass().getComponentType();
@@ -255,7 +255,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Contract(value = " -> new", pure = true)
   public FluentEnumSet<? extends @NotNull E> deepClone()
   {
-    return toBuilder().constructor(constructor).build();
+    return toBuilder().build();
   }
 
   /**

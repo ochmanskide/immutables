@@ -13,6 +13,8 @@ import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+
 /**
  * Immutable wrapper of <pre>{@code java.util.EnumList<K,V>}</pre>
  * <p>This Read-Only implementation of <pre>{@code List<>}</pre> interface
@@ -26,7 +28,8 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNull E>> implements IList<@NotNull E>
+public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent<? extends @NotNull E>>
+  implements IList<@NotNull E>
 {
 
   @UnmodifiableView
@@ -75,8 +78,8 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNul
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> FluentEnumList<@NotNull S> ofGenerator(
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> ofGenerator(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     final Class<@NotNull S> componentType = getComponentTypeFromConstructor(constructor);
     return FluentEnumList.<@NotNull S>builder().constructor(constructor).list(List.of()).build();
@@ -86,16 +89,16 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNul
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings(UNCHECKED)
-  private static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
-      final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
+  private static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
+    final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
+    return ImmutableEnumList.getComponentTypeFromConstructor();
   }
 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(@NotNull final S s1)
+  static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(@NotNull final S s1)
   {
     return FluentEnumList.<@NotNull S>builder().list(List.of(s1)).build();
   }
@@ -103,9 +106,9 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNul
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2)
+  static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2)
   {
     return FluentEnumList.<@NotNull S>builder().list(List.of(s1, s2)).build();
   }
@@ -113,10 +116,10 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNul
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2,
-      @NotNull final S s3)
+  static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3)
   {
     return FluentEnumList.<@NotNull S>builder().list(List.of(s1, s2, s3)).build();
   }
@@ -124,11 +127,11 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & Fluent<@NotNul
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2,
-      @NotNull final S s3,
-      @NotNull final S s4)
+  static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3,
+    @NotNull final S s4)
   {
     return FluentEnumList.<@NotNull S>builder().list(List.of(s1, s2, s3, s4)).build();
   }

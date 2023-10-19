@@ -31,7 +31,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extends @NotNull E>>
+public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent<? extends @NotNull E>>
   implements ISet<@NotNull E>
 {
 
@@ -81,7 +81,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> ofGenerator(
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> ofGenerator(
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
     return FluentEnumSet.<@NotNull S>of(ImmutableEnumSet.<@NotNull S>noneOf(constructor), constructor);
@@ -92,17 +92,17 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings(UNCHECKED)
-  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> Class<? extends Fluent<? extends @NotNull S>> getComponentTypeFromConstructor(
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> Class<? extends @NotNull Fluent<@NotNull S>> getComponentTypeFromConstructor(
     final @NotNull IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return (Class<? extends Fluent<? extends @NotNull S>>)constructor.apply(0).getClass().getComponentType();
+    return (Class<? extends @NotNull Fluent<S>>)ImmutableEnumSet.getComponentTypeFromConstructor(constructor);
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> of(
+  static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
@@ -114,7 +114,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
+  static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
@@ -127,7 +127,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
+  static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
@@ -141,7 +141,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
+  static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
@@ -156,12 +156,12 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> empty()
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> empty()
   {
     return (FluentEnumSet<? extends S>)EMPTY;
   }
 
-  private static final FluentEnumSet<? extends Fluent<?>> EMPTY = FluentEnumSet.ofGenerator(
+  private static final FluentEnumSet<? extends @NotNull Fluent<?>> EMPTY = FluentEnumSet.ofGenerator(
     (IntFunction)Enum @NotNull []::new);
 
   @NotNull
@@ -169,7 +169,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  private static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> IntFunction<? extends @NotNull S @NotNull []> defaultConstructor()
+  private static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> IntFunction<? extends @NotNull S @NotNull []> defaultConstructor()
   {
     return (IntFunction)Enum @NotNull []::new;
   }
@@ -178,7 +178,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> ofArray(
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> ofArray(
     @NotNull final S @NotNull [] array,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
@@ -190,7 +190,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> ofCollection(
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> ofCollection(
     @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
@@ -202,7 +202,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> of(
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> of(
     @NotNull final ImmutableEnumSet<@NotNull S> set,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {

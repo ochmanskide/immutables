@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.immutable;
 
+import de.ochmanski.immutables.IList;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -14,12 +15,14 @@ import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+
 @Value
 @UnmodifiableView
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableList<E>// extends Immutable<@NotNull E>> implements IList<@NotNull E>, Immutable<@NotNull E>
+public class ImmutableList<E> implements IList<@NotNull E>
 {
 
   @UnmodifiableView

@@ -20,8 +20,8 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class EqualableMap<K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
-    implements IMap<@NotNull K, @NotNull V>
+public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
+  implements IMap<@NotNull K, @NotNull V>
 {
 
   @UnmodifiableView

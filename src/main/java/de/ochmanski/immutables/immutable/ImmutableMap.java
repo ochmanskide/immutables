@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.immutable;
 
+import de.ochmanski.immutables.IMap;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,7 @@ import java.util.function.IntFunction;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableMap<K, V>// extends Immutable<@NotNull K>, V extends Immutable<@NotNull V>> implements ImmutableMap<@NotNull K, @NotNull V>
+public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
 {
 
   @UnmodifiableView
@@ -154,7 +155,7 @@ public class ImmutableMap<K, V>// extends Immutable<@NotNull K>, V extends Immut
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Builder(toBuilder = true)
-  public static class Entry<@NotNull K, @NotNull V>
+  public static class Entry<K, V>
   {
 
     @NonNull
@@ -215,12 +216,12 @@ public class ImmutableMap<K, V>// extends Immutable<@NotNull K>, V extends Immut
      * @return a comparator that compares {@link Entry} by the key.
      * @since 1.8
      */
-    static <@NotNull K, @NotNull V> Comparator<Entry<@NotNull K, @NotNull V>> comparingByKey(
-        Comparator<? super K> cmp)
+    static <K, V> Comparator<Entry<@NotNull K, @NotNull V>> comparingByKey(
+      Comparator<? super K> cmp)
     {
       Objects.requireNonNull(cmp);
       return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
-          (c1, c2) -> cmp.compare(c1.getKey(), c2.getKey());
+        (c1, c2) -> cmp.compare(c1.getKey(), c2.getKey());
     }
 
     /**
@@ -235,12 +236,12 @@ public class ImmutableMap<K, V>// extends Immutable<@NotNull K>, V extends Immut
      * @return a comparator that compares {@link Entry} by the value.
      * @since 1.8
      */
-    public static <@NotNull K, @NotNull V> Comparator<Entry<@NotNull K, @NotNull V>> comparingByValue(
-        Comparator<? super V> cmp)
+    public static <K, V> Comparator<Entry<@NotNull K, @NotNull V>> comparingByValue(
+      Comparator<? super V> cmp)
     {
       Objects.requireNonNull(cmp);
       return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
-          (c1, c2) -> cmp.compare(c1.getValue(), c2.getValue());
+        (c1, c2) -> cmp.compare(c1.getValue(), c2.getValue());
     }
 
   }

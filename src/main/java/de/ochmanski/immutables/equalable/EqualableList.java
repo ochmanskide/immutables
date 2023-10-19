@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class EqualableList<E extends Equalable<@NotNull E>> implements IList<@NotNull E>, Equalable<@NotNull E>
+public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements IList<@NotNull E>
 {
 
   @UnmodifiableView

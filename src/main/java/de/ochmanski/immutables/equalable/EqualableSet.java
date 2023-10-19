@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class EqualableSet<E extends Equalable<@NotNull E>> implements ISet<@NotNull E>, Equalable<@NotNull E>
+public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements ISet<@NotNull E>
 {
 
   @UnmodifiableView

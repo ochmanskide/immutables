@@ -2,7 +2,10 @@ package de.ochmanski.immutables.immutable.enums;
 
 import de.ochmanski.immutables.ISet;
 import lombok.*;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Array;
@@ -29,6 +32,8 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements ISet<E>
 {
 
+  @Getter(AccessLevel.PRIVATE)
+  @Unmodifiable
   @UnmodifiableView
   @NonNull
   @NotNull("Given set cannot be null.")
@@ -72,6 +77,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
    * </pre>
    */
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   public static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> ofGenerator(
@@ -84,6 +90,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings(UNCHECKED)
@@ -94,6 +101,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
   static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(@NotNull final S s1,
@@ -103,6 +111,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
   static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
@@ -114,6 +123,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
   static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
@@ -126,6 +136,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _ -> new", pure = true)
   static <S extends Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
@@ -139,6 +150,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
@@ -148,6 +160,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<S> of(
@@ -159,6 +172,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<S> of(
@@ -173,6 +187,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
    *
    * @return the number of elements in this set
    */
+  @Override
   public int size()
   {
     return set.size();
@@ -183,6 +198,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
    *
    * @return {@code true} if this set contains no elements
    */
+  @Override
   public boolean isEmpty()
   {
     return set.isEmpty();
@@ -207,6 +223,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
    * @return a clone of this {@code ArraySet} instance
    */
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableEnumSet<? extends @NotNull E> deepClone()
@@ -227,6 +244,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
    * @return an array containing all the elements in this set in proper sequence
    */
   @NotNull
+  @Override
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
@@ -247,12 +265,13 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   }
 
   @NotNull
+  @Override
   @SuppressWarnings(UNCHECKED)
-  private Class<? extends Enum<? extends E>> getComponentType()
+  public Class<? extends @NotNull E> getComponentType()
   {
     return isEmpty()
-      ? getComponentTypeFromConstructor(getConstructor())
-      : (Class<? extends Enum<? extends E>>)iterator().next().getClass();
+      ? (Class<? extends E>)getComponentTypeFromConstructor(getConstructor())
+      : (Class<? extends E>)iterator().next().getClass();
   }
 
   /**
@@ -262,6 +281,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
    * @return an iterator over the elements in this set
    */
   @NotNull
+  @Override
   @Contract(pure = true)
   public Iterator<? extends @NotNull E> iterator()
   {
@@ -277,6 +297,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
    * @since 1.8
    */
   @NotNull
+  @Override
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
@@ -286,25 +307,17 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   }
 
   @NotNull
+  @Override
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public EnumSet<? extends @NotNull E> unwrap()
   {
-    return EnumSet.<E>copyOf(set);
+    return EnumSet.<E>copyOf(getSet());
   }
 
-  @NotNull
-  @Contract(pure = true)
-  public Optional<? extends @Nullable E> findFirst()
-  {
-    return stream().findFirst();
-  }
-
-  @NotNull
   public ImmutableEnumSet<? extends @NotNull E> range(@NotNull final E from, @NotNull final E to)
   {
-    return ImmutableEnumSet.of(EnumSet.range(from, to), constructor);
+    return ImmutableEnumSet.of(EnumSet.range(from, to), getConstructor());
   }
-
 }

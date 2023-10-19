@@ -2,10 +2,7 @@ package de.ochmanski.immutables;
 
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.equalable.EqualableSet;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
+import org.jetbrains.annotations.*;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -35,7 +32,7 @@ public interface ISet<E>
   private static void of()
   {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-        + "For example: ISet.ofGenerator(String[]::new)");
+      + "For example: ISet.ofGenerator(String[]::new)");
   }
 
   /**
@@ -121,7 +118,7 @@ public interface ISet<E>
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   static <S extends Equalable<@NotNull S>> EqualableSet<@NotNull S> empty(
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     final Set<@NotNull S> of = Set.of();
     return copyOf(of, constructor);
@@ -131,8 +128,8 @@ public interface ISet<E>
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
   static <S extends Equalable<@NotNull S>> EqualableSet<@NotNull S> copyOf(
-      @NotNull final Set<@NotNull S> keySet,
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+    @NotNull final Set<@NotNull S> keySet,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     final Set<@NotNull S> set = Set.copyOf(keySet);
     return EqualableSet.<@NotNull S>builder().set(set).constructor(constructor).build();
@@ -142,7 +139,7 @@ public interface ISet<E>
   @Contract(value = " _ -> new", pure = true)
   static <V extends Equalable<@NotNull V>, K extends Equalable<@NotNull K>>
   IMap.@NotNull Entry<@NotNull K, @NotNull V> toEqualableEntry(
-      @NotNull final Map.@NotNull Entry<@NotNull K, @NotNull V> p)
+    @NotNull final Map.@NotNull Entry<@NotNull K, @NotNull V> p)
   {
     return IMap.Entry.<@NotNull K, @NotNull V>builder().key(p.getKey()).value(p.getValue()).build();
   }
@@ -187,8 +184,11 @@ public interface ISet<E>
    * @return an array containing all the elements in this set in proper sequence
    */
   @NotNull
-  @Contract(value = " -> new", pure = true)
+  @Contract(value = "-> new", pure = true)
   E @NotNull [] toArray();
+
+  @NotNull
+  Class<? extends @NotNull E> getComponentType();
 
   /**
    * Returns an iterator over the elements in this set.  The elements are returned in no particular order (unless this
@@ -198,18 +198,48 @@ public interface ISet<E>
    */
   @NotNull
   @Contract(pure = true)
-  Iterator<? extends @NotNull E> iterator();
+  default Iterator<? extends @NotNull E> iterator()
+  {
+    return unwrap().iterator();
+  }
 
+  /**
+   * Returns a sequential {@code Stream} with this collection as its source.
+   *
+   * @return a sequential {@code Stream} over the elements in this collection
+   * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
+   *   {@code Spliterator}.
+   * @since 1.8
+   */
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  Stream<? extends @NotNull E> stream();
+  default Stream<? extends @NotNull E> stream()
+  {
+    return unwrap().stream();
+  }
 
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   Set<? extends @NotNull E> unwrap();
 
   @NotNull
-  @Contract(pure = true)
-  Optional<? extends @Nullable E> findFirst();
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  default Optional<? extends @Nullable E> findFirst()
+  {
+    return stream().findFirst();
+  }
+
+  @NotNull
+  @Contract(value = " -> new", pure = true)
+  default Optional<? extends @Nullable E> findAny()
+  {
+    return stream().findAny();
+  }
 
 }

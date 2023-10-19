@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.immutable;
 
+import de.ochmanski.immutables.ISet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -15,12 +16,14 @@ import java.util.Set;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+
 @Value
 @UnmodifiableView
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class ImmutableSet<E> // extends Equalable<@NotNull E>> implements ISet<@NotNull E>, Equalable<@NotNull E>
+public class ImmutableSet<E extends @NotNull E> implements ISet<E>
 {
 
   @UnmodifiableView
@@ -38,9 +41,9 @@ public class ImmutableSet<E> // extends Equalable<@NotNull E>> implements ISet<@
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S> ImmutableSet<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  static <S> ImmutableSet<@NotNull S> ofGenerator(@NotNull final IntFunction<? extends S @NotNull []> constructor)
   {
-    final Class<@NotNull S> componentType = getComponentTypeFromConstructor(constructor);
+    final Class<? extends @NotNull S> componentType = getComponentTypeFromConstructor(constructor);
     return ImmutableSet.<@NotNull S>builder().constructor(constructor).set(Set.of()).build();
   }
 
@@ -48,10 +51,10 @@ public class ImmutableSet<E> // extends Equalable<@NotNull E>> implements ISet<@
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings(UNCHECKED)
-  private static <S> Class<@NotNull S> getComponentTypeFromConstructor(
-      final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
+  private static <S> Class<? extends @NotNull S> getComponentTypeFromConstructor(
+    final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
+    return (Class<? extends @NotNull S>)constructor.apply(0).getClass().getComponentType();
   }
 
   /**
@@ -133,9 +136,11 @@ public class ImmutableSet<E> // extends Equalable<@NotNull E>> implements ISet<@
 
   @NotNull
   @SuppressWarnings(UNCHECKED)
-  private Class<@NotNull E> getComponentType()
+  private Class<? extends @NotNull E> getComponentType()
   {
-    return isEmpty() ? getComponentTypeFromConstructor(getConstructor()) : (Class<E>)iterator().next().getClass();
+    return isEmpty()
+      ? getComponentTypeFromConstructor(getConstructor())
+      : (Class<? extends E>)iterator().next().getClass();
   }
 
   /**
@@ -146,7 +151,7 @@ public class ImmutableSet<E> // extends Equalable<@NotNull E>> implements ISet<@
    */
   @NotNull
   @Contract(pure = true)
-  public Iterator<@NotNull E> iterator()
+  public Iterator<? extends @NotNull E> iterator()
   {
     return unwrap().iterator();
   }
@@ -162,7 +167,7 @@ public class ImmutableSet<E> // extends Equalable<@NotNull E>> implements ISet<@
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public Stream<@NotNull E> stream()
+  public Stream<? extends @NotNull E> stream()
   {
     return unwrap().stream();
   }
@@ -170,14 +175,14 @@ public class ImmutableSet<E> // extends Equalable<@NotNull E>> implements ISet<@
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public Set<@NotNull E> unwrap()
+  public Set<? extends @NotNull E> unwrap()
   {
     return Set.copyOf(set);
   }
 
   @NotNull
   @Contract(pure = true)
-  public Optional<@Nullable E> findFirst()
+  public Optional<? extends @Nullable E> findFirst()
   {
     return stream().findFirst();
   }
@@ -185,8 +190,8 @@ public class ImmutableSet<E> // extends Equalable<@NotNull E>> implements ISet<@
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S> ImmutableSet<S> of(
-      @NotNull final Collection<@NotNull S> collection)
+  public static <S> ImmutableSet<? extends @NotNull S> of(
+    @NotNull final Collection<? extends @NotNull S> collection)
   {
     return ImmutableSet.<@NotNull S>builder().set(Set.copyOf(collection)).build();
   }

@@ -302,7 +302,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   }
 
   @NotNull
-  public ImmutableEnumSet<? extends E> range(@NotNull final E from, @NotNull final E to)
+  public ImmutableEnumSet<? extends @NotNull E> range(@NotNull final E from, @NotNull final E to)
   {
     return ImmutableEnumSet.of(EnumSet.range(from, to), constructor);
   }

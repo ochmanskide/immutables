@@ -10,7 +10,6 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
@@ -195,19 +194,19 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & Fluent<? extend
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S>> FluentEnumSet<? extends @NotNull S> of(
+  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
     @NotNull final S @NotNull [] array,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    final ImmutableEnumSet<? extends @NotNull S> set = ImmutableEnumSet.of(Arrays.asList(array));
-    return FluentEnumSet.<@NotNull S>of(list, constructor);
+    final ImmutableEnumSet<? extends @NotNull S> set = ImmutableEnumSet.ofArray(array, constructor);
+    return FluentEnumSet.<@NotNull S>of(set, constructor);
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> &> FluentEnumSet<? extends @NotNull S> of(
+  public static <S extends Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<? extends @NotNull S> of(
     @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {

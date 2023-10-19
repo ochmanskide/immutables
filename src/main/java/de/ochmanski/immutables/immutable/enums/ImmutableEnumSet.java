@@ -203,7 +203,19 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> noneOf(
     @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
   {
-    return ImmutableEnumSet.ofGenerator(constructor);
+    return ImmutableEnumSet.<@NotNull S>ofGenerator(constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<? extends @NotNull S> ofArray(
+    @NotNull final S @NotNull [] array,
+    @NotNull final IntFunction<? extends @NotNull S @NotNull []> constructor)
+  {
+    final List<@NotNull S> list = Arrays.asList(array);
+    return ImmutableEnumSet.<@NotNull S>of(list, constructor);
   }
 
   /**

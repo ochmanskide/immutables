@@ -12,6 +12,9 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.function.IntFunction;
 
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+
 @Value
 @UnmodifiableView
 @ParametersAreNonnullByDefault
@@ -31,7 +34,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull K @NonNull @NotNull []> generator = defaultConstructor();
+  IntFunction<? extends @NonNull @NotNull K @NonNull @NotNull []> generator = defaultConstructor();
 
   @NonNull
   @NotNull("Given valueType cannot be null.")
@@ -39,9 +42,9 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   Class<@NonNull @NotNull V> valueType;
 
   @NotNull
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
   @Contract(value = " -> new", pure = true)
-  private static <S extends Enum<? extends @NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
+  private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
     return (IntFunction)Enum @NotNull []::new;
   }
@@ -49,7 +52,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(IntFunction, Class, Class)} instead.
+   * <p>use method: {@link #ofGenerator(IntFunction, Class)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
@@ -199,8 +202,8 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
     return ImmutableEnumMap.<@NonNull @NotNull K, @NonNull @NotNull V>builder()
       .generator(constructor)
       .valueType(valueType)
-        .map(map)
-        .build();
+      .map(map)
+      .build();
   }
 
   @NotNull
@@ -209,15 +212,15 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
     return Optional.ofNullable(map.get(key));
   }
 
-  //  @NotNull
-  //  @UnmodifiableView
-  //  public ImmutableEnumSet<@NotNull K> findByValue(@NotNull final V value)
-  //  {
-  //    return stream()
-  //        .filter(p -> p.getValue().isEqualTo(value))
-  //        .map(Entry::getKey)
-  //        .collect(FluentCollectors.toSet());
-  //  }
+  //    @NotNull
+  //    @UnmodifiableView
+  //    public ImmutableEnumSet<@NotNull K> findByValue(@NotNull final V value)
+  //    {
+  //      return stream()
+  //          .filter(p -> p.getValue().isEqualTo(value))
+  //          .map(Entry::getKey)
+  //          .collect(FluentCollectors.toSet());
+  //    }
 
   //  @NotNull
   //  @UnmodifiableView
@@ -300,7 +303,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Contract(value = " -> new", pure = true)
   public EnumMap<K, @NotNull V> toMap()
   {
-    return new EnumMap<K, ? extends V>(map);
+    return new EnumMap<K, V>(map);
   }
 
   @Value

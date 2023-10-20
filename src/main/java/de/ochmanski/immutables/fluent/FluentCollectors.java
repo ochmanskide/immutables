@@ -91,51 +91,51 @@ public interface FluentCollectors
    */
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<@NotNull T>> toSet(
-      @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
+  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<? extends @NotNull T>> toSet(
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
   {
-    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<@NotNull T>>builder()
-        .supplier(HashSet::new)
-        .accumulator(Set::add)
-        .combiner((left, right) ->
+    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<? extends @NotNull T>>builder()
+      .supplier(HashSet::new)
+      .accumulator(Set::add)
+      .combiner((left, right) ->
+      {
+        if(left.size() < right.size())
         {
-          if(left.size() < right.size())
-          {
-            right.addAll(left);
-            return right;
-          }
-          else
-          {
-            left.addAll(right);
-            return left;
-          }
-        })
-        .finisher(set -> FluentEnumSet.<@NotNull T>of(set, constructor))
+          right.addAll(left);
+          return right;
+        }
+        else
+        {
+          left.addAll(right);
+          return left;
+        }
+      })
+      .finisher(set -> FluentEnumSet.<@NotNull T>ofCollection(set, constructor))
         .characteristics(CH_UNORDERED_NOID)
         .build();
   }
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull FluentEnumList<@NotNull T>> toList()
+  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull FluentEnumList<? extends @NotNull T>> toList()
   {
-    return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull FluentEnumList<@NotNull T>>builder()
-        .supplier(ArrayList::new)
-        .accumulator(List::add)
-        .combiner((left, right) ->
+    return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull FluentEnumList<? extends @NotNull T>>builder()
+      .supplier(ArrayList::new)
+      .accumulator(List::add)
+      .combiner((left, right) ->
+      {
+        if(left.size() < right.size())
         {
-          if(left.size() < right.size())
-          {
-            right.addAll(left);
-            return right;
-          }
-          else
-          {
-            left.addAll(right);
-            return left;
-          }
-        })
-        .finisher(FluentEnumList::of)
+          right.addAll(left);
+          return right;
+        }
+        else
+        {
+          left.addAll(right);
+          return left;
+        }
+      })
+      .finisher(set -> FluentEnumList.<@NotNull T>of(set, constructor))
         .characteristics(CH_UNORDERED_NOID)
         .build();
   }

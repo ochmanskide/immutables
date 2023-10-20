@@ -75,18 +75,21 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   /**
    * Fast implementation of isEqualTo() for enums only
    */
+  @Override
   @Contract(value = "null -> false", pure = true)
   default boolean isEqualTo(@Nullable final Fluent<@NotNull F> other)
   {
     return isSameAs(other);
   }
 
+  @Override
   @Contract(value = "null -> true", pure = true)
   default boolean isNotSameAs(@Nullable final Fluent<@NotNull F> other)
   {
     return !isSameAs(other);
   }
 
+  @Override
   @Contract(value = "null -> false", pure = true)
   default boolean isSameAs(@Nullable final Fluent<@NotNull F> other)
   {

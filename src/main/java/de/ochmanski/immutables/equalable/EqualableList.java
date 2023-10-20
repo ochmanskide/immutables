@@ -15,6 +15,8 @@ import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+
 @Value
 @UnmodifiableView
 @ParametersAreNonnullByDefault
@@ -38,7 +40,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
 
   @NotNull
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
+  private static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
     return (IntFunction)Equalable @NotNull []::new;
   }

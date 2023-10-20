@@ -4,9 +4,9 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -22,58 +22,60 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   }
 
   @Contract(pure = true)
-  default boolean anyMatch(@NotNull final List<? extends @NotNull T> elements)
+  default boolean anyMatch(@NotNull final Collection<? extends @NotNull T> elements)
   {
     return isIn(elements);
   }
 
   @Contract(pure = true)
-  default boolean anyMatchIgnoreCase(@NotNull final List<@NotNull String> b,
+  default boolean anyMatchIgnoreCase(@NotNull final Collection<@NotNull String> b,
     @NotNull final Function<? super @NotNull Equalable<@NotNull T>, @NotNull String> a)
   {
     final String s = a.apply(this);
-    return Equalable.<String>anyMatchIgnoreCase(b, s);
+    return Equalable.<@NotNull String>anyMatchIgnoreCase(b, s);
   }
 
   @Contract(pure = true)
-  static <S> boolean anyMatchIgnoreCase(@NotNull final List<@NotNull S> s, @NotNull final Function<? super @NotNull S,
-    @NotNull String> a, @NotNull final List<@NotNull String> b)
+  static <S> boolean anyMatchIgnoreCase(@NotNull final Collection<@NotNull S> s,
+    @NotNull final Function<? super @NotNull S,
+      @NotNull String> a, @NotNull final Collection<@NotNull String> b)
   {
-    return Equalable.<S>anyMatchIgnoreCase(s.stream().map(a).toList(), b);
+    return Equalable.<@NotNull S>anyMatchIgnoreCase(s.stream().map(a).collect(Collectors.toUnmodifiableSet()), b);
   }
 
   @Contract(pure = true)
   default boolean anyMatchIgnoreCase(@NotNull final Function<? super @NotNull Equalable<@NotNull T>,
-    @NotNull List<@NotNull String>> a, @NotNull final List<@NotNull String> b)
+    @NotNull Collection<@NotNull String>> a, @NotNull final Collection<@NotNull String> b)
   {
-    return Equalable.<Equalable<T>>anyMatchIgnoreCase(this, a, b);
+    return Equalable.<@NotNull Equalable<T>>anyMatchIgnoreCase(this, a, b);
   }
 
   @Contract(pure = true)
   static <S> boolean anyMatchIgnoreCase(@NotNull final S s, @NotNull final Function<? super @NotNull S,
-    List<@NotNull String>> a, @NotNull final List<@NotNull String> b)
+    Collection<@NotNull String>> a, @NotNull final Collection<@NotNull String> b)
   {
-    return Equalable.<S>anyMatchIgnoreCase(a.apply(s), b);
+    return Equalable.<@NotNull S>anyMatchIgnoreCase(a.apply(s), b);
   }
 
   @Contract(pure = true)
-  static boolean anyMatchIgnoreCase(@NotNull final List<@NotNull String> a, @NotNull final List<@NotNull String> b)
+  static boolean anyMatchIgnoreCase(@NotNull final Collection<@NotNull String> a,
+    @NotNull final Collection<@NotNull String> b)
   {
     final TreeSet<@NotNull String> sortedSet = a.stream()
       .map(String::toUpperCase)
       .sorted()
       .collect(Collectors.toCollection(TreeSet::new));
-    return Equalable.<String>anyMatch(b, c -> sortedSet.contains(c.toUpperCase()));
+    return Equalable.<@NotNull String>anyMatch(b, c -> sortedSet.contains(c.toUpperCase()));
   }
 
   @Contract(pure = true)
-  static boolean anyMatchIgnoreCase(@NotNull final List<@NotNull String> elements, @NotNull final String text)
+  static boolean anyMatchIgnoreCase(@NotNull final Collection<@NotNull String> elements, @NotNull final String text)
   {
-    return Equalable.<String>anyMatch(elements, p -> p.equalsIgnoreCase(text));
+    return Equalable.<@NotNull String>anyMatch(elements, p -> p.equalsIgnoreCase(text));
   }
 
   @Contract(pure = true)
-  static <T> boolean anyMatch(@NotNull final List<? extends @NotNull T> elements,
+  static <T> boolean anyMatch(@NotNull final Collection<? extends @NotNull T> elements,
     final Predicate<? super @NotNull T> predicate)
   {
     return elements.stream().anyMatch(predicate);
@@ -82,17 +84,17 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   @Contract(pure = true)
   default boolean allMatch(@NotNull final T @NotNull ... array)
   {
-    return allMatch(Arrays.asList(array));
+    return allMatch(Set.of(array));
   }
 
   @Contract(pure = true)
-  default boolean allMatch(@NotNull final List<? extends @NotNull T> elements)
+  default boolean allMatch(@NotNull final Collection<? extends @NotNull T> elements)
   {
     return allMatch(elements, this::isEqualTo);
   }
 
   @Contract(pure = true)
-  static <T> boolean allMatch(@NotNull final List<? extends @NotNull T> elements,
+  static <T> boolean allMatch(@NotNull final Collection<? extends @NotNull T> elements,
     final Predicate<? super @NotNull T> predicate)
   {
     return elements.stream().anyMatch(predicate);
@@ -105,13 +107,13 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   }
 
   @Contract(pure = true)
-  default boolean noneMatch(@NotNull final List<? extends @NotNull T> elements)
+  default boolean noneMatch(@NotNull final Collection<? extends @NotNull T> elements)
   {
     return isNotIn(elements);
   }
 
   @Contract(pure = true)
-  static <T> boolean noneMatch(@NotNull final List<? extends @NotNull T> elements,
+  static <T> boolean noneMatch(@NotNull final Collection<? extends @NotNull T> elements,
     final Predicate<? super @NotNull T> predicate)
   {
     return elements.stream().noneMatch(predicate);
@@ -124,7 +126,13 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   }
 
   @Contract(pure = true)
-  default boolean isNotIn(@NotNull final List<? extends @NotNull T> elements)
+  default boolean isNotIn(@NotNull final Collection<? extends @NotNull T> elements)
+  {
+    return isNotIn(Set.copyOf(elements));
+  }
+
+  @Contract(pure = true)
+  default boolean isNotIn(@NotNull final Set<? extends @NotNull T> elements)
   {
     return !isIn(elements);
   }
@@ -132,11 +140,17 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   @Contract(pure = true)
   default boolean isIn(@NotNull final T @NotNull ... array)
   {
-    return isIn(Arrays.asList(array));
+    return isIn(Set.of(array));
   }
 
   @Contract(pure = true)
-  default boolean isIn(@NotNull final List<? extends @NotNull T> elements)
+  default boolean isIn(@NotNull final Collection<? extends @NotNull T> elements)
+  {
+    return isIn(Set.copyOf(elements));
+  }
+
+  @Contract(pure = true)
+  default boolean isIn(@NotNull final Set<? extends @NotNull T> elements)
   {
     return elements.contains(this);
   }
@@ -150,7 +164,7 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   @Contract(value = "null -> false", pure = true)
   default boolean isEqualTo(@Nullable final T other)
   {
-    return Equalable.<Equalable<T>>areEqual(this, other);
+    return Equalable.<@NotNull Equalable<T>>areEqual(this, other);
   }
 
   @Contract(value = "null -> true", pure = true)
@@ -162,25 +176,25 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   @Contract(value = "null -> false", pure = true)
   default boolean isSameAs(@Nullable final T other)
   {
-    return Equalable.<Equalable<T>>areTheSame(this, other);
+    return Equalable.<@NotNull Equalable<T>>areTheSame(this, other);
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
   static <S extends Equalable<@NotNull S>> boolean areNotEqual(@Nullable final S a, @Nullable final S b)
   {
-    return Equalable.<Equalable<S>>areNotEqual(a, b);
+    return Equalable.<@NotNull Equalable<S>>areNotEqual(a, b);
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
   static <S> boolean areNotEqual(@Nullable final S a, @Nullable final S b)
   {
-    return !Equalable.<S>areEqual(a, b);
+    return !Equalable.<@NotNull S>areEqual(a, b);
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
   static <S extends Equalable<@NotNull S>> boolean areEqual(@Nullable final S a, @Nullable final S b)
   {
-    return Equalable.<Equalable<S>>areEqual(a, b);
+    return Equalable.<@NotNull Equalable<S>>areEqual(a, b);
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
@@ -192,19 +206,19 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
   static <S extends Equalable<@NotNull S>> boolean areNotTheSame(@Nullable final S a, @Nullable final S b)
   {
-    return Equalable.<Equalable<S>>areNotTheSame(a, b);
+    return Equalable.<@NotNull Equalable<S>>areNotTheSame(a, b);
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
   static <S> boolean areNotTheSame(@Nullable final S a, @Nullable final S b)
   {
-    return !Equalable.<S>areTheSame(a, b);
+    return !Equalable.<@NotNull S>areTheSame(a, b);
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
   static <S extends Equalable<@NotNull S>> boolean areTheSame(@Nullable final S a, @Nullable final S b)
   {
-    return Equalable.<Equalable<S>>areTheSame(a, b);
+    return Equalable.<@NotNull Equalable<S>>areTheSame(a, b);
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
@@ -212,5 +226,4 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   {
     return a == b;
   }
-
 }

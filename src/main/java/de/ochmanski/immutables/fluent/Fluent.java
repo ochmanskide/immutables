@@ -16,56 +16,58 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   //@MustBeInvokedByOverriders
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <F extends Enum<@NotNull F> & Fluent<? extends @NotNull F>> Stream<@NotNull F> createStream(
+  static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> Stream<@NotNull F> createStream(
     @NotNull final Class<? extends @NotNull F> clazz)
   {
     final @NotNull F @NotNull [] enumConstants = getEnumConstants(clazz);
-    return Arrays.stream(enumConstants);
+    return Arrays.<@NotNull F>stream(enumConstants);
   }
 
   //@MustBeInvokedByOverriders
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <F extends Enum<@NotNull F> & Fluent<? extends @NotNull F>> Stream<@NotNull F> createStream(
+  static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> Stream<@NotNull F> createStream(
     @NotNull final F @NotNull [] entries)
   {
-    return Arrays.stream(entries);
+    return Arrays.<@NotNull F>stream(entries);
   }
 
   //@MustBeInvokedByOverriders
   @Contract(pure = true)
-  static <F extends Enum<@NotNull F> & Fluent<? extends @NotNull F>> void forEachHelper(
-    @NotNull final Class<@NotNull F> clazz, @NotNull final Consumer<? super @NotNull F> consumer)
+  static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> void forEachHelper(
+    @NotNull final Class<@NotNull F> clazz,
+    @NotNull final Consumer<? super @NotNull F> consumer)
   {
     final @NotNull F @NotNull [] enumConstants = getEnumConstants(clazz);
     forEach(enumConstants, consumer);
   }
 
   @Contract(pure = true)
-  static <F extends Enum<@NotNull F> & Fluent<? extends @NotNull F>> void forEach(@NotNull final F @NotNull [] entries,
+  static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> void forEach(
+    @NotNull final F @NotNull [] entries,
     @NotNull final Consumer<? super @NotNull F> consumer)
   {
-    Arrays.asList(entries).forEach(consumer);
+    Arrays.<@NotNull F>asList(entries).forEach(consumer);
   }
 
   @NotNull
   @Contract(pure = true)
-  static <F extends Enum<@NotNull F> & Fluent<? extends @NotNull F>> F @NotNull [] getEnumConstants(
+  static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> F @NotNull [] getEnumConstants(
     @NotNull final Class<? extends @NotNull F> enumClass)
   {
     return enumClass.getEnumConstants();
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
-  static <F extends Enum<@NotNull F> & Fluent<? extends @NotNull F>> boolean areNotEqual(
+  static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> boolean areNotEqual(
     @Nullable final Fluent<@NotNull F> a,
     @Nullable final Fluent<@NotNull F> b)
   {
-    return !areEqual(a, b);
+    return !Fluent.<@NotNull F>areEqual(a, b);
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
-  static <F extends Enum<@NotNull F> & Fluent<? extends @NotNull F>> boolean areEqual(
+  static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> boolean areEqual(
     @Nullable final Fluent<@NotNull F> a,
     @Nullable final Fluent<@NotNull F> b)
   {
@@ -97,7 +99,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
-  static <F extends Enum<@NotNull F> & Fluent<? extends @NotNull F>> boolean areNotTheSame(
+  static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> boolean areNotTheSame(
     @Nullable final Fluent<@NotNull F> a,
     @Nullable final Fluent<@NotNull F> b)
   {
@@ -105,10 +107,10 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
-  static <F extends Enum<@NotNull F> & Fluent<? extends @NotNull F>> boolean areTheSame(
+  static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> boolean areTheSame(
     @Nullable final Fluent<@NotNull F> a,
     @Nullable final Fluent<@NotNull F> b)
   {
-    return Equalable.<@Nullable Fluent<@NotNull F>>areTheSame(a, b);
+    return Equalable.<@NotNull Fluent<@NotNull F>>areTheSame(a, b);
   }
 }

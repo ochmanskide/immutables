@@ -12,7 +12,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public interface Equalable<T extends Equalable<@NotNull T>>
+public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 {
 
   @Contract(pure = true)
@@ -47,12 +47,12 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   default boolean anyMatchIgnoreCase(@NotNull final Function<? super @NotNull Equalable<@NotNull T>,
     @NotNull Collection<@NotNull String>> a, @NotNull final Collection<@NotNull String> b)
   {
-    return Equalable.<@NotNull Equalable<T>>anyMatchIgnoreCase(this, a, b);
+    return Equalable.<@NotNull Equalable<@NotNull T>>anyMatchIgnoreCase(this, a, b);
   }
 
   @Contract(pure = true)
   static <S> boolean anyMatchIgnoreCase(@NotNull final S s, @NotNull final Function<? super @NotNull S,
-    Collection<@NotNull String>> a, @NotNull final Collection<@NotNull String> b)
+    @NotNull Collection<@NotNull String>> a, @NotNull final Collection<@NotNull String> b)
   {
     return Equalable.<@NotNull S>anyMatchIgnoreCase(a.apply(s), b);
   }
@@ -84,7 +84,7 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   @Contract(pure = true)
   default boolean allMatch(@NotNull final T @NotNull ... array)
   {
-    return allMatch(Set.of(array));
+    return allMatch(Set.<@NotNull T>of(array));
   }
 
   @Contract(pure = true)
@@ -128,7 +128,7 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   @Contract(pure = true)
   default boolean isNotIn(@NotNull final Collection<? extends @NotNull T> elements)
   {
-    return isNotIn(Set.copyOf(elements));
+    return isNotIn(Set.<@NotNull T>copyOf(elements));
   }
 
   @Contract(pure = true)
@@ -140,13 +140,13 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   @Contract(pure = true)
   default boolean isIn(@NotNull final T @NotNull ... array)
   {
-    return isIn(Set.of(array));
+    return isIn(Set.<@NotNull T>of(array));
   }
 
   @Contract(pure = true)
   default boolean isIn(@NotNull final Collection<? extends @NotNull T> elements)
   {
-    return isIn(Set.copyOf(elements));
+    return isIn(Set.<@NotNull T>copyOf(elements));
   }
 
   @Contract(pure = true)
@@ -164,7 +164,7 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   @Contract(value = "null -> false", pure = true)
   default boolean isEqualTo(@Nullable final T other)
   {
-    return Equalable.<@NotNull Equalable<T>>areEqual(this, other);
+    return Equalable.<@NotNull Equalable<@NotNull T>>areEqual(this, other);
   }
 
   @Contract(value = "null -> true", pure = true)
@@ -176,13 +176,13 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   @Contract(value = "null -> false", pure = true)
   default boolean isSameAs(@Nullable final T other)
   {
-    return Equalable.<@NotNull Equalable<T>>areTheSame(this, other);
+    return Equalable.<@NotNull Equalable<@NotNull T>>areTheSame(this, other);
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
-  static <S extends Equalable<@NotNull S>> boolean areNotEqual(@Nullable final S a, @Nullable final S b)
+  static <S extends @NotNull Equalable<@NotNull S>> boolean areNotEqual(@Nullable final S a, @Nullable final S b)
   {
-    return Equalable.<@NotNull Equalable<S>>areNotEqual(a, b);
+    return Equalable.<@NotNull Equalable<@NotNull S>>areNotEqual(a, b);
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
@@ -192,9 +192,9 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
-  static <S extends Equalable<@NotNull S>> boolean areEqual(@Nullable final S a, @Nullable final S b)
+  static <S extends @NotNull Equalable<@NotNull S>> boolean areEqual(@Nullable final S a, @Nullable final S b)
   {
-    return Equalable.<@NotNull Equalable<S>>areEqual(a, b);
+    return Equalable.<@NotNull Equalable<@NotNull S>>areEqual(a, b);
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
@@ -204,7 +204,7 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
-  static <S extends Equalable<@NotNull S>> boolean areNotTheSame(@Nullable final S a, @Nullable final S b)
+  static <S extends @NotNull Equalable<@NotNull S>> boolean areNotTheSame(@Nullable final S a, @Nullable final S b)
   {
     return Equalable.<@NotNull Equalable<S>>areNotTheSame(a, b);
   }
@@ -216,7 +216,7 @@ public interface Equalable<T extends Equalable<@NotNull T>>
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
-  static <S extends Equalable<@NotNull S>> boolean areTheSame(@Nullable final S a, @Nullable final S b)
+  static <S extends @NotNull Equalable<@NotNull S>> boolean areTheSame(@Nullable final S a, @Nullable final S b)
   {
     return Equalable.<@NotNull Equalable<S>>areTheSame(a, b);
   }

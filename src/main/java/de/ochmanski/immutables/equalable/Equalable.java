@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
 public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 {
 

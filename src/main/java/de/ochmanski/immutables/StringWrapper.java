@@ -1,5 +1,6 @@
 package de.ochmanski.immutables;
 
+import com.stadlerrail.diag.dias.servicestate.property.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
@@ -9,9 +10,6 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-
-import static de.ochmanski.immutables.constants.Constants.BLANK;
 
 @Value
 @UnmodifiableView
@@ -22,7 +20,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
   @NonNull
   @NotNull
   @Builder.Default
-  String raw = BLANK;
+  String raw = Constants.BLANK;
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
@@ -31,93 +29,121 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
     return StringWrapper.builder().raw(raw).build();
   }
 
-  /**
-   * This method is Null-safe. It cannot throw {@link NullPointerException}
-   */
+  @NotNull
+  @Contract(value = "-> new", pure = true)
+  public static StringWrapper blank()
+  {
+    return StringWrapper.builder().build();
+  }
+
+  @Contract(value = "null -> true", pure = true)
+  public boolean isNotEqualToIgnoreCase(@Nullable final StringWrapper other)
+  {
+    return !isEqualToIgnoreCase(other);
+  }
+
   @Contract(value = "null -> true", pure = true)
   public boolean isNotEqualToIgnoreCase(@Nullable final String other)
   {
     return !isEqualToIgnoreCase(other);
   }
 
-  /**
-   * This method is Null-safe. It cannot throw {@link NullPointerException}
-   */
   @Contract(value = "null -> false", pure = true)
-  public boolean isEqualToIgnoreCase(@Nullable final String other)
+  public boolean equalsIgnoreCase(@Nullable final String other)
   {
-    if(Objects.equals(raw, other))
-    {
-      return true;
-    }
+    return isEqualToIgnoreCase(other);
+  }
+
+  @Contract(value = "null -> false", pure = true)
+  public boolean isEqualToIgnoreCase(@Nullable final StringWrapper other)
+  {
     if(null == other)
     {
       return false;
     }
-    if(raw.isBlank() && other.isBlank())
-    {
-      return true;
-    }
-    if(raw.isBlank() || other.isBlank())
-    {
-      return false;
-    }
+    return raw.equalsIgnoreCase(other.getRaw());
+  }
+
+  @Contract(value = "null -> false", pure = true)
+  public boolean isEqualToIgnoreCase(@Nullable final String other)
+  {
     return raw.equalsIgnoreCase(other);
   }
 
-  public boolean isNotBlank()
+  public boolean anyMatch(@NotNull final String @NotNull ... array)
   {
-    return !raw.isBlank();
+    return isIn(Arrays.stream(array).map(StringWrapper::of).toList());
   }
 
-  public boolean anyMatch(@NotNull final StringWrapper @NotNull ... array)
+  public boolean allMatch(@NotNull final String @NotNull ... array)
   {
-    return isIn(array);
+    return allMatch(Arrays.stream(array).map(StringWrapper::of).toList());
   }
 
-  public boolean anyMatch(@NotNull final List<? extends @NotNull StringWrapper> elements)
-  {
-    return isIn(elements);
-  }
-
-  public boolean allMatch(@NotNull final StringWrapper @NotNull ... array)
-  {
-    return allMatch(Arrays.asList(array));
-  }
-
-  public boolean allMatch(@NotNull final List<? extends @NotNull StringWrapper> elements)
-  {
-    return elements.stream().allMatch(this::isEqualTo);
-  }
-
-  public boolean noneMatch(@NotNull final StringWrapper @NotNull ... array)
+  public boolean noneMatch(@NotNull final String @NotNull ... array)
   {
     return isNotIn(array);
   }
 
-  public boolean noneMatch(@NotNull final List<? extends @NotNull StringWrapper> elements)
+  public boolean isNotIn(@NotNull final String @NotNull ... array)
   {
-    return isNotIn(elements);
+    return !isIn(Arrays.stream(array).map(StringWrapper::of).toList());
   }
 
-  public boolean isNotIn(@NotNull final StringWrapper @NotNull ... array)
+  public boolean isIn(@NotNull final String @NotNull ... array)
   {
-    return !isIn(array);
+    return isIn(Arrays.stream(array).map(StringWrapper::of).toList());
   }
 
-  public boolean isNotIn(@NotNull final List<? extends @NotNull StringWrapper> elements)
+  public boolean isNotInIgnoreCase(@NotNull final String @NotNull ... array)
   {
-    return !isIn(elements);
+    return isNotInIgnoreCase(Arrays.stream(array).map(StringWrapper::of).toList());
   }
 
-  public boolean isIn(@NotNull final StringWrapper @NotNull ... array)
+  public boolean isNotInIgnoreCase(@NotNull final List<@NotNull StringWrapper> elements)
   {
-    return isIn(Arrays.asList(array));
+    return Equalable.<StringWrapper>noneMatch(elements, p -> p.isEqualToIgnoreCase(this));
   }
 
-  public boolean isIn(@NotNull final List<? extends @NotNull StringWrapper> elements)
+  public boolean isInIgnoreCase(@NotNull final String @NotNull ... array)
   {
-    return elements.contains(this);
+    return isInIgnoreCase(Arrays.stream(array).map(StringWrapper::of).toList());
+  }
+
+  public boolean isInIgnoreCase(@NotNull final List<@NotNull StringWrapper> elements)
+  {
+    return Equalable.<StringWrapper>anyMatch(elements, p -> p.isEqualToIgnoreCase(this));
+  }
+
+  @NotNull
+  public String orElse(@NotNull final String s)
+  {
+    return isBlank() ? s : raw;
+  }
+
+  public boolean isNotBlank()
+  {
+    return !isBlank();
+  }
+
+  public boolean isBlank()
+  {
+    return null == raw || raw.isBlank();
+  }
+
+  public boolean isNotEqualTo(final String a)
+  {
+    return !isEqualTo(a);
+  }
+
+  @Contract(value = "null -> false", pure = true)
+  public boolean isEqualTo(@Nullable final String other)
+  {
+    if(null == other)
+    {
+      return false;
+    }
+    return raw.equals(other);
   }
 
 }

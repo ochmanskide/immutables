@@ -1,20 +1,22 @@
 package de.ochmanski.immutables.equalable;
 
-import de.ochmanski.immutables.ISet;
+import com.stadlerrail.diag.dias.diasexport.main.collection.ISet;
+import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.ImmutableSet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
+
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
 
 @Value
 @UnmodifiableView
@@ -24,26 +26,185 @@ import java.util.stream.Stream;
 public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements ISet<@NotNull E>
 {
 
+  @Getter(AccessLevel.PRIVATE)
+  @Unmodifiable
   @UnmodifiableView
   @NonNull
   @NotNull("Given set cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given set cannot be null.")
   @Builder.Default
-  Set<@NonNull @NotNull E> set = Set.of();
+  ImmutableSet<@NonNull @NotNull E> set = ImmutableSet.empty();
 
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor;
 
+  /**
+   * This method is not supported.
+   * <p>You must provide a generic type for an empty collection.
+   * <p>use method: {@link #ofGenerator(IntFunction)} instead.
+   * <p>Example usage:
+   * <pre>
+   *   {@code
+   *   final ISet<Dummy> actual = EqualableSet.ofGenerator(Dummy[]::new);
+   *   final ISet<DayOfWeek> actual = EqualableSet.ofGenerator(DayOfWeek[]::new);
+   *   final ISet<Month> actual = EqualableSet.ofGenerator(Month[]::new);
+   *   }
+   * </pre>
+   */
+  @Contract(value = "-> fail", pure = true)
+  static void of()
+  {
+    throw new UnsupportedOperationException("Please pass array generator type to the method. "
+      + "For example: EqualableSet.ofGenerator(Day[]::new)");
+  }
+
+  /**
+   * Example usage:
+   * <pre>
+   *   {@code
+   *   final ISet<Dummy> actual = EqualableSet.ofGenerator(Dummy[]::new);
+   *   final ISet<DayOfWeek> actual = EqualableSet.ofGenerator(DayOfWeek[]::new);
+   *   final ISet<Month> actual = EqualableSet.ofGenerator(Month[]::new);
+   *   }
+   * </pre>
+   */
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> ofGenerator(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>ofGenerator(constructor), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings(UNCHECKED)
-  private static <S extends Equalable<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
-      final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
+  public static <S extends @NotNull Equalable<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
+    final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
     return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _, _ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>of(s1, constructor), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>of(s1, s2, constructor), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>of(s1, s2, s3, constructor), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _, _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3,
+    @NotNull final S s4,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    final ImmutableSet<@NotNull S> set = ImmutableSet.<@NotNull S>of(s1, s2, s3, s4, constructor);
+    return EqualableSet.<@NotNull S>of(set, constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  public static <E extends @NotNull Equalable<@NotNull E>> EqualableSet<@NotNull E> empty()
+  {
+    return (EqualableSet<E>)EMPTY_SET;
+  }
+
+  private static final EqualableSet<? extends @NotNull Equalable<?>> EMPTY_SET = EqualableSet.ofGenerator(
+    (IntFunction)Object @NotNull []::new);
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  public static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
+  {
+    return (IntFunction)Object @NotNull []::new;
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
+    @NotNull final S @NotNull [] array,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSet.<@NotNull S>of(ImmutableSet.ofArray(array, constructor), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
+    @NotNull final Collection<@NotNull S> collection,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSet.<@NotNull S>copyOf(collection, constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> noneOf(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSet.<@NotNull S>ofGenerator(constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> ofArray(
+    @NotNull final S @NotNull [] array,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSet.<@NotNull S>of(array, constructor);
   }
 
   /**
@@ -86,13 +247,13 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
    *
    * @return a clone of this {@code ArraySet} instance
    */
-  @Override
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public EqualableSet<@NotNull E> deepClone()
+  public EqualableSet<? extends @NotNull E> deepClone()
   {
-    return toBuilder().build();
+    return toBuilder().constructor(constructor).build();
   }
 
   /**
@@ -107,32 +268,22 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
    *
    * @return an array containing all the elements in this set in proper sequence
    */
-  @Override
   @NotNull
+  @Override
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
+    return set.toArray();
+  }
+
+  @NotNull
+  @Override
+  @SuppressWarnings(UNCHECKED)
+  public Class<? extends @NotNull E> getComponentType()
+  {
     return isEmpty()
-        ? set.toArray(getConstructor())
-        : set.toArray(newArrayNative());
-  }
-
-  @NotNull
-  @SuppressWarnings(UNCHECKED)
-  @Contract(value = "-> new", pure = true)
-  public E @NotNull [] newArrayNative()
-  {
-    final Class<E> componentType = getComponentType();
-    final int size = size();
-    final Object a = Array.newInstance(componentType, size);
-    return (E[])a;
-  }
-
-  @NotNull
-  @SuppressWarnings(UNCHECKED)
-  private Class<@NotNull E> getComponentType()
-  {
-    return isEmpty() ? getComponentTypeFromConstructor(getConstructor()) : (Class<E>)iterator().next().getClass();
+      ? getComponentTypeFromConstructor(getConstructor())
+      : (Class<? extends @NotNull E>)iterator().next().getClass();
   }
 
   /**
@@ -142,6 +293,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
    * @return an iterator over the elements in this set
    */
   @NotNull
+  @Override
   @Contract(pure = true)
   public Iterator<@NotNull E> iterator()
   {
@@ -153,11 +305,12 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
    *
    * @return a sequential {@code Stream} over the elements in this collection
    * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
-   *     {@code Spliterator}.
+   *   {@code Spliterator}.
    * @since 1.8
    */
-  @Override
   @NotNull
+  @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public Stream<@NotNull E> stream()
@@ -165,31 +318,33 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     return unwrap().stream();
   }
 
-  @Override
   @NotNull
+  @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public Set<@NotNull E> unwrap()
   {
-    return Set.copyOf(set);
+    return getSet().unwrap();
   }
 
   @NotNull
-  @Override
-  @Contract(pure = true)
-  public Optional<@Nullable E> findFirst()
-  {
-    return stream().findFirst();
-  }
-
-  @NotNull
+  @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "_,_ -> new", pure = true)
-  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<S> of(
-      @NotNull final Collection<@NotNull S> collection,
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  @Contract(value = " _, _ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> copyOf(
+    @NotNull final Collection<@NotNull S> keySet,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableSet.<@NotNull S>builder().set(Set.copyOf(collection)).constructor(constructor).build();
+    final ImmutableSet<@NotNull S> immutableSet = ImmutableSet.<@NotNull S>copyOf(keySet, constructor);
+    return EqualableSet.<@NotNull S>of(immutableSet, constructor);
+  }
+
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
+    @NotNull final ImmutableSet<@NotNull S> immutableSet,
+    @NotNull final IntFunction<S @NotNull []> constructor)
+  {
+    return EqualableSet.<@NotNull S>builder().set(immutableSet).constructor(constructor).build();
   }
 
 }

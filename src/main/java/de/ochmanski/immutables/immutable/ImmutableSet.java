@@ -1,20 +1,20 @@
 package de.ochmanski.immutables.immutable;
 
-import de.ochmanski.immutables.ISet;
+import com.stadlerrail.diag.dias.diasexport.main.collection.IMap;
+import com.stadlerrail.diag.dias.diasexport.main.collection.ISet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Array;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
 
 @Value
 @UnmodifiableView
@@ -40,9 +40,9 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S> ImmutableSet<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  public static <S> ImmutableSet<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableSet.<@NotNull S>builder().constructor(constructor).set(Set.of()).build();
+    return ImmutableSet.of(Set.of(), constructor);
   }
 
   @NotNull
@@ -54,6 +54,98 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   {
     return (Class<? extends @NotNull S>)constructor.apply(0).getClass().getComponentType();
   }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S> ImmutableSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableSet.of(Set.of(e1), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _ -> new", pure = true)
+  public static <S> ImmutableSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableSet.of(Set.of(e1, e2), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _ -> new", pure = true)
+  public static <S> ImmutableSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableSet.of(Set.of(e1, e2, e3), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _ -> new", pure = true)
+  public static <S> ImmutableSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableSet.of(Set.of(e1, e2, e3, e4), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S> ImmutableSet<@NotNull S> copyOf(
+    @NotNull final Collection<@NotNull S> values,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableSet.of(values, constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <K, V> ImmutableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
+    @NotNull final Set<Map.@NotNull Entry<@NotNull K, @NotNull V>> entries,
+    @NotNull final IntFunction<IMap.@NotNull Entry<@NotNull K, @NotNull V> @NotNull []> entry)
+  {
+    return entries.stream().map(ImmutableSet::toImmutableEntry).collect(ImmutableCollectors.toSet(entry));
+  }
+
+  @NotNull
+  @Contract(value = "_ -> new", pure = true)
+  private static <K, V> IMap.@Unmodifiable @UnmodifiableView @NotNull Entry<@NotNull K, @NotNull V> toImmutableEntry(
+    @NotNull final Map.@NotNull Entry<@NotNull K, @NotNull V> entry)
+  {
+    return IMap.Entry.<@NotNull K, @NotNull V>builder().key(entry.getKey()).value(entry.getValue()).build();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  public static <E> ImmutableSet<@NotNull E> empty()
+  {
+    return (ImmutableSet<E>)EMPTY_SET;
+  }
+
+  private static final ImmutableSet<?> EMPTY_SET = ImmutableSet.<@NotNull Object>ofGenerator(
+    @NotNull Object @NotNull []::new);
 
   /**
    * Returns the number of elements in this set.
@@ -117,8 +209,8 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   public E @NotNull [] toArray()
   {
     return isEmpty()
-        ? set.toArray(getConstructor())
-        : set.toArray(newArrayNative());
+      ? set.toArray(getConstructor())
+      : set.toArray(newArrayNative());
   }
 
   @NotNull
@@ -133,6 +225,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   }
 
   @NotNull
+  @Override
   @SuppressWarnings(UNCHECKED)
   public Class<? extends @NotNull E> getComponentType()
   {
@@ -149,7 +242,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
    */
   @NotNull
   @Contract(pure = true)
-  public Iterator<? extends @NotNull E> iterator()
+  public Iterator<@NotNull E> iterator()
   {
     return unwrap().iterator();
   }
@@ -159,13 +252,13 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
    *
    * @return a sequential {@code Stream} over the elements in this collection
    * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
-   *     {@code Spliterator}.
+   *   {@code Spliterator}.
    * @since 1.8
    */
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public Stream<? extends @NotNull E> stream()
+  public Stream<@NotNull E> stream()
   {
     return unwrap().stream();
   }
@@ -173,18 +266,29 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public Set<? extends @NotNull E> unwrap()
+  public Set<@NotNull E> unwrap()
   {
     return Set.copyOf(set);
   }
 
   @NotNull
   @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  public static <S> ImmutableSet<? extends @NotNull S> of(
-    @NotNull final Collection<? extends @NotNull S> collection)
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S> ImmutableSet<@NotNull S> ofArray(
+    @NotNull final S @NotNull [] array,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableSet.<@NotNull S>builder().set(Set.copyOf(collection)).build();
+    return ImmutableSet.<@NotNull S>of(List.of(array), constructor);
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S> ImmutableSet<@NotNull S> of(
+    @NotNull final Collection<@NotNull S> collection,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableSet.<@NotNull S>builder().set(Set.copyOf(collection)).constructor(constructor).build();
   }
 
 }

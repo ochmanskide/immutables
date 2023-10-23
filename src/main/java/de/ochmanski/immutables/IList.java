@@ -1,13 +1,10 @@
 package de.ochmanski.immutables;
 
-import de.ochmanski.immutables.equalable.Equalable;
-import de.ochmanski.immutables.equalable.EqualableList;
+import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.ImmutableList;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.IntFunction;
@@ -19,7 +16,7 @@ public interface IList<E>
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(IntFunction)} instead.
+   * <p>use method: {@link ImmutableList#ofGenerator(IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
@@ -34,83 +31,6 @@ public interface IList<E>
   {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
         + "For example: IList.ofGenerator(String[]::new)");
-  }
-
-  /**
-   * Example usage:
-   * <pre>
-   *   {@code
-   *   final IList<Dummy> actual = IList.ofGenerator(Dummy[]::new);
-   *   final IList<String> actual = IList.ofGenerator(String[]::new);
-   *   final IList<Integer> actual = IList.ofGenerator(Integer[]::new);
-   *   }
-   * </pre>
-   */
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  static <S extends Equalable<@NotNull S>> IList<@NotNull S> ofGenerator(
-      @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return EqualableList.<@NotNull S>builder().constructor(constructor).build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  static <S extends Equalable<@NotNull S>> IList<@NotNull S> of(@NotNull final S s1)
-  {
-    return EqualableList.<@NotNull S>builder().list(List.of(s1)).build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
-  static <S extends Equalable<@NotNull S>> IList<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2)
-  {
-    return EqualableList.<@NotNull S>builder().list(List.of(s1, s2)).build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _, _ -> new", pure = true)
-  static <S extends Equalable<@NotNull S>> IList<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2,
-      @NotNull final S s3)
-  {
-    return EqualableList.<@NotNull S>builder().list(List.of(s1, s2, s3)).build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <S extends Equalable<@NotNull S>> IList<@NotNull S> of(
-      @NotNull final S s1,
-      @NotNull final S s2,
-      @NotNull final S s3,
-      @NotNull final S s4)
-  {
-    return EqualableList.<@NotNull S>builder().list(List.of(s1, s2, s3, s4)).build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = "-> new", pure = true)
-  static <S extends Equalable<@NotNull S>> IList<@NotNull S> empty()
-  {
-    final List<@NotNull S> of = List.of();
-    return copyOf(of);
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  static <S extends Equalable<@NotNull S>> IList<@NotNull S> copyOf(@NotNull final Collection<@NotNull S> values)
-  {
-    return EqualableList.<@NotNull S>builder().list(List.copyOf(values)).build();
   }
 
   int size();

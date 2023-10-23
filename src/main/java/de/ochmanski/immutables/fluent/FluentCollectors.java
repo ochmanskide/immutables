@@ -10,35 +10,37 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
 public interface FluentCollectors
 {
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_CONCURRENT_ID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
-      Collector.Characteristics.UNORDERED,
-      Collector.Characteristics.IDENTITY_FINISH));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
+    Collector.Characteristics.UNORDERED,
+    Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_CONCURRENT_NOID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
-      Collector.Characteristics.UNORDERED));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
+    Collector.Characteristics.UNORDERED));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_ID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_UNORDERED_ID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED,
-      Collector.Characteristics.IDENTITY_FINISH));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED,
+    Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_NOID = Collections.emptySet();
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_UNORDERED_NOID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED));
 
   /**
    * Returns a {@code Collector} that accumulates the input elements into a new {@code Set}. There are no guarantees on
@@ -56,23 +58,23 @@ public interface FluentCollectors
   static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
   {
     return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
-        .supplier(HashSet::new)
-        .accumulator(Set::add)
-        .combiner((left, right) ->
+      .supplier(HashSet::new)
+      .accumulator(Set::add)
+      .combiner((left, right) ->
+      {
+        if(left.size() < right.size())
         {
-          if(left.size() < right.size())
-          {
-            right.addAll(left);
-            return right;
-          }
-          else
-          {
-            left.addAll(right);
-            return left;
-          }
-        })
-        .characteristics(CH_UNORDERED_ID)
-        .build();
+          right.addAll(left);
+          return right;
+        }
+        else
+        {
+          left.addAll(right);
+          return left;
+        }
+      })
+      .characteristics(CH_UNORDERED_ID)
+      .build();
   }
 
   /**
@@ -90,11 +92,11 @@ public interface FluentCollectors
    * @since 10
    */
   @NotNull
-  @Contract(value = "_ -> new", pure = true)
-  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<? extends @NotNull T>> toSet(
+  @Contract(value = " _ -> new", pure = true)
+  static <T extends @NotNull Enum<@NotNull T> & Fluent<? extends @NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<@NotNull T>> toSet(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
   {
-    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<? extends @NotNull T>>builder()
+    return FluentCollectors.CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<@NotNull T>>builder()
       .supplier(HashSet::new)
       .accumulator(Set::add)
       .combiner((left, right) ->
@@ -110,16 +112,18 @@ public interface FluentCollectors
           return left;
         }
       })
-      .finisher(set -> FluentEnumSet.<@NotNull T>ofCollection(set, constructor))
-        .characteristics(CH_UNORDERED_NOID)
-        .build();
+      .finisher(set -> FluentEnumSet.ofCollection(set, constructor))
+      .characteristics(CH_UNORDERED_NOID)
+      .build();
   }
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull FluentEnumList<? extends @NotNull T>> toList()
+  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull FluentEnumList<@NotNull T>> toList(
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor
+  )
   {
-    return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull FluentEnumList<? extends @NotNull T>>builder()
+    return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull FluentEnumList<@NotNull T>>builder()
       .supplier(ArrayList::new)
       .accumulator(List::add)
       .combiner((left, right) ->
@@ -135,14 +139,14 @@ public interface FluentCollectors
           return left;
         }
       })
-      .finisher(set -> FluentEnumList.<@NotNull T>of(set, constructor))
-        .characteristics(CH_UNORDERED_NOID)
-        .build();
+      .finisher(set -> FluentEnumList.of(set, constructor))
+      .characteristics(CH_UNORDERED_NOID)
+      .build();
   }
 
   @NotNull
   @Contract(pure = true)
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
   static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> IntFunction<@NotNull T @NotNull []> tGenerator()
   {
     return (IntFunction)Enum @NotNull []::new;
@@ -151,8 +155,8 @@ public interface FluentCollectors
   @Value
   @RequiredArgsConstructor
   @Builder
-  class CollectorImpl<T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>, A, R>
-      implements Collector<@NotNull T, @NotNull A, @NotNull R>
+  class CollectorImpl<T extends @NotNull Enum<@NotNull T> & Fluent<? extends @NotNull T>, A, R>
+    implements Collector<@NotNull T, @NotNull A, @NotNull R>
   {
     @NotNull
     Supplier<@NotNull A> supplier;

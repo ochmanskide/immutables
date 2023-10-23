@@ -1,11 +1,8 @@
 package de.ochmanski.immutables.immutable;
 
-import de.ochmanski.immutables.IList;
+import com.stadlerrail.diag.dias.diasexport.main.collection.IList;
 import lombok.*;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
+import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Array;
@@ -15,7 +12,8 @@ import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
 
 @Value
 @UnmodifiableView
@@ -39,11 +37,98 @@ public class ImmutableList<E> implements IList<@NotNull E>
   IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultConstructor();
 
   @NotNull
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @Contract(pure = true)
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
   private static <S> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
     return (IntFunction)Object @NotNull []::new;
   }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> ofGenerator(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableList.<@NotNull S>of(List.of(), constructor);
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableList.<@NotNull S>of(List.of(e1), constructor);
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_, _, _-> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableList.<@NotNull S>of(List.of(e1, e2), constructor);
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableList.<@NotNull S>of(List.of(e1, e2, e3), constructor);
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableList.<@NotNull S>of(List.of(e1, e2, e3, e4), constructor);
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  @SuppressWarnings(UNCHECKED)
+  public static <S> Class<@NotNull S> getComponentTypeFromConstructor(
+    final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> copyOf(@NotNull final Collection<? extends @NotNull S> values,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableList.<@NotNull S>of(values, constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  public static <E> ImmutableList<E> empty()
+  {
+    return (ImmutableList<E>)ImmutableList.EMPTY;
+  }
+
+  private static final ImmutableList<?> EMPTY = ImmutableList.ofGenerator(defaultConstructor());
 
   /**
    * Returns the number of elements in this list.
@@ -170,7 +255,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    *
    * @return a sequential {@code Stream} over the elements in this collection
    * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
-   *     {@code Spliterator}.
+   *   {@code Spliterator}.
    * @since 1.8
    */
   @NotNull
@@ -197,12 +282,14 @@ public class ImmutableList<E> implements IList<@NotNull E>
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  public static <S> ImmutableList<S> of(
-      @NotNull final Collection<@NotNull S> collection)
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final Collection<? extends @NotNull S> collection,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableList.<@NotNull S>builder().list(List.copyOf(collection)).build();
+    return ImmutableList.<@NotNull S>builder().list(List.copyOf(collection)).constructor(constructor).build();
   }
 
 }

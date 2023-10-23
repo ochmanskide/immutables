@@ -1,6 +1,7 @@
 package de.ochmanski.immutables.equalable;
 
-import de.ochmanski.immutables.IList;
+import com.stadlerrail.diag.dias.diasexport.main.collection.IList;
+import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.ImmutableList;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -8,14 +9,15 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
 
 @Value
 @UnmodifiableView
@@ -30,7 +32,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull("Given list cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given list cannot be null.")
   @Builder.Default
-  List<@NonNull @NotNull E> list = List.of();
+  ImmutableList<@NonNull @NotNull E> list = ImmutableList.empty();
 
   @NonNull
   @NotNull("Given keyType cannot be null.")
@@ -38,11 +40,133 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @Builder.Default
   IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultConstructor();
 
-  @NotNull
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  private static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
+  /**
+   * This method is not supported.
+   * <p>You must provide a generic type for an empty collection.
+   * <p>use method: {@link #ofGenerator(IntFunction)} instead.
+   * <p>Example usage:
+   * <pre>
+   *   {@code
+   *   final IList<Dummy> actual = ImmutableEnumList.ofGenerator(Dummy[]::new);
+   *   final IList<DayOfWeek> actual = ImmutableEnumList.ofGenerator(DayOfWeek[]::new);
+   *   final IList<Month> actual = ImmutableEnumList.ofGenerator(Month[]::new);
+   *   }
+   * </pre>
+   */
+  @Contract(value = "-> fail", pure = true)
+  static void of()
   {
-    return (IntFunction)Equalable @NotNull []::new;
+    throw new UnsupportedOperationException("Please pass array generator type to the method. "
+      + "For example: ImmutableEnumList.ofGenerator(Day[]::new)");
+  }
+
+  /**
+   * Example usage:
+   * <pre>
+   *   {@code
+   *   final IList<Dummy> actual = ImmutableEnumList.ofGenerator(Dummy[]::new);
+   *   final IList<DayOfWeek> actual = ImmutableEnumList.ofGenerator(DayOfWeek[]::new);
+   *   final IList<Month> actual = ImmutableEnumList.ofGenerator(Month[]::new);
+   *   }
+   * </pre>
+   */
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> ofGenerator(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableList.<@NotNull S>builder().list(ImmutableList.ofGenerator(constructor)).constructor(constructor)
+      .build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  @SuppressWarnings(UNCHECKED)
+  private static <S extends @NotNull Equalable<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
+    final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableList.getComponentTypeFromConstructor(constructor);
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _ -> new", pure = true)
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, constructor)).constructor(constructor)
+      .build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _, _ -> new", pure = true)
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, constructor)).constructor(constructor)
+      .build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _, _, _ -> new", pure = true)
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, s3, constructor)).constructor(constructor)
+      .build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _, _, _, _ -> new", pure = true)
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3,
+    @NotNull final S s4,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, s3, s4, constructor))
+      .constructor(constructor).build();
+  }
+
+  @NotNull
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
+  {
+    return (IntFunction)Enum @NotNull []::new;
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<S> of(
+    @NotNull final S @NotNull [] array,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    final List<@NotNull S> list = List.of(array);
+    return EqualableList.<@NotNull S>of(list, constructor);
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<S> of(
+    @NotNull final Collection<@NotNull S> collection,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableList.<@NotNull S>builder().list(ImmutableList.copyOf(collection, constructor))
+      .constructor(constructor).build();
   }
 
   /**
@@ -84,6 +208,8 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
    * Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not
    * contain the element. More formally, returns the lowest index {@code i} such that {@code Objects.equals(o, get(i))},
    * or -1 if there is no such index.
+   *
+   * @param o
    */
   @Override
   public int indexOf(@NotNull final E o)
@@ -95,6 +221,8 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
    * Returns the index of the last occurrence of the specified element in this list, or -1 if this list does not contain
    * the element. More formally, returns the highest index {@code i} such that {@code Objects.equals(o, get(i))}, or -1
    * if there is no such index.
+   *
+   * @param o
    */
   @Override
   public int lastIndexOf(@NotNull final E o)
@@ -130,33 +258,11 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
    */
   @Override
   @NotNull
-  @Contract(value = " -> new", pure = true)
+  @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
-    return isEmpty()
-        ? list.toArray(getConstructor())
-        : list.toArray(newArrayNative());
+    return list.toArray();
   }
-
-  @NotNull
-  @SuppressWarnings(UNCHECKED)
-  @Contract(value = "-> new", pure = true)
-  private E @NotNull [] newArrayNative()
-  {
-    final Class<E> componentType = getComponentType();
-    final int size = size();
-    final Object a = Array.newInstance(componentType, size);
-    return (E[])a;
-  }
-
-  @NotNull
-  @SuppressWarnings(UNCHECKED)
-  private Class<@NotNull E> getComponentType()
-  {
-    return (Class<E>)get(0).getClass();
-  }
-
-  // Positional Access Operations
 
   /**
    * Returns the element at the specified position in this list.
@@ -165,12 +271,24 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
    * @return the element at the specified position in this list
    * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index >= size()})
    */
-  @Override
   @NotNull
-  @Contract(pure = true)
+  @Override
   public E get(final int index)
   {
     return list.get(index);
+  }
+
+  /**
+   * Returns an iterator over the elements in this list.  The elements are returned in no particular order (unless this
+   * list is an instance of some class that provides a guarantee).
+   *
+   * @return an iterator over the elements in this list
+   */
+  @NotNull
+  @Contract(pure = true)
+  public Iterator<@NotNull E> iterator()
+  {
+    return unwrap().iterator();
   }
 
   /**
@@ -178,7 +296,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
    *
    * @return a sequential {@code Stream} over the elements in this collection
    * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
-   *     {@code Spliterator}.
+   *   {@code Spliterator}.
    * @since 1.8
    */
   @Override
@@ -196,7 +314,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @Contract(value = " -> new", pure = true)
   public List<@NotNull E> unwrap()
   {
-    return List.copyOf(list);
+    return list.unwrap();
   }
 
   @NotNull
@@ -206,14 +324,4 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   {
     return stream().findFirst();
   }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<S> of(
-      @NotNull final Collection<@NotNull S> collection)
-  {
-    return EqualableList.<@NotNull S>builder().list(List.copyOf(collection)).build();
-  }
-
 }

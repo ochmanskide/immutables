@@ -1,6 +1,7 @@
 package de.ochmanski.immutables.immutable;
 
-import de.ochmanski.immutables.IMap;
+import com.stadlerrail.diag.dias.diasexport.main.collection.IMap;
+import com.stadlerrail.diag.dias.servicestate.enums.Equalable;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -8,12 +9,13 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.Serializable;
-import java.util.Comparator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.IntFunction;
+import java.util.stream.Stream;
+
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
 
 @Value
 @UnmodifiableView
@@ -28,7 +30,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   @NotNull("Given map cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given map cannot be null.")
   @Builder.Default
-  Map<@NonNull @NotNull K, V> map = Map.of();
+  Map<@NotNull K, @NotNull V> map = Map.of();
 
   @NonNull
   @NotNull("Given keyType cannot be null.")
@@ -43,11 +45,32 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   IntFunction<@NotNull V @NotNull []> value = defaultConstructor();
 
   @NotNull
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
   @Contract(value = "-> new", pure = true)
   private static <S> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
     return (IntFunction)Object @NotNull []::new;
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_,_ -> new", pure = true)
+  public static <K, V> ImmutableMap<@NotNull K, @NotNull V> ofGenerator(
+    @NotNull final IntFunction<@NotNull K @NotNull []> key,
+    @NotNull final IntFunction<@NotNull V @NotNull []> value)
+  {
+    return ImmutableMap.<@NotNull K, @NotNull V>builder().key(key).value(value).map(Map.of()).build();
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_, _, _ -> new", pure = true)
+  public static <K, V> ImmutableMap<@NotNull K, @NotNull V> of(
+    @NotNull final Map<@NotNull K, @NotNull V> map,
+    @NotNull final IntFunction<@NotNull K @NotNull []> key,
+    @NotNull final IntFunction<@NotNull V @NotNull []> value)
+  {
+    return ImmutableMap.<@NotNull K, @NotNull V>builder().map(map).key(key).value(value).build();
   }
 
   @NotNull
@@ -56,24 +79,24 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
     return Optional.ofNullable(map.get(key));
   }
 
-  //  @NotNull
-  //  @UnmodifiableView
-  //  @Contract(pure = true)
-  //  public ImmutableSet<@NotNull K> findByValue(@NotNull final V value)
-  //  {
-  //    return stream()
-  //        .filter(p -> p.getValue().isEqualTo(value))
-  //        .map(Entry::getKey)
-  //        .collect(ImmutableCollectors.toSet());
-  //  }
+  @NotNull
+  @UnmodifiableView
+  @Contract(pure = true)
+  public ImmutableSet<@NotNull K> findByValue(@NotNull final V value)
+  {
+    return stream()
+      .filter(p -> Equalable.<@NotNull V>areEqual(p.getValue(), value))
+      .map(Entry::getKey)
+      .collect(ImmutableCollectors.toSet(getKey()));
+  }
 
-  //  @NotNull
-  //  @UnmodifiableView
-  //  @Contract(pure = true)
-  //  public Stream<@NotNull Entry<@NotNull K, @NotNull V>> stream()
-  //  {
-  //    return entrySet().stream();
-  //  }
+  @NotNull
+  @UnmodifiableView
+  @Contract(pure = true)
+  public Stream<IMap.@NotNull Entry<@NotNull K, @NotNull V>> stream()
+  {
+    return entrySet().stream();
+  }
 
   /**
    * Returns the number of elements in this map.
@@ -120,29 +143,32 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
     return toBuilder().build();
   }
 
-  //  @NotNull
-  //  @UnmodifiableView
-  //  @Contract(value = " -> new", pure = true)
-  //  public ImmutableSet<@NotNull Entry<@NotNull K, @NotNull V>> entrySet()
-  //  {
-  //    return ImmutableSet.copyOfEntries(toMap().entrySet());
-  //  }
-  //
-  //  @NotNull
-  //  @UnmodifiableView
-  //  @Contract(value = " -> new", pure = true)
-  //  public ImmutableSet<@NotNull K> keySet()
-  //  {
-  //    return ImmutableSet.copyOf(toMap().keySet());
-  //  }
-  //
-  //  @NotNull
-  //  @UnmodifiableView
-  //  @Contract(value = " -> new", pure = true)
-  //  public ImmutableList<@NotNull V> values()
-  //  {
-  //    return ImmutableList.copyOf(toMap().values());
-  //  }
+  @NotNull
+  @Override
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public ImmutableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet()
+  {
+    return ImmutableSet.<@NotNull K, @NotNull V>copyOfEntries(toMap().entrySet(), Entry[]::new);
+  }
+
+  @NotNull
+  @Override
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public ImmutableSet<@NotNull K> keySet()
+  {
+    return ImmutableSet.copyOf(toMap().keySet(), getKey());
+  }
+
+  @NotNull
+  @Override
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public ImmutableList<@NotNull V> values()
+  {
+    return ImmutableList.copyOf(toMap().values(), getValue());
+  }
 
   @NotNull
   @UnmodifiableView
@@ -150,100 +176,6 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   public Map<@NotNull K, @NotNull V> toMap()
   {
     return Map.copyOf(map);
-  }
-
-  @Value
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  @Builder(toBuilder = true)
-  public static class Entry<K, V>
-  {
-
-    @NonNull
-    @NotNull("Given keyType cannot be null.")
-    @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
-    K key;
-
-    @NonNull
-    @NotNull("Given valueType cannot be null.")
-    @javax.validation.constraints.NotNull(message = "Given valueType cannot be null.")
-    V value;
-
-    /**
-     * Returns a comparator that compares {@link Entry} in natural order on key.
-     *
-     * <p>The returned comparator is serializable and throws {@link
-     * NullPointerException} when comparing an entry with a null key.
-     *
-     * @param <K> the {@link Comparable} type of then map keys
-     * @param <V> the type of the map values
-     * @return a comparator that compares {@link Entry} in natural order on key.
-     * @see Comparable
-     * @since 1.8
-     */
-    static <K extends Comparable<? super K>, V> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByKey()
-    {
-      return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
-          (c1, c2) -> c1.getKey().compareTo(c2.getKey());
-    }
-
-    /**
-     * Returns a comparator that compares {@link Entry} in natural order on value.
-     *
-     * <p>The returned comparator is serializable and throws {@link
-     * NullPointerException} when comparing an entry with null values.
-     *
-     * @param <K> the type of the map keys
-     * @param <V> the {@link Comparable} type of the map values
-     * @return a comparator that compares {@link Entry} in natural order on value.
-     * @see Comparable
-     * @since 1.8
-     */
-    static <K, V extends Comparable<? super V>> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByValue()
-    {
-      return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
-          (c1, c2) -> c1.getValue().compareTo(c2.getValue());
-    }
-
-    /**
-     * Returns a comparator that compares {@link Entry} by key using the given {@link Comparator}.
-     *
-     * <p>The returned comparator is serializable if the specified comparator
-     * is also serializable.
-     *
-     * @param <K> the type of the map keys
-     * @param <V> the type of the map values
-     * @param cmp the key {@link Comparator}
-     * @return a comparator that compares {@link Entry} by the key.
-     * @since 1.8
-     */
-    static <K, V> Comparator<Entry<@NotNull K, @NotNull V>> comparingByKey(
-      Comparator<? super K> cmp)
-    {
-      Objects.requireNonNull(cmp);
-      return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
-        (c1, c2) -> cmp.compare(c1.getKey(), c2.getKey());
-    }
-
-    /**
-     * Returns a comparator that compares {@link Entry} by value using the given {@link Comparator}.
-     *
-     * <p>The returned comparator is serializable if the specified comparator
-     * is also serializable.
-     *
-     * @param <K> the type of the map keys
-     * @param <V> the type of the map values
-     * @param cmp the value {@link Comparator}
-     * @return a comparator that compares {@link Entry} by the value.
-     * @since 1.8
-     */
-    public static <K, V> Comparator<Entry<@NotNull K, @NotNull V>> comparingByValue(
-      Comparator<? super V> cmp)
-    {
-      Objects.requireNonNull(cmp);
-      return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
-        (c1, c2) -> cmp.compare(c1.getValue(), c2.getValue());
-    }
-
   }
 
 }

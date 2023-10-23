@@ -1,7 +1,7 @@
 package de.ochmanski.immutables;
 
-import de.ochmanski.immutables.equalable.Equalable;
-import de.ochmanski.immutables.equalable.EqualableMap;
+import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.ImmutableMap;
+import com.stadlerrail.diag.dias.servicestate.enums.Equalable;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ public interface IMap<K, V>
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(Class, Class, IntFunction)} instead.
+   * <p>use method: {@link ImmutableMap#ofGenerator(IntFunction, IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
@@ -37,118 +37,6 @@ public interface IMap<K, V>
   {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
         + "For example: IMap.ofGenerator(String[]::new)");
-  }
-
-  /**
-   * Example usage:
-   * <pre>
-   *   {@code
-   *   final IMap<Dummy> actual = IMap.ofGenerator(Dummy[]::new);
-   *   final IMap<String> actual = IMap.ofGenerator(String[]::new);
-   *   final IMap<Integer> actual = IMap.ofGenerator(Integer[]::new);
-   *   }
-   * </pre>
-   */
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = "_, _, _ -> new", pure = true)
-  static <K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V>
-  ofGenerator(@NotNull final Class<@NotNull K> keyType,
-      @NotNull final Class<@NotNull V> valueType,
-      @NotNull final IntFunction<@NotNull K @NotNull []> constructor)
-  {
-    return EqualableMap.<@NotNull K, @NotNull V>builder()
-        .keyType(keyType)
-        .valueType(valueType)
-        .generator(constructor)
-        .build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _, _, _, _ -> new", pure = true)
-  static <K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V> of(
-      @NotNull final K k1, @NotNull final V v1,
-      @NotNull final Class<@NotNull K> keyType,
-      @NotNull final Class<@NotNull V> valueType,
-      @NotNull final IntFunction<@NotNull K @NotNull []> constructor)
-  {
-    return EqualableMap.<@NotNull K, @NotNull V>builder().map(Map.of(k1, v1))
-        .keyType(keyType)
-        .valueType(valueType)
-        .generator(constructor)
-        .build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _ -> new", pure = true)
-  static <K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V> of(
-      @NotNull final K k1, @NotNull final V v1,
-      @NotNull final K k2, @NotNull final V v2,
-      @NotNull final Class<@NotNull K> keyType,
-      @NotNull final Class<@NotNull V> valueType,
-      @NotNull final IntFunction<@NotNull K @NotNull []> constructor)
-  {
-    return EqualableMap.<@NotNull K, @NotNull V>builder()
-        .map(Map.of(k1, v1, k2, v2))
-        .keyType(keyType)
-        .valueType(valueType)
-        .generator(constructor)
-        .build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _, _ -> new", pure = true)
-  static <K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V> of(
-      @NotNull final K k1, @NotNull final V v1,
-      @NotNull final K k2, @NotNull final V v2,
-      @NotNull final K k3, @NotNull final V v3,
-      @NotNull final Class<@NotNull K> keyType,
-      @NotNull final Class<@NotNull V> valueType,
-      @NotNull final IntFunction<@NotNull K @NotNull []> constructor)
-  {
-    return EqualableMap.<@NotNull K, @NotNull V>builder().map(Map.of(k1, v1, k2, v2, k3, v3))
-        .keyType(keyType)
-        .valueType(valueType)
-        .generator(constructor)
-        .build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _, _, _, _ -> new", pure = true)
-  static <K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V> of(
-      @NotNull final K k1, @NotNull final V v1,
-      @NotNull final K k2, @NotNull final V v2,
-      @NotNull final K k3, @NotNull final V v3,
-      @NotNull final K k4, @NotNull final V v4,
-      @NotNull final Class<@NotNull K> keyType,
-      @NotNull final Class<@NotNull V> valueType,
-      @NotNull final IntFunction<@NotNull K @NotNull []> constructor)
-  {
-    return EqualableMap.<@NotNull K, @NotNull V>builder().map(Map.of(k1, v1, k2, v2, k3, v3, k4, v4))
-        .keyType(keyType)
-        .valueType(valueType)
-        .generator(constructor)
-        .build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <K extends Equalable<@NotNull K>, V extends Equalable<@NotNull V>> IMap<@NotNull K, @NotNull V> of(
-      @NotNull final Map<@NotNull K, @NotNull V> map,
-      @NotNull final Class<@NotNull K> keyType,
-      @NotNull final Class<@NotNull V> valueType,
-      @NotNull final IntFunction<@NotNull K @NotNull []> constructor)
-  {
-    return EqualableMap.<@NotNull K, @NotNull V>builder().map(Map.copyOf(map))
-        .keyType(keyType)
-        .valueType(valueType)
-        .generator(constructor)
-        .build();
   }
 
   @NotNull
@@ -214,7 +102,7 @@ public interface IMap<K, V>
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Builder(toBuilder = true)
-  class Entry<@NotNull K, @NotNull V> implements Equalable<@NotNull Entry<@NotNull K, @NotNull V>>
+  class Entry<K, V> implements Equalable<@NotNull Entry<@NotNull K, @NotNull V>>
   {
 
     @NonNull
@@ -239,10 +127,12 @@ public interface IMap<K, V>
      * @see Comparable
      * @since 1.8
      */
-    static <K extends Comparable<? super K>, V> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByKey()
+    @NotNull
+    @Contract(pure = true)
+    static <K extends @NotNull Comparable<? super @NotNull K>, V> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByKey()
     {
-      return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
-          (c1, c2) -> c1.getKey().compareTo(c2.getKey());
+      return (@NotNull Comparator<@NotNull Entry<@NotNull K, @NotNull V>> & @NotNull Serializable)
+        (c1, c2) -> c1.getKey().compareTo(c2.getKey());
     }
 
     /**
@@ -257,10 +147,12 @@ public interface IMap<K, V>
      * @see Comparable
      * @since 1.8
      */
-    static <K, V extends Comparable<? super V>> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByValue()
+    @NotNull
+    @Contract(pure = true)
+    static <K, V extends @NotNull Comparable<? super @NotNull V>> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByValue()
     {
-      return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
-          (c1, c2) -> c1.getValue().compareTo(c2.getValue());
+      return (@NotNull Comparator<@NotNull Entry<@NotNull K, @NotNull V>> & @NotNull Serializable)
+        (c1, c2) -> c1.getValue().compareTo(c2.getValue());
     }
 
     /**
@@ -275,12 +167,14 @@ public interface IMap<K, V>
      * @return a comparator that compares {@link Entry} by the key.
      * @since 1.8
      */
-    static <@NotNull K, @NotNull V> Comparator<Entry<@NotNull K, @NotNull V>> comparingByKey(
-        Comparator<? super K> cmp)
+    @NotNull
+    @Contract(pure = true)
+    static <K, V> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByKey(
+      @NotNull final Comparator<? super @NotNull K> cmp)
     {
       Objects.requireNonNull(cmp);
-      return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
-          (c1, c2) -> cmp.compare(c1.getKey(), c2.getKey());
+      return (@NotNull Comparator<@NotNull Entry<@NotNull K, @NotNull V>> & @NotNull Serializable)
+        (c1, c2) -> cmp.compare(c1.getKey(), c2.getKey());
     }
 
     /**
@@ -295,14 +189,15 @@ public interface IMap<K, V>
      * @return a comparator that compares {@link Entry} by the value.
      * @since 1.8
      */
-    public static <@NotNull K, @NotNull V> Comparator<Entry<@NotNull K, @NotNull V>> comparingByValue(
-        Comparator<? super V> cmp)
+    @NotNull
+    @Contract(pure = true)
+    public static <K, V> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByValue(
+      @NotNull final Comparator<? super @NotNull V> cmp)
     {
       Objects.requireNonNull(cmp);
       return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
-          (c1, c2) -> cmp.compare(c1.getValue(), c2.getValue());
+        (c1, c2) -> cmp.compare(c1.getValue(), c2.getValue());
     }
-
   }
 
 }

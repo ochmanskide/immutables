@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.immutable;
 
+
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -11,35 +12,38 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+
 public interface ImmutableCollectors
 {
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_CONCURRENT_ID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
-      Collector.Characteristics.UNORDERED,
-      Collector.Characteristics.IDENTITY_FINISH));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
+    Collector.Characteristics.UNORDERED,
+    Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_CONCURRENT_NOID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
-      Collector.Characteristics.UNORDERED));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
+    Collector.Characteristics.UNORDERED));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_ID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_UNORDERED_ID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED,
-      Collector.Characteristics.IDENTITY_FINISH));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED,
+    Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_NOID = Collections.emptySet();
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_UNORDERED_NOID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED));
 
   /**
    * Returns a {@code Collector} that accumulates the input elements into a new {@code Set}. There are no guarantees on
@@ -57,23 +61,23 @@ public interface ImmutableCollectors
   static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
   {
     return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
-        .supplier(HashSet::new)
-        .accumulator(Set::add)
-        .combiner((left, right) ->
+      .supplier(HashSet::new)
+      .accumulator(Set::add)
+      .combiner((left, right) ->
+      {
+        if(left.size() < right.size())
         {
-          if(left.size() < right.size())
-          {
-            right.addAll(left);
-            return right;
-          }
-          else
-          {
-            left.addAll(right);
-            return left;
-          }
-        })
-        .characteristics(CH_UNORDERED_ID)
-        .build();
+          right.addAll(left);
+          return right;
+        }
+        else
+        {
+          left.addAll(right);
+          return left;
+        }
+      })
+      .characteristics(CH_UNORDERED_ID)
+      .build();
   }
 
   /**
@@ -91,83 +95,87 @@ public interface ImmutableCollectors
    * @since 10
    */
   @NotNull
-  @Contract(value = " -> new", pure = true)
-  static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableSet<@NotNull T>> toSet()
+  @Contract(value = "_ -> new", pure = true)
+  static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableSet<@NotNull T>> toSet(
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor
+  )
   {
     return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableSet<@NotNull T>>builder()
-        .supplier(HashSet::new)
-        .accumulator(Set::add)
-        .combiner((left, right) ->
+      .supplier(HashSet::new)
+      .accumulator(Set::add)
+      .combiner((left, right) ->
+      {
+        if(left.size() < right.size())
         {
-          if(left.size() < right.size())
-          {
-            right.addAll(left);
-            return right;
-          }
-          else
-          {
-            left.addAll(right);
-            return left;
-          }
-        })
-        .finisher(ImmutableSet::of)
-        .characteristics(CH_UNORDERED_NOID)
-        .build();
+          right.addAll(left);
+          return right;
+        }
+        else
+        {
+          left.addAll(right);
+          return left;
+        }
+      })
+      .finisher(set -> ImmutableSet.<@NotNull T>of(set, constructor))
+      .characteristics(CH_UNORDERED_NOID)
+      .build();
   }
 
   @NotNull
-  @Contract(value = " -> new", pure = true)
-  static <T extends @NotNull Enum<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>> toEnumSet()
+  @Contract(value = " _ -> new", pure = true)
+  static <T extends @NotNull Enum<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>> toEnumSet(
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
   {
     return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>>builder()
-        .supplier(HashSet::new)
-        .accumulator(Set::add)
-        .combiner((left, right) ->
+      .supplier(HashSet::new)
+      .accumulator(Set::add)
+      .combiner((left, right) ->
+      {
+        if(left.size() < right.size())
         {
-          if(left.size() < right.size())
-          {
-            right.addAll(left);
-            return right;
-          }
-          else
-          {
-            left.addAll(right);
-            return left;
-          }
-        })
-        .finisher(ImmutableEnumSet::of)
-        .characteristics(CH_UNORDERED_NOID)
-        .build();
+          right.addAll(left);
+          return right;
+        }
+        else
+        {
+          left.addAll(right);
+          return left;
+        }
+      })
+      .finisher(set -> ImmutableEnumSet.<@NotNull T>of(set, constructor))
+      .characteristics(CH_UNORDERED_NOID)
+      .build();
   }
 
   @NotNull
-  @Contract(value = " -> new", pure = true)
-  static <T> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull ImmutableList<@NotNull T>> toList()
+  @Contract(value = " _ -> new", pure = true)
+  static <T> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull ImmutableList<@NotNull T>> toList(
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
   {
     return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull ImmutableList<@NotNull T>>builder()
-        .supplier(ArrayList::new)
-        .accumulator(List::add)
-        .combiner((left, right) ->
+      .supplier(ArrayList::new)
+      .accumulator(List::add)
+      .combiner((left, right) ->
+      {
+        if(left.size() < right.size())
         {
-          if(left.size() < right.size())
-          {
-            right.addAll(left);
-            return right;
-          }
-          else
-          {
-            left.addAll(right);
-            return left;
-          }
-        })
-        .finisher(ImmutableList::of)
-        .characteristics(CH_UNORDERED_NOID)
-        .build();
+          right.addAll(left);
+          return right;
+        }
+        else
+        {
+          left.addAll(right);
+          return left;
+        }
+      })
+      .finisher(set -> ImmutableList.<@NotNull T>of(set, constructor))
+      .characteristics(CH_UNORDERED_NOID)
+      .build();
   }
 
   @NotNull
   @Contract(pure = true)
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
   static <T> IntFunction<@NotNull T @NotNull []> tGenerator()
   {
     return (IntFunction)Object @NotNull []::new;
@@ -177,7 +185,7 @@ public interface ImmutableCollectors
   @RequiredArgsConstructor
   @Builder
   class CollectorImpl<T, A, R>
-      implements Collector<@NotNull T, @NotNull A, @NotNull R>
+    implements Collector<@NotNull T, @NotNull A, @NotNull R>
   {
     @NotNull
     Supplier<@NotNull A> supplier;

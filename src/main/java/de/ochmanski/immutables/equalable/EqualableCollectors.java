@@ -10,14 +10,17 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
+
 public interface EqualableCollectors
 {
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_CONCURRENT_ID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
-      Collector.Characteristics.UNORDERED,
-      Collector.Characteristics.IDENTITY_FINISH));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
+    Collector.Characteristics.UNORDERED,
+    Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_CONCURRENT_NOID
@@ -116,36 +119,38 @@ public interface EqualableCollectors
   }
 
   @NotNull
-  @Contract(value = " -> new", pure = true)
-  static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>> toList()
+  @Contract(value = " _ -> new", pure = true)
+  static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>> toList(
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor
+  )
   {
     return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>>builder()
-        .supplier(ArrayList::new)
-        .accumulator(List::add)
-        .combiner((left, right) ->
+      .supplier(ArrayList::new)
+      .accumulator(List::add)
+      .combiner((left, right) ->
+      {
+        if(left.size() < right.size())
         {
-          if(left.size() < right.size())
-          {
-            right.addAll(left);
-            return right;
-          }
-          else
-          {
-            left.addAll(right);
-            return left;
-          }
-        })
-        .finisher(EqualableList::of)
+          right.addAll(left);
+          return right;
+        }
+        else
+        {
+          left.addAll(right);
+          return left;
+        }
+      })
+      .finisher(set -> EqualableList.of(set, constructor))
         .characteristics(CH_UNORDERED_NOID)
         .build();
   }
 
   @NotNull
   @Contract(pure = true)
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
   static <T> IntFunction<@NotNull T @NotNull []> tGenerator()
   {
-    return (IntFunction)Object @NotNull []::new;
+    return (IntFunction)Equalable @NotNull []::new;
   }
 
   @Value

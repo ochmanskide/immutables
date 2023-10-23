@@ -1,6 +1,6 @@
 package de.ochmanski.immutables;
 
-import com.stadlerrail.diag.dias.servicestate.property.Constants;
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
@@ -102,7 +102,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
 
   public boolean isNotInIgnoreCase(@NotNull final List<@NotNull StringWrapper> elements)
   {
-    return Equalable.<StringWrapper>noneMatch(elements, p -> p.isEqualToIgnoreCase(this));
+    return Equalable.<StringWrapper>noneMatchT(elements, p -> p.isEqualToIgnoreCase(this));
   }
 
   public boolean isInIgnoreCase(@NotNull final String @NotNull ... array)
@@ -112,7 +112,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
 
   public boolean isInIgnoreCase(@NotNull final List<@NotNull StringWrapper> elements)
   {
-    return Equalable.<StringWrapper>anyMatch(elements, p -> p.isEqualToIgnoreCase(this));
+    return Equalable.<StringWrapper>anyMatchT(elements, p -> p.isEqualToIgnoreCase(this));
   }
 
   @NotNull

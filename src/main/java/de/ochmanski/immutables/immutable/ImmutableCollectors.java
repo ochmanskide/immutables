@@ -1,7 +1,6 @@
 package de.ochmanski.immutables.immutable;
 
-
-import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
+import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.enums.ImmutableEnumSet;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -12,9 +11,8 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
-
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
 public interface ImmutableCollectors
 {
 
@@ -148,7 +146,7 @@ public interface ImmutableCollectors
   }
 
   @NotNull
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = " -> new", pure = true)
   static <T> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull ImmutableList<@NotNull T>> toList(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
   {

@@ -3,10 +3,7 @@ package de.ochmanski.immutables.immutable;
 import com.stadlerrail.diag.dias.diasexport.main.collection.IMap;
 import com.stadlerrail.diag.dias.servicestate.enums.Equalable;
 import lombok.*;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
+import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
@@ -72,6 +69,17 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   {
     return ImmutableMap.<@NotNull K, @NotNull V>builder().map(map).key(key).value(value).build();
   }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  public static <K, V> ImmutableMap<@NotNull K, @NotNull V> empty()
+  {
+    return EMPTY;
+  }
+
+  private static final ImmutableMap EMPTY = ImmutableMap.builder().build();
 
   @NotNull
   public Optional<@Nullable V> get(@NotNull final K key)

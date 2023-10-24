@@ -1,6 +1,6 @@
 package de.ochmanski.immutables;
 
-
+import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.ImmutableSet;
 import org.jetbrains.annotations.*;
 
 import java.util.Iterator;
@@ -74,9 +74,6 @@ public interface ISet<E>
   @NotNull
   @Contract(value = "-> new", pure = true)
   E @NotNull [] toArray();
-
-  @NotNull
-  Class<? extends @NotNull E> getComponentType();
 
   /**
    * Returns an iterator over the elements in this set.  The elements are returned in no particular order (unless this

@@ -76,10 +76,10 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
-  public static void of()
+  static void of()
   {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-        + "For example: IMap.ofGenerator(String[]::new)");
+      + "For example: IMap.ofGenerator(String[]::new)");
   }
 
   /**

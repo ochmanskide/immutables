@@ -81,7 +81,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> ofGenerator(
+  public static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> ofGenerator(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return FluentEnumList.<@NotNull S>builder().list(ImmutableList.ofGenerator(constructor)).constructor(constructor)
@@ -101,7 +101,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
+  public static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
@@ -112,7 +112,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
+  public static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
@@ -124,7 +124,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
+  public static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
@@ -137,7 +137,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _ -> new", pure = true)
-  static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
+  public static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,

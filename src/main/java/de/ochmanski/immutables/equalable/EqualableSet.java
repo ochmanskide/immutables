@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
@@ -38,7 +39,16 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor;
+  @Builder.Default
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultKey();
+
+  @NotNull
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  @Contract(value = " -> new", pure = true)
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey()
+  {
+    return (IntFunction)Enum @NotNull []::new;
+  }
 
   /**
    * This method is not supported.
@@ -148,11 +158,10 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Contract(pure = true)
   public static <E extends @NotNull Equalable<@NotNull E>> EqualableSet<@NotNull E> empty()
   {
-    return (EqualableSet<E>)EMPTY_SET;
+    return EMPTY_SET;
   }
 
-  private static final EqualableSet<? extends @NotNull Equalable<?>> EMPTY_SET = EqualableSet.ofGenerator(
-    (IntFunction)Object @NotNull []::new);
+  private static final EqualableSet EMPTY_SET = EqualableSet.builder().build();
 
   @NotNull
   @Unmodifiable
@@ -273,17 +282,29 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
-    return set.toArray();
+    return isEmpty()
+      ? newArrayNative()
+      : set.toArray();
   }
 
   @NotNull
-  @Override
   @SuppressWarnings(UNCHECKED)
-  public Class<? extends @NotNull E> getComponentType()
+  @Contract(value = "-> new", pure = true)
+  public E @NotNull [] newArrayNative()
+  {
+    final Class<? extends @NotNull E> componentType = getComponentType();
+    final int size = size();
+    final Object a = Array.newInstance(componentType, size);
+    return (E[])a;
+  }
+
+  @NotNull
+  @SuppressWarnings(UNCHECKED)
+  public Class<@NotNull E> getComponentType()
   {
     return isEmpty()
       ? getComponentTypeFromConstructor(getConstructor())
-      : (Class<? extends @NotNull E>)iterator().next().getClass();
+      : (Class<@NotNull E>)iterator().next().getClass();
   }
 
   /**

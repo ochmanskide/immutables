@@ -1,8 +1,7 @@
 package de.ochmanski.immutables.immutable.enums;
 
-
-import de.ochmanski.immutables.ISet;
-import de.ochmanski.immutables.immutable.ImmutableSet;
+import com.stadlerrail.diag.dias.diasexport.main.collection.ISet;
+import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.ImmutableSet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -18,9 +17,8 @@ import java.util.Iterator;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
-
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
 /**
  * Immutable wrapper of <pre>{@code java.util.EnumSet<K,V>}</pre>
  * <p>This Read-Only implementation of <pre>{@code Set<>}</pre> interface
@@ -49,7 +47,16 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor;
+  @Builder.Default
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultKey();
+
+  @NotNull
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  @Contract(value = " -> new", pure = true)
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey()
+  {
+    return (IntFunction)Enum @NotNull []::new;
+  }
 
   /**
    * This method is not supported.
@@ -159,11 +166,10 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Contract(pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> empty()
   {
-    return (ImmutableEnumSet<S>)EMPTY;
+    return EMPTY;
   }
 
-  private static final ImmutableEnumSet<? extends @NotNull Enum> EMPTY = ImmutableEnumSet.<@NotNull Enum>ofGenerator(
-    ImmutableEnumSet.<@NotNull Enum>defaultConstructor());
+  private static final ImmutableEnumSet EMPTY = ImmutableEnumSet.builder().build();
 
   @NotNull
   @Unmodifiable
@@ -285,28 +291,29 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
-    return set.toArray();
+    return isEmpty()
+      ? newArrayNative()
+      : set.toArray();
   }
 
   @NotNull
   @SuppressWarnings(UNCHECKED)
   @Contract(value = "-> new", pure = true)
-  private E @NotNull [] newArrayNative()
+  public E @NotNull [] newArrayNative()
   {
-    final Class<? extends @NotNull Enum<? extends E>> componentType = getComponentType();
+    final Class<? extends @NotNull E> componentType = getComponentType();
     final int size = size();
     final Object a = Array.newInstance(componentType, size);
     return (E[])a;
   }
 
   @NotNull
-  @Override
   @SuppressWarnings(UNCHECKED)
-  public Class<? extends @NotNull E> getComponentType()
+  public Class<@NotNull E> getComponentType()
   {
     return isEmpty()
-      ? (Class<? extends E>)getComponentTypeFromConstructor(getConstructor())
-      : (Class<? extends E>)iterator().next().getClass();
+      ? getComponentTypeFromConstructor(getConstructor())
+      : (Class<@NotNull E>)iterator().next().getClass();
   }
 
   /**
@@ -348,6 +355,10 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Contract(value = " -> new", pure = true)
   public EnumSet<@NotNull E> unwrap()
   {
+    if(isEmpty())
+    {
+      return EnumSet.noneOf(getComponentTypeFromConstructor(getConstructor()));
+    }
     return EnumSet.<@NotNull E>copyOf(getSet().unwrap());
   }
 
@@ -368,6 +379,10 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
     @NotNull final Collection<@NotNull S> keySet,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
+    if(keySet.isEmpty())
+    {
+      return ImmutableEnumSet.<@NotNull S>builder().constructor(constructor).build();
+    }
     final ImmutableSet<@NotNull S> immutableSet = ImmutableSet.<@NotNull S>copyOf(EnumSet.<@NotNull S>copyOf(keySet),
       constructor);
     return ImmutableEnumSet.<@NotNull S>builder().set(immutableSet).constructor(constructor).build();

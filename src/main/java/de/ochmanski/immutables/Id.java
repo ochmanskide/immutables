@@ -1,7 +1,7 @@
 package de.ochmanski.immutables;
 
-import de.ochmanski.immutables.constants.Constants;
-import de.ochmanski.immutables.equalable.Equalable;
+import com.stadlerrail.diag.dias.diasexport.main.utilities.Constants;
+import com.stadlerrail.diag.dias.servicestate.enums.Equalable;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

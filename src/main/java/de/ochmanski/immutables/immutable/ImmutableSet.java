@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
+import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
 import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
 
 @Value
@@ -35,7 +36,16 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor;
+  @Builder.Default
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultKey();
+
+  @NotNull
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  @Contract(value = " -> new", pure = true)
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey()
+  {
+    return (IntFunction)Object @NotNull []::new;
+  }
 
   @NotNull
   @UnmodifiableView
@@ -141,11 +151,10 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Contract(pure = true)
   public static <E> ImmutableSet<@NotNull E> empty()
   {
-    return (ImmutableSet<E>)EMPTY_SET;
+    return EMPTY_SET;
   }
 
-  private static final ImmutableSet<?> EMPTY_SET = ImmutableSet.<@NotNull Object>ofGenerator(
-    @NotNull Object @NotNull []::new);
+  private static final ImmutableSet EMPTY_SET = ImmutableSet.builder().build();
 
   /**
    * Returns the number of elements in this set.
@@ -225,7 +234,6 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   }
 
   @NotNull
-  @Override
   @SuppressWarnings(UNCHECKED)
   public Class<? extends @NotNull E> getComponentType()
   {

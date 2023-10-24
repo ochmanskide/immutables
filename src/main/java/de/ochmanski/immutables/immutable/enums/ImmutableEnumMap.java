@@ -33,7 +33,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @NotNull("Given map cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given map cannot be null.")
   @Builder.Default
-  ImmutableMap<@NonNull @NotNull K, @NonNull @NotNull V> map = ImmutableEnumMap.emptyImmutableMap();
+  ImmutableMap<@NonNull @NotNull K, @NonNull @NotNull V> map = ImmutableMap.empty();
 
   @NonNull
   @NotNull("Given keyType cannot be null.")
@@ -77,7 +77,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
-  public static void of()
+  static void of()
   {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
       + "For example: ImmutableEnumMap.ofGenerator(String[]::new)");
@@ -213,25 +213,12 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  private static <K, V> ImmutableMap<@NotNull K, @NotNull V> emptyImmutableMap()
-  {
-    return (ImmutableMap<@NotNull K, @NotNull V>)EMPTY_ENUM_MAP;
-  }
-
-  private static final ImmutableMap<@NotNull Enum<?>, ?> EMPTY_ENUM_MAP = ImmutableMap.<@NotNull Enum<?>, @NotNull Object>ofGenerator(
-    @NotNull Enum @NotNull []::new, @NotNull Object @NotNull []::new);
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(pure = true)
   public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> empty()
   {
-    return (ImmutableEnumMap<@NotNull K, @NotNull V>)EMPTY;
+    return EMPTY;
   }
 
-  private static final ImmutableEnumMap<? extends @NotNull Enum, ?> EMPTY = ImmutableEnumMap.<@NotNull Enum, @NotNull Object>ofGenerator(
-    @NotNull Enum @NotNull []::new, @NotNull Object @NotNull []::new);
+  private static final ImmutableEnumMap EMPTY = ImmutableEnumMap.builder().build();
 
   @NotNull
   public Optional<@Nullable V> get(@NotNull final K key)
@@ -336,13 +323,16 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Contract(value = " -> new", pure = true)
   public EnumMap<K, @NotNull V> toMap()
   {
+    if(map.isEmpty())
+    {
+      return new EnumMap<@NotNull K, @NotNull V>(getComponentTypeFromConstructor(getKey()));
+    }
     return new EnumMap<@NotNull K, @NotNull V>(map.toMap());
   }
 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings(UNCHECKED)
   private static <S extends Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
     final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {

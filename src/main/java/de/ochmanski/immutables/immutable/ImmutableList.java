@@ -37,7 +37,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultConstructor();
 
   @NotNull
-  @Contract(pure = true)
+  @Contract(value = "-> new", pure = true)
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
   private static <S> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
@@ -125,10 +125,10 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Contract(pure = true)
   public static <E> ImmutableList<E> empty()
   {
-    return (ImmutableList<E>)ImmutableList.EMPTY;
+    return EMPTY;
   }
 
-  private static final ImmutableList<?> EMPTY = ImmutableList.ofGenerator(defaultConstructor());
+  private static final ImmutableList EMPTY = ImmutableList.builder().build();
 
   /**
    * Returns the number of elements in this list.

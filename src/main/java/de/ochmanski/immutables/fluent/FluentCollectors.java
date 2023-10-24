@@ -96,7 +96,7 @@ public interface FluentCollectors
   static <T extends @NotNull Enum<@NotNull T> & Fluent<? extends @NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<@NotNull T>> toSet(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
   {
-    return FluentCollectors.CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<@NotNull T>>builder()
+    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<@NotNull T>>builder()
       .supplier(HashSet::new)
       .accumulator(Set::add)
       .combiner((left, right) ->

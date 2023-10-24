@@ -1,5 +1,6 @@
 package de.ochmanski.immutables;
 
+
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
@@ -30,11 +31,14 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
   }
 
   @NotNull
-  @Contract(value = "-> new", pure = true)
+  @Contract(pure = true)
   public static StringWrapper blank()
   {
-    return StringWrapper.builder().build();
+    return BLANK;
   }
+
+  @NotNull
+  private static final StringWrapper BLANK = StringWrapper.builder().build();
 
   @Contract(value = "null -> true", pure = true)
   public boolean isNotEqualToIgnoreCase(@Nullable final StringWrapper other)
@@ -102,7 +106,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
 
   public boolean isNotInIgnoreCase(@NotNull final List<@NotNull StringWrapper> elements)
   {
-    return Equalable.<StringWrapper>noneMatchT(elements, p -> p.isEqualToIgnoreCase(this));
+    return Equalable.<@NotNull StringWrapper>noneMatchT(elements, p -> p.isEqualToIgnoreCase(this));
   }
 
   public boolean isInIgnoreCase(@NotNull final String @NotNull ... array)
@@ -112,7 +116,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
 
   public boolean isInIgnoreCase(@NotNull final List<@NotNull StringWrapper> elements)
   {
-    return Equalable.<StringWrapper>anyMatchT(elements, p -> p.isEqualToIgnoreCase(this));
+    return Equalable.<@NotNull StringWrapper>anyMatchT(elements, p -> p.isEqualToIgnoreCase(this));
   }
 
   @NotNull
@@ -145,5 +149,4 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
     }
     return raw.equals(other);
   }
-
 }

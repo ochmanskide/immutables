@@ -103,8 +103,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
     @NotNull final IntFunction<@NotNull V @NotNull []> value)
   {
     final Class<K> keyType = getComponentTypeFromConstructor(key);
-    final Map<@NotNull K, @NotNull V> map = new EnumMap<@NotNull K, @NotNull V>(keyType);
-    return ImmutableEnumMap.<@NotNull K, @NotNull V>of(map, key, value);
+    return ImmutableEnumMap.<@NotNull K, @NotNull V>of(new EnumMap<@NotNull K, @NotNull V>(keyType), key, value);
   }
 
   @NotNull
@@ -188,6 +187,10 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value)
   {
+    if(map.isEmpty())
+    {
+      return ImmutableEnumMap.ofGenerator(key, value);
+    }
     final EnumMap<@NotNull K, @NotNull V> enumMap = new EnumMap<>(map);
     return ImmutableEnumMap.ofEnumMap(enumMap, key, value);
   }

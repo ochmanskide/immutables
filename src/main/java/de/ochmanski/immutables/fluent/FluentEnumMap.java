@@ -101,9 +101,8 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
     @NotNull final IntFunction<@NotNull V @NotNull []> value)
   {
     Class<@NotNull K> keyType = getComponentTypeFromConstructor(key);
-    final Map<@NotNull K, @NotNull V> map = new EnumMap<@NotNull K, @NotNull V>(keyType);
     final ImmutableEnumMap<@NotNull K, @NotNull V> enumMap = ImmutableEnumMap.<@NotNull K, @NotNull V>ofEnumMap(
-      new EnumMap<@NotNull K, @NotNull V>(map), key, value);
+      new EnumMap<@NotNull K, @NotNull V>(keyType), key, value);
     return FluentEnumMap.ofEnumMap(enumMap, key, value);
   }
 
@@ -191,6 +190,10 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value)
   {
+    if(map.isEmpty())
+    {
+      return FluentEnumMap.ofGenerator(key, value);
+    }
     final ImmutableEnumMap<@NotNull K, @NotNull V> enumMap = ImmutableEnumMap.<@NotNull K, @NotNull V>ofEnumMap(
       new EnumMap<@NotNull K, @NotNull V>(map), key, value);
     return FluentEnumMap.ofEnumMap(enumMap, key, value);

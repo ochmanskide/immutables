@@ -284,9 +284,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
-    return isEmpty()
-      ? newArrayNative()
-      : set.toArray();
+    return set.toArray();
   }
 
   @NotNull

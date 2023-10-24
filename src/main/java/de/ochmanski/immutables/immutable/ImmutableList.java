@@ -5,7 +5,6 @@ import lombok.*;
 import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -211,27 +210,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Contract(value = " -> new", pure = true)
   public E @NotNull [] toArray()
   {
-    return isEmpty()
-        ? list.toArray(getConstructor())
-        : list.toArray(newArrayNative());
-  }
-
-  @NotNull
-  @SuppressWarnings(UNCHECKED)
-  @Contract(value = "-> new", pure = true)
-  private E @NotNull [] newArrayNative()
-  {
-    final Class<E> componentType = getComponentType();
-    final int size = size();
-    final Object a = Array.newInstance(componentType, size);
-    return (E[])a;
-  }
-
-  @NotNull
-  @SuppressWarnings(UNCHECKED)
-  private Class<@NotNull E> getComponentType()
-  {
-    return (Class<E>)get(0).getClass();
+    return list.toArray(getConstructor().apply(size()));
   }
 
   // Positional Access Operations

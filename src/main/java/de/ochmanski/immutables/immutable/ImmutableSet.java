@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
@@ -217,29 +216,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
-    return isEmpty()
-      ? set.toArray(getConstructor())
-      : set.toArray(newArrayNative());
-  }
-
-  @NotNull
-  @SuppressWarnings(UNCHECKED)
-  @Contract(value = "-> new", pure = true)
-  public E @NotNull [] newArrayNative()
-  {
-    final Class<? extends @NotNull E> componentType = getComponentType();
-    final int size = size();
-    final Object a = Array.newInstance(componentType, size);
-    return (E[])a;
-  }
-
-  @NotNull
-  @SuppressWarnings(UNCHECKED)
-  public Class<? extends @NotNull E> getComponentType()
-  {
-    return isEmpty()
-      ? getComponentTypeFromConstructor(getConstructor())
-      : (Class<? extends @NotNull E>)iterator().next().getClass();
+    return set.toArray(getConstructor().apply(size()));
   }
 
   /**

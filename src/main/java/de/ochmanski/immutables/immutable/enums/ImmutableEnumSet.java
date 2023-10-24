@@ -2,6 +2,7 @@ package de.ochmanski.immutables.immutable.enums;
 
 import com.stadlerrail.diag.dias.diasexport.main.collection.ISet;
 import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.ImmutableSet;
+import de.ochmanski.immutables.ICollection;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -299,17 +300,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] newArrayNative()
   {
-    final Class<? extends @NotNull E> componentType = getComponentType();
-    return ICollection.zeroLengthArray(componentType);
-  }
-
-  @NotNull
-  @SuppressWarnings(UNCHECKED)
-  public Class<@NotNull E> getComponentType()
-  {
-    return isEmpty()
-      ? getComponentTypeFromConstructor(getConstructor())
-      : (Class<@NotNull E>)iterator().next().getClass();
+    return ICollection.zeroLengthArray(getConstructor());
   }
 
   /**

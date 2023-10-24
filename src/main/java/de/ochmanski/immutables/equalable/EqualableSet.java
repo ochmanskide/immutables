@@ -2,6 +2,7 @@ package de.ochmanski.immutables.equalable;
 
 import com.stadlerrail.diag.dias.diasexport.main.collection.ISet;
 import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.ImmutableSet;
+import de.ochmanski.immutables.ICollection;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -42,11 +43,13 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultKey();
 
   @NotNull
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey()
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  public static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey()
   {
-    return (IntFunction)Enum @NotNull []::new;
+    return (IntFunction)Object @NotNull []::new;
   }
 
   /**
@@ -165,16 +168,6 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  public static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
-  {
-    return (IntFunction)Object @NotNull []::new;
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final S @NotNull [] array,
@@ -277,7 +270,6 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
    * @return an array containing all the elements in this set in proper sequence
    */
   @NotNull
-  @Override
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
@@ -290,17 +282,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] newArrayNative()
   {
-    final Class<? extends @NotNull E> componentType = getComponentType();
-    return ICollection.zeroLengthArray(componentType);
-  }
-
-  @NotNull
-  @SuppressWarnings(UNCHECKED)
-  public Class<@NotNull E> getComponentType()
-  {
-    return isEmpty()
-      ? getComponentTypeFromConstructor(getConstructor())
-      : (Class<@NotNull E>)iterator().next().getClass();
+    return ICollection.zeroLengthArray(getConstructor());
   }
 
   /**
@@ -310,7 +292,6 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
    * @return an iterator over the elements in this set
    */
   @NotNull
-  @Override
   @Contract(pure = true)
   public Iterator<@NotNull E> iterator()
   {

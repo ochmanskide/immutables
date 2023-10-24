@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
@@ -290,14 +289,11 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   }
 
   @NotNull
-  @SuppressWarnings(UNCHECKED)
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] newArrayNative()
   {
     final Class<? extends @NotNull E> componentType = getComponentType();
-    final int size = size();
-    final Object a = Array.newInstance(componentType, size);
-    return (E[])a;
+    return ICollection.zeroLengthArray(componentType);
   }
 
   @NotNull

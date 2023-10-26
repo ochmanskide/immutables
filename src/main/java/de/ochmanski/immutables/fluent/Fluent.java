@@ -42,7 +42,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
     @NotNull final Consumer<? super @NotNull Equalable<@NotNull Fluent<@NotNull F>>> consumer)
   {
     final @NotNull Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] enumConstants = getEnumConstants(clazz);
-    forEach(enumConstants, consumer);
+    Fluent.<@NotNull F>forEach(enumConstants, consumer);
   }
 
   @Contract(pure = true)

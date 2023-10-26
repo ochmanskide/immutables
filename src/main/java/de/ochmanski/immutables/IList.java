@@ -1,6 +1,6 @@
 package de.ochmanski.immutables;
 
-import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.ImmutableList;
+import de.ochmanski.immutables.immutable.ImmutableList;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

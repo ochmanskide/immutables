@@ -1,8 +1,8 @@
 package de.ochmanski.immutables.equalable;
 
-import com.stadlerrail.diag.dias.diasexport.main.collection.ISet;
-import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.ImmutableSet;
 import de.ochmanski.immutables.ICollection;
+import de.ochmanski.immutables.ISet;
+import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -13,11 +13,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 @Value
 @UnmodifiableView
@@ -40,7 +41,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultKey();
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
 
   @NotNull
   @Unmodifiable
@@ -254,7 +255,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Contract(value = " -> new", pure = true)
   public EqualableSet<? extends @NotNull E> deepClone()
   {
-    return toBuilder().constructor(constructor).build();
+    return toBuilder().key(key).build();
   }
 
   /**
@@ -270,6 +271,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
    * @return an array containing all the elements in this set in proper sequence
    */
   @NotNull
+  @Override
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
@@ -280,7 +282,20 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] newArrayNative()
   {
-    return ICollection.zeroLengthArray(getConstructor());
+    return ICollection.zeroLengthArray(getKey());
+  }
+
+  @Override
+  @Contract(pure = true)
+  public void forEach(@NotNull final Consumer<? super @NotNull E> consumer)
+  {
+    set.forEach(consumer);
+  }
+
+  @Contract(pure = true)
+  public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer)
+  {
+    set.forEachRemaining(consumer);
   }
 
   /**
@@ -290,10 +305,11 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
    * @return an iterator over the elements in this set
    */
   @NotNull
+  @Override
   @Contract(pure = true)
   public Iterator<@NotNull E> iterator()
   {
-    return unwrap().iterator();
+    return set.iterator();
   }
 
   /**
@@ -311,7 +327,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Contract(value = " -> new", pure = true)
   public Stream<@NotNull E> stream()
   {
-    return unwrap().stream();
+    return set.stream();
   }
 
   @NotNull
@@ -321,7 +337,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Contract(value = " -> new", pure = true)
   public Set<@NotNull E> unwrap()
   {
-    return getSet().unwrap();
+    return set.unwrap();
   }
 
   @NotNull
@@ -340,7 +356,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     @NotNull final ImmutableSet<@NotNull S> immutableSet,
     @NotNull final IntFunction<S @NotNull []> constructor)
   {
-    return EqualableSet.<@NotNull S>builder().set(immutableSet).constructor(constructor).build();
+    return EqualableSet.<@NotNull S>builder().set(immutableSet).key(constructor).build();
   }
 
 }

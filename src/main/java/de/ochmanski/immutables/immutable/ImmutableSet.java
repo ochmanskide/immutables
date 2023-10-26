@@ -1,7 +1,7 @@
 package de.ochmanski.immutables.immutable;
 
-import com.stadlerrail.diag.dias.diasexport.main.collection.IMap;
-import com.stadlerrail.diag.dias.diasexport.main.collection.ISet;
+import de.ochmanski.immutables.IMap;
+import de.ochmanski.immutables.ISet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -10,11 +10,12 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 @Value
 @UnmodifiableView
@@ -36,7 +37,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultKey();
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
 
   @NotNull
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
@@ -52,16 +53,6 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   public static <S> ImmutableSet<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return ImmutableSet.of(Set.of(), constructor);
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings(UNCHECKED)
-  private static <S> Class<? extends @NotNull S> getComponentTypeFromConstructor(
-    final @NotNull IntFunction<? extends @NotNull S @NotNull []> constructor)
-  {
-    return (Class<? extends @NotNull S>)constructor.apply(0).getClass().getComponentType();
   }
 
   @NotNull
@@ -216,7 +207,20 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
-    return set.toArray(getConstructor().apply(size()));
+    return set.toArray(getKey().apply(size()));
+  }
+
+  @Override
+  @Contract(pure = true)
+  public void forEach(@NotNull final Consumer<? super @NotNull E> consumer)
+  {
+    unwrap().forEach(consumer);
+  }
+
+  @Contract(pure = true)
+  public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer)
+  {
+    iterator().forEachRemaining(consumer);
   }
 
   /**
@@ -273,7 +277,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
     @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableSet.<@NotNull S>builder().set(Set.copyOf(collection)).constructor(constructor).build();
+    return ImmutableSet.<@NotNull S>builder().set(Set.copyOf(collection)).key(constructor).build();
   }
 
 }

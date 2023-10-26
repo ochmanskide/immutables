@@ -10,8 +10,8 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 public interface FluentCollectors
 {
 

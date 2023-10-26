@@ -1,7 +1,7 @@
 package de.ochmanski.immutables;
 
-import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.ImmutableMap;
 import com.stadlerrail.diag.dias.servicestate.enums.Equalable;
+import de.ochmanski.immutables.immutable.ImmutableMap;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

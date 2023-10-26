@@ -10,8 +10,21 @@ import java.util.function.IntFunction;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
-public interface ICollection
+public interface ICollection<E>
 {
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  static <E> Class<E> getComponentType(@NotNull final ICollection<@NotNull E> collection)
+  {
+    return ICollection.getComponentTypeFromConstructor(collection.getKey());
+  }
+
+  @NotNull
+  @Contract(pure = true)
+  IntFunction<@NotNull E @NotNull []> getKey();
 
   @NotNull
   @Unmodifiable
@@ -42,5 +55,4 @@ public interface ICollection
   {
     return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
   }
-
 }

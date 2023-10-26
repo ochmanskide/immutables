@@ -1,6 +1,6 @@
 package de.ochmanski.immutables.immutable;
 
-import com.stadlerrail.diag.dias.diasexport.main.collection.IList;
+import de.ochmanski.immutables.IList;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -11,8 +11,8 @@ import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 @Value
 @UnmodifiableView

@@ -1,10 +1,10 @@
 package de.ochmanski.immutables.fluent;
 
-import com.stadlerrail.diag.dias.diasexport.main.collection.IList;
-import com.stadlerrail.diag.dias.diasexport.main.collection.IMap;
-import com.stadlerrail.diag.dias.diasexport.main.collection.ISet;
-import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.enums.ImmutableEnumMap;
 import com.stadlerrail.diag.dias.servicestate.enums.Equalable;
+import de.ochmanski.immutables.IList;
+import de.ochmanski.immutables.IMap;
+import de.ochmanski.immutables.ISet;
+import de.ochmanski.immutables.immutable.enums.ImmutableEnumMap;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -15,8 +15,8 @@ import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 @Value
 @UnmodifiableView

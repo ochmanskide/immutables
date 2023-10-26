@@ -1,6 +1,6 @@
 package de.ochmanski.immutables.immutable;
 
-import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.enums.ImmutableEnumSet;
+import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -11,8 +11,8 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 public interface ImmutableCollectors
 {
 

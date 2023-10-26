@@ -1,15 +1,16 @@
 package de.ochmanski.immutables;
 
-import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.ImmutableSet;
+import de.ochmanski.immutables.immutable.ImmutableSet;
 import org.jetbrains.annotations.*;
 
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-public interface ISet<E>
+public interface ISet<E> extends ICollection<E>
 {
 
   /**
@@ -126,5 +127,15 @@ public interface ISet<E>
   {
     return stream().findAny();
   }
+
+  @NotNull
+  @Contract(value = " -> new", pure = true)
+  default Class<@NotNull E> getComponentType()
+  {
+    return ICollection.<@NotNull E>getComponentType(this);
+  }
+
+  @Contract(pure = true)
+  void forEach(@NotNull final Consumer<? super @NotNull E> consumer);
 
 }

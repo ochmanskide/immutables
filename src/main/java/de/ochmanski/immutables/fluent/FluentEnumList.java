@@ -1,7 +1,7 @@
 package de.ochmanski.immutables.fluent;
 
-import com.stadlerrail.diag.dias.diasexport.main.collection.IList;
-import com.stadlerrail.diag.dias.diasexport.main.collection.immutable.ImmutableList;
+import de.ochmanski.immutables.IList;
+import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +16,8 @@ import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.RAWTYPES;
-import static com.stadlerrail.diag.dias.servicestate.property.Constants.Warning.UNCHECKED;
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 /**
  * Immutable wrapper of <pre>{@code java.util.EnumList<K,V>}</pre>
  * <p>This Read-Only implementation of <pre>{@code List<>}</pre> interface

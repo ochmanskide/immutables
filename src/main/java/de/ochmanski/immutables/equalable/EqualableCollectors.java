@@ -59,21 +59,9 @@ public interface EqualableCollectors
   static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
   {
     return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
-        .supplier(HashSet::new)
-        .accumulator(Set::add)
-        .combiner((left, right) ->
-        {
-          if(left.size() < right.size())
-          {
-            right.addAll(left);
-            return right;
-          }
-          else
-          {
-            left.addAll(right);
-            return left;
-          }
-        })
+      .supplier(HashSet::new)
+      .accumulator(Set::add)
+      .combiner(EqualableCollectors::combiner)
         .characteristics(CH_UNORDERED_ID)
         .build();
   }
@@ -95,27 +83,32 @@ public interface EqualableCollectors
   @NotNull
   @Contract(value = " _ -> new", pure = true)
   static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSet<@NotNull T>> toSet(
-      @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
   {
     return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSet<@NotNull T>>builder()
-        .supplier(HashSet::new)
-        .accumulator(Set::add)
-        .combiner((left, right) ->
-        {
-          if(left.size() < right.size())
-          {
-            right.addAll(left);
-            return right;
-          }
-          else
-          {
-            left.addAll(right);
-            return left;
-          }
-        })
-        .finisher(set -> EqualableSet.of(set, constructor))
-        .characteristics(CH_UNORDERED_NOID)
-        .build();
+      .supplier(HashSet::new)
+      .accumulator(Set::add)
+      .combiner(EqualableCollectors::combiner)
+      .finisher(set -> EqualableSet.of(set, constructor))
+      .characteristics(CH_UNORDERED_NOID)
+      .build();
+  }
+
+  @NotNull
+  private static <T extends @NotNull Equalable<@NotNull T>> HashSet<@NotNull T> combiner(
+    @NotNull final HashSet<@NotNull T> left,
+    @NotNull final HashSet<@NotNull T> right)
+  {
+    if(left.size() < right.size())
+    {
+      right.addAll(left);
+      return right;
+    }
+    else
+    {
+      left.addAll(right);
+      return left;
+    }
   }
 
   @NotNull
@@ -127,22 +120,27 @@ public interface EqualableCollectors
     return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>>builder()
       .supplier(ArrayList::new)
       .accumulator(List::add)
-      .combiner((left, right) ->
-      {
-        if(left.size() < right.size())
-        {
-          right.addAll(left);
-          return right;
-        }
-        else
-        {
-          left.addAll(right);
-          return left;
-        }
-      })
+      .combiner(EqualableCollectors::combiner)
       .finisher(set -> EqualableList.of(set, constructor))
-        .characteristics(CH_UNORDERED_NOID)
-        .build();
+      .characteristics(CH_UNORDERED_NOID)
+      .build();
+  }
+
+  @NotNull
+  private static <T extends @NotNull Equalable<@NotNull T>> ArrayList<@NotNull T> combiner(
+    @NotNull final ArrayList<@NotNull T> left,
+    @NotNull final ArrayList<@NotNull T> right)
+  {
+    if(left.size() < right.size())
+    {
+      right.addAll(left);
+      return right;
+    }
+    else
+    {
+      left.addAll(right);
+      return left;
+    }
   }
 
   @NotNull

@@ -33,7 +33,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultConstructor();
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultConstructor();
 
   @NotNull
   @Contract(value = "-> new", pure = true)
@@ -210,7 +210,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Contract(value = " -> new", pure = true)
   public E @NotNull [] toArray()
   {
-    return list.toArray(getConstructor().apply(size()));
+    return list.toArray(getKey().apply(size()));
   }
 
   // Positional Access Operations
@@ -268,7 +268,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
     @NotNull final Collection<? extends @NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableList.<@NotNull S>builder().list(List.copyOf(collection)).constructor(constructor).build();
+    return ImmutableList.<@NotNull S>builder().list(List.copyOf(collection)).key(constructor).build();
   }
 
 }

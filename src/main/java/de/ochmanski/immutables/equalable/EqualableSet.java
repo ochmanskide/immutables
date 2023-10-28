@@ -343,7 +343,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public EqualableList<@NotNull E> toList() {
-    return EqualableList.<@NotNull E>of(set, getKey());
+    return EqualableList.<@NotNull E>of(this); //unwanted recursion
   }
 
 }

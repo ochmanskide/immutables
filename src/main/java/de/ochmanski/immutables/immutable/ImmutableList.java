@@ -6,10 +6,7 @@ import lombok.*;
 import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
@@ -135,7 +132,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S> ImmutableList<@NotNull S> of(
-    @NotNull final Collection<? extends @NotNull S> collection,
+    @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     final List<@NotNull S> checkedList = Collections.checkedList(List.copyOf(collection), getComponentTypeFromConstructor(constructor));
@@ -310,12 +307,28 @@ public class ImmutableList<E> implements IList<@NotNull E>
     return stream().findFirst();
   }
 
-  @Override
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S> ImmutableList<? extends @NotNull S> of(@NotNull final ImmutableSet<@NotNull S> set) {
+    return set.toList();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S> ImmutableList<? extends @NotNull S> of(@NotNull final Set<@NotNull S> set) {
+    return ImmutableList.<@NotNull S>builder().list(set.toList()).key(set.getKey()).build();
+  }
+
+  @NotNull
+  @Override
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableSet<@NotNull E> toSet() {
-    return ImmutableSet.copyOf(list, getKey());
+    return ImmutableSet.of(this);
   }
 }

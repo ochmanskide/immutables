@@ -385,6 +385,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @Contract(value = " -> new", pure = true)
   public FluentEnumList<@NotNull E> toList() {
     return FluentEnumList.of(this);
+    unwanted recursion;
   }
 
 }

@@ -293,6 +293,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableList<@NotNull E> toList() {
-    return ImmutableList.<@NotNull E>copyOf(set, getKey());
+    return ImmutableList.<@NotNull E>of(this);
+    unwanted recursion
   }
 }

@@ -3,6 +3,7 @@ package de.ochmanski.immutables.immutable.enums;
 import de.ochmanski.immutables.ICollection;
 import de.ochmanski.immutables.IList;
 import de.ochmanski.immutables.immutable.ImmutableList;
+import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -195,13 +196,13 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
-    @NotNull final Collection<@NotNull S> keySet,
+    @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    if (keySet.isEmpty()) {
+    if (collection.isEmpty()) {
       return ImmutableEnumList.<@NotNull S>ofGenerator(constructor);
     }
-    final ImmutableList<@NotNull S> immutableList = ImmutableList.<@NotNull S>of(keySet, constructor);
+    final ImmutableList<@NotNull S> immutableList = ImmutableList.<@NotNull S>of(collection, constructor);
     return ImmutableEnumList.<@NotNull S>of(immutableList);
   }
 
@@ -225,14 +226,25 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
     return ImmutableEnumList.<@NotNull S>builder().list(immutableList).key(immutableList.getKey()).build();
   }
 
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> ofAll(
+    @NotNull final IntFunction<@NotNull S @NotNull []> key)
+  {
+    return ImmutableEnumList.<@NotNull S>allOf(key);
+  }
+
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
-    @NotNull final ImmutableEnumSet<@NotNull S> keySet) {
-    return ImmutableEnumList.<@NotNull S>of(keySet.toList().getList());
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> allOf(
+    @NotNull final IntFunction<@NotNull S @NotNull []> key) {
+    final Class<@NotNull S> componentType = getComponentTypeFromConstructor(key);
+    return ImmutableEnumList.<@NotNull S>ofEnumSet(EnumSet.<@NotNull S>allOf(componentType), key);
   }
 
   @NotNull
@@ -240,20 +252,8 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> noneOf(
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableEnumList.<@NotNull S>ofGenerator(constructor);
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> ofArray(
-    @NotNull final S @NotNull [] array,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return ImmutableEnumList.<@NotNull S>of(array, constructor);
   }
   //</editor-fold>
 
@@ -408,17 +408,6 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   }
 
   @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> allOf(
-    @NotNull final IntFunction<@NotNull S @NotNull []> key)
-  {
-    final Class<@NotNull S> componentTypeE = getComponentTypeFromConstructor(key);
-    return ImmutableEnumList.<@NotNull S>ofEnumSet(EnumSet.<@NotNull S>allOf(componentTypeE), key);
-  }
-
-  @NotNull
   @Override
   @Unmodifiable
   @UnmodifiableView
@@ -438,12 +427,29 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   }
 
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
+    @NotNull final ImmutableEnumSet<@NotNull S> set) {
+    return set.toList();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
+    @NotNull final ImmutableSet<@NotNull S> set) {
+    return ImmutableEnumList.<@NotNull S>builder().list(set.toList()).key(set.getKey()).build();
+  }
+
+  @NotNull
   @Override
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableEnumSet<@NotNull E> toSet() {
-    return ImmutableEnumSet.copyOf(this);
+    return ImmutableEnumSet.of(this);
   }
-
 }

@@ -178,7 +178,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return FluentEnumList.<@NotNull S>builder()
-      .list(ImmutableEnumList.<@NotNull S>copyOf(collection, constructor))
+      .list(ImmutableEnumList.<@NotNull S>of(collection, constructor))
       .key(constructor)
       .build();
   }
@@ -376,7 +376,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @Contract(value = "_ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
     @NotNull final FluentEnumSet<@NotNull S> set) {
-    return FluentEnumList.<@NotNull S>of(set.getSet());
+    return set.toList();
   }
 
   @NotNull

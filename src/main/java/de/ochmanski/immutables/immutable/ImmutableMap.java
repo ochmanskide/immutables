@@ -157,7 +157,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   @Contract(value = " -> new", pure = true)
   public ImmutableSet<@NotNull K> keySet()
   {
-    return ImmutableSet.copyOf(toMap().keySet(), getKey());
+    return ImmutableSet.of(toMap().keySet(), getKey());
   }
 
   @NotNull
@@ -166,7 +166,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   @Contract(value = " -> new", pure = true)
   public ImmutableList<@NotNull V> values()
   {
-    return ImmutableList.copyOf(toMap().values(), getValue());
+    return ImmutableList.of(toMap().values(), getValue());
   }
 
   @NotNull

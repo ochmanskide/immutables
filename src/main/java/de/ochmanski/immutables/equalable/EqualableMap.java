@@ -138,7 +138,7 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends Eq
   @Contract(value = " -> new", pure = true)
   public ISet<@NotNull K> keySet()
   {
-    return ISet.copyOf(toMap().keySet(), getGenerator());
+    return ISet.of(toMap().keySet(), getGenerator());
   }
 
   @Override
@@ -147,7 +147,7 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends Eq
   @Contract(value = " -> new", pure = true)
   public IList<@NotNull V> values()
   {
-    return IList.copyOf(toMap().values());
+    return IList.of(toMap().values());
   }
 
   @Override

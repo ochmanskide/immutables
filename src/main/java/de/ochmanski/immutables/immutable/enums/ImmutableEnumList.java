@@ -306,24 +306,28 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
     return list.toArray();
   }
 
+  /**
+   * Returns the element at the specified position in this list.
+   *
+   * @param index index of the element to return
+   * @return the element at the specified position in this list
+   * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index >= size()})
+   */
   @NotNull
-  @Contract(value = "-> new", pure = true)
-  public E @NotNull [] newArrayNative()
-  {
-    return ICollection.zeroLengthArray(getKey());
+  @Override
+  public E get(final int index) {
+    return list.get(index);
   }
 
   @Override
   @Contract(pure = true)
-  public void forEach(@NotNull final Consumer<? super @NotNull E> consumer)
-  {
+  public void forEach(@NotNull final Consumer<? super @NotNull E> consumer) {
     list.forEach(consumer);
   }
 
   @Override
   @Contract(pure = true)
-  public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer)
-  {
+  public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer) {
     list.forEachRemaining(consumer);
   }
 

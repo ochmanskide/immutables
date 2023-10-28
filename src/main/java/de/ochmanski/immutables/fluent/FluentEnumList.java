@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
@@ -46,7 +47,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultConstructor();
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultConstructor();
 
   /**
    * This method is not supported.
@@ -84,7 +85,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   public static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> ofGenerator(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return FluentEnumList.<@NotNull S>builder().list(ImmutableList.ofGenerator(constructor)).constructor(constructor)
+    return FluentEnumList.<@NotNull S>builder().list(ImmutableList.ofGenerator(constructor)).key(constructor)
       .build();
   }
 
@@ -95,7 +96,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return FluentEnumList.<@NotNull S>builder().list(ImmutableList.of(s1, constructor)).constructor(constructor)
+    return FluentEnumList.<@NotNull S>builder().list(ImmutableList.of(s1, constructor)).key(constructor)
       .build();
   }
 
@@ -107,7 +108,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
     @NotNull final S s2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return FluentEnumList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, constructor)).constructor(constructor)
+    return FluentEnumList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, constructor)).key(constructor)
       .build();
   }
 
@@ -120,7 +121,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
     @NotNull final S s3,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return FluentEnumList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, s3, constructor)).constructor(constructor)
+    return FluentEnumList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, s3, constructor)).key(constructor)
       .build();
   }
 
@@ -135,7 +136,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return FluentEnumList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, s3, s4, constructor))
-      .constructor(constructor).build();
+      .key(constructor).build();
   }
 
   @NotNull
@@ -164,7 +165,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return FluentEnumList.<@NotNull S>builder().list(ImmutableList.copyOf(collection, constructor))
-      .constructor(constructor).build();
+      .key(constructor).build();
   }
 
   /**
@@ -287,6 +288,18 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   public Iterator<@NotNull E> iterator()
   {
     return unwrap().iterator();
+  }
+
+  @Override
+  @Contract(pure = true)
+  public void forEach(@NotNull final Consumer<? super @NotNull E> consumer) {
+    list.forEach(consumer);
+  }
+
+  @Override
+  @Contract(pure = true)
+  public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer) {
+    list.forEachRemaining(consumer);
   }
 
   /**

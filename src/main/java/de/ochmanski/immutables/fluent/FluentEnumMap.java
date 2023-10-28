@@ -1,10 +1,11 @@
 package de.ochmanski.immutables.fluent;
 
-import com.stadlerrail.diag.dias.servicestate.enums.Equalable;
+
 import de.ochmanski.immutables.ICollection;
 import de.ochmanski.immutables.IList;
 import de.ochmanski.immutables.IMap;
 import de.ochmanski.immutables.ISet;
+import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumMap;
 import lombok.*;
 import org.jetbrains.annotations.*;

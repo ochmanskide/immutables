@@ -101,17 +101,6 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings(UNCHECKED)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> Class<? extends @NotNull Fluent<@NotNull S>> getComponentTypeFromConstructor(
-    final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return (Class<? extends @NotNull Fluent<S>>)ImmutableEnumSet.getComponentTypeFromConstructor(constructor);
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> of(
     @NotNull final S s1,

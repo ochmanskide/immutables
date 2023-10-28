@@ -3,7 +3,6 @@ package de.ochmanski.immutables.immutable.enums;
 import de.ochmanski.immutables.ICollection;
 import de.ochmanski.immutables.IList;
 import de.ochmanski.immutables.immutable.ImmutableList;
-import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -106,11 +105,10 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings(UNCHECKED)
   public static <S extends @NotNull Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
     final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
+    return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
   }
 
   @NotNull
@@ -370,7 +368,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   {
     if(isEmpty())
     {
-      return ImmutableList.noneOf(getComponentTypeFromConstructor(getKey()));
+      return ImmutableList.ofGenerator(getComponentTypeFromKey());
     }
     return ImmutableList.<@NotNull E>copyOf(getList().unwrap());
   }

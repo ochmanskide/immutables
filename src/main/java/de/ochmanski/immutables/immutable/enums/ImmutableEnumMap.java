@@ -1,6 +1,7 @@
 package de.ochmanski.immutables.immutable.enums;
 
 import com.stadlerrail.diag.dias.servicestate.enums.Equalable;
+import de.ochmanski.immutables.ICollection;
 import de.ochmanski.immutables.IMap;
 import de.ochmanski.immutables.immutable.ImmutableCollectors;
 import de.ochmanski.immutables.immutable.ImmutableList;
@@ -322,6 +323,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public EnumMap<K, @NotNull V> toMap()
@@ -334,12 +336,13 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   private static <S extends Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
     final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
+    return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
   }
 
 }

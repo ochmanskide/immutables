@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.immutable;
 
+import de.ochmanski.immutables.ICollection;
 import de.ochmanski.immutables.IMap;
 import de.ochmanski.immutables.ISet;
 import lombok.*;
@@ -282,7 +283,16 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
     @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableSet.<@NotNull S>builder().set(Set.copyOf(collection)).key(constructor).build();
+    final Set<@NotNull S> checkedSet = Collections.checkedSet(Set.copyOf(collection), getComponentTypeFromConstructor(constructor));
+    return ImmutableSet.<@NotNull S>builder().set(checkedSet).key(constructor).build();
   }
 
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
+  }
 }

@@ -1,5 +1,66 @@
 # immutables - Strongly typed immutable Java Collections
 
+## 1. Highlights
+
+### 1.1. No more `UnsupportedOperationException` at runtime.
+
+Similarly to `java.util.ImmutableCollections.java`, the following methods have been removed:
+
+```java
+  // all mutating methods throw UnsupportedOperationException
+@Override public boolean add(E e){throw uoe();}
+@Override public boolean addAll(Collection<?extends E> c){throw uoe();}
+@Override public void clear(){throw uoe();}
+@Override public boolean remove(Object o){throw uoe();}
+@Override public boolean removeAll(Collection<?> c){throw uoe();}
+@Override public boolean removeIf(Predicate<? super E>filter){throw uoe();}
+@Override public boolean retainAll(Collection<?> c){throw uoe();}
+```
+
+The key difference is, that these methods cannot be invoked at all. They are not available at compile time.  
+They have been removed from this API permanently.  
+Therefore, you cannot get an `UnsupportedOperationException` anymore.  
+The code will not compile, if you try to perform an illegal operation.
+
+### 1.2. All collections are checked at construction time.
+
+In order to remove known `Type Erasure` limitation, all collections types are now checked.    
+Similarly to `java.util.ImmutableCollections.java`, all collections have been enriched with the type,  
+and the type is always available at runtime.
+
+Example:
+
+```java
+  IList<DayOfWeek> list=ImmutableList.ofGenerator(DayOfWeek[]::new);
+```
+
+It means that it is possible to call `toArray()` method, and it will return the true generic type, instead of
+`Object[]`.
+
+Example:
+
+```java
+  DayOfWeek[]array=list.toArray();
+```
+
+as you see, the `toArray()`, method no longer accepts `IntFunction<T>` as an argument.  
+The method `public T[] toArray(IntFunction<T> generator)` has been removed from this API permanently.  
+The type is checked at construction time, and it is mandatory.  
+You will not be able to create a collection without specifying a type, even if the collection,
+you are trying to create, is empty.
+
+### 1.3. Bridge methods
+
+In order to provide better portability, the collections contain the bridge methods, which return a
+`@UnmodifiableView` of the backed collection.  
+The collection stays immutable, and the contract is not violated.
+
+Example:
+
+```java
+  IList<DayOfWeek> list=ImmutableList.ofGenerator(DayOfWeek[]::new);
+  List<DayOfWeek> backwardCompatible=list.unwrap();
+```
 ## Features
 
 * keyType is redundant because you get the type directly from the constructor, so remove keyType

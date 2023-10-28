@@ -1,6 +1,7 @@
 package de.ochmanski.immutables.fluent;
 
 import com.stadlerrail.diag.dias.servicestate.enums.Equalable;
+import de.ochmanski.immutables.ICollection;
 import de.ochmanski.immutables.IList;
 import de.ochmanski.immutables.IMap;
 import de.ochmanski.immutables.ISet;
@@ -318,6 +319,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
 
   @Override
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public IList<@NotNull V> values()
@@ -327,6 +329,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
 
   @Override
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public EnumMap<@NotNull K, @NotNull V> toMap()
@@ -335,13 +338,13 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings(UNCHECKED)
   private static <S extends Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
     final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
+    return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
   }
 
 }

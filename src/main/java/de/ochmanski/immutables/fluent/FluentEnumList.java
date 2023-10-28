@@ -90,16 +90,6 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
 
   @NotNull
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings(UNCHECKED)
-  private static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
-    final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return ImmutableList.getComponentTypeFromConstructor(constructor);
-  }
-
-  @NotNull
-  @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
   public static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
     @NotNull final S s1,

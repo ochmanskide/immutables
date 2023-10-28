@@ -100,16 +100,6 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
     return ImmutableEnumSet.<@NotNull S>of(EnumSet.<@NotNull S>noneOf(componentTypeE), constructor);
   }
 
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings(UNCHECKED)
-  public static <S extends @NotNull Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
-    final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
-  }
 
   @NotNull
   @Unmodifiable

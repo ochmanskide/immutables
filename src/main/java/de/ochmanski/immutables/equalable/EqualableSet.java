@@ -96,17 +96,6 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings(UNCHECKED)
-  public static <S extends @NotNull Equalable<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
-    final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
   public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final S s1,

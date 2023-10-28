@@ -1,11 +1,13 @@
 package de.ochmanski.immutables.immutable;
 
+import de.ochmanski.immutables.ICollection;
 import de.ochmanski.immutables.IList;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -97,16 +99,6 @@ public class ImmutableList<E> implements IList<@NotNull E>
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return ImmutableList.<@NotNull S>of(List.of(e1, e2, e3, e4), constructor);
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings(UNCHECKED)
-  public static <S> Class<@NotNull S> getComponentTypeFromConstructor(
-    final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return (Class<@NotNull S>)constructor.apply(0).getClass().getComponentType();
   }
 
   @NotNull
@@ -294,7 +286,16 @@ public class ImmutableList<E> implements IList<@NotNull E>
     @NotNull final Collection<? extends @NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableList.<@NotNull S>builder().list(List.copyOf(collection)).key(constructor).build();
+    final List<@NotNull S> checkedList = Collections.checkedList(List.copyOf(collection), getComponentTypeFromConstructor(constructor));
+    return ImmutableList.<@NotNull S>builder().list(checkedList).key(constructor).build();
   }
 
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
+  }
 }

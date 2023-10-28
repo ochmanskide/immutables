@@ -82,16 +82,6 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
 
   @NotNull
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings(UNCHECKED)
-  private static <S extends @NotNull Equalable<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
-    final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return ImmutableList.getComponentTypeFromConstructor(constructor);
-  }
-
-  @NotNull
-  @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
   static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
@@ -288,7 +278,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @Contract(pure = true)
   public Iterator<@NotNull E> iterator()
   {
-    return unwrap().iterator();
+    return list.iterator();
   }
 
   /**
@@ -305,7 +295,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @Contract(value = " -> new", pure = true)
   public Stream<@NotNull E> stream()
   {
-    return unwrap().stream();
+    return list.stream();
   }
 
   @Override
@@ -322,6 +312,6 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @Contract(pure = true)
   public Optional<@Nullable E> findFirst()
   {
-    return stream().findFirst();
+    return list.findFirst();
   }
 }

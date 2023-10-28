@@ -48,9 +48,17 @@ public interface ICollection<E>
   @NotNull
   @Unmodifiable
   @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  default Class<@NotNull E> getComponentTypeFromKey() {
+    return getComponentTypeFromConstructor(getKey());
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings(UNCHECKED)
-  private static <S> Class<@NotNull S> getComponentTypeFromConstructor(
+  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return (Class<@NotNull S>)constructor.getClass().getComponentType();

@@ -175,16 +175,6 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  public static <S extends @NotNull Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
-  {
-    return (IntFunction)Enum @NotNull []::new;
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
     @NotNull final S @NotNull [] array,

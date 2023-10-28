@@ -232,6 +232,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
    * @return an iterator over the elements in this set
    */
   @NotNull
+  @Override
   @Contract(pure = true)
   public Iterator<@NotNull E> iterator()
   {
@@ -247,6 +248,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
    * @since 1.8
    */
   @NotNull
+  @Override
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public Stream<@NotNull E> stream()
@@ -255,6 +257,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   }
 
   @NotNull
+  @Override
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public Set<@NotNull E> unwrap()

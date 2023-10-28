@@ -121,7 +121,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableEnumList.<@NotNull S>of(ImmutableList.<@NotNull S>of(s1), constructor);
+    return ImmutableEnumList.<@NotNull S>of(ImmutableList.<@NotNull S>of(s1, constructor));
   }
 
   @NotNull
@@ -133,7 +133,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
     @NotNull final S s2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableEnumList.<@NotNull S>of(ImmutableList.<@NotNull S>of(s1, s2), constructor);
+    return ImmutableEnumList.<@NotNull S>of(ImmutableList.<@NotNull S>of(s1, s2, constructor));
   }
 
   @NotNull
@@ -146,7 +146,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
     @NotNull final S s3,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableEnumList.<@NotNull S>of(ImmutableList.<@NotNull S>of(s1, s2, s3), constructor);
+    return ImmutableEnumList.<@NotNull S>of(ImmutableList.<@NotNull S>of(s1, s2, s3, constructor));
   }
 
   @NotNull
@@ -160,7 +160,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
     @NotNull final S s4,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableEnumList.<@NotNull S>of(ImmutableList.<@NotNull S>of(s1, s2, s3, s4), constructor);
+    return ImmutableEnumList.<@NotNull S>of(ImmutableList.<@NotNull S>of(s1, s2, s3, s4, constructor));
   }
 
   @NotNull
@@ -192,8 +192,8 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
     @NotNull final S @NotNull [] array,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    final ImmutableList<@NotNull S> set = ImmutableList.copyOf(Arrays.asList(array));
-    return ImmutableEnumList.<@NotNull S>of(set, constructor);
+    final ImmutableList<@NotNull S> set = ImmutableList.copyOf(Arrays.asList(array), constructor);
+    return ImmutableEnumList.<@NotNull S>of(set);
   }
 
   @NotNull
@@ -272,7 +272,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ImmutableEnumList<? extends @NotNull E> deepClone()
+  public ImmutableEnumList<@NotNull E> deepClone()
   {
     return toBuilder().key(key).build();
   }

@@ -6,7 +6,10 @@ import lombok.*;
 import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
@@ -313,14 +316,6 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Contract(value = "_ -> new", pure = true)
   public static <S> ImmutableList<? extends @NotNull S> of(@NotNull final ImmutableSet<@NotNull S> set) {
     return set.toList();
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  public static <S> ImmutableList<? extends @NotNull S> of(@NotNull final Set<@NotNull S> set) {
-    return ImmutableList.<@NotNull S>builder().list(set.toList()).key(set.getKey()).build();
   }
 
   @NotNull

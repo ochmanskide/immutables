@@ -71,6 +71,8 @@ public interface IList<E> extends ICollection<E>
    * @return a clone of this {@code ArrayList} instance
    */
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   IList<@NotNull E> deepClone();
 
@@ -114,16 +116,18 @@ public interface IList<E> extends ICollection<E>
   E get(final int index);
 
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   Stream<@NotNull E> stream();
 
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   List<@NotNull E> unwrap();
 
   @NotNull
-  @Unmodifiable
-  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   default Optional<@Nullable E> findFirst()
   {
@@ -151,4 +155,10 @@ public interface IList<E> extends ICollection<E>
 
   @Contract(pure = true)
   void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer);
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  ISet<@NotNull E> toSet();
 }

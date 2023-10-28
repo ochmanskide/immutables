@@ -57,6 +57,8 @@ public interface ISet<E> extends ICollection<E>
    * @return a clone of this {@code ArraySet} instance
    */
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   ISet<? extends @NotNull E> deepClone();
 
@@ -113,8 +115,6 @@ public interface ISet<E> extends ICollection<E>
   Set<@NotNull E> unwrap();
 
   @NotNull
-  @Unmodifiable
-  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   default Optional<@Nullable E> findFirst()
   {
@@ -142,4 +142,10 @@ public interface ISet<E> extends ICollection<E>
 
   @Contract(pure = true)
   void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer);
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  IList<@NotNull E> toList();
 }

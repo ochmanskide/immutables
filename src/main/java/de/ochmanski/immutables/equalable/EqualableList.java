@@ -127,7 +127,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
   private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
-    return (IntFunction)Enum @NotNull []::new;
+    return (IntFunction) Equalable @NotNull []::new;
   }
 
   @NotNull
@@ -330,5 +330,14 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   private static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> of(
     @NotNull final ImmutableList<@NotNull S> immutableList) {
     return EqualableList.<@NotNull S>builder().list(immutableList).key(immutableList.getKey()).build();
+  }
+
+  @Override
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public EqualableSet<@NotNull E> toSet() {
+    return EqualableSet.copyOf(list, getKey());
   }
 }

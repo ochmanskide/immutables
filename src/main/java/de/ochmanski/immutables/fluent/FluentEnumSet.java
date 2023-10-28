@@ -55,7 +55,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @Contract(value = " -> new", pure = true)
   private static <S> IntFunction<@NotNull S @NotNull []> defaultKey()
   {
-    return (IntFunction)Enum @NotNull []::new;
+    return (IntFunction) Fluent @NotNull []::new;
   }
 
   /**
@@ -367,6 +367,24 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   {
     final ImmutableEnumSet<@NotNull S> immutableSet = ImmutableEnumSet.<@NotNull S>ofEnumSet(enumSet, constructor);
     return FluentEnumSet.<@NotNull S>of(immutableSet);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> of(
+    @NotNull final FluentEnumList<@NotNull S> enumList) {
+    return FluentEnumSet.<@NotNull S>ofCollection(enumList.unwrap(), enumList.getKey());
+  }
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public FluentEnumList<@NotNull E> toList() {
+    return FluentEnumList.of(this);
   }
 
 }

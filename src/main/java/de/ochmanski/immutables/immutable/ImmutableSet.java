@@ -209,7 +209,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
-    return set.toArray(getKey().apply(size()));
+    return set.toArray(getKey());
   }
 
   @Override
@@ -296,5 +296,14 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
+  }
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public ImmutableList<@NotNull E> toList() {
+    return ImmutableList.<@NotNull E>copyOf(set, getKey());
   }
 }

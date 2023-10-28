@@ -36,14 +36,13 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements ISet<@NotNull E>
 {
 
-  @Getter(AccessLevel.PRIVATE)
   @Unmodifiable
   @UnmodifiableView
   @NonNull
   @NotNull("Given set cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given set cannot be null.")
   @Builder.Default
-  ImmutableSet<@NonNull @NotNull E> set = ImmutableSet.empty();
+  ImmutableSet<@NonNull @NotNull E> set = ImmutableSet.<@NotNull E>empty();
 
   @NonNull
   @NotNull("Given keyType cannot be null.")
@@ -247,6 +246,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
    * @return a clone of this {@code ArraySet} instance
    */
   @NotNull
+  @Override
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
@@ -408,4 +408,24 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
   }
+
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> copyOf(
+    @NotNull final ImmutableEnumList<@NotNull S> immutableList) {
+    return ImmutableEnumSet.<@NotNull S>of(immutableList.getList().toSet());
+  }
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public ImmutableEnumList<@NotNull E> toList() {
+    return ImmutableEnumList.ofEnumSet(unwrap(), getKey());
+  }
+
 }

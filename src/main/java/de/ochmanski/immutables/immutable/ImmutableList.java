@@ -300,4 +300,13 @@ public class ImmutableList<E> implements IList<@NotNull E>
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
   }
+
+  @Override
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public ImmutableSet<@NotNull E> toSet() {
+    return ImmutableSet.copyOf(list, getKey());
+  }
 }

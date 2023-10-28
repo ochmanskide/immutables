@@ -50,7 +50,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
   public static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey()
   {
-    return (IntFunction)Object @NotNull []::new;
+    return (IntFunction) Equalable @NotNull []::new;
   }
 
   /**
@@ -346,6 +346,15 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     @NotNull final ImmutableSet<@NotNull S> immutableSet)
   {
     return EqualableSet.<@NotNull S>builder().set(immutableSet).key(immutableSet.getKey()).build();
+  }
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public EqualableList<@NotNull E> toList() {
+    return EqualableList.<@NotNull E>of(set, getKey());
   }
 
 }

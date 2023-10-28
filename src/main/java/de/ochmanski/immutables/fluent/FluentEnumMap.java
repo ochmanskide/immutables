@@ -53,7 +53,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @Contract(value = " -> new", pure = true)
   private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey()
   {
-    return (IntFunction)Enum @NotNull []::new;
+    return (IntFunction) Fluent @NotNull []::new;
   }
 
   @NotNull

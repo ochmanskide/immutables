@@ -10,16 +10,8 @@ import java.util.function.IntFunction;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
-public interface ICollection<E>
+public interface ICollection<E> extends Checked<@NotNull E>
 {
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  default Class<@NotNull E> getComponentTypeFromKey() {
-    return getComponentTypeFromConstructor(getKey());
-  }
 
   @NotNull
   @Unmodifiable
@@ -27,12 +19,8 @@ public interface ICollection<E>
   @Contract(value = "_ -> new", pure = true)
   static <E> Class<@NotNull E> getComponentType(@NotNull final ICollection<@NotNull E> collection)
   {
-    return ICollection.getComponentTypeFromConstructor(collection.getKey());
+    return getComponentTypeFromConstructor(collection.getKey());
   }
-
-  @NotNull
-  @Contract(pure = true)
-  IntFunction<@NotNull E @NotNull []> getKey();
 
   @NotNull
   @Unmodifiable
@@ -46,21 +34,20 @@ public interface ICollection<E>
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @SuppressWarnings(UNCHECKED)
-  @Contract(value = "_ -> new", pure = true)
-  static <T> T @NotNull [] zeroLengthArray(@NotNull final Class<@NotNull T> type)
+  @Contract(value = " _ -> new", pure = true)
+  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return (@NotNull T @NotNull [])Array.newInstance(type, 0);
+    return Checked.getComponentTypeFromConstructor(constructor);
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
   @SuppressWarnings(UNCHECKED)
-  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  @Contract(value = "_ -> new", pure = true)
+  static <T> T @NotNull [] zeroLengthArray(@NotNull final Class<@NotNull T> type)
   {
-    return (Class<@NotNull S>)constructor.getClass().getComponentType();
+    return (@NotNull T @NotNull []) Array.newInstance(type, 0);
   }
 }

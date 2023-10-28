@@ -34,7 +34,6 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements IList<@NotNull E>
 {
 
-  @Getter(AccessLevel.PRIVATE)
   @Unmodifiable
   @UnmodifiableView
   @NonNull
@@ -438,6 +437,24 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> copyOf(
+    @NotNull final ImmutableEnumSet<@NotNull S> keySet) {
+    return ImmutableEnumList.<@NotNull S>of(keySet.toList().getList());
+  }
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public ImmutableEnumSet<@NotNull E> toSet() {
+    return ImmutableEnumSet.copyOf(this);
   }
 
 }

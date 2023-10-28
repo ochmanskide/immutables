@@ -2,6 +2,7 @@ package de.ochmanski.immutables.fluent;
 
 import de.ochmanski.immutables.IList;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumList;
+import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -38,7 +39,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull("Given list cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given list cannot be null.")
   @Builder.Default
-  ImmutableEnumList<@NonNull @NotNull E> list = ImmutableEnumList.empty();
+  ImmutableEnumList<@NonNull @NotNull E> list = ImmutableEnumList.<@NonNull @NotNull E>empty();
 
   @NonNull
   @NotNull("Given keyType cannot be null.")
@@ -135,7 +136,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
   private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
   {
-    return (IntFunction)Enum @NotNull []::new;
+    return (IntFunction) Fluent @NotNull []::new;
   }
 
   @NotNull
@@ -333,9 +334,45 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  private static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
-    @NotNull final ImmutableEnumList<@NotNull S> immutableList) {
-    return FluentEnumList.builder().list(immutableList).key(immutableList.getKey()).build();
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final ImmutableEnumList<@NotNull S> set) {
+    return FluentEnumList.<@NotNull S>builder().list(set).key(set.getKey()).build();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> allOf(
+    @NotNull final IntFunction<@NotNull S @NotNull []> key) {
+    return FluentEnumList.<@NotNull S>of(ImmutableEnumSet.<@NotNull S>allOf(key));
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final FluentEnumSet<@NotNull S> set) {
+    return FluentEnumList.<@NotNull S>of(set.getSet());
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final ImmutableEnumSet<@NotNull S> set) {
+    return FluentEnumList.<@NotNull S>builder().list(set.toList()).key(set.getKey()).build();
+  }
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public FluentEnumSet<@NotNull E> toSet() {
+    return FluentEnumSet.of(this);
   }
 }

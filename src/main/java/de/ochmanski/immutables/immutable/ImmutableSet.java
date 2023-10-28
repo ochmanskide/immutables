@@ -110,17 +110,6 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S> ImmutableSet<@NotNull S> copyOf(
-    @NotNull final Collection<@NotNull S> values,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return ImmutableSet.of(values, constructor);
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_, _ -> new", pure = true)
   public static <K, V> ImmutableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
     @NotNull final Set<Map.@NotNull Entry<@NotNull K, @NotNull V>> entries,
     @NotNull final IntFunction<IMap.@NotNull Entry<@NotNull K, @NotNull V> @NotNull []> entry)

@@ -169,10 +169,17 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
     @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableList.<@NotNull S>builder()
-      .list(ImmutableList.copyOf(collection, constructor))
-      .key(constructor)
-      .build();
+    final ImmutableList<@NotNull S> list = ImmutableList.of(collection, constructor);
+    return EqualableList.<@NotNull S>of(list);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  private static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+    @NotNull final ImmutableList<@NotNull S> immutableList) {
+    return EqualableList.<@NotNull S>builder().list(immutableList).key(immutableList.getKey()).build();
   }
   //</editor-fold>
 
@@ -345,21 +352,12 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
     return list.findFirst();
   }
 
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  private static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> of(
-    @NotNull final ImmutableList<@NotNull S> immutableList) {
-    return EqualableList.<@NotNull S>builder().list(immutableList).key(immutableList.getKey()).build();
-  }
-
   @Override
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public EqualableSet<@NotNull E> toSet() {
-    return EqualableSet.copyOf(list, getKey());
+    return EqualableSet.of(list, getKey());
   }
 }

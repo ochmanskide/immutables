@@ -1,6 +1,6 @@
 package de.ochmanski.immutables.immutable;
 
-import de.ochmanski.immutables.ICollection;
+import de.ochmanski.immutables.Checked;
 import de.ochmanski.immutables.IList;
 import lombok.*;
 import org.jetbrains.annotations.*;
@@ -39,7 +39,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Builder.Default
   IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
 
-  //<editor-fold defaultstate="collapsed" desc="eager static initializers">
+  //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   @Contract(value = "-> new", pure = true)
@@ -64,7 +64,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   private static final ImmutableList EMPTY = ImmutableList.builder().build();
   //</editor-fold>
 
-  //<editor-fold defaultstate="collapsed" desc="static factory methods">
+  //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
@@ -124,10 +124,31 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S> ImmutableList<@NotNull S> copyOf(@NotNull final Collection<? extends @NotNull S> values,
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final S @NotNull [] array,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ImmutableList.<@NotNull S>of(List.of(array), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final Collection<? extends @NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableList.<@NotNull S>of(values, constructor);
+    final List<@NotNull S> checkedList = Collections.checkedList(List.copyOf(collection), getComponentTypeFromConstructor(constructor));
+    return ImmutableList.<@NotNull S>builder().list(checkedList).key(constructor).build();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return Checked.<@NotNull S>getComponentTypeFromConstructor(constructor);
   }
   //</editor-fold>
 
@@ -287,27 +308,6 @@ public class ImmutableList<E> implements IList<@NotNull E>
   public Optional<@Nullable E> findFirst()
   {
     return stream().findFirst();
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_, _ -> new", pure = true)
-  public static <S> ImmutableList<@NotNull S> of(
-    @NotNull final Collection<? extends @NotNull S> collection,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    final List<@NotNull S> checkedList = Collections.checkedList(List.copyOf(collection), getComponentTypeFromConstructor(constructor));
-    return ImmutableList.<@NotNull S>builder().list(checkedList).key(constructor).build();
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
   }
 
   @Override

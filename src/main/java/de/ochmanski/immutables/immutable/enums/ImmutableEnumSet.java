@@ -10,10 +10,10 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
@@ -169,7 +169,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
     @NotNull final S @NotNull [] array,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    final EnumSet<@NotNull S> set = EnumSet.copyOf(Arrays.asList(array));
+    final EnumSet<@NotNull S> set = EnumSet.copyOf(List.of(array));
     return ImmutableEnumSet.<@NotNull S>of(set, constructor);
   }
 

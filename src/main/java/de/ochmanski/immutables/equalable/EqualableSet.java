@@ -169,17 +169,6 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
-    @NotNull final Collection<@NotNull S> collection,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return EqualableSet.<@NotNull S>copyOf(collection, constructor);
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> noneOf(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
@@ -334,11 +323,11 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> copyOf(
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final Collection<@NotNull S> keySet,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    final ImmutableSet<@NotNull S> immutableSet = ImmutableSet.<@NotNull S>copyOf(keySet, constructor);
+    final ImmutableSet<@NotNull S> immutableSet = ImmutableSet.<@NotNull S>of(keySet, constructor);
     return EqualableSet.<@NotNull S>of(immutableSet);
   }
 

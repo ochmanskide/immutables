@@ -73,6 +73,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   private static final ImmutableEnumList EMPTY = ImmutableEnumList.builder().build();
   //</editor-fold>
 
+  //<editor-fold defaultstate="collapsed" desc="static factory methods">
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
@@ -167,16 +168,6 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  public static <S extends @NotNull Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
-  {
-    return (IntFunction)Enum @NotNull []::new;
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
     @NotNull final S @NotNull [] array,
@@ -217,6 +208,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   {
     return ImmutableEnumList.<@NotNull S>of(array, constructor);
   }
+  //</editor-fold>
 
   /**
    * Returns the number of elements in this set.

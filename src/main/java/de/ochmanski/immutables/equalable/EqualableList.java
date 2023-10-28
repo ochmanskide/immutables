@@ -65,6 +65,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   private static final EqualableList EMPTY = EqualableList.builder().build();
   //</editor-fold>
 
+  //<editor-fold defaultstate="collapsed" desc="static factory methods">
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
@@ -173,6 +174,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
       .key(constructor)
       .build();
   }
+  //</editor-fold>
 
   /**
    * Returns the number of elements in this list.

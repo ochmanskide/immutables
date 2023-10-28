@@ -64,6 +64,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   private static final ImmutableList EMPTY = ImmutableList.builder().build();
   //</editor-fold>
 
+  //<editor-fold defaultstate="collapsed" desc="static factory methods">
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
@@ -128,6 +129,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   {
     return ImmutableList.<@NotNull S>of(values, constructor);
   }
+  //</editor-fold>
 
   /**
    * Returns the number of elements in this list.

@@ -73,6 +73,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   private static final FluentEnumList EMPTY = FluentEnumList.builder().build();
   //</editor-fold>
 
+  //<editor-fold defaultstate="collapsed" desc="static factory methods">
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
@@ -106,7 +107,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> ofGenerator(
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> ofGenerator(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return FluentEnumList.<@NotNull S>of(ImmutableEnumList.ofGenerator(constructor));
@@ -115,7 +116,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
@@ -125,7 +126,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
@@ -136,7 +137,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
@@ -148,7 +149,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _ -> new", pure = true)
-  public static <S extends Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
@@ -181,6 +182,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
       .key(constructor)
       .build();
   }
+  //</editor-fold>
 
   /**
    * Returns the number of elements in this list.

@@ -155,8 +155,10 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
     @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableList.<@NotNull S>builder().list(ImmutableList.copyOf(collection, constructor))
-      .key(constructor).build();
+    return EqualableList.<@NotNull S>builder()
+      .list(ImmutableList.copyOf(collection, constructor))
+      .key(constructor)
+      .build();
   }
 
   /**

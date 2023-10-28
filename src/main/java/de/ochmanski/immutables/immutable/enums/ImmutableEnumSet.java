@@ -372,7 +372,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   {
     if(keySet.isEmpty())
     {
-      return ImmutableEnumSet.<@NotNull S>of(ImmutableSet.ofGenerator(constructor));
+      return ImmutableEnumSet.<@NotNull S>ofGenerator(constructor);
     }
     final EnumSet<@NotNull S> enumSet = EnumSet.<@NotNull S>copyOf(keySet);
     return ImmutableEnumSet.<@NotNull S>ofEnumSet(enumSet, constructor);
@@ -400,4 +400,12 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
     return ImmutableEnumSet.<@NotNull S>builder().set(immutableSet).key(immutableSet.getKey()).build();
   }
 
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
+  }
 }

@@ -311,6 +311,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
     list.forEach(consumer);
   }
 
+  @Override
   @Contract(pure = true)
   public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer)
   {

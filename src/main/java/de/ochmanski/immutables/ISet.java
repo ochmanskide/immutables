@@ -138,4 +138,6 @@ public interface ISet<E> extends ICollection<E>
   @Contract(pure = true)
   void forEach(@NotNull final Consumer<? super @NotNull E> consumer);
 
+  @Contract(pure = true)
+  void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer);
 }

@@ -204,6 +204,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
    * @return an array containing all the elements in this set in proper sequence
    */
   @NotNull
+  @Override
   @Contract(value = "-> new", pure = true)
   public E @NotNull [] toArray()
   {
@@ -217,6 +218,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
     unwrap().forEach(consumer);
   }
 
+  @Override
   @Contract(pure = true)
   public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer)
   {

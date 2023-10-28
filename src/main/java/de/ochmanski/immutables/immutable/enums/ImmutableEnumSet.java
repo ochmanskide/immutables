@@ -309,6 +309,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
     set.forEach(consumer);
   }
 
+  @Override
   @Contract(pure = true)
   public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer)
   {

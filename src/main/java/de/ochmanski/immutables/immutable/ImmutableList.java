@@ -8,6 +8,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
@@ -134,6 +135,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    *
    * @return the number of elements in this list
    */
+  @Override
   public int size()
   {
     return list.size();
@@ -144,6 +146,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    *
    * @return {@code true} if this list contains no elements
    */
+  @Override
   public boolean isEmpty()
   {
     return list.isEmpty();
@@ -156,6 +159,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    * @param o element whose presence in this list is to be tested
    * @return {@code true} if this list contains the specified element
    */
+  @Override
   public boolean contains(@NotNull final E o)
   {
     return list.contains(o);
@@ -166,6 +170,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    * contain the element. More formally, returns the lowest index {@code i} such that {@code Objects.equals(o, get(i))},
    * or -1 if there is no such index.
    */
+  @Override
   public int indexOf(@NotNull final E o)
   {
     return list.indexOf(o);
@@ -176,6 +181,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    * the element. More formally, returns the highest index {@code i} such that {@code Objects.equals(o, get(i))}, or -1
    * if there is no such index.
    */
+  @Override
   public int lastIndexOf(@NotNull final E o)
   {
     return list.lastIndexOf(o);
@@ -187,6 +193,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    * @return a clone of this {@code ArrayList} instance
    */
   @NotNull
+  @Override
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableList<@NotNull E> deepClone()
@@ -207,10 +214,25 @@ public class ImmutableList<E> implements IList<@NotNull E>
    * @return an array containing all the elements in this list in proper sequence
    */
   @NotNull
+  @Override
   @Contract(value = " -> new", pure = true)
   public E @NotNull [] toArray()
   {
     return list.toArray(getKey().apply(size()));
+  }
+
+  @Override
+  @Contract(pure = true)
+  public void forEach(@NotNull final Consumer<? super @NotNull E> consumer)
+  {
+    unwrap().forEach(consumer);
+  }
+
+  @Override
+  @Contract(pure = true)
+  public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer)
+  {
+    iterator().forEachRemaining(consumer);
   }
 
   // Positional Access Operations
@@ -223,6 +245,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index >= size()})
    */
   @NotNull
+  @Override
   @Contract(pure = true)
   public E get(final int index)
   {
@@ -238,6 +261,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    * @since 1.8
    */
   @NotNull
+  @Override
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public Stream<@NotNull E> stream()
@@ -246,6 +270,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   }
 
   @NotNull
+  @Override
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public List<@NotNull E> unwrap()
@@ -254,6 +279,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   }
 
   @NotNull
+  @Override
   @Contract(pure = true)
   public Optional<@Nullable E> findFirst()
   {

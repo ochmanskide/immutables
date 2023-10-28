@@ -1,16 +1,16 @@
 package de.ochmanski.immutables;
 
 import de.ochmanski.immutables.immutable.ImmutableList;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-public interface IList<E>
+public interface IList<E> extends ICollection<E>
 {
 
   /**
@@ -91,6 +91,19 @@ public interface IList<E>
   E @NotNull [] toArray();
 
   /**
+   * Returns an iterator over the elements in this set.  The elements are returned in no particular order (unless this
+   * set is an instance of some class that provides a guarantee).
+   *
+   * @return an iterator over the elements in this set
+   */
+  @NotNull
+  @Contract(pure = true)
+  default Iterator<@NotNull E> iterator()
+  {
+    return unwrap().iterator();
+  }
+
+  /**
    * Returns the element at the specified position in this list.
    *
    * @param index index of the element to return
@@ -109,7 +122,31 @@ public interface IList<E>
   List<@NotNull E> unwrap();
 
   @NotNull
-  @Contract(pure = true)
-  Optional<@Nullable E> findFirst();
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  default Optional<@Nullable E> findFirst()
+  {
+    return stream().findFirst();
+  }
 
+  @NotNull
+  @Contract(value = " -> new", pure = true)
+  default Optional<@Nullable E> findAny()
+  {
+    return stream().findAny();
+  }
+
+  @NotNull
+  @Contract(value = " -> new", pure = true)
+  default Class<@NotNull E> getComponentType()
+  {
+    return ICollection.<@NotNull E>getComponentType(this);
+  }
+
+  @Contract(pure = true)
+  void forEach(@NotNull final Consumer<? super @NotNull E> consumer);
+
+  @Contract(pure = true)
+  void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer);
 }

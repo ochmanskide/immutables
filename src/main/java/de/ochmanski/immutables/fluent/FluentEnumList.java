@@ -57,7 +57,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   }
 
   @NotNull
-  private static final IntFunction<?> DEFAULT_KEY = Fluent @NotNull []::new;
+  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = Fluent @NotNull []::new;
 
   @NotNull
   @Unmodifiable
@@ -68,6 +68,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
     return EMPTY;
   }
 
+  @NotNull
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   private static final FluentEnumList EMPTY = FluentEnumList.builder().build();
   //</editor-fold>

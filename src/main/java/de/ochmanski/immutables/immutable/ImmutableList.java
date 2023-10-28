@@ -48,7 +48,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   }
 
   @NotNull
-  private static final IntFunction<?> DEFAULT_KEY = Object @NotNull []::new;
+  private static final IntFunction<@NotNull Object @NotNull []> DEFAULT_KEY = Object @NotNull []::new;
 
   @NotNull
   @Unmodifiable
@@ -59,6 +59,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
     return EMPTY;
   }
 
+  @NotNull
   @SuppressWarnings(RAWTYPES)
   private static final ImmutableList EMPTY = ImmutableList.builder().build();
   //</editor-fold>

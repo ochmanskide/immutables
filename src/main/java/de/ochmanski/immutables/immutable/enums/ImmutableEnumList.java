@@ -57,7 +57,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   }
 
   @NotNull
-  private static final IntFunction<?> DEFAULT_KEY = Enum @NotNull []::new;
+  private static final IntFunction<@NotNull Enum<?> @NotNull []> DEFAULT_KEY = Enum @NotNull []::new;
 
   @NotNull
   @Unmodifiable
@@ -68,6 +68,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
     return EMPTY;
   }
 
+  @NotNull
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   private static final ImmutableEnumList EMPTY = ImmutableEnumList.builder().build();
   //</editor-fold>

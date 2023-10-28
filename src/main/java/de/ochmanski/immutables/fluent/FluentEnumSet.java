@@ -384,8 +384,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public FluentEnumList<@NotNull E> toList() {
-    return FluentEnumList.of(unwrap(), getKey());
-    unwanted recursion;
+    return FluentEnumList.ofEnumSet(unwrap(), key);
   }
 
 }

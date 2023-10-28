@@ -135,7 +135,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S> ImmutableList<@NotNull S> of(
-    @NotNull final Collection<@NotNull S> collection,
+    @NotNull final Collection<? extends @NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     final List<@NotNull S> checkedList = Collections.checkedList(List.copyOf(collection), getComponentTypeFromConstructor(constructor));

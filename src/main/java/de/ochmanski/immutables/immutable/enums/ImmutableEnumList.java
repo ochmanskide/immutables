@@ -196,7 +196,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
-    @NotNull final Collection<@NotNull S> collection,
+    @NotNull final Collection<? extends @NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     if (collection.isEmpty()) {

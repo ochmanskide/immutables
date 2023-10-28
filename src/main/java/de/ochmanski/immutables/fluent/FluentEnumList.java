@@ -34,9 +34,10 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   implements IList<@NotNull E>
 {
 
-  @UnmodifiableView
   @NonNull
   @NotNull("Given list cannot be null.")
+  @Unmodifiable
+  @UnmodifiableView
   @javax.validation.constraints.NotNull(message = "Given list cannot be null.")
   @Builder.Default
   ImmutableEnumList<@NonNull @NotNull E> list = ImmutableEnumList.<@NonNull @NotNull E>empty();
@@ -45,7 +46,14 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultConstructor();
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
+
+  @NotNull
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Contract(value = "-> new", pure = true)
+  private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) Fluent @NotNull []::new;
+  }
 
   /**
    * This method is not supported.
@@ -130,13 +138,6 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return FluentEnumList.<@NotNull S>of(ImmutableEnumList.of(s1, s2, s3, s4, constructor));
-  }
-
-  @NotNull
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
-  {
-    return (IntFunction) Fluent @NotNull []::new;
   }
 
   @NotNull

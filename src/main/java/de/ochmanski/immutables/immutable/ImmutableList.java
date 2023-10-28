@@ -25,9 +25,10 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 public class ImmutableList<E> implements IList<@NotNull E>
 {
 
-  @UnmodifiableView
   @NonNull
   @NotNull("Given list cannot be null.")
+  @Unmodifiable
+  @UnmodifiableView
   @javax.validation.constraints.NotNull(message = "Given list cannot be null.")
   @Builder.Default
   List<@NonNull @NotNull E> list = List.of();
@@ -36,12 +37,12 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultConstructor();
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
 
   @NotNull
   @Contract(value = "-> new", pure = true)
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultConstructor()
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey()
   {
     return (IntFunction)Object @NotNull []::new;
   }

@@ -34,13 +34,13 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements IList<@NotNull E>
 {
 
-  @Unmodifiable
-  @UnmodifiableView
   @NonNull
   @NotNull("Given set cannot be null.")
+  @Unmodifiable
+  @UnmodifiableView
   @javax.validation.constraints.NotNull(message = "Given set cannot be null.")
   @Builder.Default
-  ImmutableList<@NonNull @NotNull E> list = ImmutableList.empty();
+  ImmutableList<@NonNull @NotNull E> list = ImmutableList.<@NotNull E>empty();
 
   @NonNull
   @NotNull("Given keyType cannot be null.")

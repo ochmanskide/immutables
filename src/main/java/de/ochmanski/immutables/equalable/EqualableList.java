@@ -25,18 +25,26 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements IList<@NotNull E>
 {
 
-  @UnmodifiableView
   @NonNull
   @NotNull("Given list cannot be null.")
+  @Unmodifiable
+  @UnmodifiableView
   @javax.validation.constraints.NotNull(message = "Given list cannot be null.")
   @Builder.Default
-  ImmutableList<@NonNull @NotNull E> list = ImmutableList.empty();
+  ImmutableList<@NonNull @NotNull E> list = ImmutableList.<@NotNull E>empty();
 
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultConstructor();
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
+
+  @NotNull
+  @Contract(value = "-> new", pure = true)
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) Equalable @NotNull []::new;
+  }
 
   /**
    * This method is not supported.
@@ -121,13 +129,6 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return EqualableList.of(ImmutableList.of(s1, s2, s3, s4, constructor));
-  }
-
-  @NotNull
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultConstructor()
-  {
-    return (IntFunction) Equalable @NotNull []::new;
   }
 
   @NotNull

@@ -115,7 +115,17 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     final Class<@NotNull S> componentTypeE = getComponentTypeFromConstructor(constructor);
-    return ImmutableEnumList.<@NotNull S>of(EnumSet.<@NotNull S>noneOf(componentTypeE), constructor);
+    final ImmutableList<@NotNull S> immutableList = ImmutableList.<@NotNull S>of(EnumSet.<@NotNull S>noneOf(componentTypeE), constructor);
+    return ImmutableEnumList.<@NotNull S>of(immutableList);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
   }
 
   @NotNull
@@ -215,14 +225,6 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
     return ImmutableEnumList.<@NotNull S>builder().list(immutableList).key(immutableList.getKey()).build();
   }
 
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
-  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
-  }
 
   @NotNull
   @Unmodifiable

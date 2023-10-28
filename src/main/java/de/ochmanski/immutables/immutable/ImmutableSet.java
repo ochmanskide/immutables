@@ -263,7 +263,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Contract(value = " -> new", pure = true)
   public Set<@NotNull E> unwrap()
   {
-    return Set.copyOf(set);
+    return Collections.checkedSet(Set.copyOf(set), getComponentType());
   }
 
   @NotNull

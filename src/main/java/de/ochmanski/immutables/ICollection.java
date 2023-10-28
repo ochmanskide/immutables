@@ -16,8 +16,16 @@ public interface ICollection<E>
   @NotNull
   @Unmodifiable
   @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  default Class<@NotNull E> getComponentTypeFromKey() {
+    return getComponentTypeFromConstructor(getKey());
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <E> Class<E> getComponentType(@NotNull final ICollection<@NotNull E> collection)
+  static <E> Class<@NotNull E> getComponentType(@NotNull final ICollection<@NotNull E> collection)
   {
     return ICollection.getComponentTypeFromConstructor(collection.getKey());
   }
@@ -43,14 +51,6 @@ public interface ICollection<E>
   static <T> T @NotNull [] zeroLengthArray(@NotNull final Class<@NotNull T> type)
   {
     return (@NotNull T @NotNull [])Array.newInstance(type, 0);
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  default Class<@NotNull E> getComponentTypeFromKey() {
-    return getComponentTypeFromConstructor(getKey());
   }
 
   @NotNull

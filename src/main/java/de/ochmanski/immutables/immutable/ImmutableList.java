@@ -267,7 +267,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Contract(value = " -> new", pure = true)
   public List<@NotNull E> unwrap()
   {
-    return List.copyOf(list);
+    return Collections.checkedList(List.copyOf(list), getComponentType());
   }
 
   @NotNull

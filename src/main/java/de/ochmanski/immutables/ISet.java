@@ -129,10 +129,12 @@ public interface ISet<E> extends ICollection<E>
   }
 
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   default Class<@NotNull E> getComponentType()
   {
-    return ICollection.<@NotNull E>getComponentType(this);
+    return getComponentTypeFromKey();
   }
 
   @Contract(pure = true)

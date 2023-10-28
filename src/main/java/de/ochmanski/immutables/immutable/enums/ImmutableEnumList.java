@@ -10,10 +10,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Iterator;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
@@ -364,13 +361,13 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ImmutableList<@NotNull E> unwrap()
+  public List<@NotNull E> unwrap()
   {
     if(isEmpty())
     {
-      return ImmutableList.ofGenerator(getComponentTypeFromKey());
+      return CheckedList.ofGenerator(getComponentTypeFromKey());
     }
-    return ImmutableList.<@NotNull E>copyOf(getList().unwrap());
+    return list.unwrap();
   }
 
   @NotNull
@@ -418,6 +415,15 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
     @NotNull final ImmutableList<@NotNull S> immutableList)
   {
     return ImmutableEnumList.<@NotNull S>builder().list(immutableList).key(immutableList.getKey()).build();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
   }
 
 }

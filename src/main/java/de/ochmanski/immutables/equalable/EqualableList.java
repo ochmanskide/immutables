@@ -38,7 +38,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> constructor = defaultConstructor();
+  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultConstructor();
 
   /**
    * This method is not supported.
@@ -76,7 +76,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> ofGenerator(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableList.<@NotNull S>builder().list(ImmutableList.ofGenerator(constructor)).constructor(constructor)
+    return EqualableList.<@NotNull S>builder().list(ImmutableList.ofGenerator(constructor)).key(constructor)
       .build();
   }
 
@@ -87,7 +87,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, constructor)).constructor(constructor)
+    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, constructor)).key(constructor)
       .build();
   }
 
@@ -99,7 +99,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
     @NotNull final S s2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, constructor)).constructor(constructor)
+    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, constructor)).key(constructor)
       .build();
   }
 
@@ -112,7 +112,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
     @NotNull final S s3,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, s3, constructor)).constructor(constructor)
+    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, s3, constructor)).key(constructor)
       .build();
   }
 
@@ -127,7 +127,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, s3, s4, constructor))
-      .constructor(constructor).build();
+      .key(constructor).build();
   }
 
   @NotNull
@@ -156,7 +156,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return EqualableList.<@NotNull S>builder().list(ImmutableList.copyOf(collection, constructor))
-      .constructor(constructor).build();
+      .key(constructor).build();
   }
 
   /**

@@ -348,9 +348,9 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   {
     if(isEmpty())
     {
-      return EnumSet.noneOf(getComponentTypeFromConstructor(getKey()));
+      return EnumSet.noneOf(getComponentTypeFromKey());
     }
-    return EnumSet.<@NotNull E>copyOf(getSet().unwrap());
+    return EnumSet.<@NotNull E>copyOf(set.unwrap());
   }
 
   @NotNull

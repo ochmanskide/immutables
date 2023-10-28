@@ -1,11 +1,13 @@
 package de.ochmanski.immutables.immutable;
 
-import com.stadlerrail.diag.dias.servicestate.enums.Equalable;
+import de.ochmanski.immutables.ICollection;
 import de.ochmanski.immutables.IMap;
+import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.IntFunction;
@@ -56,18 +58,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value)
   {
-    return ImmutableMap.<@NotNull K, @NotNull V>builder().key(key).value(value).map(Map.of()).build();
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = "_, _, _ -> new", pure = true)
-  public static <K, V> ImmutableMap<@NotNull K, @NotNull V> of(
-    @NotNull final Map<@NotNull K, @NotNull V> map,
-    @NotNull final IntFunction<@NotNull K @NotNull []> key,
-    @NotNull final IntFunction<@NotNull V @NotNull []> value)
-  {
-    return ImmutableMap.<@NotNull K, @NotNull V>builder().map(map).key(key).value(value).build();
+    return ImmutableMap.<@NotNull K, @NotNull V>of(Map.of(), key, value);
   }
 
   @NotNull
@@ -186,4 +177,23 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
     return Map.copyOf(map);
   }
 
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_, _, _ -> new", pure = true)
+  public static <K, V> ImmutableMap<@NotNull K, @NotNull V> of(
+    @NotNull final Map<@NotNull K, @NotNull V> map,
+    @NotNull final IntFunction<@NotNull K @NotNull []> key,
+    @NotNull final IntFunction<@NotNull V @NotNull []> value) {
+    final Map<@NotNull K, @NotNull V> checkedMap = Collections.checkedMap(Map.copyOf(map), getComponentTypeFromConstructor(key), getComponentTypeFromConstructor(value));
+    return ImmutableMap.<@NotNull K, @NotNull V>builder().map(checkedMap).key(key).value(value).build();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
+  }
 }

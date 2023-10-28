@@ -50,6 +50,18 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
 
   @NotNull
   private static final IntFunction<?> DEFAULT_KEY = Equalable @NotNull []::new;
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  @SuppressWarnings({UNCHECKED})
+  public static <E> EqualableList<? extends @NotNull E> empty() {
+    return EMPTY;
+  }
+
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  private static final EqualableList EMPTY = EqualableList.builder().build();
   //</editor-fold>
 
   /**

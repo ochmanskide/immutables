@@ -58,6 +58,18 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
 
   @NotNull
   private static final IntFunction<?> DEFAULT_KEY = Enum @NotNull []::new;
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  @SuppressWarnings({UNCHECKED})
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> empty() {
+    return EMPTY;
+  }
+
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  private static final ImmutableEnumList EMPTY = ImmutableEnumList.builder().build();
   //</editor-fold>
 
   /**
@@ -150,17 +162,6 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   {
     return ImmutableEnumList.<@NotNull S>of(ImmutableList.<@NotNull S>of(s1, s2, s3, s4, constructor));
   }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(pure = true)
-  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> empty()
-  {
-    return EMPTY;
-  }
-
-  private static final ImmutableEnumList EMPTY = ImmutableEnumList.builder().build();
 
   @NotNull
   @Unmodifiable

@@ -40,7 +40,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @UnmodifiableView
   @javax.validation.constraints.NotNull(message = "Given list cannot be null.")
   @Builder.Default
-  ImmutableEnumList<@NonNull @NotNull E> list = ImmutableEnumList.<@NonNull @NotNull E>empty();
+  ImmutableEnumList<@NonNull @NotNull E> list = ImmutableEnumList.<@NotNull E>empty();
 
   @NonNull
   @NotNull("Given keyType cannot be null.")
@@ -58,6 +58,18 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
 
   @NotNull
   private static final IntFunction<?> DEFAULT_KEY = Fluent @NotNull []::new;
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  @SuppressWarnings({UNCHECKED})
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> empty() {
+    return EMPTY;
+  }
+
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  private static final FluentEnumList EMPTY = FluentEnumList.builder().build();
   //</editor-fold>
 
   /**

@@ -49,6 +49,18 @@ public class ImmutableList<E> implements IList<@NotNull E>
 
   @NotNull
   private static final IntFunction<?> DEFAULT_KEY = Object @NotNull []::new;
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  @SuppressWarnings({UNCHECKED})
+  public static <E> ImmutableList<E> empty() {
+    return EMPTY;
+  }
+
+  @SuppressWarnings(RAWTYPES)
+  private static final ImmutableList EMPTY = ImmutableList.builder().build();
   //</editor-fold>
 
   @NotNull
@@ -115,17 +127,6 @@ public class ImmutableList<E> implements IList<@NotNull E>
   {
     return ImmutableList.<@NotNull S>of(values, constructor);
   }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(pure = true)
-  public static <E> ImmutableList<E> empty()
-  {
-    return EMPTY;
-  }
-
-  private static final ImmutableList EMPTY = ImmutableList.builder().build();
 
   /**
    * Returns the number of elements in this list.

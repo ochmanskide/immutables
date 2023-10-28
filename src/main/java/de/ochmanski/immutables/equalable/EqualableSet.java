@@ -90,7 +90,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> ofGenerator(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>ofGenerator(constructor), constructor);
+    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>ofGenerator(constructor));
   }
 
   @NotNull
@@ -101,7 +101,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>of(s1, constructor), constructor);
+    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>of(s1, constructor));
   }
 
   @NotNull
@@ -113,7 +113,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     @NotNull final S s2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>of(s1, s2, constructor), constructor);
+    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>of(s1, s2, constructor));
   }
 
   @NotNull
@@ -126,7 +126,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     @NotNull final S s3,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>of(s1, s2, s3, constructor), constructor);
+    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>of(s1, s2, s3, constructor));
   }
 
   @NotNull
@@ -141,7 +141,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     final ImmutableSet<@NotNull S> set = ImmutableSet.<@NotNull S>of(s1, s2, s3, s4, constructor);
-    return EqualableSet.<@NotNull S>of(set, constructor);
+    return EqualableSet.<@NotNull S>of(set);
   }
 
   @NotNull
@@ -163,7 +163,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     @NotNull final S @NotNull [] array,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableSet.<@NotNull S>of(ImmutableSet.ofArray(array, constructor), constructor);
+    return EqualableSet.<@NotNull S>of(ImmutableSet.ofArray(array, constructor));
   }
 
   @NotNull
@@ -281,6 +281,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     set.forEach(consumer);
   }
 
+  @Override
   @Contract(pure = true)
   public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer)
   {
@@ -338,14 +339,13 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     final ImmutableSet<@NotNull S> immutableSet = ImmutableSet.<@NotNull S>copyOf(keySet, constructor);
-    return EqualableSet.<@NotNull S>of(immutableSet, constructor);
+    return EqualableSet.<@NotNull S>of(immutableSet);
   }
 
   public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
-    @NotNull final ImmutableSet<@NotNull S> immutableSet,
-    @NotNull final IntFunction<S @NotNull []> constructor)
+    @NotNull final ImmutableSet<@NotNull S> immutableSet)
   {
-    return EqualableSet.<@NotNull S>builder().set(immutableSet).key(constructor).build();
+    return EqualableSet.<@NotNull S>builder().set(immutableSet).key(immutableSet.getKey()).build();
   }
 
 }

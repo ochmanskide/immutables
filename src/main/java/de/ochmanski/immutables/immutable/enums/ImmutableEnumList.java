@@ -249,6 +249,30 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   }
 
   /**
+   * Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not
+   * contain the element. More formally, returns the lowest index {@code i} such that {@code Objects.equals(o, get(i))},
+   * or -1 if there is no such index.
+   *
+   * @param o
+   */
+  @Override
+  public int indexOf(@NotNull final E o) {
+    return list.indexOf(o);
+  }
+
+  /**
+   * Returns the index of the last occurrence of the specified element in this list, or -1 if this list does not contain
+   * the element. More formally, returns the highest index {@code i} such that {@code Objects.equals(o, get(i))}, or -1
+   * if there is no such index.
+   *
+   * @param o
+   */
+  @Override
+  public int lastIndexOf(@NotNull final E o) {
+    return list.lastIndexOf(o);
+  }
+
+  /**
    * Returns a deep copy of this {@code ArraySet} instance.  (The elements themselves are also copied.)
    *
    * @return a clone of this {@code ArraySet} instance

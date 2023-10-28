@@ -3,16 +3,14 @@ package de.ochmanski.immutables.equalable;
 import de.ochmanski.immutables.IList;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.*;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
+import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
@@ -73,61 +71,56 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> ofGenerator(
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> ofGenerator(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableList.<@NotNull S>builder().list(ImmutableList.ofGenerator(constructor)).key(constructor)
-      .build();
+    return EqualableList.<@NotNull S>of(ImmutableList.ofGenerator(constructor));
   }
 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> of(
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, constructor)).key(constructor)
-      .build();
+    return EqualableList.<@NotNull S>of(ImmutableList.of(s1, constructor));
   }
 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, constructor)).key(constructor)
-      .build();
+    return EqualableList.<@NotNull S>of(ImmutableList.of(s1, s2, constructor));
   }
 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, s3, constructor)).key(constructor)
-      .build();
+    return EqualableList.<@NotNull S>of(ImmutableList.of(s1, s2, s3, constructor));
   }
 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
     @NotNull final S s4,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableList.<@NotNull S>builder().list(ImmutableList.of(s1, s2, s3, s4, constructor))
-      .key(constructor).build();
+    return EqualableList.of(ImmutableList.of(s1, s2, s3, s4, constructor));
   }
 
   @NotNull
@@ -270,13 +263,26 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
     return list.get(index);
   }
 
+  @Override
+  @Contract(pure = true)
+  public void forEach(@NotNull final Consumer<? super @NotNull E> consumer) {
+    list.forEach(consumer);
+  }
+
+  @Override
+  @Contract(pure = true)
+  public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer) {
+    list.forEachRemaining(consumer);
+  }
+
   /**
-   * Returns an iterator over the elements in this list.  The elements are returned in no particular order (unless this
-   * list is an instance of some class that provides a guarantee).
+   * Returns an iterator over the elements in this set.  The elements are returned in no particular order (unless this
+   * set is an instance of some class that provides a guarantee).
    *
-   * @return an iterator over the elements in this list
+   * @return an iterator over the elements in this set
    */
   @NotNull
+  @Override
   @Contract(pure = true)
   public Iterator<@NotNull E> iterator()
   {
@@ -315,5 +321,14 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   public Optional<@Nullable E> findFirst()
   {
     return list.findFirst();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  private static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> of(
+    @NotNull final ImmutableList<@NotNull S> immutableList) {
+    return EqualableList.<@NotNull S>builder().list(immutableList).key(immutableList.getKey()).build();
   }
 }

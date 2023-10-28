@@ -154,7 +154,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<S> of(
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> of(
     @NotNull final S @NotNull [] array,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
@@ -165,7 +165,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<S> of(
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> of(
     @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {

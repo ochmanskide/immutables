@@ -39,13 +39,17 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Builder.Default
   IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
 
+  //<editor-fold defaultstate="collapsed" desc="eager static initializers">
   @NotNull
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
   @Contract(value = "-> new", pure = true)
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey()
-  {
-    return (IntFunction)Object @NotNull []::new;
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) DEFAULT_KEY;
   }
+
+  @NotNull
+  private static final IntFunction<?> DEFAULT_KEY = Object @NotNull []::new;
+  //</editor-fold>
 
   @NotNull
   @UnmodifiableView

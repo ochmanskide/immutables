@@ -48,13 +48,17 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @Builder.Default
   IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
 
+  //<editor-fold defaultstate="collapsed" desc="eager static initializers">
   @NotNull
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  @Contract(value = " -> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey()
-  {
-    return (IntFunction)Enum @NotNull []::new;
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Contract(value = "-> new", pure = true)
+  private static <S extends @NotNull Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) DEFAULT_KEY;
   }
+
+  @NotNull
+  private static final IntFunction<?> DEFAULT_KEY = Enum @NotNull []::new;
+  //</editor-fold>
 
   /**
    * This method is not supported.

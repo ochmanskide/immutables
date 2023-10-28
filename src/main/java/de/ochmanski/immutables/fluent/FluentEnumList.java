@@ -48,12 +48,17 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @Builder.Default
   IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
 
+  //<editor-fold defaultstate="collapsed" desc="eager static initializers">
   @NotNull
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   @Contract(value = "-> new", pure = true)
-  private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Fluent @NotNull []::new;
+  private static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) DEFAULT_KEY;
   }
+
+  @NotNull
+  private static final IntFunction<?> DEFAULT_KEY = Fluent @NotNull []::new;
+  //</editor-fold>
 
   /**
    * This method is not supported.

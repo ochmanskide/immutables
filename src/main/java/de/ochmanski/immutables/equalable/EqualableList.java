@@ -33,18 +33,24 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @Builder.Default
   ImmutableList<@NonNull @NotNull E> list = ImmutableList.<@NotNull E>empty();
 
+
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
   IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
 
+  //<editor-fold defaultstate="collapsed" desc="eager static initializers">
   @NotNull
-  @Contract(value = "-> new", pure = true)
   @SuppressWarnings({UNCHECKED, RAWTYPES})
-  private static <S extends Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Equalable @NotNull []::new;
+  @Contract(value = "-> new", pure = true)
+  private static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) DEFAULT_KEY;
   }
+
+  @NotNull
+  private static final IntFunction<?> DEFAULT_KEY = Equalable @NotNull []::new;
+  //</editor-fold>
 
   /**
    * This method is not supported.

@@ -338,12 +338,18 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   }
 
   @NotNull
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(EqualableList<@NotNull S> equalableList) {
+    return EqualableSet.<@NotNull S>of(equalableList.unwrap(), equalableList.getKey());
+  }
+
+  @NotNull
   @Override
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public EqualableList<@NotNull E> toList() {
-    return EqualableList.<@NotNull E>of(unwrap(), getKey());
+    return EqualableList.<@NotNull E>of(unwrap(), key);
   }
-
 }

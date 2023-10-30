@@ -288,12 +288,18 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   }
 
   @NotNull
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S> ImmutableSet<@NotNull S> of(ImmutableList<@NotNull S> immutableList) {
+    return ImmutableSet.<@NotNull S>of(immutableList.getList(), immutableList.getKey());
+  }
+
+  @NotNull
   @Override
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableList<@NotNull E> toList() {
-    return ImmutableList.<@NotNull E>of(this);
-    unwanted recursion
+    return ImmutableList.<@NotNull E>of(unwrap(), key);
   }
 }

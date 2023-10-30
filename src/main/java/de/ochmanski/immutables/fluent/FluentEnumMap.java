@@ -328,7 +328,6 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
     return map.values();
   }
 
-  @Override
   @NotNull
   @Unmodifiable
   @UnmodifiableView

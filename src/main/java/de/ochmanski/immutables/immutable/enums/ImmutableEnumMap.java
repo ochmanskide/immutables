@@ -1,8 +1,9 @@
 package de.ochmanski.immutables.immutable.enums;
 
-import com.stadlerrail.diag.dias.servicestate.enums.Equalable;
+
 import de.ochmanski.immutables.ICollection;
 import de.ochmanski.immutables.IMap;
+import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.ImmutableCollectors;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import de.ochmanski.immutables.immutable.ImmutableMap;
@@ -307,10 +308,18 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @NotNull
   @Override
   @UnmodifiableView
+  @Contract(pure = true)
+  public Map<@NotNull K, @NotNull V> unwrap() {
+    return map.unwrap();
+  }
+
+  @NotNull
+  @Override
+  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableEnumSet<@NotNull K> keySet()
   {
-    return ImmutableEnumSet.copyOf(toMap().keySet(), getKey());
+    return ImmutableEnumSet.of(toMap().keySet(), getKey());
   }
 
   @NotNull
@@ -319,7 +328,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Contract(value = " -> new", pure = true)
   public ImmutableList<@NotNull V> values()
   {
-    return ImmutableList.copyOf(toMap().values(), getValue());
+    return ImmutableList.of(toMap().values(), getValue());
   }
 
   @NotNull
@@ -332,7 +341,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
     {
       return new EnumMap<@NotNull K, @NotNull V>(getComponentTypeFromConstructor(getKey()));
     }
-    return new EnumMap<@NotNull K, @NotNull V>(map.toMap());
+    return new EnumMap<@NotNull K, @NotNull V>(map.unwrap());
   }
 
   @NotNull

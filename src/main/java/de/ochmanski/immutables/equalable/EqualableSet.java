@@ -194,7 +194,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <K extends @NotNull Equalable<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> EqualableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
-    final Set<Map.Entry<K, V>> entries,
+    @NotNull final Set<Map.@NotNull Entry<@NotNull K, @NotNull V>> entries,
     @NotNull final IntFunction<IMap.@NotNull Entry<@NotNull K, @NotNull V> @NotNull []> entry) {
     return entries.stream().map(EqualableSet::toImmutableEntry).collect(EqualableCollectors.toSet(entry));
   }

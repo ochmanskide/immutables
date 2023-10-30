@@ -1,8 +1,6 @@
 package de.ochmanski.immutables.equalable;
 
-import de.ochmanski.immutables.IList;
 import de.ochmanski.immutables.IMap;
-import de.ochmanski.immutables.ISet;
 import de.ochmanski.immutables.immutable.ImmutableMap;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
@@ -15,6 +13,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
+
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 @Value
 @UnmodifiableView
@@ -33,19 +34,23 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends @N
   ImmutableMap<@NonNull @NotNull K, @NotNull V> map = ImmutableMap.empty();
 
   @NonNull
-  @NotNull("EqualableEnumMap::Builder 002: Given EqualableEnumMap::generator cannot be null.")
-  @javax.validation.constraints.NotNull(message = "EqualableEnumMap::Builder 002: Given FluentEnumMap::generator cannot be null.")
-  IntFunction<@NonNull @NotNull K @NonNull @NotNull []> generator;
+  @NotNull("Given keyType cannot be null.")
+  @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
+  @Builder.Default
+  IntFunction<@NotNull K @NotNull []> key = defaultConstructor();
 
   @NonNull
-  @NotNull("EqualableEnumMap::Builder 003: Given EqualableEnumMap::keyType cannot be null.")
-  @javax.validation.constraints.NotNull(message = "EqualableEnumMap::Builder 003: Given FluentEnumMap::keyType cannot be null.")
-  Class<@NonNull @NotNull K> keyType;
+  @NotNull("Given valueType cannot be null.")
+  @javax.validation.constraints.NotNull(message = "Given valueType cannot be null.")
+  @Builder.Default
+  IntFunction<@NotNull V @NotNull []> value = defaultConstructor();
 
-  @NonNull
-  @NotNull("EqualableEnumMap::Builder 004: Given EqualableEnumMap::valueType cannot be null.")
-  @javax.validation.constraints.NotNull(message = "EqualableEnumMap::Builder 004: Given FluentEnumMap::valueType cannot be null.")
-  Class<@NonNull @NotNull V> valueType;
+  @NotNull
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Contract(value = "-> new", pure = true)
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultConstructor() {
+    return (IntFunction) Equalable @NotNull []::new;
+  }
 
   @NotNull
   @Override
@@ -63,7 +68,7 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends @N
     return stream()
         .filter(p -> p.getValue().isEqualTo(value))
         .map(Entry::getKey)
-        .collect(EqualableCollectors.toSet(getGenerator()));
+      .collect(EqualableCollectors.toSet(getKey()));
   }
 
   @NotNull
@@ -124,31 +129,31 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends @N
     return toBuilder().build();
   }
 
-  @Override
   @NotNull
+  @Override
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public EqualableSet<@NotNull Entry<@NotNull K, @NotNull V>> entrySet()
+  public EqualableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet()
   {
     return EqualableSet.<@NotNull K, @NotNull V>copyOfEntries(unwrap().entrySet(), Entry[]::new);
   }
 
-  @Override
   @NotNull
+  @Override
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public EqualableSet<@NotNull K> keySet()
   {
-    return ISet.of(unwrap().keySet(), getGenerator());
+    return EqualableSet.of(unwrap().keySet(), getKey());
   }
 
-  @Override
   @NotNull
+  @Override
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public EqualableList<@NotNull V> values()
   {
-    return IList.of(unwrap().values());
+    return EqualableList.of(unwrap().values(), getValue());
   }
 
   @Override

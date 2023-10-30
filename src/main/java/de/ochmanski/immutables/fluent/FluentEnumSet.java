@@ -375,7 +375,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @Contract(value = " _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> of(
     @NotNull final FluentEnumList<@NotNull S> enumList) {
-    return FluentEnumSet.<@NotNull S>ofCollection(enumList.unwrap(), enumList.getKey());
+    return FluentEnumSet.<@NotNull S>of(enumList.getList().toSet());
   }
 
   @NotNull

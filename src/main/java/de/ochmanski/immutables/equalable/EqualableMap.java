@@ -3,6 +3,7 @@ package de.ochmanski.immutables.equalable;
 import de.ochmanski.immutables.IList;
 import de.ochmanski.immutables.IMap;
 import de.ochmanski.immutables.ISet;
+import de.ochmanski.immutables.immutable.ImmutableMap;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,7 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends Equalable<@NotNull V>>
+public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends @NotNull Equalable<@NotNull V>>
   implements IMap<@NotNull K, @NotNull V>
 {
 
@@ -29,7 +30,7 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends Eq
   @NotNull("EqualableEnumMap::Builder 001 Given EqualableEnumMap::map cannot be null.")
   @javax.validation.constraints.NotNull(message = "EqualableEnumMap::Builder 001: Given map cannot be null.")
   @Builder.Default
-  Map<@NonNull @NotNull K, V> map = Map.of();
+  ImmutableMap<@NonNull @NotNull K, @NotNull V> map = ImmutableMap.empty();
 
   @NonNull
   @NotNull("EqualableEnumMap::Builder 002: Given EqualableEnumMap::generator cannot be null.")
@@ -50,7 +51,7 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends Eq
   @Override
   public Optional<@Nullable V> get(@NotNull final K key)
   {
-    return Optional.ofNullable(map.get(key));
+    return map.get(key);
   }
 
   @NotNull
@@ -127,36 +128,35 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends Eq
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ISet<@NotNull Entry<@NotNull K, @NotNull V>> entrySet()
+  public EqualableSet<@NotNull Entry<@NotNull K, @NotNull V>> entrySet()
   {
-    return ISet.copyOfEntries(toMap().entrySet());
+    return EqualableSet.<@NotNull K, @NotNull V>copyOfEntries(unwrap().entrySet(), Entry[]::new);
   }
 
   @Override
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ISet<@NotNull K> keySet()
+  public EqualableSet<@NotNull K> keySet()
   {
-    return ISet.of(toMap().keySet(), getGenerator());
+    return ISet.of(unwrap().keySet(), getGenerator());
   }
 
   @Override
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public IList<@NotNull V> values()
+  public EqualableList<@NotNull V> values()
   {
-    return IList.of(toMap().values());
+    return IList.of(unwrap().values());
   }
 
   @Override
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public Map<@NotNull K, @NotNull V> toMap()
+  public Map<@NotNull K, @NotNull V> unwrap()
   {
-    return Map.copyOf(map);
+    return map.unwrap();
   }
-
 }

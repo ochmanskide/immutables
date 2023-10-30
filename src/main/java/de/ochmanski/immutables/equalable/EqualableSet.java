@@ -1,6 +1,7 @@
 package de.ochmanski.immutables.equalable;
 
 import de.ochmanski.immutables.ICollection;
+import de.ochmanski.immutables.IMap;
 import de.ochmanski.immutables.ISet;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.*;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
@@ -185,6 +187,23 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return EqualableSet.<@NotNull S>of(array, constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <K extends @NotNull Equalable<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> EqualableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
+    final Set<Map.Entry<K, V>> entries,
+    @NotNull final IntFunction<IMap.@NotNull Entry<@NotNull K, @NotNull V> @NotNull []> entry) {
+    return entries.stream().map(EqualableSet::toImmutableEntry).collect(EqualableCollectors.toSet(entry));
+  }
+
+  @NotNull
+  @Contract(value = "_ -> new", pure = true)
+  private static <K, V> IMap.@Unmodifiable @UnmodifiableView @NotNull Entry<@NotNull K, @NotNull V> toImmutableEntry(
+    @NotNull final Map.@NotNull Entry<@NotNull K, @NotNull V> entry) {
+    return IMap.Entry.<@NotNull K, @NotNull V>builder().key(entry.getKey()).value(entry.getValue()).build();
   }
 
   /**

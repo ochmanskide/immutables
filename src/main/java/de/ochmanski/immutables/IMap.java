@@ -82,7 +82,7 @@ public interface IMap<K, V>
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  Map<@NotNull K, @NotNull V> toMap();
+  Map<@NotNull K, @NotNull V> unwrap();
 
   @NotNull
   @UnmodifiableView

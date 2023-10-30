@@ -148,7 +148,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   @Contract(value = " -> new", pure = true)
   public ImmutableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet()
   {
-    return ImmutableSet.<@NotNull K, @NotNull V>copyOfEntries(toMap().entrySet(), Entry[]::new);
+    return ImmutableSet.<@NotNull K, @NotNull V>copyOfEntries(unwrap().entrySet(), Entry[]::new);
   }
 
   @NotNull
@@ -157,7 +157,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   @Contract(value = " -> new", pure = true)
   public ImmutableSet<@NotNull K> keySet()
   {
-    return ImmutableSet.of(toMap().keySet(), getKey());
+    return ImmutableSet.of(unwrap().keySet(), getKey());
   }
 
   @NotNull
@@ -166,15 +166,15 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   @Contract(value = " -> new", pure = true)
   public ImmutableList<@NotNull V> values()
   {
-    return ImmutableList.of(toMap().values(), getValue());
+    return ImmutableList.of(unwrap().values(), getValue());
   }
 
   @NotNull
+  @Override
   @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  public Map<@NotNull K, @NotNull V> toMap()
-  {
-    return Map.copyOf(map);
+  @Contract(pure = true)
+  public Map<@NotNull K, @NotNull V> unwrap() {
+    return map;
   }
 
   @NotNull

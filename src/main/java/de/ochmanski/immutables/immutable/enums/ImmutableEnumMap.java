@@ -1,8 +1,9 @@
 package de.ochmanski.immutables.immutable.enums;
 
-import com.stadlerrail.diag.dias.servicestate.enums.Equalable;
+
 import de.ochmanski.immutables.ICollection;
 import de.ochmanski.immutables.IMap;
+import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.ImmutableCollectors;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import de.ochmanski.immutables.immutable.ImmutableMap;
@@ -190,7 +191,9 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   {
     if(map.isEmpty())
     {
-      return ImmutableEnumMap.ofGenerator(key, value);
+      final Class<K> keyType = getComponentTypeFromConstructor(key);
+      final EnumMap<@NotNull K, @NotNull V> enumMap = new EnumMap<>(keyType);
+      return ImmutableEnumMap.ofEnumMap(enumMap, key, value);
     }
     final EnumMap<@NotNull K, @NotNull V> enumMap = new EnumMap<>(map);
     return ImmutableEnumMap.ofEnumMap(enumMap, key, value);

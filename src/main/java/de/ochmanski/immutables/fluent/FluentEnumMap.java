@@ -2,10 +2,10 @@ package de.ochmanski.immutables.fluent;
 
 
 import de.ochmanski.immutables.ICollection;
-import de.ochmanski.immutables.IList;
 import de.ochmanski.immutables.IMap;
-import de.ochmanski.immutables.ISet;
 import de.ochmanski.immutables.equalable.Equalable;
+import de.ochmanski.immutables.immutable.ImmutableList;
+import de.ochmanski.immutables.immutable.ImmutableSet;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumMap;
 import lombok.*;
 import org.jetbrains.annotations.*;
@@ -61,7 +61,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @Contract(value = " -> new", pure = true)
   private static <S> IntFunction<@NotNull S @NotNull []> defaultValue()
   {
-    return (IntFunction)Object @NotNull []::new;
+    return (IntFunction) Equalable @NotNull []::new;
   }
 
   /**
@@ -203,7 +203,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _-> new", pure = true)
-  public static <K extends Enum<@NotNull K> & @NotNull Fluent<? extends @NotNull K>, V extends Equalable<@NotNull V>> FluentEnumMap<@NotNull K, @NotNull V> ofEnumMap(
+  public static <K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<? extends @NotNull K>, V extends @NotNull Equalable<@NotNull V>> FluentEnumMap<@NotNull K, @NotNull V> ofEnumMap(
     @NotNull final ImmutableEnumMap<@NonNull @NotNull K, @NonNull @NotNull V> map,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value)
@@ -303,7 +303,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ISet<@NotNull Entry<@NotNull K, @NotNull V>> entrySet()
+  public ImmutableSet<@NotNull Entry<@NotNull K, @NotNull V>> entrySet()
   {
     return map.entrySet();
   }
@@ -312,9 +312,9 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ISet<@NotNull K> keySet()
+  public FluentEnumSet<@NotNull K> keySet()
   {
-    return map.keySet();
+    return FluentEnumSet.<@NotNull K>of(map.keySet());
   }
 
   @Override
@@ -322,7 +322,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public IList<@NotNull V> values()
+  public ImmutableList<@NotNull V> values()
   {
     return map.values();
   }
@@ -340,7 +340,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  private static <S extends Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
+  private static <S extends @NotNull Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
     final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
   {
     return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);

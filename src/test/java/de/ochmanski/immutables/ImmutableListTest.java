@@ -21,14 +21,13 @@ class ImmutableListTest
   @Test
   void ofNullClass()
   {
-    assertThatThrownBy(() -> IList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class);
+    assertThatThrownBy(() -> ImmutableList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class);
   }
 
   @Test
   void of0()
   {
-    @NotNull
-    final IList<Dummy> actual = IList.ofGenerator(Dummy[]::new);
+    @NotNull final IList<Dummy> actual = ImmutableList.ofGenerator(Dummy[]::new);
     assertThat(actual).isInstanceOf(ImmutableList.class);
     assertThat(actual.unwrap()).isEmpty();
     assertThat(actual.isEmpty()).isTrue();
@@ -39,7 +38,7 @@ class ImmutableListTest
   void of1()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
-    final IList<Dummy> actual = IList.of(s1);
+    final IList<Dummy> actual = ImmutableList.of(s1, Dummy[]::new);
     assertThat(actual).isInstanceOf(ImmutableList.class);
     assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactly("a");
   }
@@ -49,7 +48,7 @@ class ImmutableListTest
   {
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
-    final IList<Dummy> actual = IList.of(s1, s2);
+    final IList<Dummy> actual = ImmutableList.of(s1, s2, Dummy[]::new);
     assertThat(actual).isInstanceOf(ImmutableList.class);
     assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactly("a", "b");
   }
@@ -60,7 +59,7 @@ class ImmutableListTest
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
     final Dummy s3 = Dummy.builder().s("c").build();
-    final IList<Dummy> actual = IList.of(s1, s2, s3);
+    final IList<Dummy> actual = ImmutableList.of(s1, s2, s3, Dummy[]::new);
     assertThat(actual).isInstanceOf(ImmutableList.class);
     assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactly("a", "b", "c");
   }
@@ -71,7 +70,7 @@ class ImmutableListTest
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
     final Dummy s3 = Dummy.builder().s("c").build();
-    final IList<Dummy> actual = IList.of(s1, s1, s2, s3);
+    final IList<Dummy> actual = ImmutableList.of(s1, s1, s2, s3, Dummy[]::new);
     assertThat(actual).isInstanceOf(ImmutableList.class);
     assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactly("a", "a", "b", "c");
   }
@@ -80,7 +79,7 @@ class ImmutableListTest
   void toArrayNull()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
-    assertThatThrownBy(() -> IList.of((Dummy)null))
+    assertThatThrownBy(() -> ImmutableList.of((Dummy) null, Dummy[]::new))
         .isExactlyInstanceOf(NullPointerException.class)
         .hasMessage(null);
   }
@@ -89,7 +88,7 @@ class ImmutableListTest
   void toArrayEmpty()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
-    final IList<Dummy> actual = IList.of(s1);
+    final IList<Dummy> actual = ImmutableList.of(s1, Dummy[]::new);
     assertThat(actual.toArray()).containsExactly(s1);
   }
 
@@ -97,7 +96,7 @@ class ImmutableListTest
   void toArrayEmpty1()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
-    assertThatThrownBy(() -> IList.of(s1, null))
+    assertThatThrownBy(() -> ImmutableList.of(s1, null, Dummy[]::new))
         .isExactlyInstanceOf(NullPointerException.class)
         .hasMessage(null);
   }
@@ -106,7 +105,7 @@ class ImmutableListTest
   void toArrayEmpty2()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
-    assertThatThrownBy(() -> IList.of(s1, null, null))
+    assertThatThrownBy(() -> ImmutableList.of(s1, null, null, Dummy[]::new))
         .isExactlyInstanceOf(NullPointerException.class)
         .hasMessage(null);
   }
@@ -115,7 +114,7 @@ class ImmutableListTest
   void toArrayEmpty3()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
-    assertThatThrownBy(() -> IList.of(s1, null, null, null))
+    assertThatThrownBy(() -> ImmutableList.of(s1, null, null, null))
         .isExactlyInstanceOf(NullPointerException.class)
         .hasMessage(null);
   }
@@ -123,20 +122,20 @@ class ImmutableListTest
   @Test
   void toArrayNullClass()
   {
-    assertThatThrownBy(() -> IList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class);
+    assertThatThrownBy(() -> ImmutableList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class);
   }
 
   @Test
   void toArrayClass()
   {
-    final IList<Dummy> actual = IList.ofGenerator(Dummy[]::new);
+    final IList<Dummy> actual = ImmutableList.ofGenerator(Dummy[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 
   @Test
   void toArray0()
   {
-    assertThatThrownBy(() -> IList.of((Dummy)null))
+    assertThatThrownBy(() -> ImmutableList.of((Dummy) null, Dummy[]::new))
         .isExactlyInstanceOf(NullPointerException.class)
         .hasMessage(null);
   }
@@ -145,7 +144,7 @@ class ImmutableListTest
   void toArray1()
   {
     final Dummy s1 = Dummy.builder().s("a").build();
-    final IList<Dummy> actual = IList.of(s1);
+    final IList<Dummy> actual = ImmutableList.of(s1, Dummy[]::new);
     assertThat(actual.toArray()).containsExactly(s1);
   }
 
@@ -154,7 +153,7 @@ class ImmutableListTest
   {
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
-    final IList<Dummy> actual = IList.of(s1, s2);
+    final IList<Dummy> actual = ImmutableList.of(s1, s2, Dummy[]::new);
     assertThat(actual.toArray()).containsExactly(s1, s2);
   }
 
@@ -164,7 +163,7 @@ class ImmutableListTest
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
     final Dummy s3 = Dummy.builder().s("c").build();
-    final IList<Dummy> actual = IList.of(s1, s1, s2, s3);
+    final IList<Dummy> actual = ImmutableList.of(s1, s1, s2, s3, Dummy[]::new);
     assertThat(actual.toArray()).containsExactly(s1, s1, s2, s3);
   }
 

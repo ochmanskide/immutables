@@ -332,7 +332,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public EnumMap<@NotNull K, @NotNull V> toMap()
+  public EnumMap<@NotNull K, @NotNull V> unwrap()
   {
     return map.toMap();
   }

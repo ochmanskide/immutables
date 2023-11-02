@@ -96,9 +96,8 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     final Class<@NotNull S> componentTypeE = getComponentTypeFromConstructor(constructor);
-    return ImmutableEnumSet.<@NotNull S>of(EnumSet.<@NotNull S>noneOf(componentTypeE), constructor);
+    return ImmutableEnumSet.<@NotNull S>ofEnumSet(EnumSet.<@NotNull S>noneOf(componentTypeE), constructor);
   }
-
 
   @NotNull
   @Unmodifiable

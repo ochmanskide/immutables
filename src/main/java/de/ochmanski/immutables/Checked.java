@@ -18,7 +18,7 @@ public interface Checked<E> {
   @SuppressWarnings(UNCHECKED)
   static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return (Class<@NotNull S>) constructor.getClass().getComponentType();
+    return (Class<@NotNull S>) constructor.apply(0).getClass().getComponentType();
   }
 
   @NotNull

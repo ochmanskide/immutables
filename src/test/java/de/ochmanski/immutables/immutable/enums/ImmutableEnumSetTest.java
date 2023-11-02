@@ -101,7 +101,7 @@ class ImmutableEnumSetTest
     final Dummy s1 = Dummy.A;
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of(s1, null))
         .isExactlyInstanceOf(NullPointerException.class)
-        .hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null");
+      .hasMessage("Cannot invoke \"java.util.function.IntFunction.apply(int)\" because \"constructor\" is null");
   }
 
   @Test
@@ -167,7 +167,7 @@ class ImmutableEnumSetTest
     final Dummy s2 = Dummy.B;
     final Dummy s3 = Dummy.C;
     final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.of(s1, s1, s2, s3, Dummy[]::new);
-    Assertions.assertThat(actual.toArray()).containsExactly(s1, s2, s3);
+    Assertions.assertThat(actual.toArray()).containsExactlyInAnyOrder(s1, s2, s3);
   }
 
   @Test

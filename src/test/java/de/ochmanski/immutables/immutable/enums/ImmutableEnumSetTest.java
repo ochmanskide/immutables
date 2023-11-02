@@ -29,21 +29,21 @@ class ImmutableEnumSetTest
   {
     final @NotNull IntFunction<@NotNull Dummy[]> constructor = Dummy[]::new;
     final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.ofGenerator(constructor);
-    Assertions.assertThat(actual.isEmpty()).isTrue();
-    Assertions.assertThat(actual.size()).isZero();
-    Assertions.assertThat(actual.getSet().unwrap()).isEmpty();
-    Assertions.assertThat(actual.toArray()).isEmpty();
-    Assertions.assertThat(actual.toArray().getClass().getComponentType()).isEqualTo(Dummy.class);
+    assertThat(actual.isEmpty()).isTrue();
+    assertThat(actual.size()).isZero();
+    assertThat(actual.getSet().unwrap()).isEmpty();
+    assertThat(actual.toArray()).isEmpty();
+    assertThat(actual.toArray().getClass().getComponentType()).isEqualTo(Dummy.class);
     final List<Dummy> expected = Arrays.asList(Dummy.values());
     final Object[] enumConstants = actual.toArray().getClass().getComponentType().getEnumConstants();
-    Assertions.assertThat(enumConstants).containsExactlyElementsOf(expected);
+    assertThat(enumConstants).containsExactlyElementsOf(expected);
   }
 
   @Test
   void of1()
   {
     final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.of(Dummy.A, Dummy[]::new);
-    Assertions.assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
+    assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
     assertThat(actual.unwrap()).containsExactly(Dummy.A);
   }
 
@@ -53,8 +53,8 @@ class ImmutableEnumSetTest
     final Dummy s1 = Dummy.A;
     final Dummy s2 = Dummy.B;
     final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.of(s1, s2, Dummy[]::new);
-    Assertions.assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
-    Assertions.assertThat(actual.unwrap()).containsExactlyInAnyOrder(Dummy.A, Dummy.B);
+    assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
+    assertThat(actual.unwrap()).containsExactlyInAnyOrder(Dummy.A, Dummy.B);
   }
 
   @Test
@@ -64,8 +64,8 @@ class ImmutableEnumSetTest
     final Dummy s2 = Dummy.B;
     final Dummy s3 = Dummy.C;
     final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.of(s1, s2, s3, Dummy[]::new);
-    Assertions.assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
-    Assertions.assertThat(actual.unwrap()).containsExactlyInAnyOrder(Dummy.A, Dummy.B, Dummy.C);
+    assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
+    assertThat(actual.unwrap()).containsExactlyInAnyOrder(Dummy.A, Dummy.B, Dummy.C);
   }
 
   @Test
@@ -75,8 +75,8 @@ class ImmutableEnumSetTest
     final Dummy s2 = Dummy.B;
     final Dummy s3 = Dummy.C;
     final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.of(s1, s1, s2, s3, Dummy[]::new);
-    Assertions.assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
-    Assertions.assertThat(actual.unwrap()).containsExactlyInAnyOrder(Dummy.A, Dummy.B, Dummy.C);
+    assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
+    assertThat(actual.unwrap()).containsExactlyInAnyOrder(Dummy.A, Dummy.B, Dummy.C);
   }
 
   @Test
@@ -92,7 +92,7 @@ class ImmutableEnumSetTest
   {
     final Dummy s1 = Dummy.A;
     final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
-    Assertions.assertThat(actual.toArray()).isEmpty();
+    assertThat(actual.toArray()).isEmpty();
   }
 
   @Test
@@ -132,7 +132,7 @@ class ImmutableEnumSetTest
   void toArrayClass()
   {
     final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
-    Assertions.assertThat(actual.toArray()).isEmpty();
+    assertThat(actual.toArray()).isEmpty();
   }
 
   @Test
@@ -148,7 +148,7 @@ class ImmutableEnumSetTest
   {
     final Dummy s1 = Dummy.A;
     final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.of(s1, Dummy[]::new);
-    Assertions.assertThat(actual.toArray()).containsExactly(s1);
+    assertThat(actual.toArray()).containsExactly(s1);
   }
 
   @Test
@@ -157,7 +157,7 @@ class ImmutableEnumSetTest
     final Dummy s1 = Dummy.A;
     final Dummy s2 = Dummy.B;
     final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.of(s1, s2, Dummy[]::new);
-    Assertions.assertThat(actual.toArray()).containsExactly(s1, s2);
+    assertThat(actual.toArray()).containsExactlyInAnyOrder(s1, s2);
   }
 
   @Test
@@ -167,7 +167,7 @@ class ImmutableEnumSetTest
     final Dummy s2 = Dummy.B;
     final Dummy s3 = Dummy.C;
     final ImmutableEnumSet<Dummy> actual = ImmutableEnumSet.of(s1, s1, s2, s3, Dummy[]::new);
-    Assertions.assertThat(actual.toArray()).containsExactlyInAnyOrder(s1, s2, s3);
+    assertThat(actual.toArray()).containsExactlyInAnyOrder(s1, s2, s3);
   }
 
   @Test
@@ -175,13 +175,13 @@ class ImmutableEnumSetTest
   {
     final Dummy a = Dummy.A;
     final Dummy b = Dummy.A;
-    Assertions.assertThat(a).isEqualTo(b);
-    Assertions.assertThat(a.isEqualTo(b)).isTrue();
-    Assertions.assertThat(a.equals(b)).isTrue();
+    assertThat(a).isEqualTo(b);
+    assertThat(a.isEqualTo(b)).isTrue();
+    assertThat(a.equals(b)).isTrue();
     final Dummy c = Dummy.C;
-    Assertions.assertThat(a).isNotEqualTo(c);
-    Assertions.assertThat(a.isEqualTo(c)).isFalse();
-    Assertions.assertThat(a.equals(c)).isFalse();
+    assertThat(a).isNotEqualTo(c);
+    assertThat(a.isEqualTo(c)).isFalse();
+    assertThat(a.equals(c)).isFalse();
   }
 
   private enum Dummy implements Fluent<Dummy>

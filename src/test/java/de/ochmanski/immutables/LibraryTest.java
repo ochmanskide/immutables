@@ -4,17 +4,16 @@
 package de.ochmanski.immutables;
 
 import de.ochmanski.immutables.immutable.ImmutableList;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class LibraryTest
-{
+import static org.assertj.core.api.Assertions.assertThat;
 
-    @Test
-    void someLibraryMethodReturnsTrue()
-    {
-        ImmutableList classUnderTest = ImmutableList.builder().build();
-        Assertions.assertThat(classUnderTest).isNotNull();
-    }
+class LibraryTest {
 
+  @Test
+  void someLibraryMethodReturnsTrue() {
+    ImmutableList<String> classUnderTest = ImmutableList.<String>builder().build();
+    assertThat(classUnderTest).isNotNull();
+    assertThat(classUnderTest.isEmpty()).isTrue();
+  }
 }

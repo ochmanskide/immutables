@@ -152,9 +152,9 @@ public class ImmutableList<E> implements IList<@NotNull E>
   }
   //</editor-fold>
 
+  //<editor-fold defaultstate="collapsed" desc="3. implementation of IList interface">
+
   /**
-   * Returns the number of elements in this list.
-   *
    * @return the number of elements in this list
    */
   @Override
@@ -164,8 +164,6 @@ public class ImmutableList<E> implements IList<@NotNull E>
   }
 
   /**
-   * Returns {@code true} if this list contains no elements.
-   *
    * @return {@code true} if this list contains no elements
    */
   @Override
@@ -242,7 +240,9 @@ public class ImmutableList<E> implements IList<@NotNull E>
   {
     return list.toArray(getKey().apply(size()));
   }
+  //</editor-fold>
 
+  //<editor-fold defaultstate="collapsed" desc="4. Positional Access Operations">
   @Override
   @Contract(pure = true)
   public void forEach(@NotNull final Consumer<? super @NotNull E> consumer)
@@ -256,8 +256,6 @@ public class ImmutableList<E> implements IList<@NotNull E>
   {
     iterator().forEachRemaining(consumer);
   }
-
-  // Positional Access Operations
 
   /**
    * Returns the element at the specified position in this list.
@@ -274,23 +272,26 @@ public class ImmutableList<E> implements IList<@NotNull E>
     return list.get(index);
   }
 
-  /**
-   * Returns a sequential {@code Stream} with this collection as its source.
-   *
-   * @return a sequential {@code Stream} over the elements in this collection
-   * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
-   *   {@code Spliterator}.
-   * @since 1.8
-   */
   @NotNull
   @Override
+  @Contract(pure = true)
+  public Optional<@Nullable E> findFirst() {
+    return stream().findFirst();
+  }
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="5. converters">
+  @NotNull
+  @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public Stream<@NotNull E> stream()
-  {
-    return unwrap().stream();
+  public ImmutableSet<@NotNull E> toSet() {
+    return ImmutableSet.of(this);
   }
+  //</editor-fold>
 
+  //<editor-fold defaultstate="collapsed" desc="6. adapter for Java Collection API">
   @NotNull
   @Override
   @UnmodifiableView
@@ -301,29 +302,24 @@ public class ImmutableList<E> implements IList<@NotNull E>
       ? Collections.checkedList(List.of(), getComponentType())
       : Collections.checkedList(List.copyOf(list), getComponentType());
   }
+  //</editor-fold>
 
+  //<editor-fold defaultstate="collapsed" desc="7. streaming">
+
+  /**
+   * Returns a sequential {@code Stream} with this collection as its source.
+   *
+   * @return a sequential {@code Stream} over the elements in this collection
+   * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
+   * {@code Spliterator}.
+   * @since 1.8
+   */
   @NotNull
   @Override
-  @Contract(pure = true)
-  public Optional<@Nullable E> findFirst()
-  {
-    return stream().findFirst();
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  public static <S> ImmutableList<? extends @NotNull S> of(@NotNull final ImmutableSet<@NotNull S> set) {
-    return set.toList();
-  }
-
-  @NotNull
-  @Override
-  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ImmutableSet<@NotNull E> toSet() {
-    return ImmutableSet.of(this);
+  public Stream<@NotNull E> stream() {
+    return unwrap().stream();
   }
+  //</editor-fold>
 }

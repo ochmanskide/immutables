@@ -4,7 +4,10 @@
 
 ### 1.1. No more `UnsupportedOperationException` at runtime.
 
-Similarly to `java.util.ImmutableCollections.java`, the following methods have been removed:
+Authors of `java.util.ImmutableCollections.java` class attempted to make this collection immutable
+but they diddn't do it right because they wanted to maintain compatibility with the old Java `Collection` interface.
+I Improved their attempt to make `java.util.ImmutableCollections.java`, and I made the library truly immutable.
+Instead of throwing an exception to the caller, I removed the following mutators from the library:
 
 ```java
   // all mutating methods throw UnsupportedOperationException
@@ -17,16 +20,17 @@ Similarly to `java.util.ImmutableCollections.java`, the following methods have b
 @Override public boolean retainAll(Collection<?> c){throw uoe();}
 ```
 
-The key difference is, that these methods cannot be invoked at all. They are not available at compile time.  
-They have been removed from this API permanently.  
+This way this piece of code cannot be invoked at all.  
 Therefore, you cannot get an `UnsupportedOperationException` anymore.  
 The code will not compile, if you try to perform an illegal operation.
 
 ### 1.2. All collections are checked at construction time.
 
-In order to remove known `Type Erasure` limitation, all collections types are now checked.    
-Similarly to `java.util.ImmutableCollections.java`, all collections have been enriched with the type,  
-and the type is always available at runtime.
+In order to remove a known `Type Erasure` limitation of Java programming language,
+all collections have been enriched with the type object. The generic type is no longer erased during compilation.
+The class type object is available at all times, during program execution.
+The type argument must be passed to the factory method, and it cannot be omitted during construction.
+The code will not compile, if you don't provide the generic type of the collection.
 
 Example:
 
@@ -34,8 +38,8 @@ Example:
   IList<DayOfWeek> list=ImmutableList.ofGenerator(DayOfWeek[]::new);
 ```
 
-It means that it is possible to call `toArray()` method, and it will return the true generic type, instead of
-`Object[]`.
+It means that it is now possible to call `toArray()` method without parameters,
+and it will return the true generic type, instead of a simple `Object[]` array.
 
 Example:
 
@@ -46,7 +50,7 @@ Example:
 as you see, the `toArray()`, method no longer accepts `IntFunction<T>` as an argument.  
 The method `public T[] toArray(IntFunction<T> generator)` has been removed from this API permanently.  
 The type is checked at construction time, and it is mandatory.  
-You will not be able to create a collection without specifying a type, even if the collection,
+You will not be able to create a collection without specifying the type, even if the collection,
 you are trying to create, is empty.
 
 ### 1.3. Bridge methods
@@ -54,25 +58,27 @@ you are trying to create, is empty.
 In order to provide better portability, the collections contain the bridge methods, which return a
 `@UnmodifiableView` of the backed collection.  
 The collection stays immutable, and the contract is not violated.
+Be cautious when using this API because it may throw `UnsupportedOperationException` at runtime.  
+Use it at your discretion.
 
 Example:
 
 ```java
-  IList<DayOfWeek> list=ImmutableList.ofGenerator(DayOfWeek[]::new);
-  List<DayOfWeek> backwardCompatible=list.unwrap();
+  IList<DayOfWeek> immutableList=ImmutableList.ofGenerator(DayOfWeek[]::new);
+  List<DayOfWeek> normalList=immutableList.unwrap();
 ```
-## Features
 
-* keyType is redundant because you get the type directly from the constructor, so remove keyType
-* remove default constructor
-* not NULL values allowed,
+## 2. Features
+
+* no NULL values allowed,
 * compile time check for NULLs,
 * improved IDE assistance, by adding Java annotations, such as @Contract, @NotNull, @Nullable
 * lombok support,
 * not more null objects, instead you get Optional<T>
 * compile-time immutability with new IList<T>, ISet<T>, IMap<K,V> interfaces
 * not possible to modify a collection during run-time or even at compile-time
-* wraps third party code into your own, which gives you flexibility, and frees you from sticking to Java standards for
+* wraps third party code into your own, which gives you flexibility, and frees you from adhering to old Java standards
+  for
   legacy reasons,
 * no need to maintain annoying and limiting, backward-compatibility with old API,
 * no more casts in code,
@@ -192,4 +198,29 @@ private Map<@NotNull JobSettingPropertyKey, @NotNull StringWrapper> toMap(
 * create a new variant of ImmutableStream<> stream() instead of Stream<> stream()
 * add Optional.empty() "-like" API, and delegate calls to .of() methods, so that both are available.
 * add .map() method to shorten the .stream().map() syntax.
-* 
+
+## Template
+
+//<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
+
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="2. static factory methods">
+
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="3. implementation of IList interface">
+
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="4. Positional Access Operations">
+
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="5. converters">
+
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="6. bridge for Java Collection API">
+
+//</editor-fold>

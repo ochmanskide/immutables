@@ -10,9 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.IntFunction;
-import java.util.stream.Stream;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
@@ -243,19 +241,6 @@ public class ImmutableList<E> implements IList<@NotNull E>
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="4. Positional Access Operations">
-  @Override
-  @Contract(pure = true)
-  public void forEach(@NotNull final Consumer<? super @NotNull E> consumer)
-  {
-    unwrap().forEach(consumer);
-  }
-
-  @Override
-  @Contract(pure = true)
-  public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer)
-  {
-    iterator().forEachRemaining(consumer);
-  }
 
   /**
    * Returns the element at the specified position in this list.
@@ -276,7 +261,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Override
   @Contract(pure = true)
   public Optional<@Nullable E> findFirst() {
-    return stream().findFirst();
+    return isEmpty() ? Optional.empty() : Optional.of(list.get(0));
   }
   //</editor-fold>
 
@@ -291,7 +276,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   }
   //</editor-fold>
 
-  //<editor-fold defaultstate="collapsed" desc="6. adapter for Java Collection API">
+  //<editor-fold defaultstate="collapsed" desc="6. bridge for Java Collection API">
   @NotNull
   @Override
   @UnmodifiableView
@@ -301,25 +286,6 @@ public class ImmutableList<E> implements IList<@NotNull E>
     return list.isEmpty()
       ? Collections.checkedList(List.of(), getComponentType())
       : Collections.checkedList(List.copyOf(list), getComponentType());
-  }
-  //</editor-fold>
-
-  //<editor-fold defaultstate="collapsed" desc="7. streaming">
-
-  /**
-   * Returns a sequential {@code Stream} with this collection as its source.
-   *
-   * @return a sequential {@code Stream} over the elements in this collection
-   * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
-   * {@code Spliterator}.
-   * @since 1.8
-   */
-  @NotNull
-  @Override
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  public Stream<@NotNull E> stream() {
-    return unwrap().stream();
   }
   //</editor-fold>
 }

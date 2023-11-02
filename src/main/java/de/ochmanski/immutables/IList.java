@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
@@ -93,19 +94,6 @@ public interface IList<E> extends ICollection<E>
   E @NotNull [] toArray();
 
   /**
-   * Returns an iterator over the elements in this set.  The elements are returned in no particular order (unless this
-   * set is an instance of some class that provides a guarantee).
-   *
-   * @return an iterator over the elements in this set
-   */
-  @NotNull
-  @Contract(pure = true)
-  default Iterator<@NotNull E> iterator()
-  {
-    return unwrap().iterator();
-  }
-
-  /**
    * Returns the element at the specified position in this list.
    *
    * @param index index of the element to return
@@ -115,17 +103,69 @@ public interface IList<E> extends ICollection<E>
   @NotNull
   E get(final int index);
 
+
+  @Contract(pure = true)
+  default void forEach(@NotNull final Consumer<? super @NotNull E> consumer) {
+    unwrap().forEach(consumer);
+  }
+
+  @Contract(pure = true)
+  default void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer) {
+    iterator().forEachRemaining(consumer);
+  }
+
+  /**
+   * Returns an iterator over the elements in this set.  The elements are returned in no particular order (unless this
+   * set is an instance of some class that provides a guarantee).
+   *
+   * @return an iterator over the elements in this set
+   */
   @NotNull
-  @Unmodifiable
+  @Contract(pure = true)
+  default Iterator<@NotNull E> iterator() {
+    return unwrap().iterator();
+  }
+
+  /**
+   * Returns a sequential {@code Stream} with this collection as its source.
+   *
+   * @return a sequential {@code Stream} over the elements in this collection
+   * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
+   * {@code Spliterator}.
+   * @since 1.8
+   */
+  @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  Stream<@NotNull E> stream();
+  default Stream<@NotNull E> stream() {
+    return unwrap().stream();
+  }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   List<@NotNull E> unwrap();
+
+  /**
+   * Returns a stream consisting of the results of applying the given
+   * function to the elements of this stream.
+   *
+   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
+   * operation</a>.
+   *
+   * @param <R>    The element type of the new stream
+   * @param mapper a <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *               <a href="package-summary.html#Statelessness">stateless</a>
+   *               function to apply to each element
+   * @return the new stream
+   */
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  default <R> Stream<@NotNull R> map(@NotNull final Function<? super @NotNull E, ? extends @NotNull R> mapper) {
+    return stream().map(mapper);
+  }
 
   @NotNull
   @Contract(value = " -> new", pure = true)
@@ -149,12 +189,6 @@ public interface IList<E> extends ICollection<E>
   {
     return getComponentTypeFromKey();
   }
-
-  @Contract(pure = true)
-  void forEach(@NotNull final Consumer<? super @NotNull E> consumer);
-
-  @Contract(pure = true)
-  void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer);
 
   @NotNull
   @Unmodifiable

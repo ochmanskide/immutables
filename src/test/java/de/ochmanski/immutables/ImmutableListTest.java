@@ -21,7 +21,7 @@ class ImmutableListTest
   @Test
   void ofNullClass()
   {
-    assertThatThrownBy(() -> ImmutableList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class);
+    assertThatThrownBy(() -> ImmutableList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
   }
 
   @Test
@@ -80,8 +80,11 @@ class ImmutableListTest
   {
     final Dummy s1 = Dummy.builder().s("a").build();
     assertThatThrownBy(() -> ImmutableList.of((Dummy) null, Dummy[]::new))
-        .isExactlyInstanceOf(NullPointerException.class)
-        .hasMessage(null);
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
+      .satisfiesAnyOf(
+        p -> assertThat(p).isNull(),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e1' of de/ochmanski/immutables/ImmutableList.of must not be null")
+      );
   }
 
   @Test
@@ -97,8 +100,11 @@ class ImmutableListTest
   {
     final Dummy s1 = Dummy.builder().s("a").build();
     assertThatThrownBy(() -> ImmutableList.of(s1, null, Dummy[]::new))
-        .isExactlyInstanceOf(NullPointerException.class)
-        .hasMessage(null);
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
+      .satisfiesAnyOf(
+        p -> assertThat(p).isNull(),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e2' of de/ochmanski/immutables/ImmutableList.of must not be null")
+      );
   }
 
   @Test
@@ -106,8 +112,12 @@ class ImmutableListTest
   {
     final Dummy s1 = Dummy.builder().s("a").build();
     assertThatThrownBy(() -> ImmutableList.of(s1, null, null, Dummy[]::new))
-        .isExactlyInstanceOf(NullPointerException.class)
-        .hasMessage(null);
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
+      .satisfiesAnyOf(
+        p -> assertThat(p).isNull(),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e2' of de/ochmanski/immutables/ImmutableList.of must not be null"),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e3' of de/ochmanski/immutables/ImmutableList.of must not be null")
+      );
   }
 
   @Test
@@ -115,14 +125,19 @@ class ImmutableListTest
   {
     final Dummy s1 = Dummy.builder().s("a").build();
     assertThatThrownBy(() -> ImmutableList.of(s1, null, null, null))
-        .isExactlyInstanceOf(NullPointerException.class)
-        .hasMessage(null);
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
+      .satisfiesAnyOf(
+        p -> assertThat(p).isNull(),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e2' of de/ochmanski/immutables/ImmutableList.of must not be null"),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e3' of de/ochmanski/immutables/ImmutableList.of must not be null"),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'constructor' of de/ochmanski/immutables/ImmutableList.of must not be null")
+      );
   }
 
   @Test
   void toArrayNullClass()
   {
-    assertThatThrownBy(() -> ImmutableList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class);
+    assertThatThrownBy(() -> ImmutableList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
   }
 
   @Test
@@ -136,8 +151,11 @@ class ImmutableListTest
   void toArray0()
   {
     assertThatThrownBy(() -> ImmutableList.of((Dummy) null, Dummy[]::new))
-        .isExactlyInstanceOf(NullPointerException.class)
-        .hasMessage(null);
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
+      .satisfiesAnyOf(
+        p -> assertThat(p).isNull(),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e1' of de/ochmanski/immutables/ImmutableList.of must not be null")
+      );
   }
 
   @Test

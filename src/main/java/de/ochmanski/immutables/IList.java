@@ -207,15 +207,6 @@ public interface IList<E> extends ICollection<E>
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  default Class<@NotNull E> getComponentType()
-  {
-    return getComponentTypeFromKey();
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
   ISet<@NotNull E> toSet();
 
   @NotNull

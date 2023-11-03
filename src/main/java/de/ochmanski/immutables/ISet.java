@@ -7,10 +7,11 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-public interface ISet<E> extends ICollection<E>
+public interface ISet<E> extends ICollection<@NotNull E>
 {
 
   /**
@@ -33,14 +34,18 @@ public interface ISet<E> extends ICollection<E>
       + "For example: ISet.ofGenerator(String[]::new)");
   }
 
-  int size();
+  default int size() {
+    return getSet().size();
+  }
 
   /**
    * Returns {@code true} if this set contains no elements.
    *
    * @return {@code true} if this set contains no elements
    */
-  boolean isEmpty();
+  default boolean isEmpty() {
+    return getSet().isEmpty();
+  }
 
   /**
    * Returns {@code true} if this set contains the specified element. More formally, returns {@code true} if and only if
@@ -49,7 +54,9 @@ public interface ISet<E> extends ICollection<E>
    * @param o element whose presence in this set is to be tested
    * @return {@code true} if this set contains the specified element
    */
-  boolean contains(@NotNull final E o);
+  default boolean contains(@NotNull final E o) {
+    return getSet().contains(o);
+  }
 
   /**
    * Returns a deep copy of this {@code ArraySet} instance.  (The elements themselves are also copied.)
@@ -76,7 +83,9 @@ public interface ISet<E> extends ICollection<E>
    */
   @NotNull
   @Contract(value = "-> new", pure = true)
-  E @NotNull [] toArray();
+  default E @NotNull [] toArray() {
+    return getSet().toArray();
+  }
 
   /**
    * Returns an iterator over the elements in this set.  The elements are returned in no particular order (unless this
@@ -86,9 +95,8 @@ public interface ISet<E> extends ICollection<E>
    */
   @NotNull
   @Contract(pure = true)
-  default Iterator<@NotNull E> iterator()
-  {
-    return unwrap().iterator();
+  default Iterator<@NotNull E> iterator() {
+    return getSet().iterator();
   }
 
   /**
@@ -105,47 +113,77 @@ public interface ISet<E> extends ICollection<E>
   @Contract(value = " -> new", pure = true)
   default Stream<@NotNull E> stream()
   {
-    return unwrap().stream();
+    return getSet().stream();
+  }
+
+  /**
+   * Returns a stream consisting of the results of applying the given
+   * function to the elements of this stream.
+   *
+   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
+   * operation</a>.
+   *
+   * @param <R>    The element type of the new stream
+   * @param mapper a <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *               <a href="package-summary.html#Statelessness">stateless</a>
+   *               function to apply to each element
+   * @return the new stream
+   */
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  default <R> Stream<@NotNull R> map(@NotNull final Function<? super @NotNull E, ? extends @NotNull R> mapper) {
+    return stream().map(mapper);
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  Set<@NotNull E> unwrap();
+  default Set<@NotNull E> unwrap() {
+    return getSet().unwrap();
+  }
 
   @NotNull
   @Contract(value = " -> new", pure = true)
   default Optional<@Nullable E> findFirst()
   {
-    return stream().findFirst();
+    return getSet().findFirst();
+  }
+
+  @NotNull
+  @Contract(value = " -> new", pure = true)
+  default Optional<@Nullable E> findLast() {
+    return getSet().findLast();
   }
 
   @NotNull
   @Contract(value = " -> new", pure = true)
   default Optional<@Nullable E> findAny()
   {
-    return stream().findAny();
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  default Class<@NotNull E> getComponentType()
-  {
-    return getComponentTypeFromKey();
+    return getSet().findAny();
   }
 
   @Contract(pure = true)
-  void forEach(@NotNull final Consumer<? super @NotNull E> consumer);
+  default void forEach(@NotNull final Consumer<? super @NotNull E> consumer) {
+    getSet().forEach(consumer);
+  }
 
   @Contract(pure = true)
-  void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer);
+  default void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer) {
+    iterator().forEachRemaining(consumer);
+  }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   IList<@NotNull E> toList();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  ISet<@NotNull E> getSet();
 }

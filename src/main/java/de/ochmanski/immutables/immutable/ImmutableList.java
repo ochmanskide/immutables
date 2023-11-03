@@ -250,6 +250,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Override
   @Unmodifiable
   @UnmodifiableView
+  @Contract(value = " -> this", pure = true)
   public IList<@NotNull E> getList() {
     return this;
   }

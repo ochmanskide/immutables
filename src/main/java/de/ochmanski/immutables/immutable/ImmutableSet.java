@@ -26,7 +26,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 public class ImmutableSet<E> implements ISet<@NotNull E>
 {
 
-  @Getter(AccessLevel.PRIVATE)
+  @Unmodifiable
   @UnmodifiableView
   @NonNull
   @NotNull("Given set cannot be null.")
@@ -245,12 +245,6 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
     set.forEach(consumer);
   }
 
-  @Override
-  @Contract(pure = true)
-  public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer) {
-    iterator().forEachRemaining(consumer);
-  }
-
   /**
    * Returns an iterator over the elements in this set.  The elements are returned in no particular order (unless this
    * set is an instance of some class that provides a guarantee).
@@ -274,11 +268,22 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
    */
   @NotNull
   @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public Stream<@NotNull E> stream() {
     return set.stream();
   }
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> this", pure = true)
+  public ISet<E> getSet() {
+    return this;
+  }
+
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="4. Positional Access Operations">

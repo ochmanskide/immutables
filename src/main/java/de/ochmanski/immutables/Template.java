@@ -26,4 +26,5 @@ public class Template {
   //<editor-fold defaultstate="collapsed" desc="6. bridge for Java Collection API">
 
   //</editor-fold>
+
 }

@@ -38,7 +38,7 @@ public interface ICollection<E> extends Checked<@NotNull E>
   static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return Checked.getComponentTypeFromConstructor(constructor);
+    return Checked.<@NotNull S>getComponentTypeFromConstructor(constructor);
   }
 
   @NotNull

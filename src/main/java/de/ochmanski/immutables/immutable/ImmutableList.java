@@ -64,6 +64,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   public static <S> ImmutableList<@NotNull S> ofGenerator(
@@ -73,6 +74,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S> ImmutableList<@NotNull S> of(
@@ -83,6 +85,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _, _-> new", pure = true)
   public static <S> ImmutableList<@NotNull S> of(
@@ -94,6 +97,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _, _, _ -> new", pure = true)
   public static <S> ImmutableList<@NotNull S> of(
@@ -106,6 +110,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _, _, _, _ -> new", pure = true)
   public static <S> ImmutableList<@NotNull S> of(
@@ -212,6 +217,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    */
   @NotNull
   @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableList<@NotNull E> deepClone()
@@ -238,6 +244,14 @@ public class ImmutableList<E> implements IList<@NotNull E>
   {
     return list.toArray(getKey().apply(size()));
   }
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  public IList<@NotNull E> getList() {
+    return this;
+  }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="4. Positional Access Operations">
@@ -263,9 +277,23 @@ public class ImmutableList<E> implements IList<@NotNull E>
   public Optional<@Nullable E> findFirst() {
     return isEmpty() ? Optional.empty() : Optional.of(list.get(0));
   }
+
+  @NotNull
+  @Override
+  @Contract(pure = true)
+  public Optional<@Nullable E> findLast() {
+    return isEmpty() ? Optional.empty() : Optional.of(list.get(size() - 1));
+  }
+
+  @NotNull
+  @Override
+  @Contract(pure = true)
+  public Optional<@Nullable E> findAny() {
+    return findFirst();
+  }
   //</editor-fold>
 
-  //<editor-fold defaultstate="collapsed" desc="5. converters">
+  //<editor-fold defaultstate="collapsed" desc="5. converters to family classes">
   @NotNull
   @Override
   @Unmodifiable

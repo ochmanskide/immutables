@@ -48,151 +48,6 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @Builder.Default
   IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
 
-  //<editor-fold defaultstate="collapsed" desc="eager static initializers">
-  @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
-  @Contract(value = "-> new", pure = true)
-  private static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) DEFAULT_KEY;
-  }
-
-  @NotNull
-  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = Fluent @NotNull []::new;
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(pure = true)
-  @SuppressWarnings({UNCHECKED})
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> empty() {
-    return EMPTY;
-  }
-
-  @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
-  private static final FluentEnumList EMPTY = FluentEnumList.builder().build();
-  //</editor-fold>
-
-  //<editor-fold defaultstate="collapsed" desc="static factory methods">
-  /**
-   * This method is not supported.
-   * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(IntFunction)} instead.
-   * <p>Example usage:
-   * <pre>
-   *   {@code
-   *   final IList<Dummy> actual = ImmutableEnumList.ofGenerator(Dummy[]::new);
-   *   final IList<DayOfWeek> actual = ImmutableEnumList.ofGenerator(DayOfWeek[]::new);
-   *   final IList<Month> actual = ImmutableEnumList.ofGenerator(Month[]::new);
-   *   }
-   * </pre>
-   */
-  @Contract(value = "-> fail", pure = true)
-  static void of()
-  {
-    throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: ImmutableEnumList.ofGenerator(Day[]::new)");
-  }
-
-  /**
-   * Example usage:
-   * <pre>
-   *   {@code
-   *   final IList<Dummy> actual = ImmutableEnumList.ofGenerator(Dummy[]::new);
-   *   final IList<DayOfWeek> actual = ImmutableEnumList.ofGenerator(DayOfWeek[]::new);
-   *   final IList<Month> actual = ImmutableEnumList.ofGenerator(Month[]::new);
-   *   }
-   * </pre>
-   */
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> ofGenerator(
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return FluentEnumList.<@NotNull S>of(ImmutableEnumList.ofGenerator(constructor));
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
-    @NotNull final S s1,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return FluentEnumList.<@NotNull S>of(ImmutableEnumList.of(s1, constructor));
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
-    @NotNull final S s1,
-    @NotNull final S s2,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return FluentEnumList.<@NotNull S>of(ImmutableEnumList.of(s1, s2, constructor));
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _, _, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
-    @NotNull final S s1,
-    @NotNull final S s2,
-    @NotNull final S s3,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return FluentEnumList.<@NotNull S>of(ImmutableEnumList.of(s1, s2, s3, constructor));
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " _, _, _, _, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
-    @NotNull final S s1,
-    @NotNull final S s2,
-    @NotNull final S s3,
-    @NotNull final S s4,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return FluentEnumList.<@NotNull S>of(ImmutableEnumList.of(s1, s2, s3, s4, constructor));
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
-    @NotNull final S @NotNull [] array,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    final List<@NotNull S> list = List.of(array);
-    return FluentEnumList.<@NotNull S>of(list, constructor);
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> ofEnumSet(
-    @NotNull final Collection<@NotNull S> set,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return FluentEnumList.<@NotNull S>of(set, constructor);
-  }
-
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
-    @NotNull final Collection<@NotNull S> collection,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
-    return FluentEnumList.<@NotNull S>builder()
-      .list(ImmutableEnumList.<@NotNull S>of(collection, constructor))
-      .key(constructor)
-      .build();
-  }
-  //</editor-fold>
-
   /**
    * Returns the number of elements in this list.
    *
@@ -358,7 +213,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @Contract(pure = true)
   public Optional<@Nullable E> findFirst()
   {
-    return stream().findFirst();
+    return list.findFirst();
   }
 
   @NotNull
@@ -384,15 +239,6 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
-    @NotNull final FluentEnumSet<@NotNull S> set) {
-    return set.toList();
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
     @NotNull final ImmutableEnumSet<@NotNull S> set) {
     return FluentEnumList.<@NotNull S>builder().list(set.toList()).key(set.getKey()).build();
   }
@@ -405,4 +251,158 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   public FluentEnumSet<@NotNull E> toSet() {
     return FluentEnumSet.of(this);
   }
+
+  //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
+  @NotNull
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Contract(value = "-> new", pure = true)
+  private static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) DEFAULT_KEY;
+  }
+
+  @NotNull
+  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = Fluent @NotNull []::new;
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  @SuppressWarnings({UNCHECKED})
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> empty() {
+    return EMPTY;
+  }
+
+  @NotNull
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  private static final FluentEnumList EMPTY = FluentEnumList.builder().build();
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
+
+  /**
+   * This method is not supported.
+   * <p>You must provide a generic type for an empty collection.
+   * <p>use method: {@link #ofGenerator(IntFunction)} instead.
+   * <p>Example usage:
+   * <pre>
+   *   {@code
+   *   final IList<Dummy> actual = ImmutableEnumList.ofGenerator(Dummy[]::new);
+   *   final IList<DayOfWeek> actual = ImmutableEnumList.ofGenerator(DayOfWeek[]::new);
+   *   final IList<Month> actual = ImmutableEnumList.ofGenerator(Month[]::new);
+   *   }
+   * </pre>
+   */
+  @Contract(value = "-> fail", pure = true)
+  static void of() {
+    throw new UnsupportedOperationException("Please pass array generator type to the method. "
+      + "For example: ImmutableEnumList.ofGenerator(Day[]::new)");
+  }
+
+  /**
+   * Example usage:
+   * <pre>
+   *   {@code
+   *   final IList<Dummy> actual = ImmutableEnumList.ofGenerator(Dummy[]::new);
+   *   final IList<DayOfWeek> actual = ImmutableEnumList.ofGenerator(DayOfWeek[]::new);
+   *   final IList<Month> actual = ImmutableEnumList.ofGenerator(Month[]::new);
+   *   }
+   * </pre>
+   */
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> ofGenerator(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return FluentEnumList.<@NotNull S>of(ImmutableEnumList.ofGenerator(constructor));
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return FluentEnumList.<@NotNull S>of(ImmutableEnumList.of(s1, constructor));
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<@NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return FluentEnumList.<@NotNull S>of(ImmutableEnumList.of(s1, s2, constructor));
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return FluentEnumList.<@NotNull S>of(ImmutableEnumList.of(s1, s2, s3, constructor));
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final S s1,
+    @NotNull final S s2,
+    @NotNull final S s3,
+    @NotNull final S s4,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return FluentEnumList.<@NotNull S>of(ImmutableEnumList.of(s1, s2, s3, s4, constructor));
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final S @NotNull [] array,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    final List<@NotNull S> list = List.of(array);
+    return FluentEnumList.<@NotNull S>of(list, constructor);
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> ofEnumSet(
+    @NotNull final Collection<@NotNull S> set,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return FluentEnumList.<@NotNull S>of(set, constructor);
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final Collection<@NotNull S> collection,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return FluentEnumList.<@NotNull S>builder()
+      .list(ImmutableEnumList.<@NotNull S>of(collection, constructor))
+      .key(constructor)
+      .build();
+  }
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="3. implementation of IList interface">
+
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="4. Positional Access Operations">
+
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="5. converters">
+
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="6. bridge for Java Collection API">
+
+  //</editor-fold>
 }

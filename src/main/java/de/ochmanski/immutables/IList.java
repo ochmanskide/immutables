@@ -34,14 +34,18 @@ public interface IList<E> extends ICollection<E>
         + "For example: IList.ofGenerator(String[]::new)");
   }
 
-  int size();
+  default int size() {
+    return getList().size();
+  }
 
   /**
    * Returns {@code true} if this list contains no elements.
    *
    * @return {@code true} if this list contains no elements
    */
-  boolean isEmpty();
+  default boolean isEmpty() {
+    return getList().isEmpty();
+  }
 
   /**
    * Returns {@code true} if this list contains the specified element. More formally, returns {@code true} if and only
@@ -50,21 +54,27 @@ public interface IList<E> extends ICollection<E>
    * @param o element whose presence in this list is to be tested
    * @return {@code true} if this list contains the specified element
    */
-  boolean contains(@NotNull final E o);
+  default boolean contains(@NotNull final E o) {
+    return getList().contains(o);
+  }
 
   /**
    * Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not
    * contain the element. More formally, returns the lowest index {@code i} such that {@code Objects.equals(o, get(i))},
    * or -1 if there is no such index.
    */
-  int indexOf(@NotNull final E o);
+  default int indexOf(@NotNull final E o) {
+    return getList().indexOf(o);
+  }
 
   /**
    * Returns the index of the last occurrence of the specified element in this list, or -1 if this list does not contain
    * the element. More formally, returns the highest index {@code i} such that {@code Objects.equals(o, get(i))}, or -1
    * if there is no such index.
    */
-  int lastIndexOf(@NotNull final E o);
+  default int lastIndexOf(@NotNull final E o) {
+    return getList().lastIndexOf(o);
+  }
 
   /**
    * Returns a deep copy of this {@code ArrayList} instance.  (The elements themselves are also copied.)
@@ -91,7 +101,9 @@ public interface IList<E> extends ICollection<E>
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  E @NotNull [] toArray();
+  default E @NotNull [] toArray() {
+    return getList().toArray();
+  }
 
   /**
    * Returns the element at the specified position in this list.
@@ -101,12 +113,14 @@ public interface IList<E> extends ICollection<E>
    * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index >= size()})
    */
   @NotNull
-  E get(final int index);
+  default E get(final int index) {
+    return getList().get(index);
+  }
 
 
   @Contract(pure = true)
   default void forEach(@NotNull final Consumer<? super @NotNull E> consumer) {
-    unwrap().forEach(consumer);
+    getList().forEach(consumer);
   }
 
   @Contract(pure = true)
@@ -123,7 +137,7 @@ public interface IList<E> extends ICollection<E>
   @NotNull
   @Contract(pure = true)
   default Iterator<@NotNull E> iterator() {
-    return unwrap().iterator();
+    return getList().iterator();
   }
 
   /**
@@ -138,14 +152,16 @@ public interface IList<E> extends ICollection<E>
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   default Stream<@NotNull E> stream() {
-    return unwrap().stream();
+    return getList().stream();
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  List<@NotNull E> unwrap();
+  default List<@NotNull E> unwrap() {
+    return getList().unwrap();
+  }
 
   /**
    * Returns a stream consisting of the results of applying the given
@@ -171,14 +187,20 @@ public interface IList<E> extends ICollection<E>
   @Contract(value = " -> new", pure = true)
   default Optional<@Nullable E> findFirst()
   {
-    return stream().findFirst();
+    return getList().findFirst();
+  }
+
+  @NotNull
+  @Contract(value = " -> new", pure = true)
+  default Optional<@Nullable E> findLast() {
+    return getList().findLast();
   }
 
   @NotNull
   @Contract(value = " -> new", pure = true)
   default Optional<@Nullable E> findAny()
   {
-    return stream().findAny();
+    return getList().findAny();
   }
 
   @NotNull
@@ -195,4 +217,9 @@ public interface IList<E> extends ICollection<E>
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   ISet<@NotNull E> toSet();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  IList<@NotNull E> getList();
 }

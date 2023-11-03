@@ -35,7 +35,7 @@ The code will not compile, if you don't provide the generic type of the collecti
 Example:
 
 ```java
-  IList<DayOfWeek> list=ImmutableList.ofGenerator(DayOfWeek[]::new);
+IList<DayOfWeek> list = ImmutableList.ofGenerator(DayOfWeek[]::new);
 ```
 
 It means that it is now possible to call `toArray()` method without parameters,
@@ -44,7 +44,7 @@ and it will return the true generic type, instead of a simple `Object[]` array.
 Example:
 
 ```java
-  DayOfWeek[]array=list.toArray();
+DayOfWeek[] array = list.toArray();
 ```
 
 as you see, the `toArray()`, method no longer accepts `IntFunction<T>` as an argument.  
@@ -64,8 +64,8 @@ Use it at your discretion.
 Example:
 
 ```java
-  IList<DayOfWeek> immutableList=ImmutableList.ofGenerator(DayOfWeek[]::new);
-  List<DayOfWeek> normalList=immutableList.unwrap();
+IList<DayOfWeek> immutableList = ImmutableList.ofGenerator(DayOfWeek[]::new);
+List<DayOfWeek> normalList = immutableList.unwrap();
 ```
 
 ## 2. Features
@@ -114,8 +114,7 @@ SDKMan can be used via the command line, which can make the process easier for d
 
 ### TODO:
 
-*
-  * fully implemented method toString(), which calls p -> p.toString()
+* fully implemented method toString(), which calls p -> p.toString()
 * prettyPrint() method which prints JSON
 * prettyPrint(Function f) method which overwrites default p.toString() method
 * rename Fluent into FluentEnum
@@ -133,26 +132,25 @@ SDKMan can be used via the command line, which can make the process easier for d
 * create a Collector for advanced Set/Map/List for example:
 
 ```java
-  @NotNull
-private SortedSet<@NotNull OidDto> oids(@NotNull final Device entity){
+@NotNull
+private SortedSet<@NotNull OidDto> oids(@NotNull final Device entity) {
     return entity.getOids().stream()
-    .map(p->OidDto.builder()
-    .sourceOid(p.getSourceOid())
-    .destSignalName(p.getDestSignalName())
-    .destSignalDescription(p.getDestSignalDescription())
-    .build()
+      .map(p->OidDto.builder()
+      .sourceOid(p.getSourceOid())
+      .destSignalName(p.getDestSignalName())
+      .destSignalDescription(p.getDestSignalDescription())
+      .build()
     )
     .collect(collectingAndThen(toSet(),this::toUnmodifiableSortedSet));
-    }
+}
 
 @NotNull
 @UnmodifiableView
 @Contract(value = "_ -> new", pure = true)
-private SortedSet<@NotNull OidDto> toUnmodifiableSortedSet(@NotNull final Set<@NotNull OidDto> collection)
-    {
-final SortedSet<OidDto> sorted=new TreeSet<>(collection);
-    return Collections.unmodifiableSortedSet(sorted);
-    }
+private SortedSet<@NotNull OidDto> toUnmodifiableSortedSet(@NotNull final Set<@NotNull OidDto> collection) {
+  final SortedSet<OidDto> sorted=new TreeSet<>(collection);
+  return Collections.unmodifiableSortedSet(sorted);
+}
 ```
 
 ```java

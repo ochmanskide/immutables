@@ -16,6 +16,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 @Value
+@Unmodifiable
 @UnmodifiableView
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

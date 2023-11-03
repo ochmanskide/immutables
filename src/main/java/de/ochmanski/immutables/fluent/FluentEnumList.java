@@ -4,16 +4,15 @@ import de.ochmanski.immutables.IList;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumList;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.*;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.IntFunction;
-import java.util.stream.Stream;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
@@ -47,210 +46,6 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
   IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
-
-  /**
-   * Returns the number of elements in this list.
-   *
-   * @return the number of elements in this list
-   */
-  @Override
-  public int size()
-  {
-    return list.size();
-  }
-
-  /**
-   * Returns {@code true} if this list contains no elements.
-   *
-   * @return {@code true} if this list contains no elements
-   */
-  @Override
-  public boolean isEmpty()
-  {
-    return list.isEmpty();
-  }
-
-  /**
-   * Returns {@code true} if this list contains the specified element. More formally, returns {@code true} if and only
-   * if this list contains at least one element {@code e} such that {@code Objects.equals(o, e)}.
-   *
-   * @param o element whose presence in this list is to be tested
-   * @return {@code true} if this list contains the specified element
-   */
-  @Override
-  public boolean contains(@NotNull final E o)
-  {
-    return list.contains(o);
-  }
-
-  /**
-   * Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not
-   * contain the element. More formally, returns the lowest index {@code i} such that {@code Objects.equals(o, get(i))},
-   * or -1 if there is no such index.
-   *
-   * @param o
-   */
-  @Override
-  public int indexOf(@NotNull final E o)
-  {
-    return list.indexOf(o);
-  }
-
-  /**
-   * Returns the index of the last occurrence of the specified element in this list, or -1 if this list does not contain
-   * the element. More formally, returns the highest index {@code i} such that {@code Objects.equals(o, get(i))}, or -1
-   * if there is no such index.
-   *
-   * @param o
-   */
-  @Override
-  public int lastIndexOf(@NotNull final E o)
-  {
-    return list.lastIndexOf(o);
-  }
-
-  /**
-   * Returns a deep copy of this {@code ArrayList} instance.  (The elements themselves are also copied.)
-   *
-   * @return a clone of this {@code ArrayList} instance
-   */
-  @Override
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  public FluentEnumList<@NotNull E> deepClone()
-  {
-    return toBuilder().build();
-  }
-
-  /**
-   * Returns an array containing all the elements in this list in proper sequence (from first to last element).
-   *
-   * <p>The returned array will be "safe" in that no references to it are
-   * maintained by this list.  (In other words, this method must allocate a new array).  The caller is thus free to
-   * modify the returned array.
-   *
-   * <p>This method acts as bridge between array-based and collection-based
-   * APIs.
-   *
-   * @return an array containing all the elements in this list in proper sequence
-   */
-  @Override
-  @NotNull
-  @Contract(value = "-> new", pure = true)
-  public E @NotNull [] toArray()
-  {
-    return list.toArray();
-  }
-
-  /**
-   * Returns the element at the specified position in this list.
-   *
-   * @param index index of the element to return
-   * @return the element at the specified position in this list
-   * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index >= size()})
-   */
-  @NotNull
-  @Override
-  public E get(final int index)
-  {
-    return list.get(index);
-  }
-
-  /**
-   * Returns an iterator over the elements in this list.  The elements are returned in no particular order (unless this
-   * list is an instance of some class that provides a guarantee).
-   *
-   * @return an iterator over the elements in this list
-   */
-  @NotNull
-  @Contract(pure = true)
-  public Iterator<@NotNull E> iterator()
-  {
-    return unwrap().iterator();
-  }
-
-  @Override
-  @Contract(pure = true)
-  public void forEach(@NotNull final Consumer<? super @NotNull E> consumer) {
-    list.forEach(consumer);
-  }
-
-  @Override
-  @Contract(pure = true)
-  public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer) {
-    list.forEachRemaining(consumer);
-  }
-
-  /**
-   * Returns a sequential {@code Stream} with this collection as its source.
-   *
-   * @return a sequential {@code Stream} over the elements in this collection
-   * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
-   *   {@code Spliterator}.
-   * @since 1.8
-   */
-  @Override
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  public Stream<@NotNull E> stream()
-  {
-    return unwrap().stream();
-  }
-
-  @Override
-  @NotNull
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  public List<@NotNull E> unwrap()
-  {
-    return list.unwrap();
-  }
-
-  @NotNull
-  @Override
-  @Contract(pure = true)
-  public Optional<@Nullable E> findFirst()
-  {
-    return list.findFirst();
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
-    @NotNull final ImmutableEnumList<@NotNull S> set) {
-    return FluentEnumList.<@NotNull S>builder().list(set).key(set.getKey()).build();
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> allOf(
-    @NotNull final IntFunction<@NotNull S @NotNull []> key) {
-    return FluentEnumList.<@NotNull S>of(ImmutableEnumSet.<@NotNull S>allOf(key));
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
-    @NotNull final ImmutableEnumSet<@NotNull S> set) {
-    return FluentEnumList.<@NotNull S>builder().list(set.toList()).key(set.getKey()).build();
-  }
-
-  @NotNull
-  @Override
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  public FluentEnumSet<@NotNull E> toSet() {
-    return FluentEnumSet.of(this);
-  }
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
@@ -388,21 +183,60 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
       .key(constructor)
       .build();
   }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final ImmutableEnumList<@NotNull S> set) {
+    return FluentEnumList.<@NotNull S>builder().list(set).key(set.getKey()).build();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> allOf(
+    @NotNull final IntFunction<@NotNull S @NotNull []> key) {
+    return FluentEnumList.<@NotNull S>of(ImmutableEnumSet.<@NotNull S>allOf(key));
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> of(
+    @NotNull final ImmutableEnumSet<@NotNull S> set) {
+    return FluentEnumList.<@NotNull S>builder().list(set.toList()).key(set.getKey()).build();
+  }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="3. implementation of IList interface">
 
+  /**
+   * Returns a deep copy of this {@code ArrayList} instance.  (The elements themselves are also copied.)
+   *
+   * @return a clone of this {@code ArrayList} instance
+   */
+  @Override
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public FluentEnumList<@NotNull E> deepClone() {
+    return toBuilder().build();
+  }
   //</editor-fold>
 
-  //<editor-fold defaultstate="collapsed" desc="4. Positional Access Operations">
+  //<editor-fold defaultstate="collapsed" desc="4. converters to family classes">
 
-  //</editor-fold>
-
-  //<editor-fold defaultstate="collapsed" desc="5. converters">
-
-  //</editor-fold>
-
-  //<editor-fold defaultstate="collapsed" desc="6. bridge for Java Collection API">
-
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public FluentEnumSet<@NotNull E> toSet() {
+    return FluentEnumSet.of(this);
+  }
   //</editor-fold>
 }

@@ -308,8 +308,8 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Contract(value = " -> new", pure = true)
   public Set<@NotNull E> unwrap() {
     return set.isEmpty()
-      ? Collections.checkedSet(Set.of(), getComponentType())
-      : Collections.checkedSet(Set.copyOf(set), getComponentType());
+      ? Collections.checkedSet(Set.of(), getComponentTypeFromKey())
+      : Collections.checkedSet(Set.copyOf(set), getComponentTypeFromKey());
   }
   //</editor-fold>
 }

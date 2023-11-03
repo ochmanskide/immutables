@@ -32,7 +32,6 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @Builder.Default
   ImmutableList<@NonNull @NotNull E> list = ImmutableList.<@NotNull E>empty();
 
-
   @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")

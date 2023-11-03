@@ -2,6 +2,9 @@ package de.ochmanski.immutables;
 
 public class Template {
 
+
+  //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
+
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
@@ -16,7 +19,7 @@ public class Template {
 
   //</editor-fold>
 
-  //<editor-fold defaultstate="collapsed" desc="5. converters">
+  //<editor-fold defaultstate="collapsed" desc="5. converters to family classes">
 
   //</editor-fold>
 

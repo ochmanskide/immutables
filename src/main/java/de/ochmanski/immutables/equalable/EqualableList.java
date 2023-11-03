@@ -73,9 +73,9 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final IList<Dummy> actual = ImmutableEnumList.ofGenerator(Dummy[]::new);
-   *   final IList<DayOfWeek> actual = ImmutableEnumList.ofGenerator(DayOfWeek[]::new);
-   *   final IList<Month> actual = ImmutableEnumList.ofGenerator(Month[]::new);
+   *   final IList<Dummy> actual = EqualableList.ofGenerator(Dummy[]::new);
+   *   final IList<DayOfWeek> actual = EqualableList.ofGenerator(DayOfWeek[]::new);
+   *   final IList<Month> actual = EqualableList.ofGenerator(Month[]::new);
    *   }
    * </pre>
    */
@@ -83,16 +83,16 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   static void of()
   {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: ImmutableEnumList.ofGenerator(Day[]::new)");
+      + "For example: EqualableList.ofGenerator(Day[]::new)");
   }
 
   /**
    * Example usage:
    * <pre>
    *   {@code
-   *   final IList<Dummy> actual = ImmutableEnumList.ofGenerator(Dummy[]::new);
-   *   final IList<DayOfWeek> actual = ImmutableEnumList.ofGenerator(DayOfWeek[]::new);
-   *   final IList<Month> actual = ImmutableEnumList.ofGenerator(Month[]::new);
+   *   final IList<Dummy> actual = EqualableList.ofGenerator(Dummy[]::new);
+   *   final IList<DayOfWeek> actual = EqualableList.ofGenerator(DayOfWeek[]::new);
+   *   final IList<Month> actual = EqualableList.ofGenerator(Month[]::new);
    *   }
    * </pre>
    */

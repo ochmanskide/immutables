@@ -291,7 +291,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   public static <S> ImmutableSet<@NotNull S> of(ImmutableList<@NotNull S> immutableList) {
-    return ImmutableSet.<@NotNull S>of(immutableList.getList(), immutableList.getKey());
+    return ImmutableSet.<@NotNull S>of(immutableList.unwrap(), immutableList.getKey());
   }
 
   @NotNull

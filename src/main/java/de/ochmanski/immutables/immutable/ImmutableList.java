@@ -314,8 +314,8 @@ public class ImmutableList<E> implements IList<@NotNull E>
   public List<@NotNull E> unwrap()
   {
     return list.isEmpty()
-      ? Collections.checkedList(List.of(), getComponentType())
-      : Collections.checkedList(List.copyOf(list), getComponentType());
+      ? Collections.checkedList(List.of(), getComponentTypeFromKey())
+      : Collections.checkedList(List.copyOf(list), getComponentTypeFromKey());
   }
   //</editor-fold>
 }

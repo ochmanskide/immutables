@@ -151,31 +151,9 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
     return ImmutableSet.<@NotNull K, @NotNull V>copyOfEntries(unwrap().entrySet(), Entry[]::new);
   }
 
-  @NotNull
-  @Override
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  public ImmutableSet<@NotNull K> keySet()
-  {
-    return ImmutableSet.of(unwrap().keySet(), getKey());
-  }
 
-  @NotNull
-  @Override
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  public ImmutableList<@NotNull V> values()
-  {
-    return ImmutableList.of(unwrap().values(), getValue());
-  }
 
-  @NotNull
-  @Override
-  @UnmodifiableView
-  @Contract(pure = true)
-  public Map<@NotNull K, @NotNull V> unwrap() {
-    return map;
-  }
+
 
   @NotNull
   @UnmodifiableView
@@ -192,8 +170,52 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
+  private static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
   }
+
+  //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
+
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
+
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="3. implementation of IMap interface">
+
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="4. Positional Access Operations">
+
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="5. converters to family classes">
+  @NotNull
+  @Override
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public ImmutableSet<@NotNull K> keySet() {
+    return ImmutableSet.of(unwrap().keySet(), getKey());
+  }
+
+  @NotNull
+  @Override
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public ImmutableList<@NotNull V> values() {
+    return ImmutableList.of(unwrap().values(), getValue());
+  }
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="6. bridge for Java Collection API">
+  @NotNull
+  @Override
+  @UnmodifiableView
+  @Contract(pure = true)
+  public Map<@NotNull K, @NotNull V> unwrap() {
+    return map;
+  }
+  //</editor-fold>
 }

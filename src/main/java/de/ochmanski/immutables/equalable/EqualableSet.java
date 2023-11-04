@@ -231,7 +231,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   }
   //</editor-fold>
 
-  //<editor-fold defaultstate="collapsed" desc="3. implementation of IList interface">
+  //<editor-fold defaultstate="collapsed" desc="3. implementation of ISet interface">
 
   /**
    * Returns a deep copy of this {@code ArraySet} instance.  (The elements themselves are also copied.)

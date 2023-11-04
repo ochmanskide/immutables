@@ -177,7 +177,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   }
   //</editor-fold>
 
-  //<editor-fold defaultstate="collapsed" desc="3. implementation of IList interface">
+  //<editor-fold defaultstate="collapsed" desc="3. implementation of ISet interface">
 
   /**
    * Returns the number of elements in this set.

@@ -255,7 +255,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet() {
-    return ImmutableSet.<@NotNull K, @NotNull V>copyOfEntries(toMap().entrySet(), Entry[]::new);
+    return getMap().entrySet();
   }
 
   @NotNull
@@ -263,8 +263,11 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  public Map<@NotNull K, @NotNull V> unwrap() {
-    return map.unwrap();
+  public EnumMap<@NotNull K, @NotNull V> unwrap() {
+    if (map.isEmpty()) {
+      return new EnumMap<@NotNull K, @NotNull V>(getComponentTypeFromConstructor(getKey()));
+    }
+    return new EnumMap<@NotNull K, @NotNull V>(map.unwrap());
   }
 
   @NotNull
@@ -273,7 +276,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableEnumSet<@NotNull K> keySet() {
-    return ImmutableEnumSet.of(toMap().keySet(), getKey());
+    return ImmutableEnumSet.of(unwrap().keySet(), getKey());
   }
 
   @NotNull
@@ -282,21 +285,12 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableList<@NotNull V> values() {
-    return ImmutableList.of(toMap().values(), getValue());
+    return ImmutableList.of(unwrap().values(), getValue());
   }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="4. converters to family classes">
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  public EnumMap<K, @NotNull V> toMap() {
-    if (map.isEmpty()) {
-      return new EnumMap<@NotNull K, @NotNull V>(getComponentTypeFromConstructor(getKey()));
-    }
-    return new EnumMap<@NotNull K, @NotNull V>(map.unwrap());
-  }
+
 
   @NotNull
   @Unmodifiable

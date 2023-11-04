@@ -77,7 +77,7 @@ public interface IMap<K, V>
    * @return {@code true} if this map contains the specified element
    */
   default boolean containsKey(@NotNull final K o) {
-    return getMap().containsKey();
+    return getMap().containsKey(o);
   }
 
   /**
@@ -100,7 +100,7 @@ public interface IMap<K, V>
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   default ISet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet() {
-    return getMap(). ();
+    return getMap().entrySet();
   }
 
   @NotNull

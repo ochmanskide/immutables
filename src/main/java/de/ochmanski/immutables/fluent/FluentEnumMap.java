@@ -337,7 +337,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @Contract(value = " -> new", pure = true)
   public EnumMap<@NotNull K, @NotNull V> unwrap()
   {
-    return map.toMap();
+    return map.unwrap();
   }
 
   @NotNull

@@ -222,7 +222,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  private static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> of(
     @NotNull final ImmutableSet<@NotNull S> immutableSet) {
     return ImmutableEnumSet.<@NotNull S>builder().set(immutableSet).key(immutableSet.getKey()).build();
   }

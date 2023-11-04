@@ -170,7 +170,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  private static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final ImmutableList<@NotNull S> immutableList) {
     return EqualableList.<@NotNull S>builder().list(immutableList).key(immutableList.getKey()).build();
   }
@@ -183,8 +183,9 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
    *
    * @return a clone of this {@code ArrayList} instance
    */
-  @Override
   @NotNull
+  @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public EqualableList<@NotNull E> deepClone() {

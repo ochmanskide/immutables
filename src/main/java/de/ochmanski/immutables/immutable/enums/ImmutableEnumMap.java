@@ -368,15 +368,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
 
   //</editor-fold>
 
-  //<editor-fold defaultstate="collapsed" desc="4. Positional Access Operations">
-
-  //</editor-fold>
-
-  //<editor-fold defaultstate="collapsed" desc="5. converters to family classes">
-
-  //</editor-fold>
-
-  //<editor-fold defaultstate="collapsed" desc="6. bridge for Java Collection API">
+  //<editor-fold defaultstate="collapsed" desc="3. converters to family classes">
 
   //</editor-fold>
 

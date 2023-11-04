@@ -242,8 +242,9 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
     return stream();
   }
 
-  @Override
   @NotNull
+  @Override
+  @Unmodifiable
   @UnmodifiableView
   public Stream<@NotNull Entry<@NotNull K, @NotNull V>> stream()
   {
@@ -290,8 +291,9 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
    *
    * @return a clone of this {@code ArrayMap} instance
    */
-  @Override
   @NotNull
+  @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public FluentEnumMap<@NotNull K, @NotNull V> deepClone()
@@ -299,8 +301,9 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
     return toBuilder().build();
   }
 
-  @Override
   @NotNull
+  @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableSet<@NotNull Entry<@NotNull K, @NotNull V>> entrySet()
@@ -308,8 +311,9 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
     return map.entrySet();
   }
 
-  @Override
   @NotNull
+  @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public FluentEnumSet<@NotNull K> keySet()
@@ -358,15 +362,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
 
   //</editor-fold>
 
-  //<editor-fold defaultstate="collapsed" desc="4. Positional Access Operations">
-
-  //</editor-fold>
-
-  //<editor-fold defaultstate="collapsed" desc="5. converters to family classes">
-
-  //</editor-fold>
-
-  //<editor-fold defaultstate="collapsed" desc="6. bridge for Java Collection API">
+  //<editor-fold defaultstate="collapsed" desc="3. converters to family classes">
 
   //</editor-fold>
 }

@@ -219,8 +219,9 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
    *
    * @return a clone of this {@code ArrayList} instance
    */
-  @Override
   @NotNull
+  @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public FluentEnumList<@NotNull E> deepClone() {

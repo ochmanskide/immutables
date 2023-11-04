@@ -38,26 +38,36 @@ public interface IMap<K, V>
 
   @NotNull
   @Contract(pure = true)
-  Optional<@Nullable V> get(@NotNull final K key);
+  default Optional<@Nullable V> get(@NotNull final K key) {
+    return getMap().get(key);
+  }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
   ISet<@NotNull K> findByValue(@NotNull final V value);
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  Stream<@NotNull Entry<@NotNull K, @NotNull V>> stream();
+  default Stream<IMap.@NotNull Entry<@NotNull K, @NotNull V>> stream() {
+    return getMap().stream();
+  }
 
-  int size();
+  default int size() {
+    return getMap().size();
+  }
 
   /**
    * Returns {@code true} if this map contains no elements.
    *
    * @return {@code true} if this map contains no elements
    */
-  boolean isEmpty();
+  default boolean isEmpty() {
+    return getMap().isEmpty();
+  }
 
   /**
    * Returns {@code true} if this map contains the specified element. More formally, returns {@code true} if and only if
@@ -66,7 +76,9 @@ public interface IMap<K, V>
    * @param o element whose presence in this map is to be tested
    * @return {@code true} if this map contains the specified element
    */
-  boolean containsKey(@NotNull final K o);
+  default boolean containsKey(@NotNull final K o) {
+    return getMap().containsKey();
+  }
 
   /**
    * Returns a deep copy of this {@code ArrayMap} instance.  (The elements themselves are also copied.)
@@ -79,22 +91,33 @@ public interface IMap<K, V>
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  Map<@NotNull K, @NotNull V> unwrap();
+  default Map<@NotNull K, @NotNull V> unwrap() {
+    return getMap().unwrap();
+  }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  ISet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet();
+  default ISet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet() {
+    return getMap(). ();
+  }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  ISet<@NotNull K> keySet();
+  default ISet<@NotNull K> keySet() {
+    return getMap().keySet();
+  }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  IList<@NotNull V> values();
+  default IList<@NotNull V> values() {
+    return getMap().values();
+  }
 
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

@@ -3,10 +3,7 @@ package de.ochmanski.immutables;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.ImmutableMap;
 import lombok.*;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
+import org.jetbrains.annotations.*;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -87,7 +84,7 @@ public interface IMap<K, V>
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  ISet<@NotNull Entry<@NotNull K, @NotNull V>> entrySet();
+  ISet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet();
 
   @NotNull
   @UnmodifiableView
@@ -200,4 +197,8 @@ public interface IMap<K, V>
     }
   }
 
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  IMap<@NotNull K, @NotNull V> getMap();
 }

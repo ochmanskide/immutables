@@ -9,14 +9,15 @@ import de.ochmanski.immutables.immutable.ImmutableList;
 import de.ochmanski.immutables.immutable.ImmutableMap;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.*;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.IntFunction;
-import java.util.stream.Stream;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
@@ -49,21 +50,33 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Builder.Default
   IntFunction<@NonNull @NotNull V @NonNull @NotNull []> value = defaultValue();
 
+  //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> empty() {
+    return EMPTY;
+  }
+
+  private static final ImmutableEnumMap EMPTY = ImmutableEnumMap.builder().build();
+
+  @NotNull
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
   @Contract(value = " -> new", pure = true)
-  private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey()
-  {
-    return (IntFunction)Enum @NotNull []::new;
+  private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) Enum @NotNull []::new;
   }
 
   @NotNull
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
   @Contract(value = " -> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultValue()
-  {
-    return (IntFunction)Object @NotNull []::new;
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultValue() {
+    return (IntFunction) Object @NotNull []::new;
   }
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
 
   /**
    * This method is not supported.
@@ -79,8 +92,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
-  static void of()
-  {
+  static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
       + "For example: ImmutableEnumMap.ofGenerator(String[]::new)");
   }
@@ -99,11 +111,10 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V>
+  public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V>
   ofGenerator(
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
-    @NotNull final IntFunction<@NotNull V @NotNull []> value)
-  {
+    @NotNull final IntFunction<@NotNull V @NotNull []> value) {
     final Class<K> keyType = getComponentTypeFromConstructor(key);
     return ImmutableEnumMap.<@NotNull K, @NotNull V>of(new EnumMap<@NotNull K, @NotNull V>(keyType), key, value);
   }
@@ -112,11 +123,10 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _ , _, _ -> new", pure = true)
-  public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
+  public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final K k1, @NotNull final V v1,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
-    @NotNull final IntFunction<@NotNull V @NotNull []> value)
-  {
+    @NotNull final IntFunction<@NotNull V @NotNull []> value) {
     final Class<K> keyType = getComponentTypeFromConstructor(key);
     final Map<@NotNull K, @NotNull V> map = new EnumMap<@NotNull K, @NotNull V>(keyType);
     map.put(k1, v1);
@@ -127,12 +137,11 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _ , _, _ -> new", pure = true)
-  public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
+  public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final K k1, @NotNull final V v1,
     @NotNull final K k2, @NotNull final V v2,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
-    @NotNull final IntFunction<@NotNull V @NotNull []> value)
-  {
+    @NotNull final IntFunction<@NotNull V @NotNull []> value) {
     final Class<K> keyType = getComponentTypeFromConstructor(key);
     final Map<@NotNull K, @NotNull V> map = new EnumMap<@NotNull K, @NotNull V>(keyType);
     map.put(k1, v1);
@@ -144,13 +153,12 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _, _ , _, _ -> new", pure = true)
-  public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
+  public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final K k1, @NotNull final V v1,
     @NotNull final K k2, @NotNull final V v2,
     @NotNull final K k3, @NotNull final V v3,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
-    @NotNull final IntFunction<@NotNull V @NotNull []> value)
-  {
+    @NotNull final IntFunction<@NotNull V @NotNull []> value) {
     final Class<K> keyType = getComponentTypeFromConstructor(key);
     final Map<@NotNull K, @NotNull V> map = new EnumMap<@NotNull K, @NotNull V>(keyType);
     map.put(k1, v1);
@@ -163,14 +171,13 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _, _, _, _ , _, _ -> new", pure = true)
-  public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
+  public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final K k1, @NotNull final V v1,
     @NotNull final K k2, @NotNull final V v2,
     @NotNull final K k3, @NotNull final V v3,
     @NotNull final K k4, @NotNull final V v4,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
-    @NotNull final IntFunction<@NotNull V @NotNull []> value)
-  {
+    @NotNull final IntFunction<@NotNull V @NotNull []> value) {
     final Class<K> keyType = getComponentTypeFromConstructor(key);
     final Map<@NotNull K, @NotNull V> map = new EnumMap<@NotNull K, @NotNull V>(keyType);
     map.put(k1, v1);
@@ -184,13 +191,11 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
+  public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final Map<@NotNull K, @NotNull V> map,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
-    @NotNull final IntFunction<@NotNull V @NotNull []> value)
-  {
-    if(map.isEmpty())
-    {
+    @NotNull final IntFunction<@NotNull V @NotNull []> value) {
+    if (map.isEmpty()) {
       final Class<K> keyType = getComponentTypeFromConstructor(key);
       final EnumMap<@NotNull K, @NotNull V> enumMap = new EnumMap<>(keyType);
       return ImmutableEnumMap.ofEnumMap(enumMap, key, value);
@@ -203,11 +208,10 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _, _, _-> new", pure = true)
-  public static <K extends Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> ofEnumMap(
+  public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> ofEnumMap(
     @NotNull final EnumMap<@NotNull K, @NotNull V> map,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
-    @NotNull final IntFunction<@NotNull V @NotNull []> value)
-  {
+    @NotNull final IntFunction<@NotNull V @NotNull []> value) {
     final ImmutableMap<@NotNull K, @NotNull V> immutableMap = ImmutableMap.of(map, key, value);
     return ImmutableEnumMap.<@NotNull K, @NotNull V>builder()
       .key(key)
@@ -215,74 +219,20 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
       .map(immutableMap)
       .build();
   }
+  //</editor-fold>
 
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(pure = true)
-  public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> empty()
-  {
-    return EMPTY;
-  }
-
-  private static final ImmutableEnumMap EMPTY = ImmutableEnumMap.builder().build();
-
-  @NotNull
-  public Optional<@Nullable V> get(@NotNull final K key)
-  {
-    return map.get(key);
-  }
+  //<editor-fold defaultstate="collapsed" desc="3. implementation of IMap interface">
 
   @NotNull
   @Override
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public ImmutableEnumSet<@NotNull K> findByValue(@NotNull final V value)
-  {
+  public ImmutableEnumSet<@NotNull K> findByValue(@NotNull final V value) {
     return stream()
       .filter(p -> Equalable.<@NotNull V>areTheSame(p.getValue(), value))
       .map(Entry::getKey)
       .collect(ImmutableCollectors.toEnumSet(getKey()));
-  }
-
-  @NotNull
-  @UnmodifiableView
-  public Stream<IMap.@NotNull Entry<@NotNull K, @NotNull V>> stream()
-  {
-    return entrySet().stream();
-  }
-
-  /**
-   * Returns the number of elements in this map.
-   *
-   * @return the number of elements in this map
-   */
-  public int size()
-  {
-    return map.size();
-  }
-
-  /**
-   * Returns {@code true} if this map contains no elements.
-   *
-   * @return {@code true} if this map contains no elements
-   */
-  public boolean isEmpty()
-  {
-    return map.isEmpty();
-  }
-
-  /**
-   * Returns {@code true} if this map contains the specified element. More formally, returns {@code true} if and only if
-   * this map contains at least one element {@code e} such that {@code Objects.equals(o, e)}.
-   *
-   * @param o element whose presence in this map is to be tested
-   * @return {@code true} if this map contains the specified element
-   */
-  public boolean containsKey(@NotNull final K o)
-  {
-    return map.containsKey(o);
   }
 
   /**
@@ -291,24 +241,26 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
    * @return a clone of this {@code ArrayMap} instance
    */
   @NotNull
+  @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ImmutableEnumMap<@NotNull K, @NotNull V> deepClone()
-  {
+  public ImmutableEnumMap<@NotNull K, @NotNull V> deepClone() {
     return toBuilder().build();
   }
 
   @NotNull
   @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ImmutableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet()
-  {
+  public ImmutableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet() {
     return ImmutableSet.<@NotNull K, @NotNull V>copyOfEntries(toMap().entrySet(), Entry[]::new);
   }
 
   @NotNull
   @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
   public Map<@NotNull K, @NotNull V> unwrap() {
@@ -317,30 +269,30 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
 
   @NotNull
   @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ImmutableEnumSet<@NotNull K> keySet()
-  {
+  public ImmutableEnumSet<@NotNull K> keySet() {
     return ImmutableEnumSet.of(toMap().keySet(), getKey());
   }
 
   @NotNull
   @Override
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ImmutableList<@NotNull V> values()
-  {
+  public ImmutableList<@NotNull V> values() {
     return ImmutableList.of(toMap().values(), getValue());
   }
+  //</editor-fold>
 
+  //<editor-fold defaultstate="collapsed" desc="4. converters to family classes">
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public EnumMap<K, @NotNull V> toMap()
-  {
-    if(map.isEmpty())
-    {
+  public EnumMap<K, @NotNull V> toMap() {
+    if (map.isEmpty()) {
       return new EnumMap<@NotNull K, @NotNull V>(getComponentTypeFromConstructor(getKey()));
     }
     return new EnumMap<@NotNull K, @NotNull V>(map.unwrap());
@@ -351,25 +303,8 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
   private static <S extends Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
-    final @NotNull IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    final @NotNull IntFunction<@NotNull S @NotNull []> constructor) {
     return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
   }
-
-  //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
-
   //</editor-fold>
-
-  //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
-
-  //</editor-fold>
-
-  //<editor-fold defaultstate="collapsed" desc="3. implementation of IMap interface">
-
-  //</editor-fold>
-
-  //<editor-fold defaultstate="collapsed" desc="3. converters to family classes">
-
-  //</editor-fold>
-
 }

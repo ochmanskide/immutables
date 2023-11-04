@@ -28,7 +28,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @UnmodifiableView
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder(toBuilder = true)
+@Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent<? extends @NotNull E>>
   implements ISet<@NotNull E>
 {

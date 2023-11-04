@@ -121,7 +121,7 @@ public interface IMap<K, V>
 
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  @Builder(toBuilder = true)
+  @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
   class Entry<K, V> implements Equalable<@NotNull Entry<@NotNull K, @NotNull V>>
   {
 

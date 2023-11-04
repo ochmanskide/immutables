@@ -16,7 +16,7 @@ import java.util.List;
 @Value
 @UnmodifiableView
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder(toBuilder = true)
+@Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class Id implements Equalable<@NotNull Id>, Comparable<@NotNull Id>
 {
   @NonNull

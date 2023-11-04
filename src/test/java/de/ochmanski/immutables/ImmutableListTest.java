@@ -201,7 +201,7 @@ class ImmutableListTest
 
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  @Builder(toBuilder = true)
+  @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
   private static class Dummy implements Equalable<Dummy>
   {
     @Builder.Default

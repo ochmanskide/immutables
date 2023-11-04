@@ -29,7 +29,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @UnmodifiableView
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder(toBuilder = true)
+@Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements ISet<@NotNull E>
 {
 

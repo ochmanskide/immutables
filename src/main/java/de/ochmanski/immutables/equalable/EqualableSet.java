@@ -1,6 +1,5 @@
 package de.ochmanski.immutables.equalable;
 
-import de.ochmanski.immutables.ICollection;
 import de.ochmanski.immutables.IMap;
 import de.ochmanski.immutables.ISet;
 import de.ochmanski.immutables.immutable.ImmutableSet;
@@ -12,12 +11,9 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.IntFunction;
-import java.util.stream.Stream;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
@@ -206,39 +202,14 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     return IMap.Entry.<@NotNull K, @NotNull V>builder().key(entry.getKey()).value(entry.getValue()).build();
   }
 
-  /**
-   * Returns the number of elements in this set.
-   *
-   * @return the number of elements in this set
-   */
-  @Override
-  public int size()
-  {
-    return set.size();
-  }
-
-  /**
-   * Returns {@code true} if this set contains no elements.
-   *
-   * @return {@code true} if this set contains no elements
-   */
-  @Override
-  public boolean isEmpty()
-  {
-    return set.isEmpty();
-  }
-
-  /**
-   * Returns {@code true} if this set contains the specified element. More formally, returns {@code true} if and only if
-   * this set contains at least one element {@code e} such that {@code Objects.equals(o, e)}.
-   *
-   * @param o element whose presence in this set is to be tested
-   * @return {@code true} if this set contains the specified element
-   */
-  @Override
-  public boolean contains(@NotNull final E o)
-  {
-    return set.contains(o);
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <K extends @NotNull Equalable<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> EqualableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOf(
+    @NotNull final Set<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entries,
+    @NotNull final IntFunction<IMap.@NotNull Entry<@NotNull K, @NotNull V> @NotNull []> entry) {
+    return entries.stream().map(e -> e.toBuilder().build()).collect(EqualableCollectors.toSet(entry));
   }
 
   /**
@@ -253,89 +224,6 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   public EqualableSet<? extends @NotNull E> deepClone()
   {
     return toBuilder().key(key).build();
-  }
-
-  /**
-   * Returns an array containing all the elements in this set in proper sequence (from first to last element).
-   *
-   * <p>The returned array will be "safe" in that no references to it are
-   * maintained by this set.  (In other words, this method must allocate a new array).  The caller is thus free to
-   * modify the returned array.
-   *
-   * <p>This method acts as bridge between array-based and collection-based
-   * APIs.
-   *
-   * @return an array containing all the elements in this set in proper sequence
-   */
-  @NotNull
-  @Override
-  @Contract(value = "-> new", pure = true)
-  public E @NotNull [] toArray()
-  {
-    return set.toArray();
-  }
-
-  @NotNull
-  @Contract(value = "-> new", pure = true)
-  public E @NotNull [] newArrayNative()
-  {
-    return ICollection.zeroLengthArray(getKey());
-  }
-
-  @Override
-  @Contract(pure = true)
-  public void forEach(@NotNull final Consumer<? super @NotNull E> consumer)
-  {
-    set.forEach(consumer);
-  }
-
-  @Override
-  @Contract(pure = true)
-  public void forEachRemaining(@NotNull final Consumer<? super @NotNull E> consumer)
-  {
-    set.forEachRemaining(consumer);
-  }
-
-  /**
-   * Returns an iterator over the elements in this set.  The elements are returned in no particular order (unless this
-   * set is an instance of some class that provides a guarantee).
-   *
-   * @return an iterator over the elements in this set
-   */
-  @NotNull
-  @Override
-  @Contract(pure = true)
-  public Iterator<@NotNull E> iterator()
-  {
-    return set.iterator();
-  }
-
-  /**
-   * Returns a sequential {@code Stream} with this collection as its source.
-   *
-   * @return a sequential {@code Stream} over the elements in this collection
-   * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
-   *   {@code Spliterator}.
-   * @since 1.8
-   */
-  @NotNull
-  @Override
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  public Stream<@NotNull E> stream()
-  {
-    return set.stream();
-  }
-
-  @NotNull
-  @Override
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  public Set<@NotNull E> unwrap()
-  {
-    return set.unwrap();
   }
 
   @NotNull
@@ -372,4 +260,22 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   public EqualableList<@NotNull E> toList() {
     return EqualableList.<@NotNull E>of(unwrap(), key);
   }
+
+
+  //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
+
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
+
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="3. implementation of IList interface">
+
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="4. converters to family classes">
+
+  //</editor-fold>
+
 }

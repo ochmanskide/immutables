@@ -162,13 +162,13 @@ class FluentEnumSetTest
   @Test
   void ofGenerator() {
     final @NotNull IntFunction<@NotNull FluentExample[]> constructor = FluentExample[]::new;
-    final FluentEnumSet<FluentExample> actual = FluentEnumSet.ofGenerator(constructor);
+    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.ofGenerator(constructor);
     assertThat(actual.isEmpty()).isTrue();
     assertThat(actual.size()).isZero();
     assertThat(actual.getSet().unwrap()).isEmpty();
     assertThat(actual.toArray()).isEmpty();
     assertThat(actual.toArray().getClass().getComponentType()).isEqualTo(FluentExample.class);
-    final List<FluentExample> expected = Arrays.asList(FluentExample.values());
+    final List<@NotNull FluentExample> expected = Arrays.asList(FluentExample.values());
     final Object[] enumConstants = actual.toArray().getClass().getComponentType().getEnumConstants();
     assertThat(enumConstants).containsExactlyElementsOf(expected);
   }
@@ -184,7 +184,7 @@ class FluentEnumSetTest
   void of6() {
     final FluentExample s1 = FluentExample.A;
     final FluentExample s2 = FluentExample.B;
-    final FluentEnumSet<FluentExample> actual = FluentEnumSet.of(s1, s2, FluentExample[]::new);
+    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.of(s1, s2, FluentExample[]::new);
     assertThat(actual).isInstanceOf(FluentEnumSet.class);
     assertThat(actual.unwrap()).containsExactlyInAnyOrder(FluentExample.A, FluentExample.B);
   }
@@ -194,7 +194,7 @@ class FluentEnumSetTest
     final FluentExample s1 = FluentExample.A;
     final FluentExample s2 = FluentExample.B;
     final FluentExample s3 = FluentExample.C;
-    final FluentEnumSet<FluentExample> actual = FluentEnumSet.of(s1, s2, s3, FluentExample[]::new);
+    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.of(s1, s2, s3, FluentExample[]::new);
     assertThat(actual).isInstanceOf(FluentEnumSet.class);
     assertThat(actual.unwrap()).containsExactlyInAnyOrder(FluentExample.A, FluentExample.B, FluentExample.C);
   }
@@ -204,7 +204,7 @@ class FluentEnumSetTest
     final FluentExample s1 = FluentExample.A;
     final FluentExample s2 = FluentExample.B;
     final FluentExample s3 = FluentExample.C;
-    final FluentEnumSet<FluentExample> actual = FluentEnumSet.of(s1, s1, s2, s3, FluentExample[]::new);
+    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.of(s1, s1, s2, s3, FluentExample[]::new);
     assertThat(actual).isInstanceOf(FluentEnumSet.class);
     assertThat(actual.unwrap()).containsExactlyInAnyOrder(FluentExample.A, FluentExample.B, FluentExample.C);
   }
@@ -252,7 +252,7 @@ class FluentEnumSetTest
   @Test
   void toArrayEmpty() {
     final FluentExample s1 = FluentExample.A;
-    final FluentEnumSet<FluentExample> actual = FluentEnumSet.ofGenerator(FluentExample[]::new);
+    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.ofGenerator(FluentExample[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 
@@ -287,7 +287,7 @@ class FluentEnumSetTest
 
   @Test
   void toArrayClass() {
-    final FluentEnumSet<FluentExample> actual = FluentEnumSet.ofGenerator(FluentExample[]::new);
+    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.ofGenerator(FluentExample[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 
@@ -301,7 +301,7 @@ class FluentEnumSetTest
   @Test
   void toArray1() {
     final FluentExample s1 = FluentExample.A;
-    final FluentEnumSet<FluentExample> actual = FluentEnumSet.of(s1, FluentExample[]::new);
+    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.of(s1, FluentExample[]::new);
     assertThat(actual.toArray()).containsExactly(s1);
   }
 
@@ -318,7 +318,7 @@ class FluentEnumSetTest
     final FluentExample s1 = FluentExample.A;
     final FluentExample s2 = FluentExample.B;
     final FluentExample s3 = FluentExample.C;
-    final FluentEnumSet<FluentExample> actual = FluentEnumSet.of(s1, s1, s2, s3, FluentExample[]::new);
+    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.of(s1, s1, s2, s3, FluentExample[]::new);
     assertThat(actual.toArray()).containsExactlyInAnyOrder(s1, s2, s3);
   }
 

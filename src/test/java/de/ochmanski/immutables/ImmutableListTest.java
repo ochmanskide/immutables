@@ -1,5 +1,6 @@
 package de.ochmanski.immutables;
 
+import annotations.UnitTest;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.AccessLevel;
@@ -14,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@UnitTest
 @ExtendWith(MockitoExtension.class)
 class ImmutableListTest
 {

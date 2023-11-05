@@ -76,12 +76,31 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @NotNull
   @Unmodifiable
   @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static ImmutableSet<@NotNull String> of(
+    @NotNull final String e1) {
+    return ImmutableSet.<@NotNull String>of(e1, String @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S> ImmutableSet<@NotNull S> of(
     @NotNull final S e1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableSet.of(Set.of(e1), constructor);
+    return ImmutableSet.of(Set.copyOf(List.of(e1)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static ImmutableSet<@NotNull String> of(
+    @NotNull final String e1,
+    @NotNull final String e2) {
+    return ImmutableSet.<@NotNull String>of(e1, e2, String @NotNull []::new);
   }
 
   @NotNull
@@ -93,7 +112,18 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
     @NotNull final S e2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableSet.of(Set.of(e1, e2), constructor);
+    return ImmutableSet.of(Set.copyOf(List.of(e1, e2)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _ -> new", pure = true)
+  public static ImmutableSet<@NotNull String> of(
+    @NotNull final String e1,
+    @NotNull final String e2,
+    @NotNull final String e3) {
+    return ImmutableSet.<@NotNull String>of(e1, e2, e3, String @NotNull []::new);
   }
 
   @NotNull
@@ -106,7 +136,19 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
     @NotNull final S e3,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableSet.of(Set.of(e1, e2, e3), constructor);
+    return ImmutableSet.of(Set.copyOf(List.of(e1, e2, e3)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _ -> new", pure = true)
+  public static ImmutableSet<@NotNull String> of(
+    @NotNull final String e1,
+    @NotNull final String e2,
+    @NotNull final String e3,
+    @NotNull final String e4) {
+    return ImmutableSet.<@NotNull String>of(e1, e2, e3, e4, String @NotNull []::new);
   }
 
   @NotNull
@@ -120,7 +162,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
     @NotNull final S e4,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return ImmutableSet.of(Set.of(e1, e2, e3, e4), constructor);
+    return ImmutableSet.of(Set.copyOf(List.of(e1, e2, e3, e4)), constructor);
   }
 
   @NotNull
@@ -142,6 +184,16 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   }
 
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static ImmutableSet<@NotNull String> ofArray(
+    @NotNull final String @NotNull [] array) {
+    return ImmutableSet.<@NotNull String>ofArray(array, String @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S> ImmutableSet<@NotNull S> ofArray(
@@ -152,6 +204,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   }
 
   @NotNull
+  @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S> ImmutableSet<@NotNull S> of(
@@ -321,7 +374,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Contract(value = "-> new", pure = true)
   public String toString() {
     try {
-      final String s = new ObjectMapper().writeValueAsString(set);
+      final String s = new ObjectMapper().writeValueAsString(stream().sorted().toList());
       return limit(s, 1000);
     } catch (JsonProcessingException e) {
       return Arrays.toString(toArray());

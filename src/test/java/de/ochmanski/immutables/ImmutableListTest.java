@@ -23,7 +23,12 @@ class ImmutableListTest
   @Test
   void ofNullClass()
   {
-    assertThatThrownBy(() -> ImmutableList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
+    assertThatThrownBy(() -> ImmutableList.ofGenerator(null))
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
+      .satisfiesAnyOf(
+        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'constructor' of de/ochmanski/immutables/ImmutableList.of must not be null")
+      );
   }
 
   @Test
@@ -202,16 +207,111 @@ class ImmutableListTest
   }
 
   @Test
-  void toStringTest() {
-    ImmutableList<String> classUnderTest = ImmutableList.<@javax.validation.constraints.NotNull String>of("nothing", String[]::new);
+  void toStringTest01() {
+    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>ofGenerator(String[]::new);
     final String actual = classUnderTest.toString();
-    assertThat(actual).isEqualTo("[\"nothing\"]");
+    assertThat(actual).isEqualTo("[]");
+  }
+
+  @Test
+  void toStringTest02() {
+    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>empty();
+    final String actual = classUnderTest.toString();
+    assertThat(actual).isEqualTo("[]");
+  }
+
+  @Test
+  void toStringTest11() {
+    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", String[]::new);
+    final String actual = classUnderTest.toString();
+    assertThat(actual).isEqualTo("[\"a\"]");
+  }
+
+  @Test
+  void toStringTest12() {
+    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a");
+    final String actual = classUnderTest.toString();
+    assertThat(actual).isEqualTo("[\"a\"]");
+  }
+
+  @Test
+  void toStringTest21() {
+    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", "b", String[]::new);
+    final String actual = classUnderTest.toString();
+    assertThat(actual).isEqualTo("[\"a\",\"b\"]");
+  }
+
+  @Test
+  void toStringTest22() {
+    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", "b");
+    final String actual = classUnderTest.toString();
+    assertThat(actual).isEqualTo("[\"a\",\"b\"]");
+  }
+
+  @Test
+  void toStringTest31() {
+    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", "b", "c", String[]::new);
+    final String actual = classUnderTest.toString();
+    assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\"]");
+  }
+
+  @Test
+  void toStringTest32() {
+    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", "b", "c");
+    final String actual = classUnderTest.toString();
+    assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\"]");
+  }
+
+  @Test
+  void toStringTest41() {
+    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", "b", "c", "d", String[]::new);
+    final String actual = classUnderTest.toString();
+    assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\",\"d\"]");
+  }
+
+  @Test
+  void toStringTest42() {
+    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", "b", "c", "d");
+    final String actual = classUnderTest.toString();
+    assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\",\"d\"]");
+  }
+
+  @Test
+  void toStringTestArray01() {
+    final String[] array = {"a", "b", "c", "d"};
+    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of(array, String[]::new);
+    final String actual = classUnderTest.toString();
+    assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\",\"d\"]");
+  }
+
+  @Test
+  void toStringTestArray02() {
+    final String[] array = {"a", "b", "c", "d"};
+    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of(array);
+    final String actual = classUnderTest.toString();
+    assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\",\"d\"]");
+  }
+
+  @Test
+  void toStringTestArray21() {
+    final String[] array = {"a", "b", "c", null};
+    assertThatThrownBy(() -> ImmutableList.<@NotNull String>of(array, String[]::new))
+      .isExactlyInstanceOf(NullPointerException.class)
+      .hasNoCause();
+  }
+
+  @Test
+  void toStringTestArray22() {
+    final String[] array = {"a", "b", "c", null};
+    assertThatThrownBy(() -> ImmutableList.<@NotNull String>of(array))
+      .isExactlyInstanceOf(NullPointerException.class)
+      .hasNoCause();
   }
 
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-  private static class Dummy implements Equalable<Dummy>
+  private static class Dummy implements Equalable<@NotNull Dummy>
   {
     @Builder.Default
     String s = "dummy";

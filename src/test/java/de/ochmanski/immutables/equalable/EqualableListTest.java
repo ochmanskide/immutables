@@ -203,56 +203,56 @@ class EqualableListTest {
   void toStringTest11() {
     EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull String>of("a");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[\"a\"]");
+    assertThat(actual).isEqualTo("[{\"raw\":\"a\"}]");
   }
 
   @Test
   void toStringTest12() {
     EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull StringWrapper>of("a");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[\"a\"]");
+    assertThat(actual).isEqualTo("[{\"raw\":\"a\"}]");
   }
 
   @Test
   void toStringTest21() {
     EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull String>of("a", "b");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[\"a\",\"b\"]");
+    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"}]");
   }
 
   @Test
   void toStringTest22() {
-    EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull String>of("a", "b");
+    EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull StringWrapper>of("a", "b");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[\"a\",\"b\"]");
+    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"}]");
   }
 
   @Test
   void toStringTest31() {
     EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull String>of("a", "b", "c");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\"]");
+    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"}]");
   }
 
   @Test
   void toStringTest32() {
-    EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull String>of("a", "b", "c");
+    EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull StringWrapper>of("a", "b", "c");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\"]");
+    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"}]");
   }
 
   @Test
   void toStringTest41() {
     EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull String>of("a", "b", "c", "d");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\",\"d\"]");
+    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"},{\"raw\":\"d\"}]");
   }
 
   @Test
   void toStringTest42() {
-    EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull String>of("a", "b", "c", "d");
+    EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull StringWrapper>of("a", "b", "c", "d");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\",\"d\"]");
+    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"},{\"raw\":\"d\"}]");
   }
 
   @Test
@@ -260,15 +260,15 @@ class EqualableListTest {
     final String[] array = {"a", "b", "c", "d"};
     EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull String>of(array);
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\",\"d\"]");
+    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"},{\"raw\":\"d\"}]");
   }
 
   @Test
   void toStringTestArray02() {
     final String[] array = {"a", "b", "c", "d"};
-    EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull String>of(array);
+    EqualableList<@NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull StringWrapper>of(array);
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\",\"d\"]");
+    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"},{\"raw\":\"d\"}]");
   }
 
   @Test
@@ -282,7 +282,7 @@ class EqualableListTest {
   @Test
   void toStringTestArray22() {
     final String[] array = {"a", "b", "c", null};
-    assertThatThrownBy(() -> EqualableList.<@NotNull String>of(array))
+    assertThatThrownBy(() -> EqualableList.<@NotNull StringWrapper>of(array))
       .isExactlyInstanceOf(NullPointerException.class)
       .hasNoCause();
   }

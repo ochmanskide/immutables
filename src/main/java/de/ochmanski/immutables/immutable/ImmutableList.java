@@ -10,6 +10,7 @@ import org.jetbrains.annotations.*;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.IntFunction;
+import java.util.stream.Stream;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
@@ -365,6 +366,22 @@ public class ImmutableList<E> implements IList<@NotNull E>
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="6. bridge for Java Collection API">
+
+  /**
+   * Returns a sequential {@code Stream} with this collection as its source.
+   *
+   * @return a sequential {@code Stream} over the elements in this collection
+   * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
+   * {@code Spliterator}.
+   * @since 1.8
+   */
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  public Stream<@NotNull E> stream() {
+    return list.stream();
+  }
+
   @NotNull
   @Override
   @UnmodifiableView

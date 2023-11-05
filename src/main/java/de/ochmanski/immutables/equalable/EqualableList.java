@@ -107,11 +107,28 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
 
   @NotNull
   @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  static EqualableList<@NotNull StringWrapper> of(
+    @NotNull final String s1) {
+    return EqualableList.ofString(ImmutableList.of(s1));
+  }
+
+  @NotNull
+  @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
   static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return EqualableList.<@NotNull S>of(ImmutableList.of(s1, constructor));
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _ -> new", pure = true)
+  static EqualableList<@NotNull StringWrapper> of(
+    @NotNull final String s1,
+    @NotNull final String s2) {
+    return EqualableList.ofString(ImmutableList.of(s1, s2));
   }
 
   @NotNull
@@ -126,6 +143,16 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
 
   @NotNull
   @UnmodifiableView
+  @Contract(value = " _, _, _ -> new", pure = true)
+  static EqualableList<@NotNull StringWrapper> of(
+    @NotNull final String s1,
+    @NotNull final String s2,
+    @NotNull final String s3) {
+    return EqualableList.ofString(ImmutableList.of(s1, s2, s3));
+  }
+
+  @NotNull
+  @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
   static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
@@ -133,6 +160,17 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
     @NotNull final S s3,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return EqualableList.<@NotNull S>of(ImmutableList.of(s1, s2, s3, constructor));
+  }
+
+  @NotNull
+  @UnmodifiableView
+  @Contract(value = " _, _, _, _ -> new", pure = true)
+  static EqualableList<@NotNull StringWrapper> of(
+    @NotNull final String s1,
+    @NotNull final String s2,
+    @NotNull final String s3,
+    @NotNull final String s4) {
+    return EqualableList.ofString(ImmutableList.of(s1, s2, s3, s4));
   }
 
   @NotNull

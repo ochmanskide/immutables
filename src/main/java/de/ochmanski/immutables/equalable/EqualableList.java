@@ -98,7 +98,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> ofGenerator(
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> ofGenerator(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return EqualableList.<@NotNull S>of(ImmutableList.ofGenerator(constructor));
@@ -107,7 +107,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> of(
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return EqualableList.<@NotNull S>of(ImmutableList.of(s1, constructor));
@@ -116,7 +116,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> of(
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
@@ -126,7 +126,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> of(
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
@@ -137,7 +137,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<? extends @NotNull S> of(
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,

@@ -19,8 +19,8 @@ class LibraryTest {
 
   @Test
   void someLibraryMethodReturnsTrue() {
-    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("nothing", String[]::new);
-    assertThat(classUnderTest).isNotNull();
-    assertThat(classUnderTest.isNotEmpty()).isTrue();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>of("nothing", String[]::new);
+    assertThat(unitUnderTest).isNotNull();
+    assertThat(unitUnderTest.isNotEmpty()).isTrue();
   }
 }

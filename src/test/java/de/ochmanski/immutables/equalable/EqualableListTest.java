@@ -29,7 +29,7 @@ class EqualableListTest {
 
   @Test
   void of0() {
-    @NotNull EqualableList<? extends @NotNull Dummy> actual = EqualableList.ofGenerator(Dummy[]::new);
+    @NotNull EqualableList<@NotNull Dummy> actual = EqualableList.ofGenerator(Dummy[]::new);
     assertThat(actual).isInstanceOf(EqualableList.class);
     assertThat(actual.unwrap()).isEmpty();
     assertThat(actual.isEmpty()).isTrue();
@@ -39,7 +39,7 @@ class EqualableListTest {
   @Test
   void of1() {
     final Dummy s1 = Dummy.builder().s("a").build();
-    EqualableList<? extends @NotNull Dummy> actual = EqualableList.of(s1, Dummy[]::new);
+    EqualableList<@NotNull Dummy> actual = EqualableList.of(s1, Dummy[]::new);
     assertThat(actual).isInstanceOf(EqualableList.class);
     assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactly("a");
   }
@@ -48,7 +48,7 @@ class EqualableListTest {
   void of2() {
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
-    EqualableList<? extends @NotNull Dummy> actual = EqualableList.of(s1, s2, Dummy[]::new);
+    EqualableList<@NotNull Dummy> actual = EqualableList.of(s1, s2, Dummy[]::new);
     assertThat(actual).isInstanceOf(EqualableList.class);
     assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactly("a", "b");
   }
@@ -58,7 +58,7 @@ class EqualableListTest {
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
     final Dummy s3 = Dummy.builder().s("c").build();
-    EqualableList<? extends @NotNull Dummy> actual = EqualableList.of(s1, s2, s3, Dummy[]::new);
+    EqualableList<@NotNull Dummy> actual = EqualableList.of(s1, s2, s3, Dummy[]::new);
     assertThat(actual).isInstanceOf(EqualableList.class);
     assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactly("a", "b", "c");
   }
@@ -68,7 +68,7 @@ class EqualableListTest {
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
     final Dummy s3 = Dummy.builder().s("c").build();
-    EqualableList<? extends @NotNull Dummy> actual = EqualableList.of(s1, s1, s2, s3, Dummy[]::new);
+    EqualableList<@NotNull Dummy> actual = EqualableList.of(s1, s1, s2, s3, Dummy[]::new);
     assertThat(actual).isInstanceOf(EqualableList.class);
     assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactly("a", "a", "b", "c");
   }
@@ -87,7 +87,7 @@ class EqualableListTest {
   @Test
   void toArrayEmpty() {
     final Dummy s1 = Dummy.builder().s("a").build();
-    EqualableList<? extends @NotNull Dummy> actual = EqualableList.of(s1, Dummy[]::new);
+    EqualableList<@NotNull Dummy> actual = EqualableList.of(s1, Dummy[]::new);
     assertThat(actual.toArray()).containsExactly(s1);
   }
 
@@ -152,7 +152,8 @@ class EqualableListTest {
   void toArray1() {
     final Dummy s1 = Dummy.builder().s("a").build();
     EqualableList<? extends @NotNull Dummy> actual = EqualableList.of(s1, Dummy[]::new);
-    assertThat(actual.toArray()).containsExactly(s1);
+    final @NotNull Dummy[] array = actual.toArray();
+    assertThat(array).containsExactly(s1);
   }
 
   @Test
@@ -160,7 +161,8 @@ class EqualableListTest {
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
     EqualableList<? extends @NotNull Dummy> actual = EqualableList.of(s1, s2, Dummy[]::new);
-    assertThat(actual.toArray()).containsExactly(s1, s2);
+    final @NotNull Dummy[] array = actual.toArray();
+    assertThat(array).containsExactly(s1, s2);
   }
 
   @Test
@@ -169,7 +171,8 @@ class EqualableListTest {
     final Dummy s2 = Dummy.builder().s("b").build();
     final Dummy s3 = Dummy.builder().s("c").build();
     EqualableList<? extends @NotNull Dummy> actual = EqualableList.of(s1, s1, s2, s3, Dummy[]::new);
-    assertThat(actual.toArray()).containsExactly(s1, s1, s2, s3);
+    final @NotNull Dummy[] array = actual.toArray();
+    assertThat(array).containsExactly(s1, s1, s2, s3);
   }
 
   @Test
@@ -187,15 +190,15 @@ class EqualableListTest {
 
   @Test
   void toStringTest01() {
-    EqualableList<? extends @NotNull Dummy> classUnderTest = EqualableList.<@NotNull Dummy>ofGenerator(Dummy[]::new);
-    final String actual = classUnderTest.toString();
+    EqualableList<? extends @NotNull Dummy> unitUnderTest = EqualableList.<@NotNull Dummy>ofGenerator(Dummy[]::new);
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[]");
   }
 
   @Test
   void toStringTest02() {
-    EqualableList<? extends @NotNull Dummy> classUnderTest = EqualableList.<@NotNull Dummy>empty();
-    final String actual = classUnderTest.toString();
+    EqualableList<? extends @NotNull Dummy> unitUnderTest = EqualableList.<@NotNull Dummy>empty();
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[]");
   }
 
@@ -203,7 +206,7 @@ class EqualableListTest {
   @Test
   void toStringTestArray21() {
     final Dummy[] array = {Dummy.builder().s("a").build(), Dummy.builder().s("b").build(), Dummy.builder().s("c").build(), null};
-    assertThatThrownBy(() -> EqualableList.<@NotNull String>of(array, Dummy[]::new))
+    assertThatThrownBy(() -> EqualableList.<@NotNull Dummy>of(array, Dummy[]::new))
       .isExactlyInstanceOf(NullPointerException.class)
       .hasNoCause();
   }
@@ -211,9 +214,9 @@ class EqualableListTest {
   @Test
   void toStringTestArray22() {
     final Dummy[] array = {Dummy.builder().s("a").build(), Dummy.builder().s("b").build(), Dummy.builder().s("c").build()};
-    assertThatThrownBy(() -> EqualableList.<@NotNull String>of(array, Dummy[]::new))
-      .isExactlyInstanceOf(NullPointerException.class)
-      .hasNoCause();
+    final EqualableList<@NotNull Dummy> unitUnderTest = EqualableList.<@NotNull Dummy>of(array, Dummy[]::new);
+    final String actual = unitUnderTest.toString();
+    assertThat(actual).isEqualTo("[{\"s\":\"a\"},{\"s\":\"b\"},{\"s\":\"c\"}]");
   }
 
   @Value

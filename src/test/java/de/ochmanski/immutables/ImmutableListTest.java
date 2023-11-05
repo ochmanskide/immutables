@@ -208,87 +208,87 @@ class ImmutableListTest
 
   @Test
   void toStringTest01() {
-    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>ofGenerator(String[]::new);
-    final String actual = classUnderTest.toString();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>ofGenerator(String[]::new);
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[]");
   }
 
   @Test
   void toStringTest02() {
-    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>empty();
-    final String actual = classUnderTest.toString();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>empty();
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[]");
   }
 
   @Test
   void toStringTest11() {
-    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", String[]::new);
-    final String actual = classUnderTest.toString();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>of("a", String[]::new);
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[\"a\"]");
   }
 
   @Test
   void toStringTest12() {
-    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a");
-    final String actual = classUnderTest.toString();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>of("a");
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[\"a\"]");
   }
 
   @Test
   void toStringTest21() {
-    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", "b", String[]::new);
-    final String actual = classUnderTest.toString();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>of("a", "b", String[]::new);
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[\"a\",\"b\"]");
   }
 
   @Test
   void toStringTest22() {
-    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", "b");
-    final String actual = classUnderTest.toString();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>of("a", "b");
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[\"a\",\"b\"]");
   }
 
   @Test
   void toStringTest31() {
-    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", "b", "c", String[]::new);
-    final String actual = classUnderTest.toString();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>of("a", "b", "c", String[]::new);
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\"]");
   }
 
   @Test
   void toStringTest32() {
-    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", "b", "c");
-    final String actual = classUnderTest.toString();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>of("a", "b", "c");
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\"]");
   }
 
   @Test
   void toStringTest41() {
-    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", "b", "c", "d", String[]::new);
-    final String actual = classUnderTest.toString();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>of("a", "b", "c", "d", String[]::new);
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\",\"d\"]");
   }
 
   @Test
   void toStringTest42() {
-    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("a", "b", "c", "d");
-    final String actual = classUnderTest.toString();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>of("a", "b", "c", "d");
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\",\"d\"]");
   }
 
   @Test
   void toStringTestArray01() {
     final String[] array = {"a", "b", "c", "d"};
-    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of(array, String[]::new);
-    final String actual = classUnderTest.toString();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>of(array, String[]::new);
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\",\"d\"]");
   }
 
   @Test
   void toStringTestArray02() {
     final String[] array = {"a", "b", "c", "d"};
-    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of(array);
-    final String actual = classUnderTest.toString();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>of(array);
+    final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[\"a\",\"b\",\"c\",\"d\"]");
   }
 

@@ -191,6 +191,10 @@ private Map<@NotNull JobSettingPropertyKey, @NotNull StringWrapper> toMap(
   }
 ```
 
+## TODO:
+
+* add methods for elements up to 10,
+* create override methods for Strings for each above, where StringWrapper[]::new is passed,
 * split project into Fluent and not Fluent,
 * provide some Utility/Factory classes for EqualableWrappers
 * create a new variant of ImmutableStream<> stream() instead of Stream<> stream()

@@ -294,4 +294,12 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
     return ImmutableEnumList.ofEnumSet(unwrap(), getKey());
   }
   //</editor-fold>
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @Contract(value = "-> new", pure = true)
+  public String toString() {
+    return set.toString();
+  }
 }

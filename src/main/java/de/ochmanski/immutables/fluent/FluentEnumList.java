@@ -240,4 +240,12 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
     return FluentEnumSet.of(this);
   }
   //</editor-fold>
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @Contract(value = "-> new", pure = true)
+  public String toString() {
+    return list.toString();
+  }
 }

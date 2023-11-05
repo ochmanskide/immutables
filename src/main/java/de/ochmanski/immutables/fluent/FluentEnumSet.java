@@ -267,4 +267,12 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
     return FluentEnumList.ofEnumSet(unwrap(), key);
   }
   //</editor-fold>
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @Contract(value = "-> new", pure = true)
+  public String toString() {
+    return set.toString();
+  }
 }

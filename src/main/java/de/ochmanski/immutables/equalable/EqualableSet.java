@@ -257,4 +257,12 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     return EqualableList.<@NotNull E>of(unwrap(), key);
   }
   //</editor-fold>
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @Contract(value = "-> new", pure = true)
+  public String toString() {
+    return set.toString();
+  }
 }

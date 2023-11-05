@@ -203,4 +203,12 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
     return EqualableSet.of(this);
   }
   //</editor-fold>
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @Contract(value = "-> new", pure = true)
+  public String toString() {
+    return list.toString();
+  }
 }

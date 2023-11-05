@@ -297,4 +297,12 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
     return ImmutableEnumSet.of(this);
   }
   //</editor-fold>
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @Contract(value = "-> new", pure = true)
+  public String toString() {
+    return list.toString();
+  }
 }

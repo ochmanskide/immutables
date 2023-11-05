@@ -1,5 +1,7 @@
 package de.ochmanski.immutables.immutable;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ochmanski.immutables.ICollection;
 import de.ochmanski.immutables.IMap;
 import de.ochmanski.immutables.ISet;
@@ -312,4 +314,16 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
       : Collections.checkedSet(Set.copyOf(set), getComponentTypeFromKey());
   }
   //</editor-fold>
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @Contract(value = "-> new", pure = true)
+  public String toString() {
+    try {
+      return new ObjectMapper().writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      return Arrays.toString(toArray());
+    }
+  }
 }

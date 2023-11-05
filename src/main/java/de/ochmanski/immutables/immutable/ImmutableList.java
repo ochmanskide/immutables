@@ -1,15 +1,14 @@
 package de.ochmanski.immutables.immutable;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ochmanski.immutables.Checked;
 import de.ochmanski.immutables.IList;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.IntFunction;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
@@ -318,4 +317,16 @@ public class ImmutableList<E> implements IList<@NotNull E>
       : Collections.checkedList(List.copyOf(list), getComponentTypeFromKey());
   }
   //</editor-fold>
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @Contract(value = "-> new", pure = true)
+  public String toString() {
+    try {
+      return new ObjectMapper().writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      return Arrays.toString(toArray());
+    }
+  }
 }

@@ -1,6 +1,7 @@
 package de.ochmanski.immutables.equalable;
 
 import de.ochmanski.immutables.IList;
+import de.ochmanski.immutables.StringWrapper;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
@@ -148,6 +149,14 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
 
   @NotNull
   @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static EqualableList<@NotNull StringWrapper> of(@NotNull final String @NotNull [] array) {
+    final List<@NotNull String> list = List.of(array);
+    return EqualableList.<@NotNull StringWrapper>of(list);
+  }
+
+  @NotNull
+  @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S @NotNull [] array,
@@ -158,12 +167,32 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
 
   @NotNull
   @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static EqualableList<@NotNull StringWrapper> of(
+    @NotNull final Collection<@NotNull String> collection) {
+    final ImmutableList<@NotNull String> list = ImmutableList.of(collection);
+    return EqualableList.<@NotNull StringWrapper>ofString(list);
+  }
+
+  @NotNull
+  @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     final ImmutableList<@NotNull S> list = ImmutableList.of(collection, constructor);
     return EqualableList.<@NotNull S>of(list);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  public static EqualableList<@NotNull StringWrapper> ofString(
+    @NotNull final ImmutableList<@NotNull String> immutableList) {
+    final List<StringWrapper> list = immutableList.stream().map(StringWrapper::of).toList();
+    final ImmutableList<@NotNull StringWrapper> wrappers = ImmutableList.<@NotNull StringWrapper>of(list, StringWrapper @NotNull []::new);
+    return EqualableList.<@NotNull StringWrapper>builder().list(wrappers).key(StringWrapper[]::new).build();
   }
 
   @NotNull

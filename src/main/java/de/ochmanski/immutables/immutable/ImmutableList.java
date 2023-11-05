@@ -171,7 +171,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Contract(value = "_ -> new", pure = true)
   public static ImmutableList<@NotNull String> of(
     @NotNull final String @NotNull [] array) {
-    return ImmutableList.<@NotNull String>of(List.of(array), String @NotNull []::new);
+    return ImmutableList.<@NotNull String>of(List.of(array));
   }
 
   @NotNull
@@ -182,6 +182,14 @@ public class ImmutableList<E> implements IList<@NotNull E>
     @NotNull final S @NotNull [] array,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableList.<@NotNull S>of(List.of(array), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static ImmutableList<@NotNull String> of(@NotNull final Collection<@NotNull String> collection) {
+    return ImmutableList.<@NotNull String>of(collection, String @NotNull []::new);
   }
 
   @NotNull

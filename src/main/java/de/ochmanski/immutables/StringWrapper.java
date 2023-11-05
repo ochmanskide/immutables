@@ -1,13 +1,11 @@
 package de.ochmanski.immutables;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
+import org.jetbrains.annotations.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -114,11 +112,13 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
     return isBlank() ? s : raw;
   }
 
+  @JsonIgnore
   public boolean isNotBlank()
   {
     return !isBlank();
   }
 
+  @JsonIgnore
   public boolean isBlank()
   {
     return null == raw || raw.isBlank();
@@ -222,5 +222,12 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
   public boolean isIn(@NotNull final List<@NotNull StringWrapper> elements)
   {
     return elements.contains(this);
+  }
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  public String toString() {
+    return raw;
   }
 }

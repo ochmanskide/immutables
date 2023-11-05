@@ -50,4 +50,10 @@ public interface ICollection<E> extends Checked<@NotNull E>
   {
     return (@NotNull T @NotNull []) Array.newInstance(type, 0);
   }
+
+  default boolean isNotEmpty() {
+    return !isEmpty();
+  }
+
+  boolean isEmpty();
 }

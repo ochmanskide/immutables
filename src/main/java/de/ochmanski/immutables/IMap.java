@@ -218,6 +218,19 @@ public interface IMap<K, V>
       return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
         (c1, c2) -> cmp.compare(c1.getValue(), c2.getValue());
     }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    public static <K, V> IMap.@Unmodifiable @NotNull Entry<@NotNull K, @NotNull V> of(
+      @NotNull final Map.@NotNull Entry<@NotNull K, @NotNull V> entry) {
+      return IMap.Entry.<@NotNull K, @NotNull V>builder().key(entry.getKey()).value(entry.getValue()).build();
+    }
+
+    @NotNull
+    @Contract(value = "-> new", pure = true)
+    public IMap.@Unmodifiable @NotNull Entry<@NotNull K, @NotNull V> deepClone() {
+      return toBuilder().build();
+    }
   }
 
   @NotNull

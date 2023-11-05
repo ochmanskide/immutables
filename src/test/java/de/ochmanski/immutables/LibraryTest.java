@@ -6,13 +6,15 @@ package de.ochmanski.immutables;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import org.junit.jupiter.api.Test;
 
+import javax.validation.constraints.NotNull;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LibraryTest {
 
   @Test
   void someLibraryMethodReturnsTrue() {
-    ImmutableList<String> classUnderTest = ImmutableList.<String>builder().build();
+    ImmutableList<String> classUnderTest = ImmutableList.<@NotNull String>of("nothing", String[]::new);
     assertThat(classUnderTest).isNotNull();
     assertThat(classUnderTest.isEmpty()).isTrue();
   }

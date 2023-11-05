@@ -193,7 +193,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Contract(value = "_ -> new", pure = true)
   private static <K, V> IMap.@Unmodifiable @UnmodifiableView @NotNull Entry<@NotNull K, @NotNull V> toImmutableEntry(
     @NotNull final Map.@NotNull Entry<@NotNull K, @NotNull V> entry) {
-    return IMap.Entry.<@NotNull K, @NotNull V>builder().key(entry.getKey()).value(entry.getValue()).build();
+    return IMap.Entry.<@NotNull K, @NotNull V>of(entry);
   }
 
   @NotNull
@@ -202,7 +202,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Contract(value = "_ -> new", pure = true)
   public static <K extends @NotNull Equalable<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> EqualableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
     @NotNull final ImmutableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entries) {
-    return entries.stream().map(e -> e.toBuilder().build()).collect(EqualableCollectors.toSet(entries.getKey()));
+    return entries.stream().map(IMap.Entry::deepClone).collect(EqualableCollectors.toSet(entries.getKey()));
   }
 
   @NotNull

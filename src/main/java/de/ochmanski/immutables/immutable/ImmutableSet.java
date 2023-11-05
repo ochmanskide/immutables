@@ -136,7 +136,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Contract(value = "_ -> new", pure = true)
   private static <K, V> IMap.@Unmodifiable @UnmodifiableView @NotNull Entry<@NotNull K, @NotNull V> toImmutableEntry(
     @NotNull final Map.@NotNull Entry<@NotNull K, @NotNull V> entry) {
-    return IMap.Entry.<@NotNull K, @NotNull V>builder().key(entry.getKey()).value(entry.getValue()).build();
+    return IMap.Entry.<@NotNull K, @NotNull V>of(entry);
   }
 
   @NotNull

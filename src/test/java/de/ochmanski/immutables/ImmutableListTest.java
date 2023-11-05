@@ -199,6 +199,13 @@ class ImmutableListTest
     assertThat(a.equals(c)).isFalse();
   }
 
+  @Test
+  void toStringTest() {
+    ImmutableList<String> classUnderTest = ImmutableList.<@javax.validation.constraints.NotNull String>of("nothing", String[]::new);
+    final String actual = classUnderTest.toString();
+    assertThat(actual).isEqualTo("[\"nothing\"]");
+  }
+
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Builder(toBuilder = true, access = AccessLevel.PRIVATE)

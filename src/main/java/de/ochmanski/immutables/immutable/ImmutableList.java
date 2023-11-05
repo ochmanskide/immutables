@@ -324,9 +324,19 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Contract(value = "-> new", pure = true)
   public String toString() {
     try {
-      return new ObjectMapper().writeValueAsString(this);
+      final String s = new ObjectMapper().writeValueAsString(list);
+      return limit(s, 1000);
     } catch (JsonProcessingException e) {
       return Arrays.toString(toArray());
     }
+  }
+
+  @NotNull
+  @Unmodifiable
+  @Contract(value = "_, _ -> new", pure = true)
+  private String limit(@NotNull final String s, int limit) {
+    ;
+    final int end = Math.min(s.length(), Math.abs(limit));
+    return s.substring(0, end);
   }
 }

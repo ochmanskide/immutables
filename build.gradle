@@ -23,18 +23,3 @@ dependencies {
     'org.junit.jupiter:junit-jupiter-api:5.9.3'
   )
 }
-
-publishing {
-  publications {
-    customLibrary(MavenPublication) {
-      from components.java
-    }
-  }
-
-  repositories {
-    maven {
-      name = 'sampleRepo'
-      url = layout.buildDirectory.dir("repo")
-    }
-  }
-}

@@ -6,13 +6,15 @@ package de.ochmanski.immutables;
 import annotations.UnitTest;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.validation.constraints.NotNull;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @UnitTest
-//@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 class LibraryTest {
 
   @Test

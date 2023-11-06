@@ -1,13 +1,15 @@
 package de.ochmanski.immutables.fluent;
 
 import annotations.UnitTest;
-import com.stadlerrail.diag.dias.servicestate.state.StateModule;
+import de.ochmanski.immutables.equalable.Equalable;
+import de.ochmanski.immutables.fluent.FluentTest.State;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.stadlerrail.diag.dias.servicestate.state.StateModule.State.*;
+import static de.ochmanski.immutables.fluent.FluentTest.State.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @UnitTest
@@ -53,17 +55,15 @@ class StateEnumTest
   @Test
   void stream()
   {
-    final List<StateModule.State> actual = StateModule.State.stream()
-      .toList();
+    final List<@NotNull State> actual = State.stream().toList();
     assertThat(actual).containsExactly(ERROR, UNKNOWN, PENDING, OK);
   }
 
   @Test
   void forEach()
   {
-    final List<Equalable<Fluent<StateModule.State>>> list = new LinkedList<>();
-    StateModule.State.forEach(list::add);
+    final List<@NotNull Equalable<@NotNull Fluent<@NotNull State>>> list = new LinkedList<>();
+    State.forEach(list::add);
     assertThat(list).containsExactly(ERROR, UNKNOWN, PENDING, OK);
   }
-
 }

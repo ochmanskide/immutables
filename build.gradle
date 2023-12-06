@@ -20,6 +20,28 @@ dependencies {
     'org.mockito:mockito-core:5.7.0',
     'org.mockito:mockito-junit-jupiter:5.3.1',
     'org.assertj:assertj-core:3.23.1',
-    'org.junit.jupiter:junit-jupiter-api:5.9.3'
+    'org.junit.jupiter:junit-jupiter:5.9.3'
   )
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+
+// Apply a specific Java toolchain to ease working on different environments.
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
+}
+
+tasks.named('test') {
+  // Use JUnit Platform for unit tests.
+  useJUnitPlatform()
+}
+
+// <editor-fold defaultstate="collapsed" desc="idea plugin">
+idea {
+  module {
+    downloadJavadoc = true
+    downloadSources = true
+  }
+}
+// </editor-fold>

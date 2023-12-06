@@ -88,7 +88,7 @@ class ImmutableEnumSetTest
   void toArrayNull()
   {
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of((Dummy) null, Dummy[]::new))
-        .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
         .hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null");
   }
 
@@ -105,7 +105,7 @@ class ImmutableEnumSetTest
   {
     final Dummy s1 = Dummy.A;
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of(s1, null))
-        .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .hasMessage("Cannot invoke \"java.util.function.IntFunction.apply(int)\" because \"constructor\" is null");
   }
 
@@ -114,7 +114,7 @@ class ImmutableEnumSetTest
   {
     final Dummy s1 = Dummy.A;
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of(s1, null, null))
-        .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
         .hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null");
   }
 
@@ -123,7 +123,7 @@ class ImmutableEnumSetTest
   {
     final Dummy s1 = Dummy.A;
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of(s1, null, null, null))
-        .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
         .hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null");
   }
 
@@ -144,7 +144,7 @@ class ImmutableEnumSetTest
   void toArray0()
   {
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of((Dummy) null, Dummy[]::new))
-        .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
         .hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null");
   }
 

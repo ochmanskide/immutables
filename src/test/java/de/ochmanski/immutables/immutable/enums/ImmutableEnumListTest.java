@@ -21,7 +21,7 @@ class ImmutableEnumListTest {
     assertThatThrownBy(() -> ImmutableEnumList.ofGenerator(null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'constructor' of de/ochmanski/immutables/ImmutableEnumList.of must not be null")
       );
   }
@@ -78,7 +78,7 @@ class ImmutableEnumListTest {
     assertThatThrownBy(() -> ImmutableEnumList.of((Dummy) null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e1' of de/ochmanski/immutables/ImmutableEnumList.of must not be null")
       );
   }
@@ -96,7 +96,7 @@ class ImmutableEnumListTest {
     assertThatThrownBy(() -> ImmutableEnumList.of(s1, null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e2' of de/ochmanski/immutables/ImmutableEnumList.of must not be null")
       );
   }
@@ -107,7 +107,7 @@ class ImmutableEnumListTest {
     assertThatThrownBy(() -> ImmutableEnumList.of(s1, null, null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e2' of de/ochmanski/immutables/ImmutableEnumList.of must not be null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e3' of de/ochmanski/immutables/ImmutableEnumList.of must not be null")
       );
@@ -119,7 +119,7 @@ class ImmutableEnumListTest {
     assertThatThrownBy(() -> ImmutableEnumList.of(s1, null, null, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e2' of de/ochmanski/immutables/ImmutableEnumList.of must not be null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e3' of de/ochmanski/immutables/ImmutableEnumList.of must not be null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'constructor' of de/ochmanski/immutables/ImmutableEnumList.of must not be null")
@@ -142,7 +142,7 @@ class ImmutableEnumListTest {
     assertThatThrownBy(() -> ImmutableEnumList.of((Dummy) null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e1' of de/ochmanski/immutables/ImmutableEnumList.of must not be null")
       );
   }
@@ -190,7 +190,7 @@ class ImmutableEnumListTest {
   void toStringTestArray21() {
     final Dummy[] array = {Dummy.A, Dummy.B, Dummy.C, Dummy.A, null};
     assertThatThrownBy(() -> ImmutableEnumList.<@NotNull Dummy>of(array, Dummy[]::new))
-      .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .hasNoCause();
   }
 

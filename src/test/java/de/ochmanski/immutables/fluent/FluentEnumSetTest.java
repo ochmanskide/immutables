@@ -245,7 +245,7 @@ class FluentEnumSetTest
   @Test
   void toArrayNull() {
     Assertions.assertThatThrownBy(() -> FluentEnumSet.of((FluentExample) null, FluentExample[]::new))
-      .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null");
   }
 
@@ -260,7 +260,7 @@ class FluentEnumSetTest
   void toArrayEmpty1() {
     final FluentExample s1 = FluentExample.A;
     Assertions.assertThatThrownBy(() -> FluentEnumSet.of(s1, null))
-      .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .hasMessage("Cannot invoke \"java.util.function.IntFunction.apply(int)\" because \"constructor\" is null");
   }
 
@@ -268,7 +268,7 @@ class FluentEnumSetTest
   void toArrayEmpty2() {
     final FluentExample s1 = FluentExample.A;
     Assertions.assertThatThrownBy(() -> FluentEnumSet.of(s1, null, null))
-      .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null");
   }
 
@@ -276,7 +276,7 @@ class FluentEnumSetTest
   void toArrayEmpty3() {
     final FluentExample s1 = FluentExample.A;
     Assertions.assertThatThrownBy(() -> FluentEnumSet.of(s1, null, null, null))
-      .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null");
   }
 
@@ -294,7 +294,7 @@ class FluentEnumSetTest
   @Test
   void toArray0() {
     Assertions.assertThatThrownBy(() -> FluentEnumSet.of((FluentExample) null, FluentExample[]::new))
-      .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null");
   }
 

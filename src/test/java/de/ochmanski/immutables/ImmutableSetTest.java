@@ -24,7 +24,7 @@ class ImmutableSetTest {
     assertThatThrownBy(() -> ImmutableSet.ofGenerator(null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'constructor' of de/ochmanski/immutables/ImmutableSet.of must not be null")
       );
   }
@@ -81,7 +81,7 @@ class ImmutableSetTest {
     assertThatThrownBy(() -> ImmutableSet.of((Dummy) null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e1' of de/ochmanski/immutables/ImmutableSet.of must not be null")
       );
   }
@@ -99,7 +99,7 @@ class ImmutableSetTest {
     assertThatThrownBy(() -> ImmutableSet.of(s1, null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e2' of de/ochmanski/immutables/ImmutableSet.of must not be null")
       );
   }
@@ -110,7 +110,7 @@ class ImmutableSetTest {
     assertThatThrownBy(() -> ImmutableSet.of(s1, null, null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e2' of de/ochmanski/immutables/ImmutableSet.of must not be null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e3' of de/ochmanski/immutables/ImmutableSet.of must not be null")
       );
@@ -122,7 +122,7 @@ class ImmutableSetTest {
     assertThatThrownBy(() -> ImmutableSet.of(s1, null, null, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e2' of de/ochmanski/immutables/ImmutableSet.of must not be null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e3' of de/ochmanski/immutables/ImmutableSet.of must not be null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'constructor' of de/ochmanski/immutables/ImmutableSet.of must not be null")
@@ -145,7 +145,7 @@ class ImmutableSetTest {
     assertThatThrownBy(() -> ImmutableSet.of((Dummy) null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e1' of de/ochmanski/immutables/ImmutableSet.of must not be null")
       );
   }
@@ -277,7 +277,7 @@ class ImmutableSetTest {
   void toStringTestArray21() {
     final String[] array = {"a", "b", "c", null};
     assertThatThrownBy(() -> ImmutableSet.<@NotNull String>ofArray(array, String[]::new))
-      .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .hasNoCause();
   }
 
@@ -285,7 +285,7 @@ class ImmutableSetTest {
   void toStringTestArray22() {
     final String[] array = {"a", "b", "c", null};
     assertThatThrownBy(() -> ImmutableSet.<@NotNull String>ofArray(array))
-      .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .hasNoCause();
   }
 

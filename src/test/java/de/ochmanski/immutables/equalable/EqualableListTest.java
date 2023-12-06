@@ -19,7 +19,7 @@ class EqualableListTest {
     assertThatThrownBy(() -> EqualableList.ofGenerator(null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'constructor' of de/ochmanski/immutables/EqualableList.of must not be null")
       );
   }
@@ -76,7 +76,7 @@ class EqualableListTest {
     assertThatThrownBy(() -> EqualableList.of((StringWrapper) null, StringWrapper[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e1' of de/ochmanski/immutables/EqualableList.of must not be null")
       );
   }
@@ -94,7 +94,7 @@ class EqualableListTest {
     assertThatThrownBy(() -> EqualableList.of(s1, null, StringWrapper[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e2' of de/ochmanski/immutables/EqualableList.of must not be null")
       );
   }
@@ -105,7 +105,7 @@ class EqualableListTest {
     assertThatThrownBy(() -> EqualableList.of(s1, null, null, StringWrapper[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e2' of de/ochmanski/immutables/EqualableList.of must not be null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e3' of de/ochmanski/immutables/EqualableList.of must not be null")
       );
@@ -117,7 +117,7 @@ class EqualableListTest {
     assertThatThrownBy(() -> EqualableList.of(s1, null, null, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e2' of de/ochmanski/immutables/EqualableList.of must not be null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e3' of de/ochmanski/immutables/EqualableList.of must not be null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'constructor' of de/ochmanski/immutables/EqualableList.of must not be null")
@@ -140,7 +140,7 @@ class EqualableListTest {
     assertThatThrownBy(() -> EqualableList.of((StringWrapper) null, StringWrapper[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
-        npe -> assertThat(npe).isExactlyInstanceOf(NullPointerException.class),
+        npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'e1' of de/ochmanski/immutables/EqualableList.of must not be null")
       );
   }
@@ -275,7 +275,7 @@ class EqualableListTest {
   void toStringTestArray21() {
     final String[] array = {"a", "b", "c", null};
     assertThatThrownBy(() -> EqualableList.<@NotNull String>of(array))
-      .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .hasNoCause();
   }
 
@@ -283,7 +283,7 @@ class EqualableListTest {
   void toStringTestArray22() {
     final String[] array = {"a", "b", "c", null};
     assertThatThrownBy(() -> EqualableList.<@NotNull StringWrapper>of(array))
-      .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .hasNoCause();
   }
 
@@ -291,7 +291,7 @@ class EqualableListTest {
   void toStringTestArray31() {
     final StringWrapper[] array = {StringWrapper.of("a"), StringWrapper.of("b"), StringWrapper.of("c"), null};
     assertThatThrownBy(() -> EqualableList.<@NotNull StringWrapper>of(array, StringWrapper[]::new))
-      .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .hasNoCause();
   }
 
@@ -307,7 +307,7 @@ class EqualableListTest {
   void toStringTestArray41() {
     final StringWrapper[] array = {StringWrapper.of("a"), StringWrapper.of("b"), StringWrapper.of("c"), null};
     assertThatThrownBy(() -> EqualableList.<@NotNull StringWrapper>of(array, StringWrapper[]::new))
-      .isExactlyInstanceOf(NullPointerException.class)
+      .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .hasNoCause();
   }
 

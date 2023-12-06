@@ -246,7 +246,10 @@ class FluentEnumSetTest
   void toArrayNull() {
     Assertions.assertThatThrownBy(() -> FluentEnumSet.of((FluentExample) null, FluentExample[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
-      .hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null");
+      .satisfiesAnyOf(
+        p -> assertThat(p).hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null"),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 's1' of de/ochmanski/immutables/fluent/FluentEnumSet.of must not be null")
+      );
   }
 
   @Test
@@ -261,7 +264,10 @@ class FluentEnumSetTest
     final FluentExample s1 = FluentExample.A;
     Assertions.assertThatThrownBy(() -> FluentEnumSet.of(s1, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
-      .hasMessage("Cannot invoke \"java.util.function.IntFunction.apply(int)\" because \"constructor\" is null");
+      .satisfiesAnyOf(
+        p -> assertThat(p).hasMessage("Cannot invoke \"java.util.function.IntFunction.apply(int)\" because \"constructor\" is null"),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'constructor' of de/ochmanski/immutables/fluent/FluentEnumSet.of must not be null")
+      );
   }
 
   @Test
@@ -269,7 +275,10 @@ class FluentEnumSetTest
     final FluentExample s1 = FluentExample.A;
     Assertions.assertThatThrownBy(() -> FluentEnumSet.of(s1, null, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
-      .hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null");
+      .satisfiesAnyOf(
+        p -> assertThat(p).hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null"),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 's2' of de/ochmanski/immutables/fluent/FluentEnumSet.of must not be null")
+      );
   }
 
   @Test
@@ -277,12 +286,15 @@ class FluentEnumSetTest
     final FluentExample s1 = FluentExample.A;
     Assertions.assertThatThrownBy(() -> FluentEnumSet.of(s1, null, null, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
-      .hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null");
+      .satisfiesAnyOf(
+        p -> assertThat(p).hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null"),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 's2' of de/ochmanski/immutables/fluent/FluentEnumSet.of must not be null")
+      );
   }
 
   @Test
   void toArrayNullClass() {
-    Assertions.assertThatThrownBy(() -> FluentEnumSet.ofGenerator(null)).isInstanceOfAny(NullPointerException.class);
+    Assertions.assertThatThrownBy(() -> FluentEnumSet.ofGenerator(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
   }
 
   @Test

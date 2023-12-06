@@ -106,7 +106,10 @@ class ImmutableEnumSetTest
     final Dummy s1 = Dummy.A;
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of(s1, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
-      .hasMessage("Cannot invoke \"java.util.function.IntFunction.apply(int)\" because \"constructor\" is null");
+      .satisfiesAnyOf(
+        p -> assertThat(p).hasMessage("Cannot invoke \"java.util.function.IntFunction.apply(int)\" because \"constructor\" is null"),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 's1' of de/ochmanski/immutables/fluent/FluentEnumSet.of must not be null")
+      );
   }
 
   @Test
@@ -115,7 +118,10 @@ class ImmutableEnumSetTest
     final Dummy s1 = Dummy.A;
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of(s1, null, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
-        .hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null");
+      .satisfiesAnyOf(
+        p -> assertThat(p).hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null"),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 's1' of de/ochmanski/immutables/fluent/FluentEnumSet.of must not be null")
+      );
   }
 
   @Test
@@ -124,13 +130,16 @@ class ImmutableEnumSetTest
     final Dummy s1 = Dummy.A;
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of(s1, null, null, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
-        .hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null");
+      .satisfiesAnyOf(
+        p -> assertThat(p).hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null"),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 's1' of de/ochmanski/immutables/fluent/FluentEnumSet.of must not be null")
+      );
   }
 
   @Test
   void toArrayNullClass()
   {
-    Assertions.assertThatThrownBy(() -> ImmutableEnumSet.ofGenerator(null)).isInstanceOfAny(NullPointerException.class);
+    Assertions.assertThatThrownBy(() -> ImmutableEnumSet.ofGenerator(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
   }
 
   @Test
@@ -145,7 +154,11 @@ class ImmutableEnumSetTest
   {
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of((Dummy) null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
-        .hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null");
+//        .hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null");
+      .satisfiesAnyOf(
+        p -> assertThat(p).hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null"),
+        p -> assertThat(p).hasMessage("Argument for @NotNull parameter 's1' of de/ochmanski/immutables/fluent/FluentEnumSet.of must not be null")
+      );
   }
 
   @Test

@@ -89,7 +89,6 @@ class ImmutableEnumSetTest
   {
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of((Dummy) null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
-//        .hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null");
       .satisfiesAnyOf(
         p -> assertThat(p).hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 's1' of de/ochmanski/immutables/immutable/enums/ImmutableEnumSet.of must not be null")

@@ -100,7 +100,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   static <S extends @NotNull Equalable<@NotNull S>> boolean areNotEqual(@Nullable final Equalable<@NotNull S> a,
     @Nullable final Equalable<@NotNull S> b)
   {
-    return Equalable.<@NotNull Equalable<@NotNull S>>areNotEqual(a, b);
+    return !Equalable.<@NotNull Equalable<@NotNull S>>areEqual(a, b);
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
@@ -126,7 +126,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   static <S extends @NotNull Equalable<@NotNull S>> boolean areNotTheSame(@Nullable final Equalable<@NotNull S> a,
     @Nullable final Equalable<@NotNull S> b)
   {
-    return Equalable.<@NotNull Equalable<@NotNull S>>areNotTheSame(a, b);
+    return !Equalable.<@NotNull Equalable<@NotNull S>>areTheSame(a, b);
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
@@ -266,7 +266,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   }
 
   @Contract(value = "null -> true", pure = true)
-  default boolean isNotEqualTo(@Nullable final T other)
+  default boolean isNotEqualTo(@Nullable final Equalable<@NotNull T> other)
   {
     return !isEqualTo(other);
   }

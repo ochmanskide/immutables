@@ -1,5 +1,8 @@
 # immutables - Strongly typed immutable Java Collections
 
+Author: Lukasz Ochmanski <immutables@ochmanski.de>  
+Update: Sun Nov 12 16:38:55 CET 2023
+
 ## 1. Highlights
 
 ### 1.1. No more `UnsupportedOperationException` at runtime.

@@ -1,6 +1,7 @@
 package de.ochmanski.immutables.fluent;
 
 import annotations.UnitTest;
+import de.ochmanski.immutables.equalable.Equalable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -83,7 +84,9 @@ class FluentTest
   @Test
   void isInEnumSet()
   {
-    final EnumSet<FluentTest.State> enumSet = EnumSet.of(FluentTest.State.UNKNOWN, FluentTest.State.PENDING,
+    final EnumSet<FluentTest.State> enumSet = EnumSet.of(
+      FluentTest.State.UNKNOWN,
+      FluentTest.State.PENDING,
       FluentTest.State.PENDING,
       FluentTest.State.ERROR);
     final boolean actual = FluentTest.State.PENDING.isIn(enumSet);
@@ -91,6 +94,126 @@ class FluentTest
 
     final boolean negation = FluentTest.State.PENDING.isNotIn(enumSet);
     assertThat(negation).isFalse();
+  }
+
+  @Test
+  void isEqual01() {
+    final State a = State.UNKNOWN;
+    final State b = State.PENDING;
+    final boolean actual = a.isEqualTo(b);
+    assertThat(actual).isFalse();
+    final boolean actual2 = b.isEqualTo(a);
+    assertThat(actual2).isFalse();
+  }
+
+  @Test
+  void isSame01() {
+    final State a = State.UNKNOWN;
+    final State b = State.PENDING;
+    final boolean actual = a.isSameAs(b);
+    assertThat(actual).isFalse();
+    final boolean actual2 = b.isSameAs(a);
+    assertThat(actual2).isFalse();
+  }
+
+  @Test
+  void isEqual02() {
+    final Fluent<@NotNull State> a = State.UNKNOWN;
+    final Fluent<@NotNull State> b = State.PENDING;
+    final boolean actual = a.isEqualTo(b);
+    assertThat(actual).isFalse();
+    final boolean actual2 = b.isEqualTo(a);
+    assertThat(actual2).isFalse();
+  }
+
+  @Test
+  void isSame02() {
+    final Fluent<@NotNull State> a = State.UNKNOWN;
+    final Fluent<@NotNull State> b = State.PENDING;
+    final boolean actual = a.isSameAs(b);
+    assertThat(actual).isFalse();
+    final boolean actual2 = b.isSameAs(a);
+    assertThat(actual2).isFalse();
+  }
+
+  @Test
+  void isEqual03() {
+    final Equalable<@NotNull Fluent<@NotNull State>> a = State.UNKNOWN;
+    final Equalable<@NotNull Fluent<@NotNull State>> b = State.PENDING;
+    final boolean actual = a.isEqualTo(b);
+    assertThat(actual).isFalse();
+    final boolean actual2 = b.isEqualTo(a);
+    assertThat(actual2).isFalse();
+  }
+
+  @Test
+  void isSame03() {
+    final Equalable<@NotNull Fluent<@NotNull State>> a = State.UNKNOWN;
+    final Equalable<@NotNull Fluent<@NotNull State>> b = State.PENDING;
+    final boolean actual = a.isSameAs(b);
+    assertThat(actual).isFalse();
+    final boolean actual2 = b.isSameAs(a);
+    assertThat(actual2).isFalse();
+  }
+
+  @Test
+  void isNotEqual01() {
+    final State a = State.UNKNOWN;
+    final State b = State.PENDING;
+    final boolean actual = a.isNotEqualTo(b);
+    assertThat(actual).isTrue();
+    final boolean actual2 = b.isNotEqualTo(a);
+    assertThat(actual2).isTrue();
+  }
+
+  @Test
+  void isNotSame01() {
+    final State a = State.UNKNOWN;
+    final State b = State.PENDING;
+    final boolean actual = a.isNotSameAs(b);
+    assertThat(actual).isTrue();
+    final boolean actual2 = b.isNotSameAs(a);
+    assertThat(actual2).isTrue();
+  }
+
+  @Test
+  void isNotEqual02() {
+    final Fluent<@NotNull State> a = State.UNKNOWN;
+    final Fluent<@NotNull State> b = State.PENDING;
+    final boolean actual = a.isNotEqualTo(b);
+    assertThat(actual).isTrue();
+    final boolean actual2 = b.isNotEqualTo(a);
+    assertThat(actual2).isTrue();
+  }
+
+  @Test
+  void isNotSame02() {
+    final Fluent<@NotNull State> a = State.UNKNOWN;
+    final Fluent<@NotNull State> b = State.PENDING;
+    final boolean actual = a.isNotSameAs(b);
+    assertThat(actual).isTrue();
+    final boolean actual2 = b.isNotSameAs(a);
+    assertThat(actual2).isTrue();
+  }
+
+  @Test
+  void isNotEqual03() {
+    final Equalable<@NotNull Fluent<@NotNull State>> a = State.UNKNOWN;
+    final Equalable<@NotNull Fluent<@NotNull State>> b = State.PENDING;
+    final boolean actual = a.isNotEqualTo(b);
+    assertThat(actual).isTrue();
+    final boolean actual2 = b.isNotEqualTo(a);
+    assertThat(actual2).isTrue();
+  }
+
+  @Test
+  void isNotSame03() {
+    final Equalable<@NotNull Fluent<@NotNull State>> a = State.UNKNOWN;
+    final Equalable<@NotNull Fluent<@NotNull State>> b = State.PENDING;
+    final boolean actual = a.isNotSameAs(b);
+    assertThat(actual).isTrue();
+    final boolean actual2 = b.isNotSameAs(a);
+    assertThat(actual2).isTrue();
   }
 
   //<editor-fold defaultstate="collapsed" desc="enum State">

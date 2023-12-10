@@ -413,7 +413,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     @Contract(pure = true)
     public boolean isIn(@NotNull final Collection<@NotNull S> elements)
     {
-      return elements.isEmpty() ? false : isIn(EnumSet.<@NotNull S>copyOf(elements));
+      return !elements.isEmpty() && isIn(EnumSet.<@NotNull S>copyOf(elements));
     }
 
     @Contract(pure = true)

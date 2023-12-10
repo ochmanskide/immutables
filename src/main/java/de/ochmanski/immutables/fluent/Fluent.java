@@ -170,7 +170,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   @Contract(value = "null -> false", pure = true)
   default boolean isSameAs(@Nullable final Equalable<@NotNull Fluent<@NotNull F>> other)
   {
-    return Fluent.<@Nullable F>areTheSame(this, other);
+    return Fluent.<@NotNull F>areTheSame(this, other);
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
@@ -178,21 +178,21 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
     @Nullable final Equalable<@NotNull Fluent<@NotNull F>> a,
     @Nullable final Equalable<@NotNull Fluent<@NotNull F>> b)
   {
-    return !Fluent.<@Nullable F>areTheSame(a, b);
+    return !Fluent.<@NotNull F>areTheSame(a, b);
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> boolean areNotTheSame(
     @Nullable final Fluent<@NotNull F> a,
     @Nullable final Fluent<@NotNull F> b) {
-    return !Fluent.<@Nullable F>areTheSame(a, b);
+    return !Fluent.<@NotNull F>areTheSame(a, b);
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> boolean areNotTheSame(
     @Nullable final F a,
     @Nullable final F b) {
-    return !Fluent.<@Nullable F>areTheSame(a, b);
+    return !Fluent.<@NotNull F>areTheSame(a, b);
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)

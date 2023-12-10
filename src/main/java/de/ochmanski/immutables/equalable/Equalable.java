@@ -301,8 +301,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   }
 
   @Value
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Builder
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   class EqualableHolder<S>
   {
 
@@ -343,7 +343,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     @Contract(pure = true)
     public boolean isIn(@NotNull final Collection<? extends @NotNull S> elements)
     {
-      return isIn(Set.<@NotNull S>copyOf(elements));
+      return !elements.isEmpty() && isIn(Set.<@NotNull S>copyOf(elements));
     }
 
     @Contract(pure = true)
@@ -384,10 +384,9 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
   }
 
-
   @Value
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Builder
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   class EnumHolder<S extends @NotNull Enum<@NotNull S>>
   {
 

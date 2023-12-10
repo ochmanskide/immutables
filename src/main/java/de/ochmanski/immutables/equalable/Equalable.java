@@ -14,6 +14,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+
 public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 {
 
@@ -60,7 +62,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   @Contract(pure = true)
   static <T> boolean anyMatchT(
     @NotNull final Collection<? extends @NotNull T> elements,
-    final Predicate<? super @NotNull T> predicate)
+    @NotNull final Predicate<? super @NotNull T> predicate)
   {
     return elements.stream().anyMatch(predicate);
   }
@@ -68,7 +70,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   @Contract(pure = true)
   static <T extends @NotNull Equalable<@NotNull T>> boolean anyMatch(
     @NotNull final Collection<? extends @NotNull Equalable<@NotNull T>> elements,
-    final Predicate<? super @NotNull Equalable<@NotNull T>> predicate)
+    @NotNull final Predicate<? super @NotNull Equalable<@NotNull T>> predicate)
   {
     return elements.stream().anyMatch(predicate);
   }
@@ -76,14 +78,14 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   @Contract(pure = true)
   static <T extends @NotNull Equalable<@NotNull T>> boolean allMatch(
     @NotNull final Collection<? extends @NotNull Equalable<@NotNull T>> elements,
-    final Predicate<? super @NotNull Equalable<@NotNull T>> predicate)
+    @NotNull final Predicate<? super @NotNull Equalable<@NotNull T>> predicate)
   {
     return elements.stream().allMatch(predicate);
   }
 
   @Contract(pure = true)
   static <T> boolean noneMatchT(@NotNull final Collection<? extends @NotNull T> elements,
-    final Predicate<? super @NotNull T> predicate)
+                                @NotNull final Predicate<? super @NotNull T> predicate)
   {
     return elements.stream().noneMatch(predicate);
   }
@@ -91,13 +93,14 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   @Contract(pure = true)
   static <T extends @NotNull Equalable<@NotNull T>> boolean noneMatch(
     @NotNull final Collection<? extends @NotNull Equalable<@NotNull T>> elements,
-    final Predicate<? super @NotNull Equalable<@NotNull T>> predicate)
+    @NotNull final Predicate<? super @NotNull Equalable<@NotNull T>> predicate)
   {
     return elements.stream().noneMatch(predicate);
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> boolean areNotEqual(@Nullable final Equalable<@NotNull S> a,
+  static <S extends @NotNull Equalable<@NotNull S>> boolean areNotEqual(
+    @Nullable final Equalable<@NotNull S> a,
     @Nullable final Equalable<@NotNull S> b)
   {
     return !Equalable.<@NotNull Equalable<@NotNull S>>areEqual(a, b);
@@ -110,7 +113,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> boolean areEqual(@Nullable final Equalable<@NotNull S> a,
+  static <S extends @NotNull Equalable<@NotNull S>> boolean areEqual(
+    @Nullable final Equalable<@NotNull S> a,
     @Nullable final Equalable<@NotNull S> b)
   {
     return Equalable.<@NotNull Equalable<@NotNull S>>areEqual(a, b);
@@ -123,7 +127,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> boolean areNotTheSame(@Nullable final Equalable<@NotNull S> a,
+  static <S extends @NotNull Equalable<@NotNull S>> boolean areNotTheSame(
+    @Nullable final Equalable<@NotNull S> a,
     @Nullable final Equalable<@NotNull S> b)
   {
     return !Equalable.<@NotNull Equalable<@NotNull S>>areTheSame(a, b);
@@ -136,7 +141,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> boolean areTheSame(@Nullable final Equalable<@NotNull S> a,
+  static <S extends @NotNull Equalable<@NotNull S>> boolean areTheSame(
+    @Nullable final Equalable<@NotNull S> a,
     @Nullable final Equalable<@NotNull S> b)
   {
     return Equalable.<@NotNull Equalable<@NotNull S>>areTheSame(a, b);
@@ -161,6 +167,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   }
 
   @Contract(pure = true)
+  @SuppressWarnings(UNCHECKED)
   default boolean anyMatch(@NotNull final Equalable<@NotNull T> @NotNull ... array)
   {
     return isInArray(array);
@@ -188,6 +195,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   }
 
   @Contract(pure = true)
+  @SuppressWarnings(UNCHECKED)
   default boolean allMatch(@NotNull final Equalable<@NotNull T> @NotNull ... array)
   {
     return allMatchArray(array);
@@ -206,6 +214,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   }
 
   @Contract(pure = true)
+  @SuppressWarnings(UNCHECKED)
   default boolean noneMatchElements(@NotNull final Equalable<@NotNull T> @NotNull ... array)
   {
     return isNotInArray(array);
@@ -218,6 +227,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   }
 
   @Contract(pure = true)
+  @SuppressWarnings(UNCHECKED)
   default boolean isNotIn(@NotNull final Equalable<@NotNull T> @NotNull ... array)
   {
     return isNotInArray(array);
@@ -242,6 +252,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   }
 
   @Contract(pure = true)
+  @SuppressWarnings(UNCHECKED)
   default boolean isIn(@NotNull final Equalable<@NotNull T> @NotNull ... array)
   {
     return isInArray(array);
@@ -297,14 +308,16 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
     @NotNull S s;
 
+    @SafeVarargs
     @Contract(pure = true)
-    public boolean isNotIn(@NotNull final S @NotNull ... array)
+    public final boolean isNotIn(@NotNull final S @NotNull ... array)
     {
       return !isIn(array);
     }
 
+    @SafeVarargs
     @Contract(pure = true)
-    public boolean isIn(@NotNull final S @NotNull ... array)
+    public final boolean isIn(@NotNull final S @NotNull ... array)
     {
       return isInArray(array);
     }

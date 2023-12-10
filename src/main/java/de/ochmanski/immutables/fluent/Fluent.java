@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+
 public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
   extends Equalable<@NotNull Fluent<@NotNull F>>
 {
@@ -22,7 +24,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> Stream<@NotNull Equalable<@NotNull Fluent<@NotNull F>>> createStream(
     @NotNull final Class<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> clazz)
   {
-    final @NotNull Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] enumConstants = getEnumConstants(clazz);
+    @NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] enumConstants = getEnumConstants(clazz);
     return Arrays.<@NotNull Equalable<@NotNull Fluent<@NotNull F>>>stream(enumConstants);
   }
 
@@ -41,7 +43,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
     @NotNull final Class<@NotNull Equalable<@NotNull Fluent<@NotNull F>>> clazz,
     @NotNull final Consumer<? super @NotNull Equalable<@NotNull Fluent<@NotNull F>>> consumer)
   {
-    final @NotNull Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] enumConstants = getEnumConstants(clazz);
+    @NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] enumConstants = getEnumConstants(clazz);
     Fluent.<@NotNull F>forEach(enumConstants, consumer);
   }
 
@@ -79,13 +81,16 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
 
   @Override
   @Contract(pure = true)
+  @SuppressWarnings(UNCHECKED)
   default boolean isNotIn(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull ... array)
   {
     return isNotInArray(array);
   }
 
+
   @Override
   @Contract(pure = true)
+  @SuppressWarnings(UNCHECKED)
   default boolean isIn(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull ... array)
   {
     return isInArray(array);
@@ -123,16 +128,16 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   @Contract(value = " _ -> new", pure = true)
   private static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
   EnumSet<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> toEnumSet(
-    final @NotNull Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array)
+    @NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array)
   {
-    return Fluent.<@NotNull F>toEnumSet(List.of(array));
+    return Fluent.<@NotNull F>toEnumSet(List.<@NotNull Equalable<@NotNull Fluent<@NotNull F>>>of(array));
   }
 
   @NotNull
   @Contract(value = " _ -> new", pure = true)
   private static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
   EnumSet<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> toEnumSet(
-    final @NotNull Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> collection)
+    @NotNull final Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> collection)
   {
     //noinspection unchecked,rawtypes
     return EnumSet.<@NotNull Enum>copyOf((Collection)collection);

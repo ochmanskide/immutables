@@ -134,6 +134,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   EnumSet<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> toEnumSet(
     final @NotNull Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> collection)
   {
+    //noinspection unchecked,rawtypes
     return EnumSet.<@NotNull Enum>copyOf((Collection)collection);
   }
 

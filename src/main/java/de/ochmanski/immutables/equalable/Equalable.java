@@ -380,14 +380,16 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
     @NotNull S s;
 
+    @SafeVarargs
     @Contract(pure = true)
-    public boolean isNotIn(@NotNull final S @NotNull ... array)
+    public final boolean isNotIn(@NotNull final S @NotNull ... array)
     {
       return !isIn(array);
     }
 
+    @SafeVarargs
     @Contract(pure = true)
-    public boolean isIn(@NotNull final S @NotNull ... array)
+    public final boolean isIn(@NotNull final S @NotNull ... array)
     {
       return isInArray(array);
     }

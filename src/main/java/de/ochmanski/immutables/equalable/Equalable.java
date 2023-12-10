@@ -381,7 +381,6 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     {
       return Equalable.<@NotNull S>areTheSame(s, other);
     }
-
   }
 
   @Value
@@ -465,6 +464,5 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     {
       return Equalable.<@NotNull S>areTheSame(s, other);
     }
-
   }
 }

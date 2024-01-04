@@ -541,6 +541,11 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
       }
 
       @Contract(pure = true)
+      public boolean isIn(@NotNull final IntStream elements) {
+        return elements.anyMatch(p -> Integer.areTheSame(p, s));
+      }
+
+      @Contract(pure = true)
       public boolean isNotEqualTo(final int other) {
         return !isEqualTo(other);
       }
@@ -635,6 +640,11 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
       @Contract(pure = true)
       public boolean isIn(@NotNull final Set<java.lang.@NotNull Long> elements) {
         return elements.contains(s);
+      }
+
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final LongStream elements) {
+        return elements.anyMatch(p -> Long.areTheSame(p, s));
       }
 
       @Contract(pure = true)
@@ -737,7 +747,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isIn(@NotNull final DoubleStream elements) {
-        return elements.anyMatch(p -> p == s);
+        return elements.anyMatch(p -> Double.areTheSame(p, s));
       }
 
       @Contract(pure = true)
@@ -839,7 +849,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isIn(@NotNull final DoubleStream elements) {
-        return elements.anyMatch(p -> p == s);
+        return elements.anyMatch(p -> Double.areTheSame(p, s));
       }
 
       @Contract(pure = true)

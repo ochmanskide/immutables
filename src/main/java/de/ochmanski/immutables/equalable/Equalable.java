@@ -659,6 +659,109 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     }
   }
 
+  interface Float {
+
+    @Contract(pure = true)
+    static boolean areNotEqual(final float a, final float b) {
+      return !Equalable.Float.areEqual(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areEqual(final float a, final float b) {
+      return Equalable.Float.areTheSame(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areNotTheSame(final float a, final float b) {
+      return !Equalable.Float.areTheSame(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areTheSame(final float a, final float b) {
+      return a == b;
+    }
+
+    @NotNull
+    static Equalable.Float.Holder element(final float s) {
+      return Equalable.Float.Holder.builder().s(s).build();
+    }
+
+    @Value
+    @Builder
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    class Holder {
+
+      float s;
+
+      @Contract(pure = true)
+      public final boolean isNotIn(@NotNull final float @NotNull ... array) {
+        return !isIn(array);
+      }
+
+      @Contract(pure = true)
+      public final boolean isIn(@NotNull final float @NotNull ... array) {
+        return isInArray(array);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotInArray(@NotNull final float @NotNull [] array) {
+        return !isInArray(array);
+      }
+
+      @Contract(pure = true)
+      public boolean isInArray(@NotNull final float @NotNull [] floatArray) {
+        DoubleStream ds = IntStream.range(0, floatArray.length)
+          .mapToDouble(i -> floatArray[i]);
+        return isIn(ds);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull Float> elements) {
+        return !isIn(elements);
+      }
+
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final Collection<java.lang.@NotNull Float> elements) {
+        return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull Float>copyOf(elements));
+      }
+
+      @Contract(pure = true)
+      public boolean isNotIn(@NotNull final Set<java.lang.@NotNull Float> elements) {
+        return !isIn(elements);
+      }
+
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final Set<java.lang.@NotNull Float> elements) {
+        return elements.contains(s);
+      }
+
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final DoubleStream elements) {
+        return elements.anyMatch(p -> p == s);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotEqualTo(final float other) {
+        return !isEqualTo(other);
+      }
+
+      @Contract(pure = true)
+      public boolean isEqualTo(final float other) {
+        return Equalable.Float.areEqual(s, other);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotSameAs(final float other) {
+        return !isSameAs(other);
+      }
+
+      @Contract(pure = true)
+      public boolean isSameAs(final float other) {
+        return Equalable.Float.areTheSame(s, other);
+      }
+    }
+  }
+
   interface Double {
 
     @Contract(pure = true)
@@ -732,6 +835,11 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
       @Contract(pure = true)
       public boolean isIn(@NotNull final Set<java.lang.@NotNull Double> elements) {
         return elements.contains(s);
+      }
+
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final DoubleStream elements) {
+        return elements.anyMatch(p -> p == s);
       }
 
       @Contract(pure = true)

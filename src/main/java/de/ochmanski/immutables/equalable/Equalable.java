@@ -11,10 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
@@ -500,7 +497,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     class Holder {
 
-      long s;
+      int s;
 
       @Contract(pure = true)
       public final boolean isNotIn(@NotNull final int @NotNull ... array) {
@@ -658,6 +655,103 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
       @Contract(pure = true)
       public boolean isSameAs(final long other) {
         return Equalable.Long.areTheSame(s, other);
+      }
+    }
+  }
+
+  interface Double {
+
+    @Contract(pure = true)
+    static boolean areNotEqual(final double a, final double b) {
+      return !Equalable.Double.areEqual(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areEqual(final double a, final double b) {
+      return Equalable.Double.areTheSame(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areNotTheSame(final double a, final double b) {
+      return !Equalable.Double.areTheSame(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areTheSame(final double a, final double b) {
+      return a == b;
+    }
+
+    @NotNull
+    static Equalable.Double.Holder element(final double s) {
+      return Equalable.Double.Holder.builder().s(s).build();
+    }
+
+    @Value
+    @Builder
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    class Holder {
+
+      double s;
+
+      @Contract(pure = true)
+      public final boolean isNotIn(@NotNull final double @NotNull ... array) {
+        return !isIn(array);
+      }
+
+      @Contract(pure = true)
+      public final boolean isIn(@NotNull final double @NotNull ... array) {
+        return isInArray(array);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotInArray(@NotNull final double @NotNull [] array) {
+        return !isInArray(array);
+      }
+
+      @Contract(pure = true)
+      public boolean isInArray(@NotNull final double @NotNull [] array) {
+        final List<java.lang.@NotNull Double> list = DoubleStream.of(array).boxed().toList();
+        return isIn(list);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull Double> elements) {
+        return !isIn(elements);
+      }
+
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final Collection<java.lang.@NotNull Double> elements) {
+        return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull Double>copyOf(elements));
+      }
+
+      @Contract(pure = true)
+      public boolean isNotIn(@NotNull final Set<java.lang.@NotNull Double> elements) {
+        return !isIn(elements);
+      }
+
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final Set<java.lang.@NotNull Double> elements) {
+        return elements.contains(s);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotEqualTo(final double other) {
+        return !isEqualTo(other);
+      }
+
+      @Contract(pure = true)
+      public boolean isEqualTo(final double other) {
+        return Equalable.Double.areEqual(s, other);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotSameAs(final double other) {
+        return !isSameAs(other);
+      }
+
+      @Contract(pure = true)
+      public boolean isSameAs(final double other) {
+        return Equalable.Double.areTheSame(s, other);
       }
     }
   }

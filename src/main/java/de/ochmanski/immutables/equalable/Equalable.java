@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
@@ -464,6 +465,103 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     public boolean isSameAs(@Nullable final S other)
     {
       return Equalable.<@NotNull S>areTheSame(s, other);
+    }
+  }
+
+  interface Integer {
+
+    @Contract(pure = true)
+    static boolean areNotEqual(final int a, final int b) {
+      return !Equalable.Integer.areEqual(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areEqual(final int a, final int b) {
+      return Equalable.Integer.areTheSame(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areNotTheSame(final int a, final int b) {
+      return !Equalable.Integer.areTheSame(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areTheSame(final int a, final int b) {
+      return a == b;
+    }
+
+    @NotNull
+    static Equalable.Integer.Holder element(final int s) {
+      return Equalable.Integer.Holder.builder().s(s).build();
+    }
+
+    @Value
+    @Builder
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    class Holder {
+
+      long s;
+
+      @Contract(pure = true)
+      public final boolean isNotIn(@NotNull final int @NotNull ... array) {
+        return !isIn(array);
+      }
+
+      @Contract(pure = true)
+      public final boolean isIn(@NotNull final int @NotNull ... array) {
+        return isInArray(array);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotInArray(@NotNull final int @NotNull [] array) {
+        return !isInArray(array);
+      }
+
+      @Contract(pure = true)
+      public boolean isInArray(@NotNull final int @NotNull [] array) {
+        final List<java.lang.@NotNull Integer> list = IntStream.of(array).boxed().toList();
+        return isIn(list);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull Integer> elements) {
+        return !isIn(elements);
+      }
+
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final Collection<java.lang.@NotNull Integer> elements) {
+        return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull Integer>copyOf(elements));
+      }
+
+      @Contract(pure = true)
+      public boolean isNotIn(@NotNull final Set<java.lang.@NotNull Integer> elements) {
+        return !isIn(elements);
+      }
+
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final Set<java.lang.@NotNull Integer> elements) {
+        return elements.contains(s);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotEqualTo(final int other) {
+        return !isEqualTo(other);
+      }
+
+      @Contract(pure = true)
+      public boolean isEqualTo(final int other) {
+        return Equalable.Integer.areEqual(s, other);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotSameAs(final int other) {
+        return !isSameAs(other);
+      }
+
+      @Contract(pure = true)
+      public boolean isSameAs(final int other) {
+        return Equalable.Integer.areTheSame(s, other);
+      }
     }
   }
 

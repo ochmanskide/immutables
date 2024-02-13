@@ -4,10 +4,10 @@
 
 ### 1.1. No more `UnsupportedOperationException` at runtime.
 
-Authors of `java.util.ImmutableCollections.java` class attempted to make this collection immutable,
-but they didn't do it because they wanted to maintain compatibility with the old Java `Collection` interface.
-I improved their attempt to make `java.util.ImmutableCollections.java`, and I made the library truly immutable.
-Instead of throwing an exception to the caller, I removed the following mutators from the library:
+Authors of `java.util.ImmutableCollections.java` class attempted to make this collection immutable,  
+but they didn't do it because they wanted to maintain compatibility with the old Java `Collection` interface.  
+I improved their attempt to make `java.util.ImmutableCollections.java`, and I made the library truly immutable.  
+Instead of throwing an exception to the caller, I removed the following mutators from the library:  
 
 ```java
 // all mutating methods throw UnsupportedOperationException
@@ -26,12 +26,12 @@ The project will not compile if you try to perform an illegal operation.
 
 ### 1.2. All collections are checked at construction time.
 
-In addition, in order to remove a known `Type Erasure` limitation of the Java programming language,
-all collections have been enriched with the type object. The generic type is no longer erased during compilation.
-The class type object is available at all times, during the program execution.
+In addition, in order to remove a known `Type Erasure` limitation of the Java programming language,  
+all collections have been enriched with the type object. The generic type is no longer erased during compilation.  
+The class type object is available at all times, during the program execution.  
 The type argument must be passed to the factory method, and it cannot be omitted during construction.  
 This will ensure that the object is present during runtime.  
-The code will not compile without specifying the generic type of the collection.
+The code will not compile without specifying the generic type of the collection.  
 
 Example:
 
@@ -51,11 +51,11 @@ DayOfWeek[] array = list.toArray();
 as you see, the `.toArray()`, method no longer accepts `IntFunction<T>` as an argument.  
 The method `public T[] toArray(IntFunction<T> generator)` has been removed from this API permanently.  
 The type is checked at construction time, and it is mandatory.  
-You will not be able to create a collection without specifying the type, even if the collection,
-you are trying to create, is empty.
-
-
-Obviously, this will not solve the problem completely, for example, for nested types:
+You will not be able to create a collection without specifying the type, even if the collection,  
+you are trying to create, is empty.  
+  
+  
+Obviously, this will not solve the problem completely, for example, for nested types:  
 ```java
 IList immutableList = ImmutableList.ofGenerator(IList<IList<IList<IList>>>[]::new);
 ```
@@ -63,7 +63,7 @@ I am aware that you can pass the `?` type or cast it, which will later throw `Cl
 This is why it is important to always declare full types,
 and let the compiler handle the generic types.  
 If you skip type declaration, there is nothing I can do to stop you.  
-I can only check the first generic type in the chain. The rest is on you, and on the java compiler.
+I can only check the first generic type in the chain. The rest is on you, and on the java compiler.  
 
 ### 1.3. Bridge methods
 

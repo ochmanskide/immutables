@@ -12,11 +12,11 @@ Instead of throwing an exception to the caller, I removed the following mutators
 ```java
 // all mutating methods throw UnsupportedOperationException
 boolean add(E e)
-boolean addAll(Collection<?extends E> c)
+boolean addAll(Collection<? extends E> c)
 void clear()
 boolean remove(Object o)
 boolean removeAll(Collection<?> c)
-boolean removeIf(Predicate<? super E>filter)
+boolean removeIf(Predicate<? super E> filter)
 boolean retainAll(Collection<?> c)
 ```
 

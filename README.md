@@ -6,7 +6,7 @@
 
 Authors of `java.util.ImmutableCollections.java` class attempted to make this collection immutable,
 but they didn't do it because they wanted to maintain compatibility with the old Java `Collection` interface.
-I Improved their attempt to make `java.util.ImmutableCollections.java`, and I made the library truly immutable.
+I improved their attempt to make `java.util.ImmutableCollections.java`, and I made the library truly immutable.
 Instead of throwing an exception to the caller, I removed the following mutators from the library:
 
 ```java

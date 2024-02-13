@@ -29,6 +29,16 @@ class FluentTest
 {
 
   @Test
+  void isInArrayEmpty() {
+    final State[] array = new State[0];
+    final boolean actual = FluentTest.State.PENDING.isIn(array);
+    assertThat(actual).isFalse();
+
+    final boolean negation = FluentTest.State.PENDING.isNotIn(array);
+    assertThat(negation).isTrue();
+  }
+
+  @Test
   void isInEmpty() {
     List<FluentTest.State> list = List.of();
     final boolean actual = FluentTest.State.PENDING.isIn(list);

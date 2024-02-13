@@ -133,6 +133,20 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
     return Fluent.<@NotNull F>toEnumSet(List.<@NotNull Equalable<@NotNull Fluent<@NotNull F>>>of(array));
   }
 
+  /**
+   * Creates an enum set initialized from the specified collection.  If
+   * the specified collection is an {@code EnumSet} instance, this static
+   * factory method behaves identically to {@link EnumSet#copyOf(EnumSet)}.
+   * Otherwise, the specified collection must contain at least one element
+   * (in order to determine the new enum set's element type).
+   *
+   * @param <F>        The class of the elements in the collection
+   * @param collection the collection from which to initialize this enum set
+   * @return An enum set initialized from the given collection.
+   * @throws IllegalArgumentException if {@code c} is not an
+   *                                  {@code EnumSet} instance and contains no elements
+   * @throws NullPointerException     if {@code c} is null
+   */
   @NotNull
   @Contract(value = " _ -> new", pure = true)
   private static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
@@ -144,9 +158,8 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   }
 
   @Contract(pure = true)
-  default boolean isNotIn(@NotNull final EnumSet<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements)
-  {
-    return EnumSet.complementOf(elements).contains(this);
+  default boolean isNotIn(@NotNull final EnumSet<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements) {
+    return elements.isEmpty() || EnumSet.complementOf(elements).contains(this);
   }
 
   @Contract(pure = true)

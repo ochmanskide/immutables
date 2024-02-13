@@ -4,8 +4,8 @@
 
 ### 1.1. No more `UnsupportedOperationException` at runtime.
 
-Authors of `java.util.ImmutableCollections.java` class attempted to make this collection immutable, 
-but they didn't do it right because they wanted to maintain compatibility with the old Java `Collection` interface.
+Authors of `java.util.ImmutableCollections.java` class attempted to make this collection immutable,
+but they didn't do it because they wanted to maintain compatibility with the old Java `Collection` interface.
 I Improved their attempt to make `java.util.ImmutableCollections.java`, and I made the library truly immutable.
 Instead of throwing an exception to the caller, I removed the following mutators from the library:
 
@@ -26,19 +26,20 @@ The project will not compile if you try to perform an illegal operation.
 
 ### 1.2. All collections are checked at construction time.
 
-In order to remove a known `Type Erasure` limitation of Java programming language,
+In addition, in order to remove a known `Type Erasure` limitation of the Java programming language,
 all collections have been enriched with the type object. The generic type is no longer erased during compilation.
-The class type object is available at all times, during program execution.
-The type argument must be passed to the factory method, and it cannot be omitted during construction.
-The code will not compile without the generic type of the collection.  
-  
+The class type object is available at all times, during the program execution.
+The type argument must be passed to the factory method, and it cannot be omitted during construction.  
+This will ensure that the object is present during runtime.  
+The code will not compile without specifying the generic type of the collection.
+
 Example:
 
 ```java
 IList<DayOfWeek> list = ImmutableList.ofGenerator(DayOfWeek[]::new);
 ```
 
-It means that it is now possible to call `toArray()` method without parameters,
+It means that it is now possible to call `.toArray()` method without parameters,
 and it will return the true generic type, instead of a simple `Object[]` array.
 
 Example:

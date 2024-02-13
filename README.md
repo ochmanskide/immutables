@@ -73,7 +73,7 @@ The collection stays immutable, and the contract is not violated.
 Be cautious when using this old API because it may throw, known `UnsupportedOperationException` at runtime.  
 This defeats the purpose of using the library. The point of
 creating [Immutables](https://gitlab.com/stadlerrail/sw/dias/libs/immutables)
-was not to get rid of this exception, and if you use the bridge methods, the benefit is partially lost.  
+was to get rid of this exception, and if you use the bridge methods, the benefit will be partially lost.  
 Which is still better than it was up to this point because you always got the exception. Now you get it only sometimes.  
 Use it at your discretion.
 

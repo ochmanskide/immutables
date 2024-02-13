@@ -11,13 +11,13 @@ Instead of throwing an exception to the caller, I removed the following mutators
 
 ```java
 // all mutating methods throw UnsupportedOperationException
-@Override public boolean add(E e){throw uoe();}
-@Override public boolean addAll(Collection<?extends E> c){throw uoe();}
-@Override public void clear(){throw uoe();}
-@Override public boolean remove(Object o){throw uoe();}
-@Override public boolean removeAll(Collection<?> c){throw uoe();}
-@Override public boolean removeIf(Predicate<? super E>filter){throw uoe();}
-@Override public boolean retainAll(Collection<?> c){throw uoe();}
+boolean add(E e)
+  boolean addAll(Collection<?extends E> c)
+  void clear()
+  boolean remove(Object o)
+  boolean removeAll(Collection<?> c)
+  boolean removeIf(Predicate<? super E>filter)
+  boolean retainAll(Collection<?> c)
 ```
 
 This way, mutable code cannot be invoked at all.  

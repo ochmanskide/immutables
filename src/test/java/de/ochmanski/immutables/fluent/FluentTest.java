@@ -29,6 +29,16 @@ class FluentTest
 {
 
   @Test
+  void isInEmpty() {
+    List<FluentTest.State> list = List.of();
+    final boolean actual = FluentTest.State.PENDING.isIn(list);
+    assertThat(actual).isFalse();
+
+    final boolean negation = FluentTest.State.PENDING.isNotIn(list);
+    assertThat(negation).isTrue();
+  }
+
+  @Test
   void isIn()
   {
     final boolean actual = FluentTest.State.PENDING.isIn(FluentTest.State.UNKNOWN, FluentTest.State.PENDING,

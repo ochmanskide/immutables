@@ -100,28 +100,28 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   @Contract(pure = true)
   default boolean isNotInArray(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array)
   {
-    return isNotIn(Fluent.<@NotNull F>toEnumSet(array));
+    return 0 == array.length || isNotIn(Fluent.<@NotNull F>toEnumSet(array));
   }
 
   @Override
   @Contract(pure = true)
   default boolean isInArray(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array)
   {
-    return isIn(Fluent.<@NotNull F>toEnumSet(array));
+    return 0 != array.length && isIn(Fluent.<@NotNull F>toEnumSet(array));
   }
 
   @Override
   @Contract(pure = true)
   default boolean isNotIn(@NotNull final Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements)
   {
-    return isNotIn(Fluent.<@NotNull F>toEnumSet(elements));
+    return elements.isEmpty() || isNotIn(Fluent.<@NotNull F>toEnumSet(elements));
   }
 
   @Override
   @Contract(pure = true)
   default boolean isIn(@NotNull final Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements)
   {
-    return isIn(Fluent.<@NotNull F>toEnumSet(elements));
+    return !elements.isEmpty() && isIn(Fluent.<@NotNull F>toEnumSet(elements));
   }
 
   @NotNull

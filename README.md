@@ -1,4 +1,4 @@
-# immutables - Strongly typed immutable Java Collections
+# Immutables - strongly typed immutable Java Collections
 
 ## 1. Highlights
 

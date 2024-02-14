@@ -40,7 +40,7 @@ IList<DayOfWeek> list = ImmutableList.ofGenerator(DayOfWeek[]::new);
 ```
 
 It means that it is now possible to call `.toArray()` method without parameters,
-and it will return the true generic type, instead of a simple `Object[]` array.
+and it will return the `T[]` generic array, instead of a simple `Object[]` array
 
 Example:
 

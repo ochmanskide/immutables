@@ -5,14 +5,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Value
-@UnmodifiableView
+@Unmodifiable
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class StringWrapper implements Equalable<@NotNull StringWrapper>
@@ -121,7 +123,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
   @JsonIgnore
   public boolean isBlank()
   {
-    return null == raw || raw.isBlank();
+    return Equalable.<@NotNull StringWrapper>areTheSame(this, BLANK) || raw.isBlank();
   }
 
   public boolean isNotEqualTo(final String a)
@@ -132,11 +134,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
   @Contract(value = "null -> false", pure = true)
   public boolean isEqualTo(@Nullable final String other)
   {
-    if(null == other)
-    {
-      return false;
-    }
-    return raw.equals(other);
+    return Equalable.<@NotNull String>areEqual(raw, other);
   }
 
 
@@ -155,7 +153,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
   @Contract(value = "null -> false", pure = true)
   public boolean isEqualToIgnoreCase(@Nullable final String other)
   {
-    if(Objects.equals(raw, other))
+    if (Equalable.<@NotNull String>areEqual(raw, other))
     {
       return true;
     }
@@ -167,7 +165,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
     {
       return true;
     }
-    if(raw.isBlank() || other.isBlank())
+    if (raw.isBlank() || other.isBlank()) this is a bug
     {
       return false;
     }

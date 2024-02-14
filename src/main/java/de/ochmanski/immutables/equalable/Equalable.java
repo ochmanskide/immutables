@@ -465,21 +465,21 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     }
   }
 
-  interface Integer {
+  interface EqualableString {
 
     @Contract(pure = true)
     static boolean areNotEqual(final int a, final int b) {
-      return !Equalable.Integer.areEqual(a, b);
+      return !EqualableString.areEqual(a, b);
     }
 
     @Contract(pure = true)
     static boolean areEqual(final int a, final int b) {
-      return Equalable.Integer.areTheSame(a, b);
+      return EqualableString.areTheSame(a, b);
     }
 
     @Contract(pure = true)
     static boolean areNotTheSame(final int a, final int b) {
-      return !Equalable.Integer.areTheSame(a, b);
+      return !EqualableString.areTheSame(a, b);
     }
 
     @Contract(pure = true)
@@ -488,8 +488,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     }
 
     @NotNull
-    static Equalable.Integer.Holder element(final int s) {
-      return Equalable.Integer.Holder.builder().s(s).build();
+    static Equalable.EqualableString.Holder element(final int s) {
+      return EqualableString.Holder.builder().s(s).build();
     }
 
     @Value
@@ -542,7 +542,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isIn(@NotNull final IntStream elements) {
-        return elements.anyMatch(p -> Integer.areTheSame(p, s));
+        return elements.anyMatch(p -> EqualableInteger.areTheSame(p, s));
       }
 
       @Contract(pure = true)
@@ -552,7 +552,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isEqualTo(final int other) {
-        return Equalable.Integer.areEqual(s, other);
+        return EqualableString.areEqual(s, other);
       }
 
       @Contract(pure = true)
@@ -562,26 +562,128 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isSameAs(final int other) {
-        return Equalable.Integer.areTheSame(s, other);
+        return EqualableString.areTheSame(s, other);
       }
     }
   }
 
-  interface Long {
+  interface EqualableInteger {
+
+    @Contract(pure = true)
+    static boolean areNotEqual(final int a, final int b) {
+      return !EqualableInteger.areEqual(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areEqual(final int a, final int b) {
+      return EqualableInteger.areTheSame(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areNotTheSame(final int a, final int b) {
+      return !EqualableInteger.areTheSame(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areTheSame(final int a, final int b) {
+      return a == b;
+    }
+
+    @NotNull
+    static Equalable.EqualableInteger.Holder element(final int s) {
+      return EqualableInteger.Holder.builder().s(s).build();
+    }
+
+    @Value
+    @Builder
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    class Holder {
+
+      int s;
+
+      @Contract(pure = true)
+      public final boolean isNotIn(@NotNull final int @NotNull ... array) {
+        return !isIn(array);
+      }
+
+      @Contract(pure = true)
+      public final boolean isIn(@NotNull final int @NotNull ... array) {
+        return isInArray(array);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotInArray(@NotNull final int @NotNull [] array) {
+        return !isInArray(array);
+      }
+
+      @Contract(pure = true)
+      public boolean isInArray(@NotNull final int @NotNull [] array) {
+        final List<java.lang.@NotNull Integer> list = IntStream.of(array).boxed().toList();
+        return isIn(list);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull Integer> elements) {
+        return !isIn(elements);
+      }
+
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final Collection<java.lang.@NotNull Integer> elements) {
+        return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull Integer>copyOf(elements));
+      }
+
+      @Contract(pure = true)
+      public boolean isNotIn(@NotNull final Set<java.lang.@NotNull Integer> elements) {
+        return !isIn(elements);
+      }
+
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final Set<java.lang.@NotNull Integer> elements) {
+        return elements.contains(s);
+      }
+
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final IntStream elements) {
+        return elements.anyMatch(p -> EqualableInteger.areTheSame(p, s));
+      }
+
+      @Contract(pure = true)
+      public boolean isNotEqualTo(final int other) {
+        return !isEqualTo(other);
+      }
+
+      @Contract(pure = true)
+      public boolean isEqualTo(final int other) {
+        return EqualableInteger.areEqual(s, other);
+      }
+
+      @Contract(pure = true)
+      public boolean isNotSameAs(final int other) {
+        return !isSameAs(other);
+      }
+
+      @Contract(pure = true)
+      public boolean isSameAs(final int other) {
+        return EqualableInteger.areTheSame(s, other);
+      }
+    }
+  }
+
+  interface EqualableLong {
 
     @Contract(pure = true)
     static boolean areNotEqual(final long a, final long b) {
-      return !Equalable.Long.areEqual(a, b);
+      return !EqualableLong.areEqual(a, b);
     }
 
     @Contract(pure = true)
     static boolean areEqual(final long a, final long b) {
-      return Equalable.Long.areTheSame(a, b);
+      return EqualableLong.areTheSame(a, b);
     }
 
     @Contract(pure = true)
     static boolean areNotTheSame(final long a, final long b) {
-      return !Equalable.Long.areTheSame(a, b);
+      return !EqualableLong.areTheSame(a, b);
     }
 
     @Contract(pure = true)
@@ -590,8 +692,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     }
 
     @NotNull
-    static Equalable.Long.Holder element(final long s) {
-      return Equalable.Long.Holder.builder().s(s).build();
+    static Equalable.EqualableLong.Holder element(final long s) {
+      return EqualableLong.Holder.builder().s(s).build();
     }
 
     @Value
@@ -644,7 +746,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isIn(@NotNull final LongStream elements) {
-        return elements.anyMatch(p -> Long.areTheSame(p, s));
+        return elements.anyMatch(p -> EqualableLong.areTheSame(p, s));
       }
 
       @Contract(pure = true)
@@ -654,7 +756,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isEqualTo(final long other) {
-        return Equalable.Long.areEqual(s, other);
+        return EqualableLong.areEqual(s, other);
       }
 
       @Contract(pure = true)
@@ -664,26 +766,26 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isSameAs(final long other) {
-        return Equalable.Long.areTheSame(s, other);
+        return EqualableLong.areTheSame(s, other);
       }
     }
   }
 
-  interface Float {
+  interface EqualableFloat {
 
     @Contract(pure = true)
     static boolean areNotEqual(final float a, final float b) {
-      return !Equalable.Float.areEqual(a, b);
+      return !EqualableFloat.areEqual(a, b);
     }
 
     @Contract(pure = true)
     static boolean areEqual(final float a, final float b) {
-      return Equalable.Float.areTheSame(a, b);
+      return EqualableFloat.areTheSame(a, b);
     }
 
     @Contract(pure = true)
     static boolean areNotTheSame(final float a, final float b) {
-      return !Equalable.Float.areTheSame(a, b);
+      return !EqualableFloat.areTheSame(a, b);
     }
 
     @Contract(pure = true)
@@ -692,8 +794,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     }
 
     @NotNull
-    static Equalable.Float.Holder element(final float s) {
-      return Equalable.Float.Holder.builder().s(s).build();
+    static Equalable.EqualableFloat.Holder element(final float s) {
+      return EqualableFloat.Holder.builder().s(s).build();
     }
 
     @Value
@@ -747,7 +849,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isIn(@NotNull final DoubleStream elements) {
-        return elements.anyMatch(p -> Double.areTheSame(p, s));
+        return elements.anyMatch(p -> EqualableDouble.areTheSame(p, s));
       }
 
       @Contract(pure = true)
@@ -757,7 +859,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isEqualTo(final float other) {
-        return Equalable.Float.areEqual(s, other);
+        return EqualableFloat.areEqual(s, other);
       }
 
       @Contract(pure = true)
@@ -767,26 +869,26 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isSameAs(final float other) {
-        return Equalable.Float.areTheSame(s, other);
+        return EqualableFloat.areTheSame(s, other);
       }
     }
   }
 
-  interface Double {
+  interface EqualableDouble {
 
     @Contract(pure = true)
     static boolean areNotEqual(final double a, final double b) {
-      return !Equalable.Double.areEqual(a, b);
+      return !EqualableDouble.areEqual(a, b);
     }
 
     @Contract(pure = true)
     static boolean areEqual(final double a, final double b) {
-      return Equalable.Double.areTheSame(a, b);
+      return EqualableDouble.areTheSame(a, b);
     }
 
     @Contract(pure = true)
     static boolean areNotTheSame(final double a, final double b) {
-      return !Equalable.Double.areTheSame(a, b);
+      return !EqualableDouble.areTheSame(a, b);
     }
 
     @Contract(pure = true)
@@ -795,8 +897,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     }
 
     @NotNull
-    static Equalable.Double.Holder element(final double s) {
-      return Equalable.Double.Holder.builder().s(s).build();
+    static Equalable.EqualableDouble.Holder element(final double s) {
+      return EqualableDouble.Holder.builder().s(s).build();
     }
 
     @Value
@@ -849,7 +951,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isIn(@NotNull final DoubleStream elements) {
-        return elements.anyMatch(p -> Double.areTheSame(p, s));
+        return elements.anyMatch(p -> EqualableDouble.areTheSame(p, s));
       }
 
       @Contract(pure = true)
@@ -859,7 +961,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isEqualTo(final double other) {
-        return Equalable.Double.areEqual(s, other);
+        return EqualableDouble.areEqual(s, other);
       }
 
       @Contract(pure = true)
@@ -869,7 +971,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
       @Contract(pure = true)
       public boolean isSameAs(final double other) {
-        return Equalable.Double.areTheSame(s, other);
+        return EqualableDouble.areTheSame(s, other);
       }
     }
   }

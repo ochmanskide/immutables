@@ -484,7 +484,17 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
 
     @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
     static boolean areEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
-      return EqualableString.areTheSame(a, b) || (a != null && a.equalsIgnoreCase(b));
+      return EqualableString.areTheSame(a, b) || EqualableString.bothAreBlank(a, b) || (a != null && a.equalsIgnoreCase(b));
+    }
+
+    @Contract(value = "null, null -> true", pure = true)
+    static boolean bothAreNotBlank(@Nullable final String a, @Nullable final String b) {
+      return !EqualableString.bothAreBlank(a, b);
+    }
+
+    @Contract(value = "null, null -> false", pure = true)
+    static boolean bothAreBlank(@Nullable final String a, @Nullable final String b) {
+      return a != null && b != null && a.isBlank() && b.isBlank();
     }
 
     @Contract(pure = true)

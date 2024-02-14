@@ -153,23 +153,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
   @Contract(value = "null -> false", pure = true)
   public boolean isEqualToIgnoreCase(@Nullable final String other)
   {
-    if (Equalable.<@NotNull String>areEqual(raw, other))
-    {
-      return true;
-    }
-    if(null == other)
-    {
-      return false;
-    }
-    if(raw.isBlank() && other.isBlank())
-    {
-      return true;
-    }
-    if (raw.isBlank() || other.isBlank()) this is a bug
-    {
-      return false;
-    }
-    return raw.equalsIgnoreCase(other);
+    return EqualableString.areEqualIgnoreCase(raw, other);
   }
 
   public boolean anyMatch(@NotNull final StringWrapper @NotNull ... array)

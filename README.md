@@ -46,7 +46,7 @@ IMap<String, String> collection = IMap.of(...);
 String s = collection.get(123);
 ```
   
-previously it was not clear what type is needed, because the following code compiled, even if you passed an `int` to the `get()` method:  
+previously it was not clear what type is needed, because the following code compiled, even if you passed an `int` instead of a `String` to the `get()` method:  
 
 ```java
 Map<String, String> collection = Map.of(...);

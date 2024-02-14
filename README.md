@@ -36,21 +36,21 @@ methods with parameters of `Object` type have been replaced with `T` generic typ
 
 ```java
 IMap<String, String> collection = IMap.of(...);
-String s=collection.get("abc");
+String s = collection.get("abc");
 ```
   
 the following code will no longer compile:  
   
 ```java
 IMap<String, String> collection = IMap.of(...);
-String s=collection.get(123);
+String s = collection.get(123);
 ```
   
-previously it was not clear what type is needed:  
+previously it was not clear what type is needed, because the following code compiled, even if you passed an `int` to the `get()` method:  
 
 ```java
-Map<String, String> collection=Map.of(...);
-String s=collection.get(123);
+Map<String, String> collection = Map.of(...);
+String s = collection.get(123);
 ```
   
 ### 2.3. Added `Optional` support

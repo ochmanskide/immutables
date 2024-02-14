@@ -50,7 +50,7 @@ DayOfWeek[] array = list.toArray();
 
 as you see, the `.toArray()`, method no longer accepts `IntFunction<T>` as an argument.  
 The method `public T[] toArray(IntFunction<T> generator)` has been removed from this API permanently.  
-The type is checked at construction time, and it is mandatory.  
+The type is now checked at construction time, and it is mandatory.  
 You will not be able to create a collection without specifying the type, even if the collection,  
 you are trying to create, is empty.  
   

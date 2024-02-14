@@ -124,18 +124,31 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
     return !elements.isEmpty() && isIn(Fluent.<@NotNull F>toEnumSet(elements));
   }
 
+  /**
+   * Creates an enum set initialized from the specified collection.
+   * If the specified collection is an {@code EnumSet} instance, this static
+   * factory method behaves identically to {@link Fluent#toEnumSet(Collection)}.
+   * Otherwise, the specified collection must contain at least one element
+   * (in order to determine the new enum set's element type).
+   *
+   * @param array the collection from which to initialize this enum set
+   * @return An enum set initialized from the given collection.
+   * @throws IllegalArgumentException if {@code c} is not an
+   *     {@code EnumSet} instance and contains no elements
+   * @throws NullPointerException if {@code c} is null
+   */
   @NotNull
   @Contract(value = " _ -> new", pure = true)
   private static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
   EnumSet<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> toEnumSet(
-    @NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array)
+    final @NotNull Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array)
   {
-    return Fluent.<@NotNull F>toEnumSet(List.<@NotNull Equalable<@NotNull Fluent<@NotNull F>>>of(array));
+    return Fluent.<@NotNull F>toEnumSet(List.of(array));
   }
 
   /**
-   * Creates an enum set initialized from the specified collection.  If
-   * the specified collection is an {@code EnumSet} instance, this static
+   * Creates an enum set initialized from the specified collection.
+   * If the specified collection is an {@code EnumSet} instance, this static
    * factory method behaves identically to {@link EnumSet#copyOf(EnumSet)}.
    * Otherwise, the specified collection must contain at least one element
    * (in order to determine the new enum set's element type).
@@ -144,8 +157,8 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
    * @param collection the collection from which to initialize this enum set
    * @return An enum set initialized from the given collection.
    * @throws IllegalArgumentException if {@code c} is not an
-   *                                  {@code EnumSet} instance and contains no elements
-   * @throws NullPointerException     if {@code c} is null
+   *     {@code EnumSet} instance and contains no elements
+   * @throws NullPointerException if {@code c} is null
    */
   @NotNull
   @Contract(value = " _ -> new", pure = true)

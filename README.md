@@ -16,7 +16,7 @@ I improved their attempt to make `java.util.ImmutableCollections.java`, and I ma
 Instead of throwing an exception to the caller, I removed the following mutators from the library:  
 
 ```java
-// all mutating methods throw UnsupportedOperationException
+// methods that throw UnsupportedOperationException
 boolean add(E e)
 boolean addAll(Collection<? extends E> c)
 void clear()
@@ -30,29 +30,35 @@ This way, mutable code cannot be invoked at all.
 Therefore, you cannot get an `UnsupportedOperationException` anymore.  
 The project will not compile if you try to perform an illegal operation.
 
-### 2.2. No more `Object` or `ClassCastException`
-methods with `Object` parameters have been replaced with `T` generic type, for example:
-```java
-IMap<String, String> collection = IMap.of(...);
-String s = collection.get("abc");
-```
-the following code will no longer compile:
+### 2.2. No more `Object` type or `ClassCastException`
+
+methods with parameters of `Object` type have been replaced with `T` generic type, for example:
 
 ```java
 IMap<String, String> collection = IMap.of(...);
-String s = collection.get(123);
+String s=collection.get("abc");
 ```
-previously it was not clear what type is needed:
+  
+the following code will no longer compile:  
+  
 ```java
-Map<String, String> collection = Map.of(...);
-String s = collection.get(123);
+IMap<String, String> collection = IMap.of(...);
+String s=collection.get(123);
 ```
+  
+previously it was not clear what type is needed:  
 
-### 2.3. `Optional` support
-methods such as `get(K key)` return `Optional<V>` instead of `null`. 
-
+```java
+Map<String, String> collection=Map.of(...);
+String s=collection.get(123);
+```
+  
+### 2.3. Added `Optional` support
+  
+methods such as `get(K key)` return `Optional<V>` instead of `null`.  
+  
 ### 2.4. All collections are checked at construction time.
-
+  
 In addition, in order to remove a known `Type Erasure` limitation of the Java programming language,  
 all collections have been enriched with the type object. The generic type is no longer erased during compilation.  
 The class type object is available at all times, during the program execution.  
@@ -65,16 +71,16 @@ Example:
 ```java
 IList<DayOfWeek> list = ImmutableList.ofGenerator(DayOfWeek[]::new);
 ```
-
-It means that it is now possible to call `.toArray()` method without parameters,
-and it will return the `T[]` generic array, instead of a simple `Object[]` array
-
-Example:
-
+  
+It means that it is now possible to call `.toArray()` method without parameters,  
+and it will return the `T[]` generic array, instead of a simple `Object[]` array.  
+  
+Example:  
+  
 ```java
 DayOfWeek[] array = list.toArray();
 ```
-
+  
 as you see, the `.toArray()`, method no longer accepts `IntFunction<T>` as an argument.  
 The method `public T[] toArray(IntFunction<T> generator)` has been removed from this API permanently.  
 The type is now checked at construction time, and it is mandatory.  
@@ -92,7 +98,7 @@ and let the compiler handle the generic types.
 If you skip type declaration, there is nothing I can do to stop you.  
 I can only check the first generic type in the chain. The rest is on you, and on the java compiler.  
 
-### 2.6. Bridge methods
+### 2.5. Bridge methods
 
 In order to provide better portability, the collections contain the bridge methods, which return a
 `@UnmodifiableView` of the backed collection.  

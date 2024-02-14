@@ -1,8 +1,14 @@
 # Immutables - strongly typed immutable Java Collections
 
-## 1. Highlights
+## 1. Getting Started
+### 1.1. Gradle
 
-### 1.1. No more `UnsupportedOperationException` at runtime.
+### 1.2. Maven
+
+
+## 2. Highlights
+
+### 2.1. No more `UnsupportedOperationException` at runtime.
 
 Authors of `java.util.ImmutableCollections.java` class attempted to make this collection immutable,  
 but they didn't do it because they wanted to maintain compatibility with the old Java `Collection` interface.  
@@ -24,7 +30,28 @@ This way, mutable code cannot be invoked at all.
 Therefore, you cannot get an `UnsupportedOperationException` anymore.  
 The project will not compile if you try to perform an illegal operation.
 
-### 1.2. All collections are checked at construction time.
+### 2.2. No more `Object` or `ClassCastException`
+methods with `Object` parameters have been replaced with `T` generic type, for example:
+```java
+IMap<String, String> collection = IMap.of(...);
+String s = collection.get("abc");
+```
+the following code will no longer compile:
+
+```java
+IMap<String, String> collection = IMap.of(...);
+String s = collection.get(123);
+```
+previously it was not clear what type is needed:
+```java
+Map<String, String> collection = Map.of(...);
+String s = collection.get(123);
+```
+
+### 2.3. `Optional` support
+methods such as `get(K key)` return `Optional<V>` instead of `null`. 
+
+### 2.4. All collections are checked at construction time.
 
 In addition, in order to remove a known `Type Erasure` limitation of the Java programming language,  
 all collections have been enriched with the type object. The generic type is no longer erased during compilation.  
@@ -65,7 +92,7 @@ and let the compiler handle the generic types.
 If you skip type declaration, there is nothing I can do to stop you.  
 I can only check the first generic type in the chain. The rest is on you, and on the java compiler.  
 
-### 1.3. Bridge methods
+### 2.6. Bridge methods
 
 In order to provide better portability, the collections contain the bridge methods, which return a
 `@UnmodifiableView` of the backed collection.  
@@ -84,7 +111,7 @@ IList<DayOfWeek> immutableList = ImmutableList.ofGenerator(DayOfWeek[]::new);
 List<DayOfWeek> normalList = immutableList.unwrap();
 ```
 
-## 2. Features
+## 3. Features
 
 - [ ] no `NULL` values allowed,
 - [ ] compile time check for `NULL`s,
@@ -122,14 +149,14 @@ List<DayOfWeek> normalList = immutableList.unwrap();
 
 new immutable interface definitions of Java `Collections`, such as `List<T>`, `Set<T>`, `Map<T>`
 
-## Prerequisites
+## 4. Prerequisites
 
-### SDKMAN
+### 4.1. SDKMAN
 
 `SDKMAN` is a software development kit manager, to download and manage different versions of Java.
 `SDKMan` can be used via the command line, which can make the process easier for developers who prefer this method.
 
-### TODO:
+## 5. TODO:
 
 - [ ] fully implemented method `toString()`, which `calls p -> p.toString()`
 - [ ] `prettyPrint()` method which prints JSON

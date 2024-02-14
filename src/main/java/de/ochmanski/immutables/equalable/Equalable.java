@@ -322,13 +322,13 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     }
 
     @Contract(pure = true)
-    public boolean isNotInArray(@NotNull final S @NotNull [] array)
+    public final boolean isNotInArray(@NotNull final S @NotNull [] array)
     {
       return !isInArray(array);
     }
 
     @Contract(pure = true)
-    public boolean isInArray(@NotNull final S @NotNull [] array)
+    public final boolean isInArray(@NotNull final S @NotNull [] array)
     {
       return isIn(List.<@NotNull S>of(array));
     }
@@ -405,13 +405,13 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     }
 
     @Contract(pure = true)
-    public boolean isNotInArray(@NotNull final S @NotNull [] array)
+    public final boolean isNotInArray(@NotNull final S @NotNull [] array)
     {
       return !isInArray(array);
     }
 
     @Contract(pure = true)
-    public boolean isInArray(@NotNull final S @NotNull [] array)
+    public final boolean isInArray(@NotNull final S @NotNull [] array)
     {
       return isIn(List.<@NotNull S>of(array));
     }
@@ -468,27 +468,46 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
   interface EqualableString {
 
     @Contract(pure = true)
-    static boolean areNotEqual(final int a, final int b) {
+    static boolean areNotEqual(@Nullable final String a, @Nullable final String b) {
       return !EqualableString.areEqual(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areEqual(final int a, final int b) {
-      return EqualableString.areTheSame(a, b);
+    static boolean areEqual(@Nullable final String a, @Nullable final String b) {
+      return Equalable.<@NotNull String>areEqual(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areNotTheSame(final int a, final int b) {
+    static boolean areNotEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
+      return !EqualableString.areEqualIgnoreCase(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
+      if (a == null && b != null) {
+        return false;
+      }
+      if (a != null && b == null) {
+        return false;
+      }
+      if (null == a) {
+        return true;
+      }
+      return a.equalsIgnoreCase(b);
+    }
+
+    @Contract(pure = true)
+    static boolean areNotTheSame(@Nullable final String a, @Nullable final String b) {
       return !EqualableString.areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areTheSame(final int a, final int b) {
-      return a == b;
+    static boolean areTheSame(@Nullable final String a, @Nullable final String b) {
+      return Equalable.<@NotNull String>areTheSame(a, b);
     }
 
     @NotNull
-    static Equalable.EqualableString.Holder element(final int s) {
+    static Equalable.EqualableString.Holder element(@NotNull final String s) {
       return EqualableString.Holder.builder().s(s).build();
     }
 
@@ -497,71 +516,72 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     class Holder {
 
-      int s;
+      @NotNull
+      String s;
 
       @Contract(pure = true)
-      public final boolean isNotIn(@NotNull final int @NotNull ... array) {
+      public final boolean isNotIn(@NotNull final String @NotNull ... array) {
         return !isIn(array);
       }
 
       @Contract(pure = true)
-      public final boolean isIn(@NotNull final int @NotNull ... array) {
+      public final boolean isIn(@NotNull final String @NotNull ... array) {
         return isInArray(array);
       }
 
       @Contract(pure = true)
-      public boolean isNotInArray(@NotNull final int @NotNull [] array) {
+      public final boolean isNotInArray(@NotNull final String @NotNull [] array) {
         return !isInArray(array);
       }
 
       @Contract(pure = true)
-      public boolean isInArray(@NotNull final int @NotNull [] array) {
-        final List<java.lang.@NotNull Integer> list = IntStream.of(array).boxed().toList();
+      public final boolean isInArray(@NotNull final String @NotNull [] array) {
+        final List<java.lang.@NotNull String> list = Arrays.stream(array).toList();
         return isIn(list);
       }
 
       @Contract(pure = true)
-      public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull Integer> elements) {
+      public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull String> elements) {
         return !isIn(elements);
       }
 
       @Contract(pure = true)
-      public boolean isIn(@NotNull final Collection<java.lang.@NotNull Integer> elements) {
-        return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull Integer>copyOf(elements));
+      public boolean isIn(@NotNull final Collection<java.lang.@NotNull String> elements) {
+        return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull String>copyOf(elements));
       }
 
       @Contract(pure = true)
-      public boolean isNotIn(@NotNull final Set<java.lang.@NotNull Integer> elements) {
+      public boolean isNotIn(@NotNull final Set<java.lang.@NotNull String> elements) {
         return !isIn(elements);
       }
 
       @Contract(pure = true)
-      public boolean isIn(@NotNull final Set<java.lang.@NotNull Integer> elements) {
+      public boolean isIn(@NotNull final Set<java.lang.@NotNull String> elements) {
         return elements.contains(s);
       }
 
       @Contract(pure = true)
-      public boolean isIn(@NotNull final IntStream elements) {
-        return elements.anyMatch(p -> EqualableInteger.areTheSame(p, s));
+      public boolean isIn(@NotNull final Stream<@NotNull String> elements) {
+        return elements.anyMatch(p -> EqualableString.areTheSame(p, s));
       }
 
       @Contract(pure = true)
-      public boolean isNotEqualTo(final int other) {
+      public boolean isNotEqualTo(final String other) {
         return !isEqualTo(other);
       }
 
       @Contract(pure = true)
-      public boolean isEqualTo(final int other) {
+      public boolean isEqualTo(final String other) {
         return EqualableString.areEqual(s, other);
       }
 
       @Contract(pure = true)
-      public boolean isNotSameAs(final int other) {
+      public boolean isNotSameAs(final String other) {
         return !isSameAs(other);
       }
 
       @Contract(pure = true)
-      public boolean isSameAs(final int other) {
+      public boolean isSameAs(final String other) {
         return EqualableString.areTheSame(s, other);
       }
     }
@@ -602,22 +622,22 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
       int s;
 
       @Contract(pure = true)
-      public final boolean isNotIn(@NotNull final int @NotNull ... array) {
+      public final boolean isNotIn(@SuppressWarnings("NullableProblems") @NotNull final int @NotNull ... array) {
         return !isIn(array);
       }
 
       @Contract(pure = true)
-      public final boolean isIn(@NotNull final int @NotNull ... array) {
+      public final boolean isIn(@SuppressWarnings("NullableProblems") @NotNull final int @NotNull ... array) {
         return isInArray(array);
       }
 
       @Contract(pure = true)
-      public boolean isNotInArray(@NotNull final int @NotNull [] array) {
+      public boolean isNotInArray(@SuppressWarnings("NullableProblems") @NotNull final int @NotNull [] array) {
         return !isInArray(array);
       }
 
       @Contract(pure = true)
-      public boolean isInArray(@NotNull final int @NotNull [] array) {
+      public boolean isInArray(@SuppressWarnings("NullableProblems") @NotNull final int @NotNull [] array) {
         final List<java.lang.@NotNull Integer> list = IntStream.of(array).boxed().toList();
         return isIn(list);
       }
@@ -704,22 +724,22 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
       long s;
 
       @Contract(pure = true)
-      public final boolean isNotIn(@NotNull final long @NotNull ... array) {
+      public final boolean isNotIn(@SuppressWarnings("NullableProblems") @NotNull final long @NotNull ... array) {
         return !isIn(array);
       }
 
       @Contract(pure = true)
-      public final boolean isIn(@NotNull final long @NotNull ... array) {
+      public final boolean isIn(@SuppressWarnings("NullableProblems") @NotNull final long @NotNull ... array) {
         return isInArray(array);
       }
 
       @Contract(pure = true)
-      public boolean isNotInArray(@NotNull final long @NotNull [] array) {
+      public final boolean isNotInArray(@SuppressWarnings("NullableProblems") @NotNull final long @NotNull [] array) {
         return !isInArray(array);
       }
 
       @Contract(pure = true)
-      public boolean isInArray(@NotNull final long @NotNull [] array) {
+      public final boolean isInArray(@SuppressWarnings("NullableProblems") @NotNull final long @NotNull [] array) {
         final List<java.lang.Long> list = LongStream.of(array).boxed().toList();
         return isIn(list);
       }
@@ -806,22 +826,22 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
       float s;
 
       @Contract(pure = true)
-      public final boolean isNotIn(@NotNull final float @NotNull ... array) {
+      public final boolean isNotIn(@SuppressWarnings("NullableProblems") @NotNull final float @NotNull ... array) {
         return !isIn(array);
       }
 
       @Contract(pure = true)
-      public final boolean isIn(@NotNull final float @NotNull ... array) {
+      public final boolean isIn(@SuppressWarnings("NullableProblems") @NotNull final float @NotNull ... array) {
         return isInArray(array);
       }
 
       @Contract(pure = true)
-      public boolean isNotInArray(@NotNull final float @NotNull [] array) {
+      public final boolean isNotInArray(@SuppressWarnings("NullableProblems") @NotNull final float @NotNull [] array) {
         return !isInArray(array);
       }
 
       @Contract(pure = true)
-      public boolean isInArray(@NotNull final float @NotNull [] floatArray) {
+      public final boolean isInArray(@SuppressWarnings("NullableProblems") @NotNull final float @NotNull [] floatArray) {
         DoubleStream ds = IntStream.range(0, floatArray.length)
           .mapToDouble(i -> floatArray[i]);
         return isIn(ds);
@@ -909,22 +929,22 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
       double s;
 
       @Contract(pure = true)
-      public final boolean isNotIn(@NotNull final double @NotNull ... array) {
+      public final boolean isNotIn(@SuppressWarnings("NullableProblems") @NotNull final double @NotNull ... array) {
         return !isIn(array);
       }
 
       @Contract(pure = true)
-      public final boolean isIn(@NotNull final double @NotNull ... array) {
+      public final boolean isIn(@SuppressWarnings("NullableProblems") @NotNull final double @NotNull ... array) {
         return isInArray(array);
       }
 
       @Contract(pure = true)
-      public boolean isNotInArray(@NotNull final double @NotNull [] array) {
+      public final boolean isNotInArray(@SuppressWarnings("NullableProblems") @NotNull final double @NotNull [] array) {
         return !isInArray(array);
       }
 
       @Contract(pure = true)
-      public boolean isInArray(@NotNull final double @NotNull [] array) {
+      public final boolean isInArray(@SuppressWarnings("NullableProblems") @NotNull final double @NotNull [] array) {
         final List<java.lang.@NotNull Double> list = DoubleStream.of(array).boxed().toList();
         return isIn(list);
       }

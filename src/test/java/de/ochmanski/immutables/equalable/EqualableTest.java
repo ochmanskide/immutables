@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static de.ochmanski.immutables.constants.Constants.BLANK;
 import static de.ochmanski.immutables.equalable.EqualableTest.State.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -245,6 +246,102 @@ class EqualableTest
     final boolean actual = Equalable.<StringWrapper>areEqual(StringWrapper.of("a"), StringWrapper.of("A"));
     assertThat(actual).isFalse();
     final boolean actual2 = Equalable.<StringWrapper>areEqual(StringWrapper.of("a"), StringWrapper.of("a"));
+    assertThat(actual2).isTrue();
+  }
+
+  @Test
+  void testAreNotEqual() {
+    final boolean actual = EqualableString.areNotEqual("a", "A");
+    assertThat(actual).isTrue();
+    final boolean actual2 = EqualableString.areNotEqual("a", "a");
+    assertThat(actual2).isFalse();
+  }
+
+  @Test
+  void testAreEqual() {
+    final boolean actual = EqualableString.areEqual("a", "A");
+    assertThat(actual).isFalse();
+    final boolean actual2 = EqualableString.areEqual("a", "a");
+    assertThat(actual2).isTrue();
+  }
+
+  @Test
+  void areNotEqualIgnoreCase() {
+    final boolean actual = EqualableString.areNotEqualIgnoreCase("a", "A");
+    assertThat(actual).isFalse();
+    final boolean actual2 = EqualableString.areNotEqualIgnoreCase("a", "a");
+    assertThat(actual2).isFalse();
+  }
+
+  @Test
+  void areEqualIgnoreCase() {
+    final boolean actual = EqualableString.areEqualIgnoreCase("a", "A");
+    assertThat(actual).isTrue();
+    final boolean actual2 = EqualableString.areEqualIgnoreCase("a", "a");
+    assertThat(actual2).isTrue();
+  }
+
+  @Test
+  void bothAreNotBlank() {
+    final boolean actual = EqualableString.bothAreNotBlank(" ", "A");
+    assertThat(actual).isTrue();
+    final boolean actual2 = EqualableString.bothAreNotBlank("", " ");
+    assertThat(actual2).isFalse();
+  }
+
+  @Test
+  void bothAreBlank() {
+    final boolean actual = EqualableString.bothAreBlank(" ", "A");
+    assertThat(actual).isFalse();
+    final boolean actual2 = EqualableString.bothAreBlank("", " ");
+    assertThat(actual2).isTrue();
+  }
+
+  @Test
+  void areNotTheSame() {
+    final boolean actual = EqualableString.areNotTheSame("", "A");
+    assertThat(actual).isTrue();
+    final boolean actual2 = EqualableString.areNotTheSame("", "");
+    assertThat(actual2).isFalse();
+    final boolean actual3 = EqualableString.areNotTheSame(BLANK, BLANK);
+    assertThat(actual3).isFalse();
+  }
+
+  @Test
+  void areTheSame() {
+    final boolean actual = EqualableString.areTheSame("", "A");
+    assertThat(actual).isFalse();
+    final boolean actual2 = EqualableString.areTheSame("", "");
+    assertThat(actual2).isTrue();
+    final boolean actual3 = EqualableString.areTheSame(BLANK, BLANK);
+    assertThat(actual3).isTrue();
+  }
+
+  @Test
+  void areTheSame2() {
+    final boolean actual = EqualableString.areTheSame(" ", "A");
+    assertThat(actual).isFalse();
+    final boolean actual2 = EqualableString.areTheSame(" ", " ");
+    assertThat(actual2).isTrue();
+    final boolean actual3 = EqualableString.areTheSame(BLANK, BLANK);
+    assertThat(actual3).isTrue();
+  }
+
+  @Test
+  void areTheSame3() {
+    final boolean actual = EqualableString.areTheSame(new String("ABC"), "ABC");
+    assertThat(actual).isFalse();
+    final boolean actual2 = EqualableString.areTheSame(new String(" "), " ");
+    assertThat(actual2).isFalse();
+    final boolean actual3 = EqualableString.areTheSame(new String(BLANK), BLANK);
+    assertThat(actual3).isFalse();
+  }
+
+  @Test
+  void element() {
+    final boolean actual = Equalable.element("String").isEqualTo("string");
+    assertThat(actual).isFalse();
+    final boolean actual2 = Equalable.element("String").isEqualTo("String");
     assertThat(actual2).isTrue();
   }
 

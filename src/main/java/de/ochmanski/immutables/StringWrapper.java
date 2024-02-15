@@ -60,7 +60,7 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper>
     {
       return false;
     }
-    return raw.equalsIgnoreCase(other.getRaw());
+    return EqualableString.areEqualIgnoreCase(raw, other.getRaw());
   }
 
   public boolean anyMatch(@NotNull final String @NotNull ... array)

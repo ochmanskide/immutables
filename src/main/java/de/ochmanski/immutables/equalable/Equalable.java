@@ -465,7 +465,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     }
   }
 
-  interface EqualableString {
+  interface EqualableString extends Equalable<@NotNull EqualableString> {
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
     static boolean areNotEqual(@Nullable final String a, @Nullable final String b) {

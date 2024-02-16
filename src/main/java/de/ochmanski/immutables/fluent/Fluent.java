@@ -1,14 +1,15 @@
 package de.ochmanski.immutables.fluent;
 
 import de.ochmanski.immutables.equalable.Equalable;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -247,5 +248,76 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
     @Nullable final F a,
     @Nullable final F b) {
     return Equalable.<@Nullable F>areTheSame(a, b);
+  }
+
+  @Value
+  @Builder
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  class FluentHolder<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
+    implements Equalable<@NotNull Fluent<@NotNull F>> {
+
+    @NotNull F s;
+
+    @SafeVarargs
+    @Contract(pure = true)
+    public final boolean isNotIn(@NotNull final F @NotNull ... array) {
+      return !isIn(array);
+    }
+
+    @SafeVarargs
+    @Contract(pure = true)
+    public final boolean isIn(@NotNull final F @NotNull ... array) {
+      return isInArray(array);
+    }
+
+    @Contract(pure = true)
+    public final boolean isNotInArray(@NotNull final F @NotNull [] array) {
+      return !isInArray(array);
+    }
+
+    @Contract(pure = true)
+    public final boolean isInArray(@NotNull final F @NotNull [] array) {
+      return isIn(List.<@NotNull F>of(array));
+    }
+
+    @Contract(pure = true)
+    public boolean isNotIn(@NotNull final Collection<? extends @NotNull F> elements) {
+      return !isIn(elements);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Collection<? extends @NotNull F> elements) {
+      return !elements.isEmpty() && isIn(Set.<@NotNull F>copyOf(elements));
+    }
+
+    @Contract(pure = true)
+    public boolean isNotIn(@NotNull final Set<? extends @NotNull F> elements) {
+      return !isIn(elements);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Set<? extends @NotNull F> elements) {
+      return elements.contains(s);
+    }
+
+    @Contract(value = "null -> true", pure = true)
+    public boolean isNotEqualTo(@Nullable final F other) {
+      return !isEqualTo(other);
+    }
+
+    @Contract(value = "null -> false", pure = true)
+    public boolean isEqualTo(@Nullable final F other) {
+      return Fluent.<@NotNull F>areEqual(s, other);
+    }
+
+    @Contract(value = "null -> true", pure = true)
+    public boolean isNotSameAs(@Nullable final F other) {
+      return !isSameAs(other);
+    }
+
+    @Contract(value = "null -> false", pure = true)
+    public boolean isSameAs(@Nullable final F other) {
+      return Fluent.<@NotNull F>areTheSame(s, other);
+    }
   }
 }

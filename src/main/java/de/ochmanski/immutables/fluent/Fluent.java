@@ -256,67 +256,68 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   class FluentHolder<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
     implements Equalable<@NotNull Fluent<@NotNull F>> {
 
-    @NotNull F s;
+    @NotNull
+    Equalable<@NotNull Fluent<@NotNull F>> s;
 
     @SafeVarargs
     @Contract(pure = true)
-    public final boolean isNotIn(@NotNull final F @NotNull ... array) {
+    public final boolean isNotIn(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull ... array) {
       return !isIn(array);
     }
 
     @SafeVarargs
     @Contract(pure = true)
-    public final boolean isIn(@NotNull final F @NotNull ... array) {
+    public final boolean isIn(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull ... array) {
       return isInArray(array);
     }
 
     @Contract(pure = true)
-    public final boolean isNotInArray(@NotNull final F @NotNull [] array) {
+    public final boolean isNotInArray(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array) {
       return !isInArray(array);
     }
 
     @Contract(pure = true)
-    public final boolean isInArray(@NotNull final F @NotNull [] array) {
-      return isIn(List.<@NotNull F>of(array));
+    public final boolean isInArray(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array) {
+      return isIn(List.<@NotNull Equalable<@NotNull Fluent<@NotNull F>>>of(array));
     }
 
     @Contract(pure = true)
-    public boolean isNotIn(@NotNull final Collection<? extends @NotNull F> elements) {
+    public boolean isNotIn(final @NotNull Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements) {
       return !isIn(elements);
     }
 
     @Contract(pure = true)
-    public boolean isIn(@NotNull final Collection<? extends @NotNull F> elements) {
-      return !elements.isEmpty() && isIn(Set.<@NotNull F>copyOf(elements));
+    public boolean isIn(final @NotNull Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements) {
+      return !elements.isEmpty() && isIn(Set.copyOf(elements));
     }
 
     @Contract(pure = true)
-    public boolean isNotIn(@NotNull final Set<? extends @NotNull F> elements) {
+    public boolean isNotIn(final @NotNull Set<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements) {
       return !isIn(elements);
     }
 
     @Contract(pure = true)
-    public boolean isIn(@NotNull final Set<? extends @NotNull F> elements) {
+    public boolean isIn(final @NotNull Set<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements) {
       return elements.contains(s);
     }
 
     @Contract(value = "null -> true", pure = true)
-    public boolean isNotEqualTo(@Nullable final F other) {
+    public boolean isNotEqualTo(@Nullable final Equalable<@NotNull Fluent<@NotNull F>> other) {
       return !isEqualTo(other);
     }
 
     @Contract(value = "null -> false", pure = true)
-    public boolean isEqualTo(@Nullable final F other) {
+    public boolean isEqualTo(@Nullable final Equalable<@NotNull Fluent<@NotNull F>> other) {
       return Fluent.<@NotNull F>areEqual(s, other);
     }
 
     @Contract(value = "null -> true", pure = true)
-    public boolean isNotSameAs(@Nullable final F other) {
+    public boolean isNotSameAs(@Nullable final Equalable<@NotNull Fluent<@NotNull F>> other) {
       return !isSameAs(other);
     }
 
     @Contract(value = "null -> false", pure = true)
-    public boolean isSameAs(@Nullable final F other) {
+    public boolean isSameAs(@Nullable final Equalable<@NotNull Fluent<@NotNull F>> other) {
       return Fluent.<@NotNull F>areTheSame(s, other);
     }
   }

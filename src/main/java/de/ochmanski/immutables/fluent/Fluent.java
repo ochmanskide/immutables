@@ -250,6 +250,27 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
     return Equalable.<@Nullable F>areTheSame(a, b);
   }
 
+  @NotNull
+  static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
+      Fluent.FluentHolder<@NotNull F> element(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> s)
+  {
+    return FluentHolder.<@NotNull F>builder().s(s).build();
+  }
+
+  @NotNull
+  static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
+      Fluent.FluentHolder<@NotNull F> element(@NotNull final Fluent<@NotNull F> s)
+  {
+    return FluentHolder.<@NotNull F>builder().s(s).build();
+  }
+
+  @NotNull
+  static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
+      EqualableHolder<@NotNull F> element(@NotNull final F s)
+  {
+    return EqualableHolder.<@NotNull F>builder().s(s).build();
+  }
+
   @Value
   @Builder
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

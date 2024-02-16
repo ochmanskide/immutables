@@ -588,7 +588,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     }
   }
 
-  interface EqualableInteger {
+  interface EqualableInteger extends Equalable<@NotNull EqualableInteger> {
 
     @Contract(pure = true)
     static boolean areNotEqual(final int a, final int b) {
@@ -690,7 +690,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     }
   }
 
-  interface EqualableLong {
+  interface EqualableLong extends Equalable<@NotNull EqualableLong> {
 
     @Contract(pure = true)
     static boolean areNotEqual(final long a, final long b) {
@@ -792,7 +792,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     }
   }
 
-  interface EqualableFloat {
+  interface EqualableFloat extends Equalable<@NotNull EqualableFloat> {
 
     @Contract(pure = true)
     static boolean areNotEqual(final float a, final float b) {
@@ -895,7 +895,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>>
     }
   }
 
-  interface EqualableDouble {
+  interface EqualableDouble extends Equalable<@NotNull EqualableDouble> {
 
     @Contract(pure = true)
     static boolean areNotEqual(final double a, final double b) {

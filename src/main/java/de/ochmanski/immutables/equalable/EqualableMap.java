@@ -1,6 +1,6 @@
 package de.ochmanski.immutables.equalable;
 
-import de.ochmanski.immutables.IMap;
+import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.immutable.ImmutableMap;
 import lombok.*;
 import org.jetbrains.annotations.Contract;

@@ -1,7 +1,7 @@
 package de.ochmanski.immutables.immutable;
 
-import de.ochmanski.immutables.ICollection;
-import de.ochmanski.immutables.IMap;
+import de.ochmanski.immutables.collection.ICollection;
+import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
 import org.jetbrains.annotations.*;

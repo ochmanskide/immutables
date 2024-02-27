@@ -1,7 +1,7 @@
 package de.ochmanski.immutables.equalable;
 
-import de.ochmanski.immutables.IList;
 import de.ochmanski.immutables.StringWrapper;
+import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.*;
 import org.jetbrains.annotations.Contract;

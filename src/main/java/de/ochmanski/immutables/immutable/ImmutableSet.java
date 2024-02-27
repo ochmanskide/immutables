@@ -2,9 +2,9 @@ package de.ochmanski.immutables.immutable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.ochmanski.immutables.ICollection;
-import de.ochmanski.immutables.IMap;
-import de.ochmanski.immutables.ISet;
+import de.ochmanski.immutables.collection.ICollection;
+import de.ochmanski.immutables.collection.IMap;
+import de.ochmanski.immutables.collection.ISet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

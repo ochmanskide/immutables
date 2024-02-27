@@ -1,7 +1,7 @@
 package de.ochmanski.immutables.immutable.enums;
 
-import de.ochmanski.immutables.ICollection;
-import de.ochmanski.immutables.ISet;
+import de.ochmanski.immutables.collection.ICollection;
+import de.ochmanski.immutables.collection.ISet;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;

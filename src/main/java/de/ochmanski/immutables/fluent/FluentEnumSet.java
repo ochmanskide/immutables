@@ -1,6 +1,6 @@
 package de.ochmanski.immutables.fluent;
 
-import de.ochmanski.immutables.ISet;
+import de.ochmanski.immutables.collection.ISet;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;

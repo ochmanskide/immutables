@@ -1,7 +1,7 @@
 package de.ochmanski.immutables.immutable.enums;
 
 import annotations.UnitTest;
-import de.ochmanski.immutables.IList;
+import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.equalable.Equalable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

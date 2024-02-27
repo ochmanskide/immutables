@@ -1,6 +1,6 @@
 package de.ochmanski.immutables.fluent;
 
-import de.ochmanski.immutables.IList;
+import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumList;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.*;

@@ -1,6 +1,7 @@
 package de.ochmanski.immutables;
 
 import annotations.UnitTest;
+import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.AccessLevel;

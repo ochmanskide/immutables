@@ -1,8 +1,8 @@
 package de.ochmanski.immutables.fluent;
 
 
-import de.ochmanski.immutables.ICollection;
-import de.ochmanski.immutables.IMap;
+import de.ochmanski.immutables.collection.ICollection;
+import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import de.ochmanski.immutables.immutable.ImmutableSet;

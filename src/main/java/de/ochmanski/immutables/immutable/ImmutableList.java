@@ -3,7 +3,7 @@ package de.ochmanski.immutables.immutable;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ochmanski.immutables.Checked;
-import de.ochmanski.immutables.IList;
+import de.ochmanski.immutables.collection.IList;
 import lombok.*;
 import org.jetbrains.annotations.*;
 

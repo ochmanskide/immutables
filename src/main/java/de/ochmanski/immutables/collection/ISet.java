@@ -1,4 +1,4 @@
-package de.ochmanski.immutables;
+package de.ochmanski.immutables.collection;
 
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import org.jetbrains.annotations.*;

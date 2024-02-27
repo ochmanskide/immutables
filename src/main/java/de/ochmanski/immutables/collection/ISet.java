@@ -11,8 +11,7 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-public interface ISet<E> extends ICollection<@NotNull E>
-{
+public interface ISet<E> extends ICollection<@NotNull E> {
 
   /**
    * This method is not supported.
@@ -28,8 +27,7 @@ public interface ISet<E> extends ICollection<@NotNull E>
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
-  private static void of()
-  {
+  private static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
       + "For example: ISet.ofGenerator(String[]::new)");
   }
@@ -104,15 +102,14 @@ public interface ISet<E> extends ICollection<@NotNull E>
    *
    * @return a sequential {@code Stream} over the elements in this collection
    * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
-   *   {@code Spliterator}.
+   * {@code Spliterator}.
    * @since 1.8
    */
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  default Stream<@NotNull E> stream()
-  {
+  default Stream<@NotNull E> stream() {
     return getSet().stream();
   }
 
@@ -147,8 +144,7 @@ public interface ISet<E> extends ICollection<@NotNull E>
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  default Optional<@Nullable E> findFirst()
-  {
+  default Optional<@Nullable E> findFirst() {
     return getSet().findFirst();
   }
 
@@ -160,8 +156,7 @@ public interface ISet<E> extends ICollection<@NotNull E>
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  default Optional<@Nullable E> findAny()
-  {
+  default Optional<@Nullable E> findAny() {
     return getSet().findAny();
   }
 

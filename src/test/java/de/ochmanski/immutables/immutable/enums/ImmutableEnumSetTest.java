@@ -17,21 +17,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @UnitTest
 @ExtendWith(MockitoExtension.class)
-class ImmutableEnumSetTest
-{
+class ImmutableEnumSetTest {
 
   @Test
-  void of()
-  {
+  void of() {
     assertThatThrownBy(ImmutableEnumSet::of)
-        .isExactlyInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Please pass array generator type to the method. "
-            + "For example: ImmutableEnumSet.ofGenerator(Day[]::new)");
+      .isExactlyInstanceOf(UnsupportedOperationException.class)
+      .hasMessage("Please pass array generator type to the method. "
+        + "For example: ImmutableEnumSet.ofGenerator(Day[]::new)");
   }
 
   @Test
-  void ofGenerator()
-  {
+  void ofGenerator() {
     final @NotNull IntFunction<@NotNull Dummy[]> constructor = Dummy[]::new;
     final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.ofGenerator(constructor);
     assertThat(actual.isEmpty()).isTrue();
@@ -45,16 +42,14 @@ class ImmutableEnumSetTest
   }
 
   @Test
-  void of1()
-  {
+  void of1() {
     final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.of(Dummy.A, Dummy[]::new);
     assertThat(actual).isInstanceOf(ImmutableEnumSet.class);
     assertThat(actual.unwrap()).containsExactly(Dummy.A);
   }
 
   @Test
-  void of2()
-  {
+  void of2() {
     final Dummy s1 = Dummy.A;
     final Dummy s2 = Dummy.B;
     final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.of(s1, s2, Dummy[]::new);
@@ -63,8 +58,7 @@ class ImmutableEnumSetTest
   }
 
   @Test
-  void of3()
-  {
+  void of3() {
     final Dummy s1 = Dummy.A;
     final Dummy s2 = Dummy.B;
     final Dummy s3 = Dummy.C;
@@ -74,8 +68,7 @@ class ImmutableEnumSetTest
   }
 
   @Test
-  void ofArray3()
-  {
+  void ofArray3() {
     final Dummy s1 = Dummy.A;
     final Dummy s2 = Dummy.B;
     final Dummy s3 = Dummy.C;
@@ -85,8 +78,7 @@ class ImmutableEnumSetTest
   }
 
   @Test
-  void toArrayNull()
-  {
+  void toArrayNull() {
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of((Dummy) null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
@@ -96,16 +88,14 @@ class ImmutableEnumSetTest
   }
 
   @Test
-  void toArrayEmpty()
-  {
+  void toArrayEmpty() {
     final Dummy s1 = Dummy.A;
     final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 
   @Test
-  void toArrayEmpty1()
-  {
+  void toArrayEmpty1() {
     final Dummy s1 = Dummy.A;
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of(s1, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
@@ -116,8 +106,7 @@ class ImmutableEnumSetTest
   }
 
   @Test
-  void toArrayEmpty2()
-  {
+  void toArrayEmpty2() {
     final Dummy s1 = Dummy.A;
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of(s1, null, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
@@ -128,8 +117,7 @@ class ImmutableEnumSetTest
   }
 
   @Test
-  void toArrayEmpty3()
-  {
+  void toArrayEmpty3() {
     final Dummy s1 = Dummy.A;
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of(s1, null, null, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
@@ -140,21 +128,18 @@ class ImmutableEnumSetTest
   }
 
   @Test
-  void toArrayNullClass()
-  {
+  void toArrayNullClass() {
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.ofGenerator(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
   }
 
   @Test
-  void toArrayClass()
-  {
+  void toArrayClass() {
     final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 
   @Test
-  void toArray0()
-  {
+  void toArray0() {
     Assertions.assertThatThrownBy(() -> ImmutableEnumSet.of((Dummy) null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
@@ -164,16 +149,14 @@ class ImmutableEnumSetTest
   }
 
   @Test
-  void toArray1()
-  {
+  void toArray1() {
     final Dummy s1 = Dummy.A;
     final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.of(s1, Dummy[]::new);
     assertThat(actual.toArray()).containsExactly(s1);
   }
 
   @Test
-  void toArray2()
-  {
+  void toArray2() {
     final Dummy s1 = Dummy.A;
     final Dummy s2 = Dummy.B;
     final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.of(s1, s2, Dummy[]::new);
@@ -181,8 +164,7 @@ class ImmutableEnumSetTest
   }
 
   @Test
-  void toArray3()
-  {
+  void toArray3() {
     final Dummy s1 = Dummy.A;
     final Dummy s2 = Dummy.B;
     final Dummy s3 = Dummy.C;
@@ -191,8 +173,7 @@ class ImmutableEnumSetTest
   }
 
   @Test
-  void equalable()
-  {
+  void equalable() {
     final Dummy a = Dummy.A;
     final Dummy b = Dummy.A;
     assertThat(a).isEqualTo(b);
@@ -204,8 +185,7 @@ class ImmutableEnumSetTest
     assertThat(a.equals(c)).isFalse();
   }
 
-  private enum Dummy implements Fluent<@NotNull Dummy>
-  {
+  private enum Dummy implements Fluent<@NotNull Dummy> {
     A,
     B,
     C;

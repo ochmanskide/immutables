@@ -13,8 +13,7 @@ import java.util.stream.Collector;
 import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
-public interface EqualableCollectors
-{
+public interface EqualableCollectors {
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_CONCURRENT_ID
@@ -24,24 +23,24 @@ public interface EqualableCollectors
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_CONCURRENT_NOID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
-      Collector.Characteristics.UNORDERED));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
+    Collector.Characteristics.UNORDERED));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_ID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_UNORDERED_ID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED,
-      Collector.Characteristics.IDENTITY_FINISH));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED,
+    Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_NOID = Collections.emptySet();
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_UNORDERED_NOID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED));
 
   /**
    * Returns a {@code Collector} that accumulates the input elements into a new {@code Set}. There are no guarantees on
@@ -56,14 +55,13 @@ public interface EqualableCollectors
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
-  {
+  static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet() {
     return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
       .supplier(HashSet::new)
       .accumulator(Set::add)
       .combiner(EqualableCollectors::combiner)
-        .characteristics(CH_UNORDERED_ID)
-        .build();
+      .characteristics(CH_UNORDERED_ID)
+      .build();
   }
 
   /**
@@ -77,14 +75,13 @@ public interface EqualableCollectors
    *
    * @param <T> the type of the input elements
    * @return a {@code Collector} that accumulates the input elements into an
-   *     <a href="../Set.html#unmodifiable">unmodifiable Set</a>
+   * <a href="../Set.html#unmodifiable">unmodifiable Set</a>
    * @since 10
    */
   @NotNull
   @Contract(value = " _ -> new", pure = true)
   static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSet<@NotNull T>> toSet(
-    @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor) {
     return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSet<@NotNull T>>builder()
       .supplier(HashSet::new)
       .accumulator(Set::add)
@@ -97,15 +94,11 @@ public interface EqualableCollectors
   @NotNull
   private static <T extends @NotNull Equalable<@NotNull T>> HashSet<@NotNull T> combiner(
     @NotNull final HashSet<@NotNull T> left,
-    @NotNull final HashSet<@NotNull T> right)
-  {
-    if(left.size() < right.size())
-    {
+    @NotNull final HashSet<@NotNull T> right) {
+    if (left.size() < right.size()) {
       right.addAll(left);
       return right;
-    }
-    else
-    {
+    } else {
       left.addAll(right);
       return left;
     }
@@ -115,8 +108,7 @@ public interface EqualableCollectors
   @Contract(value = " _ -> new", pure = true)
   static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>> toList(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor
-  )
-  {
+  ) {
     return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>>builder()
       .supplier(ArrayList::new)
       .accumulator(List::add)
@@ -129,15 +121,11 @@ public interface EqualableCollectors
   @NotNull
   private static <T extends @NotNull Equalable<@NotNull T>> ArrayList<@NotNull T> combiner(
     @NotNull final ArrayList<@NotNull T> left,
-    @NotNull final ArrayList<@NotNull T> right)
-  {
-    if(left.size() < right.size())
-    {
+    @NotNull final ArrayList<@NotNull T> right) {
+    if (left.size() < right.size()) {
       right.addAll(left);
       return right;
-    }
-    else
-    {
+    } else {
       left.addAll(right);
       return left;
     }
@@ -145,18 +133,16 @@ public interface EqualableCollectors
 
   @NotNull
   @Contract(pure = true)
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  static <T> IntFunction<@NotNull T @NotNull []> tGenerator()
-  {
-    return (IntFunction)Equalable @NotNull []::new;
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  static <T> IntFunction<@NotNull T @NotNull []> tGenerator() {
+    return (IntFunction) Equalable @NotNull []::new;
   }
 
   @Value
   @RequiredArgsConstructor
   @Builder
   class CollectorImpl<T extends @NotNull Equalable<@NotNull T>, A, R>
-      implements Collector<@NotNull T, @NotNull A, @NotNull R>
-  {
+    implements Collector<@NotNull T, @NotNull A, @NotNull R> {
     @NotNull
     Supplier<@NotNull A> supplier;
 
@@ -175,36 +161,31 @@ public interface EqualableCollectors
 
     @NotNull
     @Override
-    public BiConsumer<@NotNull A, @NotNull T> accumulator()
-    {
+    public BiConsumer<@NotNull A, @NotNull T> accumulator() {
       return accumulator;
     }
 
     @NotNull
     @Override
-    public Supplier<@NotNull A> supplier()
-    {
+    public Supplier<@NotNull A> supplier() {
       return supplier;
     }
 
     @NotNull
     @Override
-    public BinaryOperator<@NotNull A> combiner()
-    {
+    public BinaryOperator<@NotNull A> combiner() {
       return combiner;
     }
 
     @NotNull
     @Override
-    public Function<@NotNull A, @NotNull R> finisher()
-    {
+    public Function<@NotNull A, @NotNull R> finisher() {
       return finisher;
     }
 
     @NotNull
     @Override
-    public Set<@NotNull Characteristics> characteristics()
-    {
+    public Set<@NotNull Characteristics> characteristics() {
       return characteristics;
     }
 
@@ -213,9 +194,8 @@ public interface EqualableCollectors
   @NotNull
   @Contract(pure = true)
   @SuppressWarnings(UNCHECKED)
-  private static <I, R> Function<@NotNull I, @NotNull R> castingIdentity()
-  {
-    return i -> (R)i;
+  private static <I, R> Function<@NotNull I, @NotNull R> castingIdentity() {
+    return i -> (R) i;
   }
 
 }

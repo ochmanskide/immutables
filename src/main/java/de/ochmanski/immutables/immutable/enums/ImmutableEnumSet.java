@@ -17,6 +17,7 @@ import java.util.function.IntFunction;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+
 /**
  * Immutable wrapper of <pre>{@code java.util.EnumSet<K,V>}</pre>
  * <p>This Read-Only implementation of <pre>{@code Set<>}</pre> interface
@@ -30,8 +31,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements ISet<@NotNull E>
-{
+public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements ISet<@NotNull E> {
 
   @Unmodifiable
   @UnmodifiableView

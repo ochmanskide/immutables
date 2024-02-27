@@ -21,8 +21,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
-{
+public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
 
   @Unmodifiable
   @UnmodifiableView

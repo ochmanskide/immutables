@@ -16,15 +16,13 @@ import java.util.stream.Stream;
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
-  extends Equalable<@NotNull Fluent<@NotNull F>>
-{
+  extends Equalable<@NotNull Fluent<@NotNull F>> {
 
   //@MustBeInvokedByOverriders
   @NotNull
   @Contract(value = "_ -> new", pure = true)
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> Stream<@NotNull Equalable<@NotNull Fluent<@NotNull F>>> createStream(
-    @NotNull final Class<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> clazz)
-  {
+    @NotNull final Class<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> clazz) {
     @NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] enumConstants = getEnumConstants(clazz);
     return Arrays.<@NotNull Equalable<@NotNull Fluent<@NotNull F>>>stream(enumConstants);
   }
@@ -33,8 +31,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> Stream<@NotNull Equalable<@NotNull Fluent<@NotNull F>>> createStream(
-    @NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] entries)
-  {
+    @NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] entries) {
     return Arrays.<@NotNull Equalable<@NotNull Fluent<@NotNull F>>>stream(entries);
   }
 
@@ -42,8 +39,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   @Contract(pure = true)
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> void forEachHelper(
     @NotNull final Class<@NotNull Equalable<@NotNull Fluent<@NotNull F>>> clazz,
-    @NotNull final Consumer<? super @NotNull Equalable<@NotNull Fluent<@NotNull F>>> consumer)
-  {
+    @NotNull final Consumer<? super @NotNull Equalable<@NotNull Fluent<@NotNull F>>> consumer) {
     @NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] enumConstants = getEnumConstants(clazz);
     Fluent.<@NotNull F>forEach(enumConstants, consumer);
   }
@@ -51,40 +47,35 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   @Contract(pure = true)
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> void forEach(
     @NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] entries,
-    @NotNull final Consumer<? super @NotNull Equalable<@NotNull Fluent<@NotNull F>>> consumer)
-  {
+    @NotNull final Consumer<? super @NotNull Equalable<@NotNull Fluent<@NotNull F>>> consumer) {
     Arrays.<@NotNull Equalable<@NotNull Fluent<@NotNull F>>>asList(entries).forEach(consumer);
   }
 
   @NotNull
   @Contract(pure = true)
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] getEnumConstants(
-    @NotNull final Class<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> enumClass)
-  {
+    @NotNull final Class<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> enumClass) {
     return enumClass.getEnumConstants();
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> boolean areNotEqual(
     @Nullable final Equalable<@NotNull Fluent<@NotNull F>> a,
-    @Nullable final Equalable<@NotNull Fluent<@NotNull F>> b)
-  {
+    @Nullable final Equalable<@NotNull Fluent<@NotNull F>> b) {
     return !Fluent.<@NotNull F>areEqual(a, b);
   }
 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> boolean areEqual(
     @Nullable final Equalable<@NotNull Fluent<@NotNull F>> a,
-    @Nullable final Equalable<@NotNull Fluent<@NotNull F>> b)
-  {
+    @Nullable final Equalable<@NotNull Fluent<@NotNull F>> b) {
     return Fluent.<@NotNull F>areTheSame(a, b);
   }
 
   @Override
   @Contract(pure = true)
   @SuppressWarnings(UNCHECKED)
-  default boolean isNotIn(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull ... array)
-  {
+  default boolean isNotIn(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull ... array) {
     return isNotInArray(array);
   }
 
@@ -92,36 +83,31 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   @Override
   @Contract(pure = true)
   @SuppressWarnings(UNCHECKED)
-  default boolean isIn(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull ... array)
-  {
+  default boolean isIn(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull ... array) {
     return isInArray(array);
   }
 
   @Override
   @Contract(pure = true)
-  default boolean isNotInArray(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array)
-  {
+  default boolean isNotInArray(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array) {
     return 0 == array.length || isNotIn(Fluent.<@NotNull F>toEnumSet(array));
   }
 
   @Override
   @Contract(pure = true)
-  default boolean isInArray(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array)
-  {
+  default boolean isInArray(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array) {
     return 0 != array.length && isIn(Fluent.<@NotNull F>toEnumSet(array));
   }
 
   @Override
   @Contract(pure = true)
-  default boolean isNotIn(@NotNull final Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements)
-  {
+  default boolean isNotIn(@NotNull final Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements) {
     return elements.isEmpty() || isNotIn(Fluent.<@NotNull F>toEnumSet(elements));
   }
 
   @Override
   @Contract(pure = true)
-  default boolean isIn(@NotNull final Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements)
-  {
+  default boolean isIn(@NotNull final Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements) {
     return !elements.isEmpty() && isIn(Fluent.<@NotNull F>toEnumSet(elements));
   }
 
@@ -135,15 +121,14 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
    * @param array the collection from which to initialize this enum set
    * @return An enum set initialized from the given collection.
    * @throws IllegalArgumentException if {@code c} is not an
-   *     {@code EnumSet} instance and contains no elements
-   * @throws NullPointerException if {@code c} is null
+   *                                  {@code EnumSet} instance and contains no elements
+   * @throws NullPointerException     if {@code c} is null
    */
   @NotNull
   @Contract(value = " _ -> new", pure = true)
   private static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
   EnumSet<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> toEnumSet(
-    final @NotNull Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array)
-  {
+    final @NotNull Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array) {
     return Fluent.<@NotNull F>toEnumSet(List.of(array));
   }
 
@@ -158,17 +143,16 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
    * @param collection the collection from which to initialize this enum set
    * @return An enum set initialized from the given collection.
    * @throws IllegalArgumentException if {@code c} is not an
-   *     {@code EnumSet} instance and contains no elements
-   * @throws NullPointerException if {@code c} is null
+   *                                  {@code EnumSet} instance and contains no elements
+   * @throws NullPointerException     if {@code c} is null
    */
   @NotNull
   @Contract(value = " _ -> new", pure = true)
   private static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
   EnumSet<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> toEnumSet(
-    @NotNull final Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> collection)
-  {
+    @NotNull final Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> collection) {
     //noinspection unchecked,rawtypes
-    return EnumSet.<@NotNull Enum>copyOf((Collection)collection);
+    return EnumSet.<@NotNull Enum>copyOf((Collection) collection);
   }
 
   @Contract(pure = true)
@@ -177,8 +161,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   }
 
   @Contract(pure = true)
-  default boolean isIn(@NotNull final EnumSet<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements)
-  {
+  default boolean isIn(@NotNull final EnumSet<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements) {
     return elements.contains(this);
   }
 
@@ -187,30 +170,26 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
    */
   @Override
   @Contract(value = "null -> false", pure = true)
-  default boolean isEqualTo(@Nullable final Equalable<@NotNull Fluent<@NotNull F>> other)
-  {
+  default boolean isEqualTo(@Nullable final Equalable<@NotNull Fluent<@NotNull F>> other) {
     return isSameAs(other);
   }
 
   @Override
   @Contract(value = "null -> true", pure = true)
-  default boolean isNotSameAs(@Nullable final Equalable<@NotNull Fluent<@NotNull F>> other)
-  {
+  default boolean isNotSameAs(@Nullable final Equalable<@NotNull Fluent<@NotNull F>> other) {
     return !isSameAs(other);
   }
 
   @Override
   @Contract(value = "null -> false", pure = true)
-  default boolean isSameAs(@Nullable final Equalable<@NotNull Fluent<@NotNull F>> other)
-  {
+  default boolean isSameAs(@Nullable final Equalable<@NotNull Fluent<@NotNull F>> other) {
     return Fluent.<@NotNull F>areTheSame(this, other);
   }
 
   @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> boolean areNotTheSame(
     @Nullable final Equalable<@NotNull Fluent<@NotNull F>> a,
-    @Nullable final Equalable<@NotNull Fluent<@NotNull F>> b)
-  {
+    @Nullable final Equalable<@NotNull Fluent<@NotNull F>> b) {
     return !Fluent.<@NotNull F>areTheSame(a, b);
   }
 
@@ -231,8 +210,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>> boolean areTheSame(
     @Nullable final Equalable<@NotNull Fluent<@NotNull F>> a,
-    @Nullable final Equalable<@NotNull Fluent<@NotNull F>> b)
-  {
+    @Nullable final Equalable<@NotNull Fluent<@NotNull F>> b) {
     return Equalable.<@Nullable Equalable<@NotNull Fluent<@NotNull F>>>areTheSame(a, b);
   }
 
@@ -252,22 +230,19 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
 
   @NotNull
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
-      Fluent.FluentHolder<@NotNull F> element(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> s)
-  {
+  Fluent.FluentHolder<@NotNull F> element(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> s) {
     return FluentHolder.<@NotNull F>builder().s(s).build();
   }
 
   @NotNull
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
-      Fluent.FluentHolder<@NotNull F> element(@NotNull final Fluent<@NotNull F> s)
-  {
+  Fluent.FluentHolder<@NotNull F> element(@NotNull final Fluent<@NotNull F> s) {
     return FluentHolder.<@NotNull F>builder().s(s).build();
   }
 
   @NotNull
   static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
-      EqualableHolder<@NotNull F> element(@NotNull final F s)
-  {
+  EqualableHolder<@NotNull F> element(@NotNull final F s) {
     return EqualableHolder.<@NotNull F>builder().s(s).build();
   }
 

@@ -16,12 +16,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @UnitTest
 @ExtendWith(MockitoExtension.class)
-class EqualableTest
-{
+class EqualableTest {
 
   @Test
-  void duplicatedValue()
-  {
+  void duplicatedValue() {
     boolean actual = ServiceState.START.isIn(ServiceState.SLEEP, ServiceState.SLEEP);
     assertThat(actual).isFalse();
     actual = ServiceState.START.isNotIn(ServiceState.SLEEP, ServiceState.SLEEP);
@@ -29,17 +27,15 @@ class EqualableTest
   }
 
   @Test
-  void duplicatedValueArray()
-  {
-    boolean actual = ServiceState.START.isInArray(new ServiceState[] { ServiceState.SLEEP, ServiceState.SLEEP });
+  void duplicatedValueArray() {
+    boolean actual = ServiceState.START.isInArray(new ServiceState[]{ServiceState.SLEEP, ServiceState.SLEEP});
     assertThat(actual).isFalse();
-    actual = ServiceState.START.isNotInArray(new ServiceState[] { ServiceState.SLEEP, ServiceState.SLEEP });
+    actual = ServiceState.START.isNotInArray(new ServiceState[]{ServiceState.SLEEP, ServiceState.SLEEP});
     assertThat(actual).isTrue();
   }
 
   @Test
-  void duplicatedValueSet()
-  {
+  void duplicatedValueSet() {
     final List<ServiceState> duplicated = List.<ServiceState>of(ServiceState.SLEEP, ServiceState.SLEEP);
     boolean actual = ServiceState.START.isIn(duplicated);
     assertThat(actual).isFalse();
@@ -48,8 +44,7 @@ class EqualableTest
   }
 
   @Test
-  void startIsInErrorUnknown()
-  {
+  void startIsInErrorUnknown() {
     boolean actual = ServiceState.START.isIn(ServiceState.ERROR, ServiceState.UNKNOWN);
     assertThat(actual).isFalse();
     actual = ServiceState.START.isNotIn(ServiceState.ERROR, ServiceState.UNKNOWN);
@@ -57,8 +52,7 @@ class EqualableTest
   }
 
   @Test
-  void anyMatchIgnoreCase1()
-  {
+  void anyMatchIgnoreCase1() {
     List<StringWrapper> list = List.of(
       StringWrapper.of("a"),
       StringWrapper.of("b"),
@@ -72,8 +66,7 @@ class EqualableTest
   }
 
   @Test
-  void anyMatchIgnoreCase3()
-  {
+  void anyMatchIgnoreCase3() {
     List<String> list = List.of("a", "b", "C", "D");
     final boolean actual = Equalable.<String>anyMatchIgnoreCase(list, "C");
     final boolean expected = true;
@@ -83,8 +76,7 @@ class EqualableTest
   }
 
   @Test
-  void anyMatchIgnoreCase4()
-  {
+  void anyMatchIgnoreCase4() {
     List<String> list = List.of("a", "b", "C", "D");
     final boolean actual = Equalable.<String>anyMatchIgnoreCase(list, List.of("C"));
     final boolean expected = true;
@@ -94,8 +86,7 @@ class EqualableTest
   }
 
   @Test
-  void anyMatchIgnoreCase5()
-  {
+  void anyMatchIgnoreCase5() {
     List<StringWrapper> list = List.of(
       StringWrapper.of("a"),
       StringWrapper.of("b"),
@@ -111,8 +102,7 @@ class EqualableTest
   }
 
   @Test
-  void anyMatchIgnoreCase6()
-  {
+  void anyMatchIgnoreCase6() {
     List<StringWrapper> list = List.of(
       StringWrapper.of("a"),
       StringWrapper.of("b"),
@@ -126,8 +116,7 @@ class EqualableTest
   }
 
   @Test
-  void isNotIn()
-  {
+  void isNotIn() {
     final boolean actual = StringWrapper.of("a").isNotIn("A", "B");
     assertThat(actual).isTrue();
     final boolean actual2 = StringWrapper.of("a").isNotIn("a", "b");
@@ -135,8 +124,7 @@ class EqualableTest
   }
 
   @Test
-  void isNotInIgnoreCase()
-  {
+  void isNotInIgnoreCase() {
     final boolean actual = StringWrapper.of("a").isNotInIgnoreCase("A", "B");
     assertThat(actual).isFalse();
     final boolean actual2 = StringWrapper.of("a").isNotInIgnoreCase("a", "b");
@@ -144,8 +132,7 @@ class EqualableTest
   }
 
   @Test
-  void testIsNotIn()
-  {
+  void testIsNotIn() {
     final boolean actual = OK.isNotIn(State.ERROR, State.PENDING);
     assertThat(actual).isTrue();
     final boolean actual2 = OK.isNotIn(OK, ERROR);
@@ -153,8 +140,7 @@ class EqualableTest
   }
 
   @Test
-  void isIn()
-  {
+  void isIn() {
     final boolean actual = StringWrapper.of("a").isIn("A", "B");
     assertThat(actual).isFalse();
     final boolean actual2 = StringWrapper.of("a").isIn("a", "b");
@@ -162,8 +148,7 @@ class EqualableTest
   }
 
   @Test
-  void isInIgnoreCase()
-  {
+  void isInIgnoreCase() {
     final boolean actual = StringWrapper.of("a").isInIgnoreCase("A", "B");
     assertThat(actual).isTrue();
     final boolean actual2 = StringWrapper.of("a").isInIgnoreCase("a", "b");
@@ -171,8 +156,7 @@ class EqualableTest
   }
 
   @Test
-  void testIsIn()
-  {
+  void testIsIn() {
     final boolean actual = OK.isIn(ERROR, PENDING);
     assertThat(actual).isFalse();
     final boolean actual2 = OK.isIn(OK, ERROR);
@@ -180,8 +164,7 @@ class EqualableTest
   }
 
   @Test
-  void isNotEqualTo()
-  {
+  void isNotEqualTo() {
     boolean actual = StringWrapper.of("a").isNotEqualTo(StringWrapper.of("A"));
     assertThat(actual).isTrue();
     boolean actual2 = StringWrapper.of("a").isNotEqualTo("A");
@@ -193,8 +176,7 @@ class EqualableTest
   }
 
   @Test
-  void isEqualTo()
-  {
+  void isEqualTo() {
     boolean actual = StringWrapper.of("a").isEqualTo(StringWrapper.of("A"));
     assertThat(actual).isFalse();
     boolean actual2 = StringWrapper.of("a").isEqualTo("A");
@@ -206,8 +188,7 @@ class EqualableTest
   }
 
   @Test
-  void isNotEqualToIgnoreCase()
-  {
+  void isNotEqualToIgnoreCase() {
     boolean actual = StringWrapper.of("a").isNotEqualToIgnoreCase(StringWrapper.of("A"));
     assertThat(actual).isFalse();
     boolean actual2 = StringWrapper.of("a").isNotEqualToIgnoreCase("A");
@@ -219,8 +200,7 @@ class EqualableTest
   }
 
   @Test
-  void isEqualToIgnoreCase()
-  {
+  void isEqualToIgnoreCase() {
     boolean actual = StringWrapper.of("a").isEqualToIgnoreCase(StringWrapper.of("A"));
     assertThat(actual).isTrue();
     boolean actual2 = StringWrapper.of("a").isEqualToIgnoreCase("A");
@@ -232,8 +212,7 @@ class EqualableTest
   }
 
   @Test
-  void areNotEqual()
-  {
+  void areNotEqual() {
     final boolean actual = Equalable.<StringWrapper>areNotEqual(StringWrapper.of("a"), StringWrapper.of("A"));
     assertThat(actual).isTrue();
     final boolean actual2 = Equalable.<StringWrapper>areNotEqual(StringWrapper.of("a"), StringWrapper.of("a"));
@@ -241,8 +220,7 @@ class EqualableTest
   }
 
   @Test
-  void areEqual()
-  {
+  void areEqual() {
     final boolean actual = Equalable.<StringWrapper>areEqual(StringWrapper.of("a"), StringWrapper.of("A"));
     assertThat(actual).isFalse();
     final boolean actual2 = Equalable.<StringWrapper>areEqual(StringWrapper.of("a"), StringWrapper.of("a"));
@@ -345,8 +323,7 @@ class EqualableTest
     assertThat(actual2).isTrue();
   }
 
-  public enum State implements Fluent<@NotNull State>
-  {
+  public enum State implements Fluent<@NotNull State> {
     OK,
     ERROR,
     PENDING;

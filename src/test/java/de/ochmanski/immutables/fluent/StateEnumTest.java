@@ -13,12 +13,10 @@ import static de.ochmanski.immutables.fluent.FluentTest.State.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @UnitTest
-class StateEnumTest
-{
+class StateEnumTest {
 
   @Test
-  void isEqualTo()
-  {
+  void isEqualTo() {
     final boolean actual = OK.isEqualTo(OK);
     assertThat(actual).isTrue();
     final boolean actual2 = OK.isEqualTo(ERROR);
@@ -26,8 +24,7 @@ class StateEnumTest
   }
 
   @Test
-  void isNotEqualTo()
-  {
+  void isNotEqualTo() {
     final boolean actual = OK.isNotEqualTo(ERROR);
     assertThat(actual).isTrue();
     final boolean actual2 = OK.isNotEqualTo(OK);
@@ -35,8 +32,7 @@ class StateEnumTest
   }
 
   @Test
-  void isIn()
-  {
+  void isIn() {
     final boolean actual = OK.isIn(OK, ERROR);
     assertThat(actual).isTrue();
     final boolean actual2 = OK.isIn(ERROR, PENDING);
@@ -44,8 +40,7 @@ class StateEnumTest
   }
 
   @Test
-  void isNotIn()
-  {
+  void isNotIn() {
     final boolean actual = OK.isNotIn(ERROR, PENDING);
     assertThat(actual).isTrue();
     final boolean actual2 = OK.isNotIn(OK, ERROR);
@@ -53,15 +48,13 @@ class StateEnumTest
   }
 
   @Test
-  void stream()
-  {
+  void stream() {
     final List<@NotNull State> actual = State.stream().toList();
     assertThat(actual).containsExactly(ERROR, UNKNOWN, PENDING, OK);
   }
 
   @Test
-  void forEach()
-  {
+  void forEach() {
     final List<@NotNull Equalable<@NotNull Fluent<@NotNull State>>> list = new LinkedList<>();
     State.forEach(list::add);
     assertThat(list).containsExactly(ERROR, UNKNOWN, PENDING, OK);

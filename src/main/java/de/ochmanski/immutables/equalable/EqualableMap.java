@@ -20,8 +20,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends @NotNull Equalable<@NotNull V>>
-  implements IMap<@NotNull K, @NotNull V>
-{
+  implements IMap<@NotNull K, @NotNull V> {
 
   @UnmodifiableView
   @NonNull

@@ -25,8 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @UnitTest
 @ExtendWith(MockitoExtension.class)
-class FluentTest
-{
+class FluentTest {
 
   @Test
   void isInArrayEmpty() {
@@ -49,8 +48,7 @@ class FluentTest
   }
 
   @Test
-  void isIn()
-  {
+  void isIn() {
     final boolean actual = FluentTest.State.PENDING.isIn(FluentTest.State.UNKNOWN, FluentTest.State.PENDING,
       FluentTest.State.PENDING,
       FluentTest.State.ERROR);
@@ -63,11 +61,10 @@ class FluentTest
   }
 
   @Test
-  void isInArray()
-  {
-    final FluentTest.State[] array = new FluentTest.State[] { FluentTest.State.UNKNOWN, FluentTest.State.PENDING,
+  void isInArray() {
+    final FluentTest.State[] array = new FluentTest.State[]{FluentTest.State.UNKNOWN, FluentTest.State.PENDING,
       FluentTest.State.PENDING,
-      FluentTest.State.ERROR };
+      FluentTest.State.ERROR};
     final boolean actual = FluentTest.State.PENDING.isIn(array);
     assertThat(actual).isTrue();
 
@@ -76,8 +73,7 @@ class FluentTest
   }
 
   @Test
-  void testIsIn()
-  {
+  void testIsIn() {
     final List<FluentTest.State> collection = List.of(FluentTest.State.UNKNOWN, FluentTest.State.PENDING,
       FluentTest.State.PENDING,
       FluentTest.State.ERROR);
@@ -89,8 +85,7 @@ class FluentTest
   }
 
   @Test
-  void isInCollection()
-  {
+  void isInCollection() {
     final Set<FluentTest.State> enumSet = EnumSet.of(FluentTest.State.UNKNOWN, FluentTest.State.PENDING,
       FluentTest.State.PENDING,
       FluentTest.State.ERROR);
@@ -102,8 +97,7 @@ class FluentTest
   }
 
   @Test
-  void isInEnumSet()
-  {
+  void isInEnumSet() {
     final EnumSet<FluentTest.State> enumSet = EnumSet.of(
       FluentTest.State.UNKNOWN,
       FluentTest.State.PENDING,
@@ -240,15 +234,14 @@ class FluentTest
   @Getter
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-  enum State implements Fluent<@NotNull State>, Comparable<@NotNull State>
-  {
+  enum State implements Fluent<@NotNull State>, Comparable<@NotNull State> {
     ERROR(0),
     UNKNOWN(1),
     PENDING(2),
     OK(3);
 
     @PositiveOrZero
-    @MagicConstant(intValues = { 0, 1, 2, 3 })
+    @MagicConstant(intValues = {0, 1, 2, 3})
     @Min(value = 0, message = "Priority should not be less than {value}. Actual value: ${validatedValue}")
     int priority;
 
@@ -260,62 +253,52 @@ class FluentTest
 
     @NotNull
     @Contract(value = "-> new", pure = true)
-    public static Stream<@NotNull State> stream()
-    {
+    public static Stream<@NotNull State> stream() {
       return Arrays.<@NotNull State>stream(ENTRIES);
     }
 
     @Contract(pure = true)
-    public static void forEach(@NotNull final Consumer<? super @NotNull State> consumer)
-    {
+    public static void forEach(@NotNull final Consumer<? super @NotNull State> consumer) {
       Arrays.<@NotNull State>asList(ENTRIES).forEach(consumer);
     }
 
     @Contract(pure = true)
-    public boolean isNotError()
-    {
+    public boolean isNotError() {
       return !isError();
     }
 
     @Contract(pure = true)
-    public boolean isError()
-    {
+    public boolean isError() {
       return isSameAs(ERROR);
     }
 
     @Contract(pure = true)
-    public boolean isNotUnknown()
-    {
+    public boolean isNotUnknown() {
       return !isUnknown();
     }
 
     @Contract(pure = true)
-    public boolean isUnknown()
-    {
+    public boolean isUnknown() {
       return isSameAs(UNKNOWN);
     }
 
     @Contract(pure = true)
-    public boolean isNotPending()
-    {
+    public boolean isNotPending() {
       return !isPending();
     }
 
     @Contract(pure = true)
-    public boolean isPending()
-    {
+    public boolean isPending() {
       return isSameAs(PENDING);
     }
 
     @Contract(pure = true)
-    public boolean isNotOk()
-    {
+    public boolean isNotOk() {
       return !isOk();
     }
 
     @Contract(pure = true)
-    public boolean isOk()
-    {
+    public boolean isOk() {
       return isSameAs(OK);
     }
 
@@ -326,10 +309,8 @@ class FluentTest
      * <p>to determine the order. If the specified comparator is {@code null},
      * <p>then the returned comparator considers all non-null values to be equal.
      */
-    public static int orderByPriorityNullsLast(@Nullable final State a, @Nullable final State b)
-    {
-      if(a == b)
-      {
+    public static int orderByPriorityNullsLast(@Nullable final State a, @Nullable final State b) {
+      if (a == b) {
         return 0;
       }
       return a != null ? b != null ? orderByPriorityComparatorAsc().compare(a, b) : -1 : 1;
@@ -342,10 +323,8 @@ class FluentTest
      * <p>to determine the order. If the specified comparator is {@code null},
      * <p>then the returned comparator considers all non-null values to be equal.
      */
-    public static int orderByPriorityNullsFirst(@Nullable final State a, @Nullable final State b)
-    {
-      if(a == b)
-      {
+    public static int orderByPriorityNullsFirst(@Nullable final State a, @Nullable final State b) {
+      if (a == b) {
         return 0;
       }
       return a != null ? b != null ? orderByPriorityComparatorDesc().compare(a, b) : 1 : -1;
@@ -360,8 +339,7 @@ class FluentTest
      */
     @NotNull
     @Contract(pure = true)
-    public static Comparator<@NotNull State> orderByPriorityComparatorAsc()
-    {
+    public static Comparator<@NotNull State> orderByPriorityComparatorAsc() {
       return ORDER_BY_PRIORITY_COMPARATOR_ASCENDING;
     }
 
@@ -374,8 +352,7 @@ class FluentTest
      */
     @NotNull
     @Contract(pure = true)
-    public static Comparator<@NotNull State> orderByPriorityComparatorDesc()
-    {
+    public static Comparator<@NotNull State> orderByPriorityComparatorDesc() {
       return ORDER_BY_PRIORITY_COMPARATOR_DESCENDING;
     }
 
@@ -398,8 +375,7 @@ class FluentTest
      */
     @NotNull
     @Contract(value = "-> new", pure = true)
-    private static Comparator<@NotNull State> createOrderByPriorityComparatorAsc()
-    {
+    private static Comparator<@NotNull State> createOrderByPriorityComparatorAsc() {
       return Comparator.nullsLast(
         Comparator.comparingInt(State::getPriority)
           .thenComparingInt(State::ordinal));
@@ -414,8 +390,7 @@ class FluentTest
      */
     @NotNull
     @Contract(value = "-> new", pure = true)
-    private static Comparator<@NotNull State> createOrderByPriorityComparatorDesc()
-    {
+    private static Comparator<@NotNull State> createOrderByPriorityComparatorDesc() {
       return Comparator.nullsFirst(
         Comparator.comparingInt(State::getPriority)
           .thenComparingInt(State::ordinal));

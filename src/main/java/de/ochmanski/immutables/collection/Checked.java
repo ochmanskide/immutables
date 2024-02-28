@@ -1,4 +1,4 @@
-package de.ochmanski.immutables;
+package de.ochmanski.immutables.collection;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

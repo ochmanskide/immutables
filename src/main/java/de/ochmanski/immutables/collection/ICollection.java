@@ -1,6 +1,5 @@
 package de.ochmanski.immutables.collection;
 
-import de.ochmanski.immutables.Checked;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;

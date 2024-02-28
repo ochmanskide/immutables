@@ -6,6 +6,7 @@ import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.collection.ISet;
 import de.ochmanski.immutables.constants.Constants;
+import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -53,7 +54,15 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
   @Unmodifiable
   @UnmodifiableView
   @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  private static final ImmutableSet EMPTY_SET = ImmutableSet.builder().build();
+  private static final ImmutableSet EMPTY_SET = create();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  private static <E> ImmutableSet<? extends @NotNull Equalable> create() {
+    return ImmutableSet.<@NotNull Equalable>builder().build();
+  }
 
   @NotNull
   @SuppressWarnings({UNCHECKED, RAWTYPES})

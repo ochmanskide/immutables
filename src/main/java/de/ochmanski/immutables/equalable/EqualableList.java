@@ -51,15 +51,6 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable @NotNull []::new;
 
-//  @NotNull
-//  @Unmodifiable
-//  @UnmodifiableView
-//  @Contract(pure = true)
-//  @SuppressWarnings(Constants.Warning.UNCHECKED)
-//  public static <E> EqualableList<? extends @NotNull E> empty() {
-//    return EMPTY;
-//  }
-
   @NotNull
   @Unmodifiable
   @UnmodifiableView

@@ -51,18 +51,38 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable @NotNull []::new;
 
+//  @NotNull
+//  @Unmodifiable
+//  @UnmodifiableView
+//  @Contract(pure = true)
+//  @SuppressWarnings(Constants.Warning.UNCHECKED)
+//  public static <E> EqualableList<? extends @NotNull E> empty() {
+//    return EMPTY;
+//  }
+
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings(Constants.Warning.UNCHECKED)
-  public static <E> EqualableList<? extends @NotNull E> empty() {
+  @SuppressWarnings(UNCHECKED)
+  public static <E extends Equalable<? extends @NotNull E>> EqualableList<? extends @NotNull E> empty() {
     return EMPTY;
   }
 
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   private static final EqualableList EMPTY = EqualableList.builder().build();
+
+//  @NotNull
+//  @Unmodifiable
+//  @UnmodifiableView
+//  @SuppressWarnings({UNCHECKED, RAWTYPES})
+//  @Contract(value = "-> new", pure = true)
+//  private static <E extends Equalable<? extends @NotNull E>> EqualableList<? extends @NotNull E> create() {
+//    return (EqualableList) EqualableList.builder().build();
+//  }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">

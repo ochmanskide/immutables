@@ -1,4 +1,4 @@
-package de.ochmanski.immutables;
+package de.ochmanski.immutables.collection;
 
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.ImmutableMap;
@@ -13,8 +13,7 @@ import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-public interface IMap<K, V>
-{
+public interface IMap<K, V> {
 
   /**
    * This method is not supported.
@@ -30,10 +29,9 @@ public interface IMap<K, V>
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
-  static void of()
-  {
+  static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-        + "For example: IMap.ofGenerator(String[]::new)");
+      + "For example: IMap.ofGenerator(String[]::new)");
   }
 
   @NotNull
@@ -122,8 +120,7 @@ public interface IMap<K, V>
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-  class Entry<K, V> implements Equalable<@NotNull Entry<@NotNull K, @NotNull V>>
-  {
+  class Entry<K, V> implements Equalable<@NotNull Entry<@NotNull K, @NotNull V>> {
 
     @NonNull
     @NotNull("Given keyType cannot be null.")
@@ -149,8 +146,7 @@ public interface IMap<K, V>
      */
     @NotNull
     @Contract(pure = true)
-    static <K extends @NotNull Comparable<? super @NotNull K>, V> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByKey()
-    {
+    static <K extends @NotNull Comparable<? super @NotNull K>, V> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByKey() {
       return (@NotNull Comparator<@NotNull Entry<@NotNull K, @NotNull V>> & @NotNull Serializable)
         (c1, c2) -> c1.getKey().compareTo(c2.getKey());
     }
@@ -169,8 +165,7 @@ public interface IMap<K, V>
      */
     @NotNull
     @Contract(pure = true)
-    static <K, V extends @NotNull Comparable<? super @NotNull V>> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByValue()
-    {
+    static <K, V extends @NotNull Comparable<? super @NotNull V>> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByValue() {
       return (@NotNull Comparator<@NotNull Entry<@NotNull K, @NotNull V>> & @NotNull Serializable)
         (c1, c2) -> c1.getValue().compareTo(c2.getValue());
     }
@@ -190,8 +185,7 @@ public interface IMap<K, V>
     @NotNull
     @Contract(pure = true)
     static <K, V> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByKey(
-      @NotNull final Comparator<? super @NotNull K> cmp)
-    {
+      @NotNull final Comparator<? super @NotNull K> cmp) {
       Objects.requireNonNull(cmp);
       return (@NotNull Comparator<@NotNull Entry<@NotNull K, @NotNull V>> & @NotNull Serializable)
         (c1, c2) -> cmp.compare(c1.getKey(), c2.getKey());
@@ -212,8 +206,7 @@ public interface IMap<K, V>
     @NotNull
     @Contract(pure = true)
     public static <K, V> Comparator<@NotNull Entry<@NotNull K, @NotNull V>> comparingByValue(
-      @NotNull final Comparator<? super @NotNull V> cmp)
-    {
+      @NotNull final Comparator<? super @NotNull V> cmp) {
       Objects.requireNonNull(cmp);
       return (Comparator<Entry<@NotNull K, @NotNull V>> & Serializable)
         (c1, c2) -> cmp.compare(c1.getValue(), c2.getValue());

@@ -1,7 +1,7 @@
 package de.ochmanski.immutables.equalable;
 
-import de.ochmanski.immutables.IList;
 import de.ochmanski.immutables.StringWrapper;
+import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
@@ -22,8 +22,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements IList<@NotNull E>
-{
+public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements IList<@NotNull E> {
 
   @NonNull
   @NotNull("Given list cannot be null.")
@@ -66,6 +65,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
+
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
@@ -80,8 +80,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
-  static void of()
-  {
+  static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
       + "For example: EqualableList.ofGenerator(Day[]::new)");
   }
@@ -100,8 +99,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> ofGenerator(
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return EqualableList.<@NotNull S>of(ImmutableList.ofGenerator(constructor));
   }
 

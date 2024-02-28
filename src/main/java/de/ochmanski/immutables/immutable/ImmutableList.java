@@ -3,7 +3,7 @@ package de.ochmanski.immutables.immutable;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ochmanski.immutables.Checked;
-import de.ochmanski.immutables.IList;
+import de.ochmanski.immutables.collection.IList;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -21,8 +21,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class ImmutableList<E> implements IList<@NotNull E>
-{
+public class ImmutableList<E> implements IList<@NotNull E> {
 
   @NonNull
   @NotNull("Given list cannot be null.")
@@ -69,8 +68,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   public static <S> ImmutableList<@NotNull S> ofGenerator(
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableList.<@NotNull S>of(List.of(), constructor);
   }
 
@@ -89,8 +87,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Contract(value = "_, _ -> new", pure = true)
   public static <S> ImmutableList<@NotNull S> of(
     @NotNull final S e1,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableList.<@NotNull S>of(List.of(e1), constructor);
   }
 
@@ -111,8 +108,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   public static <S> ImmutableList<@NotNull S> of(
     @NotNull final S e1,
     @NotNull final S e2,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableList.<@NotNull S>of(List.of(e1, e2), constructor);
   }
 
@@ -135,8 +131,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
     @NotNull final S e1,
     @NotNull final S e2,
     @NotNull final S e3,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableList.<@NotNull S>of(List.of(e1, e2, e3), constructor);
   }
 
@@ -161,8 +156,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
     @NotNull final S e2,
     @NotNull final S e3,
     @NotNull final S e4,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableList.<@NotNull S>of(List.of(e1, e2, e3, e4), constructor);
   }
 
@@ -199,8 +193,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Contract(value = "_, _ -> new", pure = true)
   public static <S> ImmutableList<@NotNull S> of(
     @NotNull final Collection<? extends @NotNull S> collection,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     final List<@NotNull S> checkedList = Collections.checkedList(List.copyOf(collection), getComponentTypeFromConstructor(constructor));
     return ImmutableList.<@NotNull S>builder().list(checkedList).key(constructor).build();
   }
@@ -221,8 +214,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    * @return the number of elements in this list
    */
   @Override
-  public int size()
-  {
+  public int size() {
     return list.size();
   }
 
@@ -230,8 +222,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    * @return {@code true} if this list contains no elements
    */
   @Override
-  public boolean isEmpty()
-  {
+  public boolean isEmpty() {
     return list.isEmpty();
   }
 
@@ -243,8 +234,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    * @return {@code true} if this list contains the specified element
    */
   @Override
-  public boolean contains(@NotNull final E o)
-  {
+  public boolean contains(@NotNull final E o) {
     return list.contains(o);
   }
 
@@ -254,8 +244,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    * or -1 if there is no such index.
    */
   @Override
-  public int indexOf(@NotNull final E o)
-  {
+  public int indexOf(@NotNull final E o) {
     return list.indexOf(o);
   }
 
@@ -265,8 +254,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
    * if there is no such index.
    */
   @Override
-  public int lastIndexOf(@NotNull final E o)
-  {
+  public int lastIndexOf(@NotNull final E o) {
     return list.lastIndexOf(o);
   }
 
@@ -280,8 +268,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ImmutableList<@NotNull E> deepClone()
-  {
+  public ImmutableList<@NotNull E> deepClone() {
     return toBuilder().build();
   }
 
@@ -300,8 +287,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @NotNull
   @Override
   @Contract(value = " -> new", pure = true)
-  public E @NotNull [] toArray()
-  {
+  public E @NotNull [] toArray() {
     return list.toArray(getKey().apply(size()));
   }
 
@@ -327,8 +313,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @NotNull
   @Override
   @Contract(pure = true)
-  public E get(final int index)
-  {
+  public E get(final int index) {
     return list.get(index);
   }
 
@@ -386,8 +371,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @Override
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public List<@NotNull E> unwrap()
-  {
+  public List<@NotNull E> unwrap() {
     return list.isEmpty()
       ? Collections.checkedList(List.of(), getComponentTypeFromKey())
       : Collections.checkedList(List.copyOf(list), getComponentTypeFromKey());

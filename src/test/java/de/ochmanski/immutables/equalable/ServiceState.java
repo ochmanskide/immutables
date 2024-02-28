@@ -22,8 +22,7 @@ import static de.ochmanski.immutables.equalable.ServiceState.Constants.State.*;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public enum ServiceState implements Fluent<@NotNull ServiceState>, Comparable<@NotNull ServiceState>
-{
+public enum ServiceState implements Fluent<@NotNull ServiceState>, Comparable<@NotNull ServiceState> {
 
   UNKNOWN(0, UNKNOWN_DEFAULT),
   START(1, START_DEFAULT),
@@ -40,7 +39,7 @@ public enum ServiceState implements Fluent<@NotNull ServiceState>, Comparable<@N
    * State position roughly in expected progression order should not be used for determining previous or next state
    */
   @PositiveOrZero
-  @MagicConstant(intValues = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 })
+  @MagicConstant(intValues = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
   @Min(value = 0, message = "ServiceState.position should not be less than {value}. Actual value: ${validatedValue}")
   int position;
 
@@ -61,130 +60,108 @@ public enum ServiceState implements Fluent<@NotNull ServiceState>, Comparable<@N
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  public static Stream<@NotNull Equalable<@NotNull Fluent<@NotNull ServiceState>>> stream()
-  {
+  public static Stream<@NotNull Equalable<@NotNull Fluent<@NotNull ServiceState>>> stream() {
     return Fluent.createStream(ENTRIES);
   }
 
   @Contract(pure = true)
   public static void forEach(
-    @NotNull final Consumer<? super @NotNull Equalable<@NotNull Fluent<@NotNull ServiceState>>> consumer)
-  {
+    @NotNull final Consumer<? super @NotNull Equalable<@NotNull Fluent<@NotNull ServiceState>>> consumer) {
     Fluent.forEach(ENTRIES, consumer);
   }
 
   @Contract(pure = true)
-  public boolean isNotUnknown()
-  {
+  public boolean isNotUnknown() {
     return !isUnknown();
   }
 
   @Contract(pure = true)
-  public boolean isUnknown()
-  {
+  public boolean isUnknown() {
     return isSameAs(UNKNOWN);
   }
 
   @Contract(pure = true)
-  public boolean isNotStart()
-  {
+  public boolean isNotStart() {
     return !isStart();
   }
 
   @Contract(pure = true)
-  public boolean isStart()
-  {
+  public boolean isStart() {
     return isSameAs(START);
   }
 
   @Contract(pure = true)
-  public boolean isNotCreate()
-  {
+  public boolean isNotCreate() {
     return !isCreate();
   }
 
   @Contract(pure = true)
-  public boolean isCreate()
-  {
+  public boolean isCreate() {
     return isSameAs(CREATE);
   }
 
   @Contract(pure = true)
-  public boolean isNotInit()
-  {
+  public boolean isNotInit() {
     return !isInit();
   }
 
   @Contract(pure = true)
-  public boolean isInit()
-  {
+  public boolean isInit() {
     return isSameAs(INIT);
   }
 
   @Contract(pure = true)
-  public boolean isNotRunSlave()
-  {
+  public boolean isNotRunSlave() {
     return !isRunSlave();
   }
 
   @Contract(pure = true)
-  public boolean isRunSlave()
-  {
+  public boolean isRunSlave() {
     return isSameAs(RUN_SLAVE);
   }
 
   @Contract(pure = true)
-  public boolean isNotRunMaster()
-  {
+  public boolean isNotRunMaster() {
     return !isRunMaster();
   }
 
   @Contract(pure = true)
-  public boolean isRunMaster()
-  {
+  public boolean isRunMaster() {
     return isSameAs(RUN_MASTER);
   }
 
   @Contract(pure = true)
-  public boolean isNotShutdown()
-  {
+  public boolean isNotShutdown() {
     return !isShutdown();
   }
 
   @Contract(pure = true)
-  public boolean isShutdown()
-  {
+  public boolean isShutdown() {
     return isSameAs(SHUTDOWN);
   }
 
   @Contract(pure = true)
-  public boolean isNotSleep()
-  {
+  public boolean isNotSleep() {
     return !isSleep();
   }
 
   @Contract(pure = true)
-  public boolean isSleep()
-  {
+  public boolean isSleep() {
     return isSameAs(SLEEP);
   }
 
   @Contract(pure = true)
-  public boolean isNotError()
-  {
+  public boolean isNotError() {
     return !isError();
   }
 
   @Contract(pure = true)
-  public boolean isError()
-  {
+  public boolean isError() {
     return isSameAs(ERROR);
   }
 
-  public interface Constants
-  {
-    interface State
-    {
+  public interface Constants {
+    interface State {
       String UNKNOWN_DEFAULT = "UNKNOWN";
       String START_DEFAULT = "START";
       String CREATE_DEFAULT = "CREATE";

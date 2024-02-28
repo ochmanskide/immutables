@@ -4,15 +4,13 @@ import org.jetbrains.annotations.NonNls;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.UNUSED;
 
-public interface Constants
-{
+public interface Constants {
   @NonNls
   String BLANK = "";
 
 
   @SuppressWarnings(UNUSED)
-  interface Language
-  {
+  interface Language {
     String REGEX = "RegExp",
       JAVA = "Java",
       SQL = "SQL",
@@ -56,8 +54,7 @@ public interface Constants
    * </ul>
    */
   @SuppressWarnings(UNUSED)
-  interface Warning
-  {
+  interface Warning {
     /**
      * this is sort of a wildcard that suppresses all warnings.
      */

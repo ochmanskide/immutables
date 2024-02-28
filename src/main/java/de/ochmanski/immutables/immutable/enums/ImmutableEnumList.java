@@ -1,7 +1,7 @@
 package de.ochmanski.immutables.immutable.enums;
 
-import de.ochmanski.immutables.ICollection;
-import de.ochmanski.immutables.IList;
+import de.ochmanski.immutables.collection.ICollection;
+import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.*;
@@ -31,8 +31,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements IList<@NotNull E>
-{
+public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements IList<@NotNull E> {
 
   @NonNull
   @NotNull("Given set cannot be null.")

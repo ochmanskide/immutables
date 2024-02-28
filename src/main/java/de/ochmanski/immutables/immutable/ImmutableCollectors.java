@@ -13,8 +13,8 @@ import java.util.stream.Collector;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
-public interface ImmutableCollectors
-{
+
+public interface ImmutableCollectors {
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_CONCURRENT_ID
@@ -56,20 +56,16 @@ public interface ImmutableCollectors
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
-  {
+  static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet() {
     return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
       .supplier(HashSet::new)
       .accumulator(Set::add)
       .combiner((left, right) ->
       {
-        if(left.size() < right.size())
-        {
+        if (left.size() < right.size()) {
           right.addAll(left);
           return right;
-        }
-        else
-        {
+        } else {
           left.addAll(right);
           return left;
         }
@@ -89,27 +85,23 @@ public interface ImmutableCollectors
    *
    * @param <T> the type of the input elements
    * @return a {@code Collector} that accumulates the input elements into an
-   *     <a href="../Set.html#unmodifiable">unmodifiable Set</a>
+   * <a href="../Set.html#unmodifiable">unmodifiable Set</a>
    * @since 10
    */
   @NotNull
   @Contract(value = "_ -> new", pure = true)
   static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableSet<@NotNull T>> toSet(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor
-  )
-  {
+  ) {
     return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableSet<@NotNull T>>builder()
       .supplier(HashSet::new)
       .accumulator(Set::add)
       .combiner((left, right) ->
       {
-        if(left.size() < right.size())
-        {
+        if (left.size() < right.size()) {
           right.addAll(left);
           return right;
-        }
-        else
-        {
+        } else {
           left.addAll(right);
           return left;
         }
@@ -122,20 +114,16 @@ public interface ImmutableCollectors
   @NotNull
   @Contract(value = " _ -> new", pure = true)
   static <T extends @NotNull Enum<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>> toEnumSet(
-    @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor) {
     return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>>builder()
       .supplier(HashSet::new)
       .accumulator(Set::add)
       .combiner((left, right) ->
       {
-        if(left.size() < right.size())
-        {
+        if (left.size() < right.size()) {
           right.addAll(left);
           return right;
-        }
-        else
-        {
+        } else {
           left.addAll(right);
           return left;
         }
@@ -148,20 +136,16 @@ public interface ImmutableCollectors
   @NotNull
   @Contract(value = " -> new", pure = true)
   static <T> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull ImmutableList<@NotNull T>> toList(
-    @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor) {
     return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull ImmutableList<@NotNull T>>builder()
       .supplier(ArrayList::new)
       .accumulator(List::add)
       .combiner((left, right) ->
       {
-        if(left.size() < right.size())
-        {
+        if (left.size() < right.size()) {
           right.addAll(left);
           return right;
-        }
-        else
-        {
+        } else {
           left.addAll(right);
           return left;
         }
@@ -173,18 +157,16 @@ public interface ImmutableCollectors
 
   @NotNull
   @Contract(pure = true)
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  static <T> IntFunction<@NotNull T @NotNull []> tGenerator()
-  {
-    return (IntFunction)Object @NotNull []::new;
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  static <T> IntFunction<@NotNull T @NotNull []> tGenerator() {
+    return (IntFunction) Object @NotNull []::new;
   }
 
   @Value
   @RequiredArgsConstructor
   @Builder
   class CollectorImpl<T, A, R>
-    implements Collector<@NotNull T, @NotNull A, @NotNull R>
-  {
+    implements Collector<@NotNull T, @NotNull A, @NotNull R> {
     @NotNull
     Supplier<@NotNull A> supplier;
 
@@ -203,36 +185,31 @@ public interface ImmutableCollectors
 
     @NotNull
     @Override
-    public BiConsumer<@NotNull A, @NotNull T> accumulator()
-    {
+    public BiConsumer<@NotNull A, @NotNull T> accumulator() {
       return accumulator;
     }
 
     @NotNull
     @Override
-    public Supplier<@NotNull A> supplier()
-    {
+    public Supplier<@NotNull A> supplier() {
       return supplier;
     }
 
     @NotNull
     @Override
-    public BinaryOperator<@NotNull A> combiner()
-    {
+    public BinaryOperator<@NotNull A> combiner() {
       return combiner;
     }
 
     @NotNull
     @Override
-    public Function<@NotNull A, @NotNull R> finisher()
-    {
+    public Function<@NotNull A, @NotNull R> finisher() {
       return finisher;
     }
 
     @NotNull
     @Override
-    public Set<@NotNull Characteristics> characteristics()
-    {
+    public Set<@NotNull Characteristics> characteristics() {
       return characteristics;
     }
 
@@ -241,9 +218,8 @@ public interface ImmutableCollectors
   @NotNull
   @Contract(pure = true)
   @SuppressWarnings(UNCHECKED)
-  private static <I, R> Function<@NotNull I, @NotNull R> castingIdentity()
-  {
-    return i -> (R)i;
+  private static <I, R> Function<@NotNull I, @NotNull R> castingIdentity() {
+    return i -> (R) i;
   }
 
 }

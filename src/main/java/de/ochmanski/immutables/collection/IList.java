@@ -1,4 +1,4 @@
-package de.ochmanski.immutables;
+package de.ochmanski.immutables.collection;
 
 import de.ochmanski.immutables.immutable.ImmutableList;
 import org.jetbrains.annotations.*;
@@ -11,8 +11,7 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-public interface IList<E> extends ICollection<E>
-{
+public interface IList<E> extends ICollection<E> {
 
   /**
    * This method is not supported.
@@ -28,10 +27,9 @@ public interface IList<E> extends ICollection<E>
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
-  static void of()
-  {
+  static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-        + "For example: IList.ofGenerator(String[]::new)");
+      + "For example: IList.ofGenerator(String[]::new)");
   }
 
   default int size() {
@@ -185,8 +183,7 @@ public interface IList<E> extends ICollection<E>
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  default Optional<@Nullable E> findFirst()
-  {
+  default Optional<@Nullable E> findFirst() {
     return getList().findFirst();
   }
 
@@ -198,8 +195,7 @@ public interface IList<E> extends ICollection<E>
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  default Optional<@Nullable E> findAny()
-  {
+  default Optional<@Nullable E> findAny() {
     return getList().findAny();
   }
 

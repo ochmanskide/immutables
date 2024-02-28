@@ -16,12 +16,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @UnitTest
 @ExtendWith(MockitoExtension.class)
-class FluentEnumSetTest
-{
+class FluentEnumSetTest {
 
   @Test
-  void of()
-  {
+  void of() {
     assertThatThrownBy(FluentEnumSet::of)
       .isExactlyInstanceOf(UnsupportedOperationException.class)
       .hasMessage("Please pass array generator type to the method. "
@@ -29,12 +27,11 @@ class FluentEnumSetTest
   }
 
   @Test
-  void ofArray()
-  {
+  void ofArray() {
     final FluentExample e1 = FluentExample.A;
     final FluentExample e2 = FluentExample.A;
     final FluentExample e3 = FluentExample.B;
-    final FluentExample[] enums = { e1, e2, e3 };
+    final FluentExample[] enums = {e1, e2, e3};
     final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.ofArray(enums, FluentExample[]::new);
     assertThat(actual.unwrap())
       .containsOnlyOnce(FluentExample.A, FluentExample.B)
@@ -42,8 +39,7 @@ class FluentEnumSetTest
   }
 
   @Test
-  void ofGivenClass()
-  {
+  void ofGivenClass() {
     final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.<@NotNull FluentExample>ofGenerator(
       FluentExample[]::new);
     assertThat(actual.unwrap()).isEmpty();
@@ -64,8 +60,7 @@ class FluentEnumSetTest
   }
 
   @Test
-  void ofElement()
-  {
+  void ofElement() {
     final FluentEnumSet<@NotNull FluentExample> actual2 = FluentEnumSet.of(FluentExample.A,
       FluentExample[]::new);
     assertThat(actual2.toArray().getClass()).isSameAs(FluentExample[].class);
@@ -74,7 +69,7 @@ class FluentEnumSetTest
     assertThat(actual2.toArray()).isNotNull();
     assertThat(actual2.toArray()).containsExactly(FluentExample.A);
     assertThat(actual2.toArray().getClass()).isSameAs(FluentExample[].class);
-    assertThat(actual2.toArray()).extracting(Object::getClass).containsExactly(new Class[] { FluentExample.class });
+    assertThat(actual2.toArray()).extracting(Object::getClass).containsExactly(new Class[]{FluentExample.class});
     assertThat(actual2.toArray().getClass().getComponentType()).isSameAs(FluentExample.class);
     assertThat(actual2.unwrap().toArray().getClass()).isSameAs(Object[].class);
     assertThat(actual2.unwrap().toArray().getClass().getComponentType()).isSameAs(Object.class);
@@ -106,8 +101,7 @@ class FluentEnumSetTest
   }
 
   @Test
-  void of1()
-  {
+  void of1() {
     final FluentExample e1 = FluentExample.A;
     final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.of(e1,
       FluentExample[]::new);
@@ -118,8 +112,7 @@ class FluentEnumSetTest
   }
 
   @Test
-  void of2()
-  {
+  void of2() {
     final FluentExample e1 = FluentExample.A;
     final FluentExample e2 = FluentExample.A;
     final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.of(e1, e2,
@@ -131,8 +124,7 @@ class FluentEnumSetTest
   }
 
   @Test
-  void of3()
-  {
+  void of3() {
     final FluentExample e1 = FluentExample.A;
     final FluentExample e2 = FluentExample.A;
     final FluentExample e3 = FluentExample.B;
@@ -145,8 +137,7 @@ class FluentEnumSetTest
   }
 
   @Test
-  void of4()
-  {
+  void of4() {
     final FluentExample e1 = FluentExample.A;
     final FluentExample e2 = FluentExample.A;
     final FluentExample e3 = FluentExample.B;

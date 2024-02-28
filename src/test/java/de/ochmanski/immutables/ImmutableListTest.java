@@ -1,6 +1,7 @@
 package de.ochmanski.immutables;
 
 import annotations.UnitTest;
+import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.AccessLevel;
@@ -17,12 +18,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @UnitTest
 @ExtendWith(MockitoExtension.class)
-class ImmutableListTest
-{
+class ImmutableListTest {
 
   @Test
-  void ofNullClass()
-  {
+  void ofNullClass() {
     assertThatThrownBy(() -> ImmutableList.ofGenerator(null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
@@ -32,8 +31,7 @@ class ImmutableListTest
   }
 
   @Test
-  void of0()
-  {
+  void of0() {
     @NotNull final IList<Dummy> actual = ImmutableList.ofGenerator(Dummy[]::new);
     assertThat(actual).isInstanceOf(ImmutableList.class);
     assertThat(actual.unwrap()).isEmpty();
@@ -42,8 +40,7 @@ class ImmutableListTest
   }
 
   @Test
-  void of1()
-  {
+  void of1() {
     final Dummy s1 = Dummy.builder().s("a").build();
     final IList<Dummy> actual = ImmutableList.of(s1, Dummy[]::new);
     assertThat(actual).isInstanceOf(ImmutableList.class);
@@ -51,8 +48,7 @@ class ImmutableListTest
   }
 
   @Test
-  void of2()
-  {
+  void of2() {
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
     final IList<Dummy> actual = ImmutableList.of(s1, s2, Dummy[]::new);
@@ -61,8 +57,7 @@ class ImmutableListTest
   }
 
   @Test
-  void of3()
-  {
+  void of3() {
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
     final Dummy s3 = Dummy.builder().s("c").build();
@@ -72,8 +67,7 @@ class ImmutableListTest
   }
 
   @Test
-  void ofArray3()
-  {
+  void ofArray3() {
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
     final Dummy s3 = Dummy.builder().s("c").build();
@@ -83,8 +77,7 @@ class ImmutableListTest
   }
 
   @Test
-  void toArrayNull()
-  {
+  void toArrayNull() {
     final Dummy s1 = Dummy.builder().s("a").build();
     assertThatThrownBy(() -> ImmutableList.of((Dummy) null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
@@ -95,16 +88,14 @@ class ImmutableListTest
   }
 
   @Test
-  void toArrayEmpty()
-  {
+  void toArrayEmpty() {
     final Dummy s1 = Dummy.builder().s("a").build();
     final IList<Dummy> actual = ImmutableList.of(s1, Dummy[]::new);
     assertThat(actual.toArray()).containsExactly(s1);
   }
 
   @Test
-  void toArrayEmpty1()
-  {
+  void toArrayEmpty1() {
     final Dummy s1 = Dummy.builder().s("a").build();
     assertThatThrownBy(() -> ImmutableList.of(s1, null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
@@ -115,8 +106,7 @@ class ImmutableListTest
   }
 
   @Test
-  void toArrayEmpty2()
-  {
+  void toArrayEmpty2() {
     final Dummy s1 = Dummy.builder().s("a").build();
     assertThatThrownBy(() -> ImmutableList.of(s1, null, null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
@@ -128,8 +118,7 @@ class ImmutableListTest
   }
 
   @Test
-  void toArrayEmpty3()
-  {
+  void toArrayEmpty3() {
     final Dummy s1 = Dummy.builder().s("a").build();
     assertThatThrownBy(() -> ImmutableList.of(s1, null, null, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
@@ -142,21 +131,18 @@ class ImmutableListTest
   }
 
   @Test
-  void toArrayNullClass()
-  {
+  void toArrayNullClass() {
     assertThatThrownBy(() -> ImmutableList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
   }
 
   @Test
-  void toArrayClass()
-  {
+  void toArrayClass() {
     final IList<Dummy> actual = ImmutableList.ofGenerator(Dummy[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 
   @Test
-  void toArray0()
-  {
+  void toArray0() {
     assertThatThrownBy(() -> ImmutableList.of((Dummy) null, Dummy[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
@@ -166,16 +152,14 @@ class ImmutableListTest
   }
 
   @Test
-  void toArray1()
-  {
+  void toArray1() {
     final Dummy s1 = Dummy.builder().s("a").build();
     final IList<Dummy> actual = ImmutableList.of(s1, Dummy[]::new);
     assertThat(actual.toArray()).containsExactly(s1);
   }
 
   @Test
-  void toArray2()
-  {
+  void toArray2() {
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
     final IList<Dummy> actual = ImmutableList.of(s1, s2, Dummy[]::new);
@@ -183,8 +167,7 @@ class ImmutableListTest
   }
 
   @Test
-  void toArray3()
-  {
+  void toArray3() {
     final Dummy s1 = Dummy.builder().s("a").build();
     final Dummy s2 = Dummy.builder().s("b").build();
     final Dummy s3 = Dummy.builder().s("c").build();
@@ -193,8 +176,7 @@ class ImmutableListTest
   }
 
   @Test
-  void equalable()
-  {
+  void equalable() {
     final Dummy a = Dummy.builder().s("a").build();
     final Dummy b = Dummy.builder().s("a").build();
     assertThat(a).isEqualTo(b);
@@ -311,8 +293,7 @@ class ImmutableListTest
   @Value
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-  private static class Dummy implements Equalable<@NotNull Dummy>
-  {
+  private static class Dummy implements Equalable<@NotNull Dummy> {
     @Builder.Default
     String s = "dummy";
   }

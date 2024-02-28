@@ -1,8 +1,8 @@
 package de.ochmanski.immutables.fluent;
 
 
-import de.ochmanski.immutables.ICollection;
-import de.ochmanski.immutables.IMap;
+import de.ochmanski.immutables.collection.ICollection;
+import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import de.ochmanski.immutables.immutable.ImmutableSet;
@@ -27,8 +27,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<? extends @NotNull K>, V extends @NotNull Equalable<? extends @NotNull V>>
-  implements IMap<@NotNull K, @NotNull V>
-{
+  implements IMap<@NotNull K, @NotNull V> {
 
   @UnmodifiableView
   @NonNull

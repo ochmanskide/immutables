@@ -2,9 +2,9 @@ package de.ochmanski.immutables.immutable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.ochmanski.immutables.ICollection;
-import de.ochmanski.immutables.IMap;
-import de.ochmanski.immutables.ISet;
+import de.ochmanski.immutables.collection.ICollection;
+import de.ochmanski.immutables.collection.IMap;
+import de.ochmanski.immutables.collection.ISet;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -22,8 +22,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class ImmutableSet<E> implements ISet<@NotNull E>
-{
+public class ImmutableSet<E> implements ISet<@NotNull E> {
 
   @Unmodifiable
   @UnmodifiableView
@@ -44,8 +43,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  public static <E> ImmutableSet<@NotNull E> empty()
-  {
+  public static <E> ImmutableSet<@NotNull E> empty() {
     return EMPTY_SET;
   }
 
@@ -54,8 +52,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @NotNull
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   @Contract(value = " -> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey()
-  {
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
     return (IntFunction) Object @NotNull []::new;
   }
   //</editor-fold>
@@ -65,8 +62,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S> ImmutableSet<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+  public static <S> ImmutableSet<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableSet.of(Set.of(), constructor);
   }
 
@@ -85,8 +81,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Contract(value = "_, _ -> new", pure = true)
   public static <S> ImmutableSet<@NotNull S> of(
     @NotNull final S e1,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableSet.of(Set.copyOf(List.of(e1)), constructor);
   }
 
@@ -107,8 +102,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   public static <S> ImmutableSet<@NotNull S> of(
     @NotNull final S e1,
     @NotNull final S e2,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableSet.of(Set.copyOf(List.of(e1, e2)), constructor);
   }
 
@@ -131,8 +125,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
     @NotNull final S e1,
     @NotNull final S e2,
     @NotNull final S e3,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableSet.of(Set.copyOf(List.of(e1, e2, e3)), constructor);
   }
 
@@ -157,8 +150,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
     @NotNull final S e2,
     @NotNull final S e3,
     @NotNull final S e4,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableSet.of(Set.copyOf(List.of(e1, e2, e3, e4)), constructor);
   }
 
@@ -168,8 +160,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Contract(value = "_, _ -> new", pure = true)
   public static <K, V> ImmutableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
     @NotNull final Set<Map.@NotNull Entry<@NotNull K, @NotNull V>> entries,
-    @NotNull final IntFunction<IMap.@NotNull Entry<@NotNull K, @NotNull V> @NotNull []> entry)
-  {
+    @NotNull final IntFunction<IMap.@NotNull Entry<@NotNull K, @NotNull V> @NotNull []> entry) {
     return entries.stream().map(ImmutableSet::toImmutableEntry).collect(ImmutableCollectors.toSet(entry));
   }
 
@@ -195,8 +186,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Contract(value = "_, _ -> new", pure = true)
   public static <S> ImmutableSet<@NotNull S> ofArray(
     @NotNull final S @NotNull [] array,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableSet.<@NotNull S>of(List.of(array), constructor);
   }
 
@@ -206,8 +196,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Contract(value = "_, _ -> new", pure = true)
   public static <S> ImmutableSet<@NotNull S> of(
     @NotNull final Collection<@NotNull S> collection,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
-  {
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     final Set<@NotNull S> checkedSet = Collections.checkedSet(Set.copyOf(collection), getComponentTypeFromConstructor(constructor));
     return ImmutableSet.<@NotNull S>builder().set(checkedSet).key(constructor).build();
   }

@@ -1,6 +1,6 @@
 package de.ochmanski.immutables.fluent;
 
-import de.ochmanski.immutables.IList;
+import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumList;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.*;
@@ -16,6 +16,7 @@ import java.util.function.IntFunction;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+
 /**
  * Immutable wrapper of <pre>{@code java.util.EnumList<K,V>}</pre>
  * <p>This Read-Only implementation of <pre>{@code List<>}</pre> interface
@@ -30,8 +31,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent<? extends @NotNull E>>
-  implements IList<@NotNull E>
-{
+  implements IList<@NotNull E> {
 
   @NonNull
   @NotNull("Given list cannot be null.")

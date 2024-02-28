@@ -1,7 +1,7 @@
 package de.ochmanski.immutables.immutable;
 
-import de.ochmanski.immutables.ICollection;
-import de.ochmanski.immutables.IMap;
+import de.ochmanski.immutables.collection.ICollection;
+import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
 import org.jetbrains.annotations.*;
@@ -21,8 +21,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
-{
+public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
 
   @Unmodifiable
   @UnmodifiableView

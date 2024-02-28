@@ -1,7 +1,7 @@
 package de.ochmanski.immutables.equalable;
 
-import de.ochmanski.immutables.IMap;
-import de.ochmanski.immutables.ISet;
+import de.ochmanski.immutables.collection.IMap;
+import de.ochmanski.immutables.collection.ISet;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
@@ -23,8 +23,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements ISet<@NotNull E>
-{
+public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements ISet<@NotNull E> {
 
   @Unmodifiable
   @UnmodifiableView

@@ -1,6 +1,6 @@
 package de.ochmanski.immutables.equalable;
 
-import de.ochmanski.immutables.IMap;
+import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.immutable.ImmutableMap;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
@@ -20,8 +20,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends @NotNull Equalable<@NotNull V>>
-  implements IMap<@NotNull K, @NotNull V>
-{
+  implements IMap<@NotNull K, @NotNull V> {
 
   @UnmodifiableView
   @NonNull

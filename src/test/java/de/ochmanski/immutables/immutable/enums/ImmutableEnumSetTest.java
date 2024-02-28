@@ -4,12 +4,14 @@ import annotations.UnitTest;
 import de.ochmanski.immutables.fluent.Fluent;
 import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.IntFunction;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -202,6 +204,36 @@ class ImmutableEnumSetTest
     assertThat(a).isNotEqualTo(c);
     assertThat(a.isEqualTo(c)).isFalse();
     assertThat(a.equals(c)).isFalse();
+  }
+
+  @Test
+  void findFirst() {
+    final Dummy s1 = Dummy.A;
+    final Dummy s2 = Dummy.B;
+    final Dummy s3 = Dummy.C;
+    final ImmutableEnumSet<@NotNull Dummy> dummy = ImmutableEnumSet.of(s1, s1, s2, s3, Dummy[]::new);
+    final Optional<@Nullable Dummy> actual = dummy.findFirst();
+    assertThat(actual).get().isSameAs(Dummy.A);
+  }
+
+  @Test
+  void findLast() {
+    final Dummy s1 = Dummy.A;
+    final Dummy s2 = Dummy.B;
+    final Dummy s3 = Dummy.C;
+    final ImmutableEnumSet<@NotNull Dummy> dummy = ImmutableEnumSet.of(s1, s1, s2, s3, Dummy[]::new);
+    final Optional<@Nullable Dummy> actual = dummy.findLast();
+    assertThat(actual).containsSame(Dummy.C);
+  }
+
+  @Test
+  void findAny() {
+    final Dummy s1 = Dummy.A;
+    final Dummy s2 = Dummy.B;
+    final Dummy s3 = Dummy.C;
+    final ImmutableEnumSet<@NotNull Dummy> dummy = ImmutableEnumSet.of(s1, s1, s2, s3, Dummy[]::new);
+    final Optional<@Nullable Dummy> actual = dummy.findAny();
+    assertThat(actual).get().isIn(Dummy.A, Dummy.B, Dummy.C);
   }
 
   private enum Dummy implements Fluent<@NotNull Dummy>

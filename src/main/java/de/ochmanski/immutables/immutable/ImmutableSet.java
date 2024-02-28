@@ -6,10 +6,7 @@ import de.ochmanski.immutables.ICollection;
 import de.ochmanski.immutables.IMap;
 import de.ochmanski.immutables.ISet;
 import lombok.*;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
-import org.jetbrains.annotations.UnmodifiableView;
+import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
@@ -339,6 +336,40 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
     return this;
   }
 
+  @NotNull
+  @Override
+  @Contract(value = " -> new", pure = true)
+  public Optional<@Nullable E> findFirst() {
+    final Comparator c = Comparator.naturalOrder();
+    return min(c);
+  }
+
+  @NotNull
+  @Contract(value = "_ -> new", pure = true)
+  public Optional<@Nullable E> min(@NotNull final Comparator<? super @NotNull E> c) {
+    return set.stream().min(c);
+  }
+
+  @NotNull
+  @Override
+  @Contract(value = " -> new", pure = true)
+  public Optional<@Nullable E> findLast() {
+    final Comparator c = Comparator.naturalOrder();
+    return max(c);
+  }
+
+  @NotNull
+  @Contract(value = "_ -> new", pure = true)
+  public Optional<@Nullable E> max(@NotNull final Comparator<? super @NotNull E> c) {
+    return set.stream().max(c);
+  }
+
+  @NotNull
+  @Override
+  @Contract(value = " -> new", pure = true)
+  public Optional<@Nullable E> findAny() {
+    return set.stream().findAny();
+  }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="4. Positional Access Operations">

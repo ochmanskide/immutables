@@ -55,6 +55,7 @@ public interface Constants {
    */
   @SuppressWarnings(UNUSED)
   interface Warning {
+
     /**
      * this is sort of a wildcard that suppresses all warnings.
      */
@@ -65,22 +66,55 @@ public interface Constants {
      * suppresses warnings related to properties that are not mandatory, and have default values provided.
      */
     @NonNls
-    String PROPERTY_NOT_FOUND = ALL;
-
-    /**
-     * suppresses warnings related to fields that are initialized in {@code @PostConstruct} block.
-     */
-    @NonNls
-    String NOT_INITIALIZED = ALL;
+    String PROPERTY_NOT_FOUND = "UnresolvedPropertyKey";
 
     @NonNls
-    String MIGHT_EVALUATE_TO_NULL = ALL;
+    String UNSTABLE_API_USAGE = "UnstableApiUsage";
 
     @NonNls
-    String ARGUMENT_MIGHT_BE_NULL = ALL;
+    String NOT_NULL_FIELD_NOT_INITIALIZED = "NotNullFieldNotInitialized";
 
     @NonNls
-    String ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME = ALL;
+    String UNUSED_RETURN_VALUE = "UnusedReturnValue";
+
+    @NonNls
+    String DATA_FLOW_ISSUE = "DataFlowIssue";
+
+    @NonNls
+    String CDI_INJECTION_POINTS_INSPECTION = "CdiInjectionPointsInspection";
+
+    @NonNls
+    String NULLABLE_PROBLEMS = "NullableProblems";
+
+    @NonNls
+    String BLOCKING_METHOD_IN_NON_BLOCKING_CONTEXT = "BlockingMethodInNonBlockingContext";
+
+    @NonNls
+    String NULLNESS_ASSIGNMENT = "nullness:assignment";
+
+    @NonNls
+    String PROHIBITED_EXCEPTION_THROWN = "ProhibitedExceptionThrown";
+
+    @NonNls
+    String MAGIC_CHARACTER = "MagicCharacter";
+
+    @NonNls
+    String ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME = "SameParameterValue";
+
+    @NonNls
+    String STRING_EQUALITY = "StringEquality";
+
+    @NonNls
+    String BUSY_WAIT = "BusyWait";
+
+    @NonNls
+    String MISMATCHED_QUERY_AND_UPDATE_OF_COLLECTION = "MismatchedQueryAndUpdateOfCollection";
+
+    @NonNls
+    String DUPLICATED_CODE = "DuplicatedCode";
+
+    @NonNls
+    String LAMBDA_PARAMETER_TYPE_CAN_BE_SPECIFIED = "LambdaParameterTypeCanBeSpecified";
 
     /**
      * <b>boxing</b>: suppresses warnings related to boxing/unboxing operations

@@ -107,6 +107,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
+  @SuppressWarnings(Constants.Warning.ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME)
   static EqualableList<@NotNull StringWrapper> of(
     @NotNull final String s1) {
     return EqualableList.ofString(ImmutableList.of(s1));
@@ -124,6 +125,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
+  @SuppressWarnings(Constants.Warning.ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME)
   static EqualableList<@NotNull StringWrapper> of(
     @NotNull final String s1,
     @NotNull final String s2) {
@@ -143,6 +145,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
+  @SuppressWarnings(Constants.Warning.ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME)
   static EqualableList<@NotNull StringWrapper> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -164,6 +167,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
+  @SuppressWarnings(Constants.Warning.ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME)
   static EqualableList<@NotNull StringWrapper> of(
     @NotNull final String s1,
     @NotNull final String s2,

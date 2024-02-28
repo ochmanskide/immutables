@@ -1,6 +1,7 @@
 package de.ochmanski.immutables.fluent;
 
 import de.ochmanski.immutables.collection.ISet;
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
@@ -51,10 +52,13 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> empty() {
     return EMPTY;
   }
 
+  @NotNull
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
   private static final FluentEnumSet EMPTY = FluentEnumSet.builder().build();
 
   @NotNull

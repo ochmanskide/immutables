@@ -2,6 +2,7 @@ package de.ochmanski.immutables.equalable;
 
 import de.ochmanski.immutables.StringWrapper;
 import de.ochmanski.immutables.collection.IList;
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
@@ -54,7 +55,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings({UNCHECKED})
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   public static <E> EqualableList<? extends @NotNull E> empty() {
     return EMPTY;
   }

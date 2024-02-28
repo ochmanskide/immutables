@@ -2,6 +2,7 @@ package de.ochmanski.immutables.immutable.enums;
 
 import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.collection.IList;
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.*;
@@ -62,7 +63,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings({UNCHECKED})
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> empty() {
     return EMPTY;
   }

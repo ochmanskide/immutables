@@ -3,6 +3,7 @@ package de.ochmanski.immutables.immutable.enums;
 
 import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.collection.IMap;
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.ImmutableCollectors;
 import de.ochmanski.immutables.immutable.ImmutableList;
@@ -54,10 +55,13 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> empty() {
     return EMPTY;
   }
 
+  @NotNull
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
   private static final ImmutableEnumMap EMPTY = ImmutableEnumMap.builder().build();
 
   @NotNull

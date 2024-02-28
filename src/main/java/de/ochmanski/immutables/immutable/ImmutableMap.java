@@ -2,6 +2,7 @@ package de.ochmanski.immutables.immutable;
 
 import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.collection.IMap;
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
 import org.jetbrains.annotations.*;
@@ -48,11 +49,23 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   public static <K, V> ImmutableMap<@NotNull K, @NotNull V> empty() {
     return EMPTY;
   }
 
-  private static final ImmutableMap EMPTY = ImmutableMap.builder().build();
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @SuppressWarnings(RAWTYPES)
+  private static final ImmutableMap EMPTY = create();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  private static <K, V> ImmutableMap<@NotNull K, @NotNull V> create() {
+    return ImmutableMap.<@NotNull K, @NotNull V>builder().build();
+  }
 
   @NotNull
   @SuppressWarnings({UNCHECKED, RAWTYPES})

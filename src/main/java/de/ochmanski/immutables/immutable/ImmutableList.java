@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ochmanski.immutables.collection.Checked;
 import de.ochmanski.immutables.collection.IList;
+import de.ochmanski.immutables.constants.Constants;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -52,7 +53,7 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings({UNCHECKED})
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   public static <E> ImmutableList<E> empty() {
     return EMPTY;
   }

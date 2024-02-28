@@ -2,6 +2,7 @@ package de.ochmanski.immutables.immutable.enums;
 
 import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.collection.ISet;
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
@@ -52,10 +53,13 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> empty() {
     return EMPTY;
   }
 
+  @NotNull
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
   private static final ImmutableEnumSet EMPTY = ImmutableEnumSet.builder().build();
 
   @NotNull

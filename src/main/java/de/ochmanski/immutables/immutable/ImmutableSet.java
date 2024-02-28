@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.collection.ISet;
+import de.ochmanski.immutables.constants.Constants;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -43,10 +44,13 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   public static <E> ImmutableSet<@NotNull E> empty() {
     return EMPTY_SET;
   }
 
+  @NotNull
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   private static final ImmutableSet EMPTY_SET = ImmutableSet.builder().build();
 
   @NotNull
@@ -225,6 +229,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
    *
    * @return the number of elements in this set
    */
+  @Override
   public int size() {
     return set.size();
   }
@@ -234,6 +239,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
    *
    * @return {@code true} if this set contains no elements
    */
+  @Override
   public boolean isEmpty() {
     return set.isEmpty();
   }
@@ -245,6 +251,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
    * @param o element whose presence in this set is to be tested
    * @return {@code true} if this set contains the specified element
    */
+  @Override
   public boolean contains(@NotNull final E o) {
     return set.contains(o);
   }
@@ -255,6 +262,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
    * @return a clone of this {@code ArraySet} instance
    */
   @NotNull
+  @Override
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableSet<@NotNull E> deepClone() {
@@ -403,6 +411,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
 
   @NotNull
   @Unmodifiable
+  @SuppressWarnings("SameParameterValue")
   @Contract(value = "_, _ -> new", pure = true)
   private String limit(@NotNull final String s, int limit) {
     final int end = Math.min(s.length(), Math.abs(limit));

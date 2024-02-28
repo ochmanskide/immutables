@@ -2,6 +2,7 @@ package de.ochmanski.immutables.equalable;
 
 import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.collection.ISet;
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
@@ -45,6 +46,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   public static <E extends @NotNull Equalable<@NotNull E>> EqualableSet<@NotNull E> empty() {
     return EMPTY_SET;
   }

@@ -55,11 +55,11 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   @Contract(value = " -> new", pure = true)
   private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Enum<?> @NotNull []::new;
+    return (IntFunction) DEFAULT_KEY;
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Enum<?> @NotNull []> DEFAULT_KEY = Enum<?> @NotNull []::new;
+  private static final IntFunction<@NotNull Enum<?> @NotNull []> DEFAULT_KEY = Enum @NotNull []::new;
 
   @NotNull
   @SuppressWarnings({UNCHECKED, RAWTYPES})

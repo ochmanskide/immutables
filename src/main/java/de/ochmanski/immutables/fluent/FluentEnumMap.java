@@ -57,7 +57,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = Fluent<?> @NotNull []::new;
+  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = Fluent @NotNull []::new;
 
   @NotNull
   @SuppressWarnings({UNCHECKED, RAWTYPES})
@@ -67,7 +67,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_VALUE = Equalable<?> @NotNull []::new;
+  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_VALUE = Equalable @NotNull []::new;
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">

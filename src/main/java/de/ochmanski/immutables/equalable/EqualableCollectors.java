@@ -139,7 +139,7 @@ public interface EqualableCollectors {
   }
 
   @NotNull
-  IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable<?> @NotNull []::new;
+  IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable @NotNull []::new;
 
   @Value
   @RequiredArgsConstructor

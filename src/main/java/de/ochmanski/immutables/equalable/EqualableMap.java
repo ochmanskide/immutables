@@ -50,7 +50,7 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends @N
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable<?> @NotNull []::new;
+  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable @NotNull []::new;
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">

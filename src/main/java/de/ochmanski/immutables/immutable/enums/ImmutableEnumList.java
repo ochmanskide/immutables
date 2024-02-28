@@ -57,7 +57,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Enum<?> @NotNull []> DEFAULT_KEY = Enum<?> @NotNull []::new;
+  private static final IntFunction<@NotNull Enum<?> @NotNull []> DEFAULT_KEY = Enum @NotNull []::new;
 
   @NotNull
   @Unmodifiable

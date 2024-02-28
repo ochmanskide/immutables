@@ -52,7 +52,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable<?> @NotNull []::new;
+  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable @NotNull []::new;
 
   @NotNull
   @Unmodifiable

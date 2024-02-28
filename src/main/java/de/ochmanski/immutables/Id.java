@@ -4,10 +4,7 @@ package de.ochmanski.immutables;
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
+import org.jetbrains.annotations.*;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -35,6 +32,10 @@ public class Id implements Equalable<@NotNull Id>, Comparable<@NotNull Id> {
     return BLANK;
   }
 
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   public static final Id BLANK = Id.builder().build();
 
   @Contract(value = "null -> true", pure = true)

@@ -61,7 +61,9 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   }
 
   @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Unmodifiable
+  @UnmodifiableView
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   private static final ImmutableEnumMap EMPTY = ImmutableEnumMap.builder().build();
 
   @NotNull

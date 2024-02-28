@@ -50,6 +50,8 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
   }
 
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   private static final ImmutableSet EMPTY_SET = ImmutableSet.builder().build();
 

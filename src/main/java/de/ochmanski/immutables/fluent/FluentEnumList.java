@@ -69,7 +69,9 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   }
 
   @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Unmodifiable
+  @UnmodifiableView
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   private static final FluentEnumList EMPTY = FluentEnumList.builder().build();
   //</editor-fold>
 

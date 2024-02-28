@@ -58,7 +58,9 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   }
 
   @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Unmodifiable
+  @UnmodifiableView
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   private static final FluentEnumSet EMPTY = FluentEnumSet.builder().build();
 
   @NotNull

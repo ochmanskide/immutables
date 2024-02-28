@@ -59,7 +59,9 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   }
 
   @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Unmodifiable
+  @UnmodifiableView
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   private static final ImmutableEnumSet EMPTY = ImmutableEnumSet.builder().build();
 
   @NotNull

@@ -51,6 +51,10 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     return EMPTY_SET;
   }
 
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   private static final EqualableSet EMPTY_SET = EqualableSet.builder().build();
 
   @NotNull

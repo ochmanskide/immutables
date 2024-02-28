@@ -54,12 +54,14 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   @UnmodifiableView
   @Contract(pure = true)
   @SuppressWarnings(Constants.Warning.UNCHECKED)
-  public static <E> ImmutableList<E> empty() {
+  public static <E> ImmutableList<@NotNull E> empty() {
     return EMPTY;
   }
 
   @NotNull
-  @SuppressWarnings(RAWTYPES)
+  @Unmodifiable
+  @UnmodifiableView
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   private static final ImmutableList EMPTY = ImmutableList.builder().build();
   //</editor-fold>
 
@@ -395,6 +397,7 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   @NotNull
   @Unmodifiable
   @Contract(value = "_, _ -> new", pure = true)
+  @SuppressWarnings(Constants.Warning.ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME)
   private String limit(@NotNull final String s, int limit) {
     final int end = Math.min(s.length(), Math.abs(limit));
     return s.substring(0, end);

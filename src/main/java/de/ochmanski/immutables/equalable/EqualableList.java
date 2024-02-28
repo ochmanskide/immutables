@@ -63,17 +63,17 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
-  private static final EqualableList EMPTY = EqualableList.builder().build();
+  @SuppressWarnings(RAWTYPES)
+  private static final EqualableList EMPTY = create();
 
-//  @NotNull
-//  @Unmodifiable
-//  @UnmodifiableView
-//  @SuppressWarnings({UNCHECKED, RAWTYPES})
-//  @Contract(value = "-> new", pure = true)
-//  private static <E extends Equalable<? extends @NotNull E>> EqualableList<? extends @NotNull E> create() {
-//    return (EqualableList) EqualableList.builder().build();
-//  }
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Contract(value = "-> new", pure = true)
+  private static EqualableList<? extends @NotNull Equalable> create() {
+    return EqualableList.builder().build();
+  }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">

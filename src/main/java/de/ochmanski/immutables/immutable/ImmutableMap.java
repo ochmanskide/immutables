@@ -63,6 +63,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
   @NotNull
   @Unmodifiable
   @UnmodifiableView
+  @Contract(value = "-> new", pure = true)
   private static <K, V> ImmutableMap<@NotNull K, @NotNull V> create() {
     return ImmutableMap.<@NotNull K, @NotNull V>builder().build();
   }

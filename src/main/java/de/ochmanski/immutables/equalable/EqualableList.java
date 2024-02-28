@@ -48,30 +48,29 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable @NotNull []::new;
+  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable<?> @NotNull []::new;
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings(UNCHECKED)
-  public static <E extends Equalable<? extends @NotNull E>> EqualableList<? extends @NotNull E> empty() {
-    return EMPTY;
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
+  public static <E extends @NotNull Equalable<@NotNull E>> EqualableList<@NotNull E> empty() {
+    return EMPTY_SET;
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @SuppressWarnings(RAWTYPES)
-  private static final EqualableList EMPTY = create();
+  @SuppressWarnings(Constants.Warning.RAWTYPES)
+  private static final EqualableList EMPTY_SET = create();
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
-  @Contract(value = "-> new", pure = true)
-  private static EqualableList<? extends @NotNull Equalable> create() {
-    return EqualableList.builder().build();
+  @Contract(value = " -> new", pure = true)
+  private static <E extends @NotNull Equalable<@NotNull E>> EqualableList<@NotNull E> create() {
+    return EqualableList.<@NotNull E>builder().build();
   }
   //</editor-fold>
 

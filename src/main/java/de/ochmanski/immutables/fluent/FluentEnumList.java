@@ -57,22 +57,30 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = Fluent @NotNull []::new;
+  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = Fluent<?> @NotNull []::new;
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
   @SuppressWarnings(Constants.Warning.UNCHECKED)
-  public static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> empty() {
-    return EMPTY;
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> empty() {
+    return EMPTY_SET;
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  private static final FluentEnumList EMPTY = FluentEnumList.builder().build();
+  @SuppressWarnings(Constants.Warning.RAWTYPES)
+  private static final FluentEnumList EMPTY_SET = create();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  private static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumList<@NotNull S> create() {
+    return FluentEnumList.<@NotNull S>builder().build();
+  }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">

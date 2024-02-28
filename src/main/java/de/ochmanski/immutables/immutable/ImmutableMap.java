@@ -72,8 +72,11 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   @Contract(value = "-> new", pure = true)
   private static <S> IntFunction<@NotNull S @NotNull []> defaultConstructor() {
-    return (IntFunction) Object @NotNull []::new;
+    return (IntFunction) DEFAULT_KEY;
   }
+
+  @NotNull
+  private static final IntFunction<@NotNull Object @NotNull []> DEFAULT_KEY = Object @NotNull []::new;
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
@@ -117,7 +120,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet() {
-    return ImmutableSet.<@NotNull K, @NotNull V>copyOfEntries(unwrap().entrySet(), Entry[]::new);
+    return ImmutableSet.<@NotNull K, @NotNull V>copyOfEntries(unwrap().entrySet(), Entry @NotNull []::new);
   }
 
   @NotNull

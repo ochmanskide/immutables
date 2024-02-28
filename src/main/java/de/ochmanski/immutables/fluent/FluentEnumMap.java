@@ -53,15 +53,21 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   @Contract(value = " -> new", pure = true)
   private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Fluent @NotNull []::new;
+    return (IntFunction) DEFAULT_KEY;
   }
+
+  @NotNull
+  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = Fluent<?> @NotNull []::new;
 
   @NotNull
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   @Contract(value = " -> new", pure = true)
   private static <S> IntFunction<@NotNull S @NotNull []> defaultValue() {
-    return (IntFunction) Equalable @NotNull []::new;
+    return (IntFunction) DEFAULT_VALUE;
   }
+
+  @NotNull
+  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_VALUE = Equalable<?> @NotNull []::new;
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">

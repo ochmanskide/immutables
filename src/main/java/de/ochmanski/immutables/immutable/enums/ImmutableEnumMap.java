@@ -52,6 +52,26 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Contract(value = " -> new", pure = true)
+  private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) Enum<?> @NotNull []::new;
+  }
+
+  @NotNull
+  private static final IntFunction<@NotNull Enum<?> @NotNull []> DEFAULT_KEY = Enum<?> @NotNull []::new;
+
+  @NotNull
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Contract(value = " -> new", pure = true)
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultValue() {
+    return (IntFunction) DEFAULT_VALUE;
+  }
+
+  @NotNull
+  private static final IntFunction<@NotNull Object @NotNull []> DEFAULT_VALUE = Object @NotNull []::new;
+
+  @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
@@ -63,21 +83,15 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  private static final ImmutableEnumMap EMPTY = ImmutableEnumMap.builder().build();
+  @SuppressWarnings(RAWTYPES)
+  private static final ImmutableEnumMap EMPTY = create();
 
   @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
-  @Contract(value = " -> new", pure = true)
-  private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Enum @NotNull []::new;
-  }
-
-  @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
-  @Contract(value = " -> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultValue() {
-    return (IntFunction) Object @NotNull []::new;
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "-> new", pure = true)
+  private static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> create() {
+    return ImmutableEnumMap.<@NotNull K, @NotNull V>builder().build();
   }
   //</editor-fold>
 

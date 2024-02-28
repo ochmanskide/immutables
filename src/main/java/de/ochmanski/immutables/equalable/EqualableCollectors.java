@@ -135,8 +135,11 @@ public interface EqualableCollectors {
   @Contract(pure = true)
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   static <T> IntFunction<@NotNull T @NotNull []> tGenerator() {
-    return (IntFunction) Equalable @NotNull []::new;
+    return (IntFunction) DEFAULT_KEY;
   }
+
+  @NotNull
+  IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable<?> @NotNull []::new;
 
   @Value
   @RequiredArgsConstructor

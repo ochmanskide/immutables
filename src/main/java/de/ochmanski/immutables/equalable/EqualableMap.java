@@ -46,8 +46,11 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends @N
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   @Contract(value = "-> new", pure = true)
   private static <S> IntFunction<@NotNull S @NotNull []> defaultConstructor() {
-    return (IntFunction) Equalable @NotNull []::new;
+    return (IntFunction) DEFAULT_KEY;
   }
+
+  @NotNull
+  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable<?> @NotNull []::new;
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">

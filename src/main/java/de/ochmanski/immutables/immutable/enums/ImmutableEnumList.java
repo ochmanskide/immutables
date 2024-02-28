@@ -57,22 +57,30 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Enum<?> @NotNull []> DEFAULT_KEY = Enum @NotNull []::new;
+  private static final IntFunction<@NotNull Enum<?> @NotNull []> DEFAULT_KEY = Enum<?> @NotNull []::new;
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
   @SuppressWarnings(Constants.Warning.UNCHECKED)
-  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> empty() {
-    return EMPTY;
+  public static <E extends @NotNull Enum<@NotNull E>> ImmutableEnumList<@NotNull E> empty() {
+    return EMPTY_SET;
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  private static final ImmutableEnumList EMPTY = ImmutableEnumList.builder().build();
+  @SuppressWarnings(Constants.Warning.RAWTYPES)
+  private static final ImmutableEnumList EMPTY_SET = create();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  private static <E extends @NotNull Enum<@NotNull E>> ImmutableEnumList<@NotNull E> create() {
+    return ImmutableEnumList.<@NotNull E>builder().build();
+  }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">

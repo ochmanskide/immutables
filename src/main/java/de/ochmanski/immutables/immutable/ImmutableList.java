@@ -55,14 +55,22 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   @Contract(pure = true)
   @SuppressWarnings(Constants.Warning.UNCHECKED)
   public static <E> ImmutableList<@NotNull E> empty() {
-    return EMPTY;
+    return EMPTY_SET;
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  private static final ImmutableList EMPTY = ImmutableList.builder().build();
+  @SuppressWarnings(Constants.Warning.RAWTYPES)
+  private static final ImmutableList EMPTY_SET = create();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  private static <E> ImmutableList<@NotNull E> create() {
+    return ImmutableList.<@NotNull E>builder().build();
+  }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">

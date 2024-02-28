@@ -57,7 +57,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Enum<?> @NotNull []> DEFAULT_KEY = Enum @NotNull []::new;
+  private static final IntFunction<@NotNull Enum<?> @NotNull []> DEFAULT_KEY = Enum<?> @NotNull []::new;
 
   @NotNull
   @Unmodifiable

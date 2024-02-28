@@ -53,8 +53,11 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   @Contract(value = " -> new", pure = true)
   private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Enum @NotNull []::new;
+    return (IntFunction) DEFAULT_KEY;
   }
+
+  @NotNull
+  private static final IntFunction<@NotNull Enum<?> @NotNull []> DEFAULT_KEY = Enum @NotNull []::new;
 
   @NotNull
   @Unmodifiable

@@ -48,8 +48,11 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Contract(value = " -> new", pure = true)
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   public static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Equalable @NotNull []::new;
+    return (IntFunction) DEFAULT_KEY;
   }
+
+  @NotNull
+  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable @NotNull []::new;
 
   @NotNull
   @Unmodifiable

@@ -42,10 +42,13 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
   @SuppressWarnings({UNCHECKED, RAWTYPES})
-  @Contract(value = " -> new", pure = true)
+  @Contract(value = "-> new", pure = true)
   private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Object @NotNull []::new;
+    return (IntFunction) DEFAULT_KEY;
   }
+
+  @NotNull
+  private static final IntFunction<@NotNull Object @NotNull []> DEFAULT_KEY = Object @NotNull []::new;
 
   @NotNull
   @Unmodifiable

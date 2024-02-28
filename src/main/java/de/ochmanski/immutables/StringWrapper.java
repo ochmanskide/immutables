@@ -5,16 +5,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static de.ochmanski.immutables.constants.Constants.Warning.UNUSED;
 
 @Value
 @Unmodifiable
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class StringWrapper implements Equalable<@NotNull StringWrapper> {
+
   @NonNull
   @NotNull
   @Builder.Default
@@ -28,15 +34,21 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper> {
 
   @NotNull
   @Contract(pure = true)
+  @SuppressWarnings(UNUSED)
   public static StringWrapper blank() {
     return BLANK;
   }
 
   @NotNull
   @Unmodifiable
-  @UnmodifiableView
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  private static final StringWrapper BLANK = StringWrapper.builder().build();
+  private static final StringWrapper BLANK = create();
+
+  @NotNull
+  @Unmodifiable
+  @Contract(value = "-> new", pure = true)
+  private static StringWrapper create() {
+    return StringWrapper.builder().build();
+  }
 
   @Contract(value = "null -> true", pure = true)
   public boolean isNotEqualToIgnoreCase(@Nullable final StringWrapper other) {

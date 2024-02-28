@@ -15,8 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.IntFunction;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+import static de.ochmanski.immutables.constants.Constants.Warning.*;
 
 @Value
 @UnmodifiableView
@@ -91,6 +90,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
    *   }
    * </pre>
    */
+  @SuppressWarnings(UNUSED)
   @Contract(value = "-> fail", pure = true)
   static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "

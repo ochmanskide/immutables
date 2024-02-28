@@ -54,8 +54,16 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  private static final EqualableSet EMPTY_SET = EqualableSet.builder().build();
+  @SuppressWarnings(Constants.Warning.RAWTYPES)
+  private static final EqualableSet EMPTY_SET = create();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  private static <E extends @NotNull Equalable<@NotNull E>> EqualableSet<@NotNull E> create() {
+    return EqualableSet.<@NotNull E>builder().build();
+  }
 
   @NotNull
   @Unmodifiable

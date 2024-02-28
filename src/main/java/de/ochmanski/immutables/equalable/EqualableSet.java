@@ -45,6 +45,15 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  public static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) Equalable @NotNull []::new;
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(pure = true)
   @SuppressWarnings(Constants.Warning.UNCHECKED)
   public static <E extends @NotNull Equalable<@NotNull E>> EqualableSet<@NotNull E> empty() {
@@ -63,15 +72,6 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Contract(value = " -> new", pure = true)
   private static <E extends @NotNull Equalable<@NotNull E>> EqualableSet<@NotNull E> create() {
     return EqualableSet.<@NotNull E>builder().build();
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
-  public static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Equalable @NotNull []::new;
   }
 
   //</editor-fold>

@@ -41,6 +41,13 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Contract(value = " -> new", pure = true)
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) Object @NotNull []::new;
+  }
+
+  @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
@@ -59,16 +66,8 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  @SuppressWarnings(Constants.Warning.RAWTYPES)
   private static <E> ImmutableSet<@NotNull E> create() {
     return ImmutableSet.<@NotNull E>builder().build();
-  }
-
-  @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
-  @Contract(value = " -> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Object @NotNull []::new;
   }
   //</editor-fold>
 

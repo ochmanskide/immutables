@@ -49,25 +49,33 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(pure = true)
-  @SuppressWarnings(Constants.Warning.UNCHECKED)
-  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> empty() {
-    return EMPTY;
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Contract(value = " -> new", pure = true)
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) Fluent @NotNull []::new;
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  private static final FluentEnumSet EMPTY = FluentEnumSet.builder().build();
+  @Contract(pure = true)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> empty() {
+    return EMPTY_SET;
+  }
 
   @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Unmodifiable
+  @UnmodifiableView
+  @SuppressWarnings(Constants.Warning.RAWTYPES)
+  private static final FluentEnumSet EMPTY_SET = create();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Fluent @NotNull []::new;
+  private static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> create() {
+    return FluentEnumSet.<@NotNull S>builder().build();
   }
   //</editor-fold>
 

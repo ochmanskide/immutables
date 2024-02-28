@@ -50,25 +50,33 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(pure = true)
-  @SuppressWarnings(Constants.Warning.UNCHECKED)
-  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> empty() {
-    return EMPTY;
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Contract(value = " -> new", pure = true)
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) Enum @NotNull []::new;
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  private static final ImmutableEnumSet EMPTY = ImmutableEnumSet.builder().build();
+  @Contract(pure = true)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
+  public static <E extends @NotNull Enum<@NotNull E>> ImmutableEnumSet<@NotNull E> empty() {
+    return EMPTY_SET;
+  }
 
   @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @Unmodifiable
+  @UnmodifiableView
+  @SuppressWarnings(Constants.Warning.RAWTYPES)
+  private static final ImmutableEnumSet EMPTY_SET = create();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Enum @NotNull []::new;
+  private static <E extends @NotNull Enum<@NotNull E>> ImmutableEnumSet<@NotNull E> create() {
+    return ImmutableEnumSet.<@NotNull E>builder().build();
   }
   //</editor-fold>
 

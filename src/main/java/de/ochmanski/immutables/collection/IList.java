@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-public interface IList<E> extends ICollection<E> {
+public interface IList<E> extends ICollection<@NotNull E> {
 
   /**
    * This method is not supported.

@@ -15,28 +15,36 @@ import java.util.List;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class Id implements Equalable<@NotNull Id>, Comparable<@NotNull Id> {
+
   @NonNull
   @NotNull
   @Builder.Default
   String id = Constants.BLANK;
 
   @NotNull
+  @Unmodifiable
   @Contract(value = "_ -> new", pure = true)
   public static Id of(@NotNull final String raw) {
     return Id.builder().id(raw).build();
   }
 
   @NotNull
-  @Contract(value = "-> new", pure = true)
+  @Unmodifiable
+  @Contract(pure = true)
   public static Id blank() {
     return BLANK;
   }
 
   @NotNull
   @Unmodifiable
-  @UnmodifiableView
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  public static final Id BLANK = Id.builder().build();
+  public static final Id BLANK = create();
+
+  @NotNull
+  @Unmodifiable
+  @Contract(value = "-> new", pure = true)
+  private static Id create() {
+    return Id.builder().build();
+  }
 
   @Contract(value = "null -> true", pure = true)
   public boolean isNotEqualToIgnoreCase(@Nullable final String other) {

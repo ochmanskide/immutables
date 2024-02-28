@@ -13,8 +13,6 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Arrays;
 import java.util.List;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.UNUSED;
-
 @Value
 @Unmodifiable
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -27,14 +25,15 @@ public class StringWrapper implements Equalable<@NotNull StringWrapper> {
   String raw = Constants.BLANK;
 
   @NotNull
+  @Unmodifiable
   @Contract(value = "_ -> new", pure = true)
   public static StringWrapper of(@NotNull final String raw) {
     return StringWrapper.builder().raw(raw).build();
   }
 
   @NotNull
+  @Unmodifiable
   @Contract(pure = true)
-  @SuppressWarnings(UNUSED)
   public static StringWrapper blank() {
     return BLANK;
   }

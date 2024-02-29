@@ -5,9 +5,9 @@ import org.jetbrains.annotations.NonNls;
 import static de.ochmanski.immutables.constants.Constants.Warning.UNUSED;
 
 public interface Constants {
+
   @NonNls
   String BLANK = "";
-
 
   @SuppressWarnings(UNUSED)
   interface Language {
@@ -21,9 +21,7 @@ public interface Constants {
       JSON = "JSON",
       JSONPATH = "JSONPath",
       GROOVY = "Groovy";
-
   }
-
 
   /**
    * Below is a list of valid warning names available in the {@code @SuppressWarnings} annotation:
@@ -100,6 +98,9 @@ public interface Constants {
 
     @NonNls
     String ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME = "SameParameterValue";
+
+    @NonNls
+    String SAME_PARAMETER_VALUE = ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME;
 
     @NonNls
     String STRING_EQUALITY = "StringEquality";
@@ -251,7 +252,5 @@ public interface Constants {
      */
     @NonNls
     String SYNC_OVERRIDE = "sync-override";
-
   }
-
 }

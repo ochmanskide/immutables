@@ -619,6 +619,11 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       public boolean isSameAs(final int other) {
         return EqualableInteger.areTheSame(s, other);
       }
+
+      @Contract(pure = true)
+      public boolean isZero() {
+        return EqualableInteger.areTheSame(s, 0);
+      }
     }
   }
 

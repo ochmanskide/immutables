@@ -326,6 +326,18 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     public boolean isSameAs(@Nullable final S other) {
       return Equalable.<@NotNull S>areTheSame(s, other);
     }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    static <E extends @NotNull Enum<@NotNull E>> Equalable.@Unmodifiable EnumHolder<@NotNull E> of(@NotNull final E s) {
+      return EnumHolder.<@NotNull E>builder().s(s).build();
+    }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    static <E extends @NotNull Enum<@NotNull E>> Equalable.@Unmodifiable EnumHolder<@NotNull E> element(@NotNull final E s) {
+      return EnumHolder.<@NotNull E>builder().s(s).build();
+    }
   }
 
   @Value

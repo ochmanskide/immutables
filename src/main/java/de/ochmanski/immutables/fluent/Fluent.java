@@ -294,7 +294,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
 
     @Contract(pure = true)
     public boolean isIn(final @NotNull Set<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> elements) {
-      return elements.contains(s);
+      return null == s ? false : elements.contains(s);
     }
 
     @Contract(value = "null -> true", pure = true)

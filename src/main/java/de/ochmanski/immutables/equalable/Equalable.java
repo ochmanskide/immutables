@@ -7,6 +7,7 @@ import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -262,7 +263,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   class EqualableHolder<S> {
 
-    @NotNull S s;
+    @Nullable S s;
 
     @SafeVarargs
     @Contract(pure = true)
@@ -303,7 +304,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public boolean isIn(@NotNull final Set<? extends @NotNull S> elements) {
-      return elements.contains(s);
+      return null == s ? false : elements.contains(s);
     }
 
     @Contract(value = "null -> true", pure = true)
@@ -332,7 +333,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   class EnumHolder<S extends @NotNull Enum<@NotNull S>> {
 
-    @NotNull S s;
+    @Nullable S s;
 
     @SafeVarargs
     @Contract(pure = true)
@@ -373,7 +374,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public boolean isIn(@NotNull final Set<@NotNull S> elements) {
-      return elements.contains(s);
+      return null == s ? false : elements.contains(s);
     }
 
     @Contract(value = "null -> true", pure = true)
@@ -440,12 +441,13 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @NotNull
-    static Equalable.EqualableString.Holder element(@NotNull final String s) {
+    static Equalable.EqualableString.@Unmodifiable Holder element(@NotNull final String s) {
       return EqualableString.Holder.builder().s(s).build();
     }
 
     @Value
     @Builder
+    @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     class Holder {
 
@@ -490,7 +492,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
       @Contract(pure = true)
       public boolean isIn(@NotNull final Set<java.lang.@NotNull String> elements) {
-        return elements.contains(s);
+        return null == s ? false : elements.contains(s);
       }
 
       @Contract(pure = true)
@@ -543,16 +545,90 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @NotNull
-    static Equalable.EqualableInteger.Holder element(final int s) {
+    @Contract(value = "_ -> new", pure = true)
+    static Equalable.EqualableInteger.@Unmodifiable Holder integer(final int s) {
+      return element(s);
+    }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    static Equalable.EqualableInteger.@Unmodifiable Holder of(final int s) {
+      return element(s);
+    }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    static Equalable.EqualableInteger.@Unmodifiable Holder element(final int s) {
       return EqualableInteger.Holder.builder().s(s).build();
     }
 
     @Value
     @Builder
+    @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     class Holder {
 
       int s;
+
+      @Contract(pure = true)
+      public boolean isZero() {
+        return EqualableInteger.areTheSame(s, 0);
+      }
+
+      @Contract(pure = true)
+      public boolean isOne() {
+        return EqualableInteger.areTheSame(s, 1);
+      }
+
+      @Contract(pure = true)
+      public boolean isNegative() {
+        return isLessThanZero();
+      }
+
+      @Contract(pure = true)
+      public boolean isPositive() {
+        return isGreaterThanZero();
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThanZero() {
+        return isGreaterThan(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThanOrEqualToZero() {
+        return isGreaterThanOrEqualTo(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThanZero() {
+        return isLessThan(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThanOrEqualToZero() {
+        return isLessThanOrEqualTo(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThan(final int other) {
+        return s > other;
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThanOrEqualTo(final int other) {
+        return s >= other;
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThan(final int other) {
+        return s < other;
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThanOrEqualTo(final int other) {
+        return s <= other;
+      }
 
       @Contract(pure = true)
       public final boolean isNotIn(@SuppressWarnings("NullableProblems") @NotNull final int @NotNull ... array) {
@@ -592,7 +668,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
       @Contract(pure = true)
       public boolean isIn(@NotNull final Set<java.lang.@NotNull Integer> elements) {
-        return elements.contains(s);
+        return null == s ? false : elements.contains(s);
       }
 
       @Contract(pure = true)
@@ -618,11 +694,6 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       @Contract(pure = true)
       public boolean isSameAs(final int other) {
         return EqualableInteger.areTheSame(s, other);
-      }
-
-      @Contract(pure = true)
-      public boolean isZero() {
-        return EqualableInteger.areTheSame(s, 0);
       }
     }
   }
@@ -650,16 +721,84 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @NotNull
-    static Equalable.EqualableLong.Holder element(final long s) {
+    @Contract(value = "_ -> new", pure = true)
+    static Equalable.EqualableLong.@Unmodifiable Holder of(final int s) {
+      return element(s);
+    }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    static Equalable.EqualableLong.@Unmodifiable Holder element(final int s) {
       return EqualableLong.Holder.builder().s(s).build();
     }
 
     @Value
     @Builder
+    @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class Holder {
+    public class Holder {
 
       long s;
+
+      @Contract(pure = true)
+      public boolean isZero() {
+        return EqualableLong.areTheSame(s, 0);
+      }
+
+      @Contract(pure = true)
+      public boolean isOne() {
+        return EqualableLong.areTheSame(s, 1);
+      }
+
+      @Contract(pure = true)
+      public boolean isNegative() {
+        return isLessThanZero();
+      }
+
+      @Contract(pure = true)
+      public boolean isPositive() {
+        return isGreaterThanZero();
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThanZero() {
+        return isGreaterThan(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThanOrEqualToZero() {
+        return isGreaterThanOrEqualTo(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThanZero() {
+        return isLessThan(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThanOrEqualToZero() {
+        return isLessThanOrEqualTo(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThan(final long other) {
+        return s > other;
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThanOrEqualTo(final long other) {
+        return s >= other;
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThan(final long other) {
+        return s < other;
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThanOrEqualTo(final long other) {
+        return s <= other;
+      }
 
       @Contract(pure = true)
       public final boolean isNotIn(@SuppressWarnings("NullableProblems") @NotNull final long @NotNull ... array) {
@@ -699,7 +838,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
       @Contract(pure = true)
       public boolean isIn(@NotNull final Set<java.lang.@NotNull Long> elements) {
-        return elements.contains(s);
+        return null == s ? false : elements.contains(s);
       }
 
       @Contract(pure = true)
@@ -752,16 +891,84 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @NotNull
-    static Equalable.EqualableFloat.Holder element(final float s) {
+    @Contract(value = "_ -> new", pure = true)
+    static Equalable.EqualableFloat.@Unmodifiable Holder of(final int s) {
+      return element(s);
+    }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    static Equalable.EqualableFloat.@Unmodifiable Holder element(final int s) {
       return EqualableFloat.Holder.builder().s(s).build();
     }
 
     @Value
     @Builder
+    @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class Holder {
+    public class Holder {
 
       float s;
+
+      @Contract(pure = true)
+      public boolean isZero() {
+        return EqualableFloat.areTheSame(s, 0);
+      }
+
+      @Contract(pure = true)
+      public boolean isOne() {
+        return EqualableFloat.areTheSame(s, 1);
+      }
+
+      @Contract(pure = true)
+      public boolean isNegative() {
+        return isLessThanZero();
+      }
+
+      @Contract(pure = true)
+      public boolean isPositive() {
+        return isGreaterThanZero();
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThanZero() {
+        return isGreaterThan(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThanOrEqualToZero() {
+        return isGreaterThanOrEqualTo(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThanZero() {
+        return isLessThan(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThanOrEqualToZero() {
+        return isLessThanOrEqualTo(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThan(final float other) {
+        return s > other;
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThanOrEqualTo(final float other) {
+        return s >= other;
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThan(final float other) {
+        return s < other;
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThanOrEqualTo(final float other) {
+        return s <= other;
+      }
 
       @Contract(pure = true)
       public final boolean isNotIn(@SuppressWarnings("NullableProblems") @NotNull final float @NotNull ... array) {
@@ -802,7 +1009,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
       @Contract(pure = true)
       public boolean isIn(@NotNull final Set<java.lang.@NotNull Float> elements) {
-        return elements.contains(s);
+        return null == s ? false : elements.contains(s);
       }
 
       @Contract(pure = true)
@@ -855,16 +1062,84 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @NotNull
-    static Equalable.EqualableDouble.Holder element(final double s) {
+    @Contract(value = "_ -> new", pure = true)
+    static Equalable.EqualableDouble.@Unmodifiable Holder of(final int s) {
+      return element(s);
+    }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    static Equalable.EqualableDouble.@Unmodifiable Holder element(final int s) {
       return EqualableDouble.Holder.builder().s(s).build();
     }
 
     @Value
     @Builder
+    @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class Holder {
+    public class Holder {
 
       double s;
+
+      @Contract(pure = true)
+      public boolean isZero() {
+        return EqualableDouble.areTheSame(s, 0);
+      }
+
+      @Contract(pure = true)
+      public boolean isOne() {
+        return EqualableDouble.areTheSame(s, 1);
+      }
+
+      @Contract(pure = true)
+      public boolean isNegative() {
+        return isLessThanZero();
+      }
+
+      @Contract(pure = true)
+      public boolean isPositive() {
+        return isGreaterThanZero();
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThanZero() {
+        return isGreaterThan(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThanOrEqualToZero() {
+        return isGreaterThanOrEqualTo(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThanZero() {
+        return isLessThan(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThanOrEqualToZero() {
+        return isLessThanOrEqualTo(0);
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThan(final double other) {
+        return s > other;
+      }
+
+      @Contract(pure = true)
+      public boolean isGreaterThanOrEqualTo(final double other) {
+        return s >= other;
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThan(final double other) {
+        return s < other;
+      }
+
+      @Contract(pure = true)
+      public boolean isLessThanOrEqualTo(final double other) {
+        return s <= other;
+      }
 
       @Contract(pure = true)
       public final boolean isNotIn(@SuppressWarnings("NullableProblems") @NotNull final double @NotNull ... array) {
@@ -904,7 +1179,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
       @Contract(pure = true)
       public boolean isIn(@NotNull final Set<java.lang.@NotNull Double> elements) {
-        return elements.contains(s);
+        return null == s ? false : elements.contains(s);
       }
 
       @Contract(pure = true)

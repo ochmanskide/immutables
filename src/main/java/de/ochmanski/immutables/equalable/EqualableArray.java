@@ -35,15 +35,15 @@ public interface EqualableArray<T> extends Equalable<@NotNull EqualableArray<@No
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <T> EqualableArray.@Unmodifiable Holder<@NotNull T> of(@NotNull final T @NotNull [] s) {
-    return EqualableArray.Holder.<@NotNull T>builder().s(s).build();
+  static <T> EqualableArray.@Unmodifiable ArrayHolder<@NotNull T> of(@NotNull final T @NotNull [] s) {
+    return ArrayHolder.<@NotNull T>builder().s(s).build();
   }
 
   @Value
   @Builder
   @Unmodifiable
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  class Holder<T> {
+  class ArrayHolder<T> {
 
     @Nullable T @NotNull [] s;
 

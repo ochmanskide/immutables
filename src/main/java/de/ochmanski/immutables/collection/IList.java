@@ -16,20 +16,20 @@ public interface IList<E> extends ICollection<@NotNull E> {
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link ImmutableList#ofGenerator(IntFunction)} instead.
+   * <p>use method: {@link ImmutableList#noneOf(IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final IList<Dummy> actual = IList.ofGenerator(Dummy[]::new);
-   *   final IList<String> actual = IList.ofGenerator(String[]::new);
-   *   final IList<Integer> actual = IList.ofGenerator(Integer[]::new);
+   *   final IList<Dummy> actual = IList.noneOf(Dummy[]::new);
+   *   final IList<String> actual = IList.noneOf(String[]::new);
+   *   final IList<Integer> actual = IList.noneOf(Integer[]::new);
    *   }
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
   static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: IList.ofGenerator(String[]::new)");
+      + "For example: IList.noneOf(String[]::new)");
   }
 
   default int size() {

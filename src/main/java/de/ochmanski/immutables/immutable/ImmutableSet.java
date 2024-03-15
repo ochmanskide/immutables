@@ -79,7 +79,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S> ImmutableSet<@NotNull S> ofGenerator(@NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+  public static <S> ImmutableSet<@NotNull S> noneOf(@NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableSet.of(Set.of(), constructor);
   }
 

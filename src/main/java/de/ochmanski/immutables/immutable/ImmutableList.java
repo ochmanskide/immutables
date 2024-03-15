@@ -78,7 +78,7 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S> ImmutableList<@NotNull S> ofGenerator(
+  public static <S> ImmutableList<@NotNull S> noneOf(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableList.<@NotNull S>of(List.of(), constructor);
   }

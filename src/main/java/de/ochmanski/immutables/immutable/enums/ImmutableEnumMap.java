@@ -100,29 +100,29 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(IntFunction, IntFunction)} instead.
+   * <p>use method: {@link #noneOf(IntFunction, IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final ImmutableEnumMap<Dummy> actual = ImmutableEnumMap.ofGenerator(Dummy[]::new);
-   *   final ImmutableEnumMap<String> actual = ImmutableEnumMap.ofGenerator(String[]::new);
-   *   final ImmutableEnumMap<Integer> actual = ImmutableEnumMap.ofGenerator(Integer[]::new);
+   *   final ImmutableEnumMap<Dummy> actual = ImmutableEnumMap.noneOf(Dummy[]::new);
+   *   final ImmutableEnumMap<String> actual = ImmutableEnumMap.noneOf(String[]::new);
+   *   final ImmutableEnumMap<Integer> actual = ImmutableEnumMap.noneOf(Integer[]::new);
    *   }
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
   static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: ImmutableEnumMap.ofGenerator(String[]::new)");
+      + "For example: ImmutableEnumMap.noneOf(String[]::new)");
   }
 
   /**
    * Example usage:
    * <pre>
    *   {@code
-   *   final ImmutableEnumMap<Dummy> actual = ImmutableEnumMap.ofGenerator(Dummy[]::new);
-   *   final ImmutableEnumMap<String> actual = ImmutableEnumMap.ofGenerator(String[]::new);
-   *   final ImmutableEnumMap<Integer> actual = ImmutableEnumMap.ofGenerator(Integer[]::new);
+   *   final ImmutableEnumMap<Dummy> actual = ImmutableEnumMap.noneOf(Dummy[]::new);
+   *   final ImmutableEnumMap<String> actual = ImmutableEnumMap.noneOf(String[]::new);
+   *   final ImmutableEnumMap<Integer> actual = ImmutableEnumMap.noneOf(Integer[]::new);
    *   }
    * </pre>
    */
@@ -131,7 +131,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V>
-  ofGenerator(
+  noneOf(
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value) {
     final Class<K> keyType = getComponentTypeFromConstructor(key);

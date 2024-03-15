@@ -84,7 +84,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_,_ -> new", pure = true)
-  public static <K, V> ImmutableMap<@NotNull K, @NotNull V> ofGenerator(
+  public static <K, V> ImmutableMap<@NotNull K, @NotNull V> noneOf(
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value) {
     return ImmutableMap.<@NotNull K, @NotNull V>of(Map.of(), key, value);

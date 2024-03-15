@@ -18,20 +18,20 @@ public interface IMap<K, V> {
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link ImmutableMap#ofGenerator(IntFunction, IntFunction)} instead.
+   * <p>use method: {@link ImmutableMap#noneOf(IntFunction, IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final IMap<Dummy> actual = IMap.ofGenerator(Dummy[]::new);
-   *   final IMap<String> actual = IMap.ofGenerator(String[]::new);
-   *   final IMap<Integer> actual = IMap.ofGenerator(Integer[]::new);
+   *   final IMap<Dummy> actual = IMap.noneOf(Dummy[]::new);
+   *   final IMap<String> actual = IMap.noneOf(String[]::new);
+   *   final IMap<Integer> actual = IMap.noneOf(Integer[]::new);
    *   }
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
   static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: IMap.ofGenerator(String[]::new)");
+      + "For example: IMap.noneOf(String[]::new)");
   }
 
   @NotNull

@@ -16,20 +16,20 @@ public interface ISet<E> extends ICollection<@NotNull E> {
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link ImmutableSet#ofGenerator(IntFunction)} instead.
+   * <p>use method: {@link ImmutableSet#noneOf(IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = ISet.ofGenerator(Dummy[]::new);
-   *   final ISet<String> actual = ISet.ofGenerator(String[]::new);
-   *   final ISet<Integer> actual = ISet.ofGenerator(Integer[]::new);
+   *   final ISet<Dummy> actual = ISet.noneOf(Dummy[]::new);
+   *   final ISet<String> actual = ISet.noneOf(String[]::new);
+   *   final ISet<Integer> actual = ISet.noneOf(Integer[]::new);
    *   }
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
   private static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: ISet.ofGenerator(String[]::new)");
+      + "For example: ISet.noneOf(String[]::new)");
   }
 
   default int size() {

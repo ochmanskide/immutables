@@ -88,29 +88,29 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(IntFunction)} instead.
+   * <p>use method: {@link #noneOf(IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
-   *   final ISet<DayOfWeek> actual = ImmutableEnumSet.ofGenerator(DayOfWeek[]::new);
-   *   final ISet<Month> actual = ImmutableEnumSet.ofGenerator(Month[]::new);
+   *   final ISet<Dummy> actual = ImmutableEnumSet.noneOf(Dummy[]::new);
+   *   final ISet<DayOfWeek> actual = ImmutableEnumSet.noneOf(DayOfWeek[]::new);
+   *   final ISet<Month> actual = ImmutableEnumSet.noneOf(Month[]::new);
    *   }
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
   static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: ImmutableEnumSet.ofGenerator(Day[]::new)");
+      + "For example: ImmutableEnumSet.noneOf(Day[]::new)");
   }
 
   /**
    * Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
-   *   final ISet<DayOfWeek> actual = ImmutableEnumSet.ofGenerator(DayOfWeek[]::new);
-   *   final ISet<Month> actual = ImmutableEnumSet.ofGenerator(Month[]::new);
+   *   final ISet<Dummy> actual = ImmutableEnumSet.noneOf(Dummy[]::new);
+   *   final ISet<DayOfWeek> actual = ImmutableEnumSet.noneOf(DayOfWeek[]::new);
+   *   final ISet<Month> actual = ImmutableEnumSet.noneOf(Month[]::new);
    *   }
    * </pre>
    */
@@ -118,7 +118,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> ofGenerator(
+  public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> noneOf(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     final Class<@NotNull S> componentTypeE = getComponentTypeFromConstructor(constructor);
     return ImmutableEnumSet.<@NotNull S>ofEnumSet(EnumSet.<@NotNull S>noneOf(componentTypeE), constructor);
@@ -187,7 +187,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Contract(value = "_ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumSet<@NotNull S> noneOf(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return ImmutableEnumSet.<@NotNull S>ofGenerator(constructor);
+    return ImmutableEnumSet.<@NotNull S>noneOf(constructor);
   }
 
   @NotNull
@@ -218,7 +218,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
     @NotNull final Collection<@NotNull S> keySet,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     if (keySet.isEmpty()) {
-      return ImmutableEnumSet.<@NotNull S>ofGenerator(constructor);
+      return ImmutableEnumSet.<@NotNull S>noneOf(constructor);
     }
     final EnumSet<@NotNull S> enumSet = EnumSet.<@NotNull S>copyOf(keySet);
     return ImmutableEnumSet.<@NotNull S>ofEnumSet(enumSet, constructor);

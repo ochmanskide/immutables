@@ -18,7 +18,7 @@ class ImmutableEnumListTest {
 
   @Test
   void ofNullClass() {
-    assertThatThrownBy(() -> ImmutableEnumList.ofGenerator(null))
+    assertThatThrownBy(() -> ImmutableEnumList.noneOf(null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
         npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
@@ -28,7 +28,7 @@ class ImmutableEnumListTest {
 
   @Test
   void of0() {
-    @NotNull final IList<Dummy> actual = ImmutableEnumList.ofGenerator(Dummy[]::new);
+    @NotNull final IList<Dummy> actual = ImmutableEnumList.noneOf(Dummy[]::new);
     assertThat(actual).isInstanceOf(ImmutableEnumList.class);
     assertThat(actual.unwrap()).isEmpty();
     assertThat(actual.isEmpty()).isTrue();
@@ -128,12 +128,12 @@ class ImmutableEnumListTest {
 
   @Test
   void toArrayNullClass() {
-    assertThatThrownBy(() -> ImmutableEnumList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
+    assertThatThrownBy(() -> ImmutableEnumList.noneOf(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
   }
 
   @Test
   void toArrayClass() {
-    final IList<Dummy> actual = ImmutableEnumList.ofGenerator(Dummy[]::new);
+    final IList<Dummy> actual = ImmutableEnumList.noneOf(Dummy[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 

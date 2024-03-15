@@ -84,29 +84,29 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(IntFunction)} instead.
+   * <p>use method: {@link #noneOf(IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = EqualableSet.ofGenerator(Dummy[]::new);
-   *   final ISet<DayOfWeek> actual = EqualableSet.ofGenerator(DayOfWeek[]::new);
-   *   final ISet<Month> actual = EqualableSet.ofGenerator(Month[]::new);
+   *   final ISet<Dummy> actual = EqualableSet.noneOf(Dummy[]::new);
+   *   final ISet<DayOfWeek> actual = EqualableSet.noneOf(DayOfWeek[]::new);
+   *   final ISet<Month> actual = EqualableSet.noneOf(Month[]::new);
    *   }
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
   static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: EqualableSet.ofGenerator(Day[]::new)");
+      + "For example: EqualableSet.noneOf(Day[]::new)");
   }
 
   /**
    * Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = EqualableSet.ofGenerator(Dummy[]::new);
-   *   final ISet<DayOfWeek> actual = EqualableSet.ofGenerator(DayOfWeek[]::new);
-   *   final ISet<Month> actual = EqualableSet.ofGenerator(Month[]::new);
+   *   final ISet<Dummy> actual = EqualableSet.noneOf(Dummy[]::new);
+   *   final ISet<DayOfWeek> actual = EqualableSet.noneOf(DayOfWeek[]::new);
+   *   final ISet<Month> actual = EqualableSet.noneOf(Month[]::new);
    *   }
    * </pre>
    */
@@ -114,9 +114,9 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> ofGenerator(
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> noneOf(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>ofGenerator(constructor));
+    return EqualableSet.<@NotNull S>of(ImmutableSet.<@NotNull S>noneOf(constructor));
   }
 
   @NotNull
@@ -182,7 +182,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Contract(value = "_ -> new", pure = true)
   public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> noneOf(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return EqualableSet.<@NotNull S>ofGenerator(constructor);
+    return EqualableSet.<@NotNull S>noneOf(constructor);
   }
 
   @NotNull

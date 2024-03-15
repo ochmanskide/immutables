@@ -87,29 +87,29 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(IntFunction)} instead.
+   * <p>use method: {@link #noneOf(IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = FluentEnumSet.ofGenerator(Dummy[]::new);
-   *   final ISet<DayOfWeek> actual = FluentEnumSet.ofGenerator(DayOfWeek[]::new);
-   *   final ISet<Month> actual = FluentEnumSet.ofGenerator(Month[]::new);
+   *   final ISet<Dummy> actual = FluentEnumSet.noneOf(Dummy[]::new);
+   *   final ISet<DayOfWeek> actual = FluentEnumSet.noneOf(DayOfWeek[]::new);
+   *   final ISet<Month> actual = FluentEnumSet.noneOf(Month[]::new);
    *   }
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
   static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: FluentEnumSet.ofGenerator(Day[]::new)");
+      + "For example: FluentEnumSet.noneOf(Day[]::new)");
   }
 
   /**
    * Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = FluentEnumSet.ofGenerator(Dummy[]::new);
-   *   final ISet<DayOfWeek> actual = FluentEnumSet.ofGenerator(DayOfWeek[]::new);
-   *   final ISet<Month> actual = FluentEnumSet.ofGenerator(Month[]::new);
+   *   final ISet<Dummy> actual = FluentEnumSet.noneOf(Dummy[]::new);
+   *   final ISet<DayOfWeek> actual = FluentEnumSet.noneOf(DayOfWeek[]::new);
+   *   final ISet<Month> actual = FluentEnumSet.noneOf(Month[]::new);
    *   }
    * </pre>
    */
@@ -117,7 +117,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> ofGenerator(
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> noneOf(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return FluentEnumSet.<@NotNull S>of(ImmutableEnumSet.<@NotNull S>noneOf(constructor));
   }

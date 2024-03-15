@@ -79,13 +79,13 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(IntFunction)} instead.
+   * <p>use method: {@link #noneOf(IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final IList<Dummy> actual = EqualableList.ofGenerator(Dummy[]::new);
-   *   final IList<DayOfWeek> actual = EqualableList.ofGenerator(DayOfWeek[]::new);
-   *   final IList<Month> actual = EqualableList.ofGenerator(Month[]::new);
+   *   final IList<Dummy> actual = EqualableList.noneOf(Dummy[]::new);
+   *   final IList<DayOfWeek> actual = EqualableList.noneOf(DayOfWeek[]::new);
+   *   final IList<Month> actual = EqualableList.noneOf(Month[]::new);
    *   }
    * </pre>
    */
@@ -93,25 +93,25 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @Contract(value = "-> fail", pure = true)
   static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: EqualableList.ofGenerator(Day[]::new)");
+      + "For example: EqualableList.noneOf(Day[]::new)");
   }
 
   /**
    * Example usage:
    * <pre>
    *   {@code
-   *   final IList<Dummy> actual = EqualableList.ofGenerator(Dummy[]::new);
-   *   final IList<DayOfWeek> actual = EqualableList.ofGenerator(DayOfWeek[]::new);
-   *   final IList<Month> actual = EqualableList.ofGenerator(Month[]::new);
+   *   final IList<Dummy> actual = EqualableList.noneOf(Dummy[]::new);
+   *   final IList<DayOfWeek> actual = EqualableList.noneOf(DayOfWeek[]::new);
+   *   final IList<Month> actual = EqualableList.noneOf(Month[]::new);
    *   }
    * </pre>
    */
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> ofGenerator(
+  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> noneOf(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return EqualableList.<@NotNull S>of(ImmutableList.ofGenerator(constructor));
+    return EqualableList.<@NotNull S>of(ImmutableList.noneOf(constructor));
   }
 
   @NotNull

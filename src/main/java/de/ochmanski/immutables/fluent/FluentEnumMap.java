@@ -75,29 +75,29 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(IntFunction, IntFunction)} instead.
+   * <p>use method: {@link #noneOf(IntFunction, IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final IMap<Dummy> actual = IMap.ofGenerator(Dummy[]::new);
-   *   final IMap<String> actual = IMap.ofGenerator(String[]::new);
-   *   final IMap<Integer> actual = IMap.ofGenerator(Integer[]::new);
+   *   final IMap<Dummy> actual = IMap.noneOf(Dummy[]::new);
+   *   final IMap<String> actual = IMap.noneOf(String[]::new);
+   *   final IMap<Integer> actual = IMap.noneOf(Integer[]::new);
    *   }
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
   static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: IMap.ofGenerator(String[]::new)");
+      + "For example: IMap.noneOf(String[]::new)");
   }
 
   /**
    * Example usage:
    * <pre>
    *   {@code
-   *   final IMap<Dummy> actual = IMap.ofGenerator(Dummy[]::new);
-   *   final IMap<String> actual = IMap.ofGenerator(String[]::new);
-   *   final IMap<Integer> actual = IMap.ofGenerator(Integer[]::new);
+   *   final IMap<Dummy> actual = IMap.noneOf(Dummy[]::new);
+   *   final IMap<String> actual = IMap.noneOf(String[]::new);
+   *   final IMap<Integer> actual = IMap.noneOf(Integer[]::new);
    *   }
    * </pre>
    */
@@ -105,10 +105,10 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> FluentEnumMap<@NotNull K, @NotNull V>
-  ofGenerator(
+  noneOf(
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value) {
-    final ImmutableEnumMap<@NotNull K, @NotNull V> enumMap = ImmutableEnumMap.<@NotNull K, @NotNull V>ofGenerator(key,
+    final ImmutableEnumMap<@NotNull K, @NotNull V> enumMap = ImmutableEnumMap.<@NotNull K, @NotNull V>noneOf(key,
       value);
     return FluentEnumMap.ofEnumMap(enumMap, key, value);
   }
@@ -193,7 +193,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value) {
     if (map.isEmpty()) {
-      return FluentEnumMap.ofGenerator(key, value);
+      return FluentEnumMap.noneOf(key, value);
     }
     final ImmutableEnumMap<@NotNull K, @NotNull V> enumMap = ImmutableEnumMap.<@NotNull K, @NotNull V>ofEnumMap(
       new EnumMap<@NotNull K, @NotNull V>(map), key, value);

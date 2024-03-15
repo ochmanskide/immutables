@@ -26,13 +26,13 @@ class ImmutableEnumSetTest {
     assertThatThrownBy(ImmutableEnumSet::of)
       .isExactlyInstanceOf(UnsupportedOperationException.class)
       .hasMessage("Please pass array generator type to the method. "
-        + "For example: ImmutableEnumSet.ofGenerator(Day[]::new)");
+        + "For example: ImmutableEnumSet.noneOf(Day[]::new)");
   }
 
   @Test
-  void ofGenerator() {
+  void noneOf() {
     final @NotNull IntFunction<@NotNull Dummy[]> constructor = Dummy[]::new;
-    final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.ofGenerator(constructor);
+    final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.noneOf(constructor);
     assertThat(actual.isEmpty()).isTrue();
     assertThat(actual.size()).isZero();
     assertThat(actual.getSet().unwrap()).isEmpty();
@@ -92,7 +92,7 @@ class ImmutableEnumSetTest {
   @Test
   void toArrayEmpty() {
     final Dummy s1 = Dummy.A;
-    final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
+    final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.noneOf(Dummy[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 
@@ -131,12 +131,12 @@ class ImmutableEnumSetTest {
 
   @Test
   void toArrayNullClass() {
-    Assertions.assertThatThrownBy(() -> ImmutableEnumSet.ofGenerator(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
+    Assertions.assertThatThrownBy(() -> ImmutableEnumSet.noneOf(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
   }
 
   @Test
   void toArrayClass() {
-    final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.ofGenerator(Dummy[]::new);
+    final ImmutableEnumSet<@NotNull Dummy> actual = ImmutableEnumSet.noneOf(Dummy[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 

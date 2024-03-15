@@ -22,7 +22,7 @@ class ImmutableListTest {
 
   @Test
   void ofNullClass() {
-    assertThatThrownBy(() -> ImmutableList.ofGenerator(null))
+    assertThatThrownBy(() -> ImmutableList.noneOf(null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
         npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
@@ -32,7 +32,7 @@ class ImmutableListTest {
 
   @Test
   void of0() {
-    @NotNull final IList<Dummy> actual = ImmutableList.ofGenerator(Dummy[]::new);
+    @NotNull final IList<Dummy> actual = ImmutableList.noneOf(Dummy[]::new);
     assertThat(actual).isInstanceOf(ImmutableList.class);
     assertThat(actual.unwrap()).isEmpty();
     assertThat(actual.isEmpty()).isTrue();
@@ -132,12 +132,12 @@ class ImmutableListTest {
 
   @Test
   void toArrayNullClass() {
-    assertThatThrownBy(() -> ImmutableList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
+    assertThatThrownBy(() -> ImmutableList.noneOf(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
   }
 
   @Test
   void toArrayClass() {
-    final IList<Dummy> actual = ImmutableList.ofGenerator(Dummy[]::new);
+    final IList<Dummy> actual = ImmutableList.noneOf(Dummy[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 
@@ -190,7 +190,7 @@ class ImmutableListTest {
 
   @Test
   void toStringTest01() {
-    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>ofGenerator(String[]::new);
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>noneOf(String[]::new);
     final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[]");
   }

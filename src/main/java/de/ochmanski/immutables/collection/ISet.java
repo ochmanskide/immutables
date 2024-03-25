@@ -41,6 +41,7 @@ public interface ISet<E> extends ICollection<@NotNull E> {
    *
    * @return {@code true} if this set contains no elements
    */
+  @Override
   default boolean isEmpty() {
     return getSet().isEmpty();
   }

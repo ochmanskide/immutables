@@ -1,16 +1,22 @@
 package de.ochmanski.immutables.constants;
 
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.UNUSED;
 
 public interface Constants {
   @NonNls
+  @NotNull
+  @Unmodifiable
   String BLANK = "";
-
 
   @SuppressWarnings(UNUSED)
   interface Language {
+    @NonNls
+    @NotNull
+    @Unmodifiable
     String REGEX = "RegExp",
       JAVA = "Java",
       SQL = "SQL",
@@ -21,9 +27,7 @@ public interface Constants {
       JSON = "JSON",
       JSONPATH = "JSONPath",
       GROOVY = "Groovy";
-
   }
-
 
   /**
    * Below is a list of valid warning names available in the {@code @SuppressWarnings} annotation:
@@ -102,6 +106,9 @@ public interface Constants {
     String ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME = "SameParameterValue";
 
     @NonNls
+    String SAME_PARAMETER_VALUE = ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME;
+
+    @NonNls
     String STRING_EQUALITY = "StringEquality";
 
     @NonNls
@@ -115,6 +122,24 @@ public interface Constants {
 
     @NonNls
     String LAMBDA_PARAMETER_TYPE_CAN_BE_SPECIFIED = "LambdaParameterTypeCanBeSpecified";
+
+    @NonNls
+    String FIELD_CAN_BE_LOCAL = "FieldCanBeLocal";
+
+    @NonNls
+    String REDUNDANT_SUPPRESSION = "RedundantSuppression";
+
+    @NonNls
+    String REDUNDANT_METHOD_OVERRIDE = "RedundantMethodOverride";
+
+    @NonNls
+    String UNRESOLVED_PROPERTY_KEY = "UnresolvedPropertyKey";
+
+    @NonNls
+    String FUNCTIONAL_EXPRESSION_CAN_BE_FOLDED = "FunctionalExpressionCanBeFolded";
+
+    @NonNls
+    String SPELL_CHECKING_INSPECTION = "SpellCheckingInspection";
 
     /**
      * <b>boxing</b>: suppresses warnings related to boxing/unboxing operations
@@ -251,7 +276,5 @@ public interface Constants {
      */
     @NonNls
     String SYNC_OVERRIDE = "sync-override";
-
   }
-
 }

@@ -225,7 +225,7 @@ public interface EqualableArray<T> extends Equalable<@NotNull EqualableArray<@No
       if (isNull()) {
         return false;
       }
-      return EqualableInteger.element(s.length).isBetween(lowerBoundary, higherBoundary);
+      return EqualableInteger.element(s.length).isBetweenInclusive(lowerBoundary, higherBoundary);
     }
   }
 }

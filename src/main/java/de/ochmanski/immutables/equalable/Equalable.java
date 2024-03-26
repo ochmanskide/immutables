@@ -144,8 +144,14 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <E extends @NotNull Enum<@NotNull E>> Equalable.EnumHolder<@NotNull E> element(@Nullable final E s) {
-    return EnumHolder.<@NotNull E>builder().s(s).build();
+  public static <E extends @NotNull Enum<@NotNull E>> Equalable.EnumHolder<@NotNull E> of(@Nullable final E s) {
+    return EqualableHolder.<@NotNull E>element(s);
+  }
+
+  @NotNull
+  @Contract(value = "_ -> new", pure = true)
+  public static <E extends @NotNull Enum<@NotNull E>> Equalable.EnumHolder<@NotNull E> element(@Nullable final E s) {
+    return EnumHolder.<@NotNull E>of(s);
   }
 
   @Contract(pure = true)
@@ -335,14 +341,14 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static <E extends @NotNull Enum<@NotNull E>> Equalable.@Unmodifiable EnumHolder<@NotNull E> of(@NotNull final E s) {
-      return EnumHolder.<@NotNull E>builder().s(s).build();
+    public static <E extends @NotNull Enum<@NotNull E>> Equalable.EnumHolder<@NotNull E> of(@Nullable final E s) {
+      return EqualableHolder.<@NotNull E>element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static <E extends @NotNull Enum<@NotNull E>> Equalable.@Unmodifiable EnumHolder<@NotNull E> element(@NotNull final E s) {
-      return EnumHolder.<@NotNull E>builder().s(s).build();
+    public static <E extends @NotNull Enum<@NotNull E>> Equalable.EnumHolder<@NotNull E> element(@Nullable final E s) {
+      return EnumHolder.<@NotNull E>of(s);
     }
   }
 
@@ -417,6 +423,18 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     public boolean isSameAs(@Nullable final S other) {
       return Equalable.<@NotNull S>areTheSame(s, other);
     }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    public static <E extends @NotNull Enum<@NotNull E>> Equalable.EnumHolder<@NotNull E> of(@Nullable final E s) {
+      return EnumHolder.<@NotNull E>element(s);
+    }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    public static <E extends @NotNull Enum<@NotNull E>> Equalable.EnumHolder<@NotNull E> element(@Nullable final E s) {
+      return EnumHolder.<@NotNull E>builder().s(s).build();
+    }
   }
 
   interface EqualableString {
@@ -469,23 +487,24 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Value
     @Builder
+    @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     class Holder {// implements Equalable<@NotNull String> {
 
       @Nullable String s;
 
       @Contract(pure = true)
-      public final boolean isNotIn(@NotNull final String @NotNull ... array) {
+      public boolean isNotIn(@NotNull final String @NotNull ... array) {
         return !isIn(array);
       }
 
       @Contract(pure = true)
-      public final boolean isIn(@NotNull final String @NotNull ... array) {
+      public boolean isIn(@NotNull final String @NotNull ... array) {
         return isInArray(array);
       }
 
       @Contract(pure = true)
-      public final boolean isNotInArray(@NotNull final String @NotNull [] array) {
+      public boolean isNotInArray(@NotNull final String @NotNull [] array) {
         return !isInArray(array);
       }
 

@@ -46,21 +46,34 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   }
 
   @NotNull
-  @SuppressWarnings(Constants.Warning.RAWTYPES)
-  private static final IntFunction<@NotNull Fluent @NotNull []> DEFAULT_KEY = Fluent @NotNull []::new;
+  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = createDefaultKey();
+
+  @NotNull
+  @Contract(pure = true)
+  private static IntFunction<@NotNull Fluent<?> @NotNull []> createDefaultKey() {
+    return Fluent @NotNull []::new;
+  }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings(Constants.Warning.UNCHECKED)
   public static ImmutableList<@NotNull Fluent<?>> empty() {
     return EMPTY;
   }
 
   @NotNull
-  @SuppressWarnings(Constants.Warning.RAWTYPES)
-  private static final ImmutableList EMPTY = ImmutableList.builder().build();
+  @Unmodifiable
+  @UnmodifiableView
+  private static final ImmutableList<@NotNull Fluent<?>> EMPTY = createConstant();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "-> new", pure = true)
+  private static ImmutableList<@NotNull Fluent<?>> createConstant() {
+    return ImmutableList.<@NotNull Fluent<?>>builder().build();
+  }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">

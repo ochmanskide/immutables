@@ -40,26 +40,42 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   IntFunction<@NotNull E @NotNull []> key = defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
+  @NotNull
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  @Contract(value = "-> new", pure = true)
+  private static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) DEFAULT_KEY;
+  }
+
+  @NotNull
+  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = createDefaultKey();
+
+  @NotNull
+  @Contract(pure = true)
+  private static IntFunction<@NotNull Fluent<?> @NotNull []> createDefaultKey() {
+    return Fluent @NotNull []::new;
+  }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
   public static EqualableSet<? extends @NotNull Fluent<?>> empty() {
-    return EMPTY_SET;
+    return EMPTY;
   }
-
-  private static final EqualableSet EMPTY_SET = EqualableSet.builder().build();
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  public static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Fluent @NotNull []::new;
-  }
+  private static final EqualableSet<? extends @NotNull Fluent<?>> EMPTY = createConstant();
 
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "-> new", pure = true)
+  private static EqualableSet<? extends @NotNull Fluent<? extends @NotNull Equalable<?>>> createConstant() {
+    return (EqualableSet) EqualableSet.<@NotNull Fluent>builder().build();
+  }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">

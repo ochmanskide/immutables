@@ -38,6 +38,22 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  @Contract(value = "-> new", pure = true)
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) DEFAULT_KEY;
+  }
+
+  @NotNull
+  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = createDefaultKey();
+
+  @NotNull
+  @Contract(pure = true)
+  private static IntFunction<@NotNull Fluent<?> @NotNull []> createDefaultKey() {
+    return Fluent @NotNull []::new;
+  }
+
+  @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
@@ -45,13 +61,17 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
     return EMPTY_SET;
   }
 
-  private static final ImmutableSet<@NotNull Fluent<?>> EMPTY_SET = ImmutableSet.<@NotNull Fluent<?>>builder().build();
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  private static final ImmutableSet<@NotNull Fluent<?>> EMPTY_SET = createConstant();
 
   @NotNull
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  @Contract(value = " -> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Fluent @NotNull []::new;
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "-> new", pure = true)
+  private static ImmutableSet<@NotNull Fluent<?>> createConstant() {
+    return ImmutableSet.<@NotNull Fluent<?>>builder().build();
   }
   //</editor-fold>
 

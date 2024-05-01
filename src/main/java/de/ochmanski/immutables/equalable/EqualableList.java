@@ -1,6 +1,5 @@
 package de.ochmanski.immutables.equalable;
 
-import de.ochmanski.immutables.StringWrapper;
 import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.fluent.Fluent;

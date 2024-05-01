@@ -473,7 +473,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
     static boolean areNotEqual(@Nullable final String a, @Nullable final String b) {
-      return !EqualableString.areEqual(a, b);
+      return !EqualableString.<@NotNull String>areEqual(a, b);
     }
 
     @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
@@ -493,7 +493,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
     static boolean areNotEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
-      return !EqualableString.areEqualIgnoreCase(a, b);
+      return !EqualableString.<@NotNull String>areEqualIgnoreCase(a, b);
     }
 
     @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
@@ -503,7 +503,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
     public static boolean areEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
-      return EqualableString.areTheSame(a, b) || EqualableString.bothAreBlank(a, b) || (a != null && a.equalsIgnoreCase(b));
+      return EqualableString.<@NotNull String>areTheSame(a, b) || EqualableString.<@NotNull String>bothAreBlank(a, b) || (a != null && a.equalsIgnoreCase(b));
     }
 
     @Contract(value = "null, null -> true", pure = true)
@@ -513,7 +513,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(value = "null, null -> true", pure = true)
     static boolean bothAreNotBlank(@Nullable final String a, @Nullable final String b) {
-      return !EqualableString.bothAreBlank(a, b);
+      return !EqualableString.<@NotNull String>bothAreBlank(a, b);
     }
 
     @Contract(value = "null, null -> false", pure = true)
@@ -533,7 +533,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     static boolean areNotTheSame(@Nullable final String a, @Nullable final String b) {
-      return !EqualableString.areTheSame(a, b);
+      return !EqualableString.<@NotNull String>areTheSame(a, b);
     }
 
     @Contract(pure = true)
@@ -589,7 +589,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isIn(@NotNull final EqualableString @NotNull ... array) {
-
+      return isInArray(array);
     }
 
     @Override
@@ -610,7 +610,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isInIgnoreCase(@NotNull final EqualableString @NotNull ... array) {
-
+      return isInArrayIgnoreCase(array);
     }
 
     @Contract(pure = true)
@@ -625,7 +625,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isInArray(@NotNull final EqualableString @NotNull [] array) {
-
+      final List<@NotNull EqualableString> list = Arrays.stream(array).toList();
+      return isInEqualableString(list);
     }
 
     @Override
@@ -647,7 +648,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isInArrayIgnoreCase(@NotNull final EqualableString @NotNull [] array) {
-
+      final List<@NotNull EqualableString> list = Arrays.stream(array).toList();
+      return isInIgnoreCaseEqualableString(list);
     }
 
     @Contract(pure = true)
@@ -663,7 +665,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isInEqualableString(@NotNull final Collection<? extends @NotNull EqualableString> elements) {
-
+      return !elements.isEmpty() && isInEqualableString(Set.<@NotNull EqualableString>copyOf(elements));
     }
 
     @Override
@@ -684,7 +686,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isInIgnoreCaseEqualableString(@NotNull final Collection<? extends @NotNull EqualableString> elements) {
-
+      return !elements.isEmpty() && isInIgnoreCaseEqualableString(Set.<@NotNull EqualableString>copyOf(elements));
     }
 
     @Contract(pure = true)
@@ -700,7 +702,10 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isInEqualableString(@NotNull final Set<? extends @NotNull EqualableString> elements) {
-
+      if (null == plain) {
+        return false;
+      }
+      return elements.contains(this);
     }
 
     @Override
@@ -724,7 +729,10 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isInIgnoreCaseEqualableString(@NotNull final Set<? extends @NotNull EqualableString> elements) {
-
+      if (null == plain) {
+        return false;
+      }
+      return elements.stream().anyMatch(p -> p.isEqualToIgnoreCase(plain));
     }
 
     @Contract(pure = true)
@@ -735,7 +743,6 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       return elements.stream().anyMatch(p -> p.equalsIgnoreCase(plain));
     }
 
-
     @Contract(pure = true)
     public final boolean isNotInEqualableString(@NotNull final Stream<? extends @NotNull EqualableString> elements) {
       return !isInEqualableString(elements);
@@ -743,13 +750,13 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isInEqualableString(@NotNull final Stream<? extends @NotNull EqualableString> elements) {
-
+      return elements.anyMatch(p -> p.isEqualTo(plain));
     }
 
     @Override
     @Contract(pure = true)
     public final boolean isIn(@NotNull final Stream<? extends @NotNull String> elements) {
-      return elements.anyMatch(p -> EqualableString.areTheSame(p, plain));
+      return elements.anyMatch(p -> EqualableString.areEqual(p, plain));
     }
 
     @Contract(pure = true)
@@ -795,7 +802,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isEqualToIgnoreCase(@Nullable final String other) {
-      return EqualableString.areEqualIgnoreCase(plain, other);
+      return EqualableString.<@NotNull String>areEqualIgnoreCase(plain, other);
     }
 
     @Contract(pure = true)
@@ -805,13 +812,13 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isSameAs(@Nullable final EqualableString other) {
-      return EqualableString.areTheSame(plain, null == other ? null : other.getPlain());
+      return EqualableString.<@NotNull String>areTheSame(plain, null == other ? null : other.getPlain());
     }
 
     @Override
     @Contract(pure = true)
     public final boolean isSameAs(@Nullable final String other) {
-      return EqualableString.areTheSame(plain, other);
+      return EqualableString.<@NotNull String>areTheSame(plain, other);
     }
 
     @JsonIgnore
@@ -821,7 +828,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @JsonIgnore
     public final boolean isBlank() {
-      return Equalable.<@NotNull String>areTheSame(plain, BLANK) || EqualableString.isNullOrBlank(plain);
+      return Equalable.<@NotNull String>areTheSame(plain, BLANK) || EqualableString.<@NotNull String>isNullOrBlank(plain);
     }
     //</editor-fold>
   }

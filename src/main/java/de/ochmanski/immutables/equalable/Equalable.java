@@ -461,7 +461,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   @Builder
   @Unmodifiable
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  class EqualableString implements Not<@NotNull String> {
+  class EqualableString implements Equalable<@NotNull EqualableString>, Not<@NotNull Equalable<@NotNull EqualableString>> {
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
     static boolean areNotEqual(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
@@ -655,6 +655,12 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Override
     @Contract(pure = true)
+    public boolean isNotIn(@NotNull final Collection<? extends @NotNull Equalable<@NotNull EqualableString>> elements) {
+      return !isIn(elements);
+    }
+
+    @Override
+    @Contract(pure = true)
     public final boolean isIn(@NotNull final Collection<? extends @NotNull Equalable<@NotNull EqualableString>> elements) {
       return !elements.isEmpty() && isIn(Set.<@NotNull Equalable<@NotNull EqualableString>>copyOf(elements));
     }
@@ -682,6 +688,12 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     @Contract(pure = true)
     public final boolean isInIgnoreCasePlain(@NotNull final Collection<@NotNull String> elements) {
       return !elements.isEmpty() && isInIgnoreCasePlain(Set.<@NotNull String>copyOf(elements));
+    }
+
+    @Override
+    @Contract(pure = true)
+    public boolean isNotIn(@NotNull final Set<? extends @NotNull Equalable<@NotNull EqualableString>> elements) {
+      return !isIn(elements);
     }
 
     @Override

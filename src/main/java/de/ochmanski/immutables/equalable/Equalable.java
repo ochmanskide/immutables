@@ -144,14 +144,14 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  public static <E extends @NotNull Enum<@NotNull E>> Equalable.EnumHolder<@NotNull E> of(@Nullable final E s) {
+  public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum.EnumHolder<@NotNull E> of(@Nullable final E s) {
     return EqualableHolder.<@NotNull E>element(s);
   }
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  public static <E extends @NotNull Enum<@NotNull E>> Equalable.EnumHolder<@NotNull E> element(@Nullable final E s) {
-    return EnumHolder.<@NotNull E>of(s);
+  public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum.EnumHolder<@NotNull E> element(@Nullable final E s) {
+    return EqualableEnum.EnumHolder.<@NotNull E>of(s);
   }
 
   @Contract(pure = true)
@@ -270,47 +270,30 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   @Value
   @Builder
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  class EqualableHolder<S> {
+  class GenericHolder<S> implements EqualableHolder<@Nullable S> {
 
     @Nullable S s;
 
-    @SafeVarargs
-    @Contract(pure = true)
-    public final boolean isNotIn(@NotNull final S @NotNull ... array) {
-      return !isIn(array);
-    }
-
+    @Override
     @SafeVarargs
     @Contract(pure = true)
     public final boolean isIn(@NotNull final S @NotNull ... array) {
       return isInArray(array);
     }
 
-    @Contract(pure = true)
-    public boolean isNotInArray(@NotNull final S @NotNull [] array) {
-      return !isInArray(array);
-    }
-
+    @Override
     @Contract(pure = true)
     public boolean isInArray(@NotNull final S @NotNull [] array) {
       return isIn(List.<@NotNull S>of(array));
     }
 
-    @Contract(pure = true)
-    public boolean isNotIn(@NotNull final Collection<? extends @NotNull S> elements) {
-      return !isIn(elements);
-    }
-
+    @Override
     @Contract(pure = true)
     public boolean isIn(@NotNull final Collection<? extends @NotNull S> elements) {
       return !elements.isEmpty() && isIn(Set.<@NotNull S>copyOf(elements));
     }
 
-    @Contract(pure = true)
-    public boolean isNotIn(@NotNull final Set<? extends @NotNull S> elements) {
-      return !isIn(elements);
-    }
-
+    @Override
     @Contract(pure = true)
     public boolean isIn(@NotNull final Set<? extends @NotNull S> elements) {
       if (null == s) {
@@ -319,21 +302,13 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       return elements.contains(s);
     }
 
-    @Contract(value = "null -> true", pure = true)
-    public boolean isNotEqualTo(@Nullable final S other) {
-      return !isEqualTo(other);
-    }
-
+    @Override
     @Contract(value = "null -> false", pure = true)
     public boolean isEqualTo(@Nullable final S other) {
       return Equalable.<@NotNull S>areEqual(s, other);
     }
 
-    @Contract(value = "null -> true", pure = true)
-    public boolean isNotSameAs(@Nullable final S other) {
-      return !isSameAs(other);
-    }
-
+    @Override
     @Contract(value = "null -> false", pure = true)
     public boolean isSameAs(@Nullable final S other) {
       return Equalable.<@NotNull S>areTheSame(s, other);
@@ -341,99 +316,149 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    public static <E extends @NotNull Enum<@NotNull E>> Equalable.EnumHolder<@NotNull E> of(@Nullable final E s) {
+    public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum.EnumHolder<@NotNull E> of(@Nullable final E s) {
       return EqualableHolder.<@NotNull E>element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    public static <E extends @NotNull Enum<@NotNull E>> Equalable.EnumHolder<@NotNull E> element(@Nullable final E s) {
-      return EnumHolder.<@NotNull E>of(s);
+    public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum.EnumHolder<@NotNull E> element(@Nullable final E s) {
+      return EqualableEnum.EnumHolder.<@NotNull E>of(s);
     }
   }
 
-  @Value
-  @Builder
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  class EnumHolder<S extends @NotNull Enum<@NotNull S>> {
+  interface EqualableEnum {
 
-    @Nullable S s;
-
-    @SafeVarargs
-    @Contract(pure = true)
-    public final boolean isNotIn(@NotNull final S @NotNull ... array) {
-      return !isIn(array);
+    @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
+    static boolean areNotEqual(@Nullable final String a, @Nullable final String b) {
+      return !Equalable.EqualableString.areEqual(a, b);
     }
 
-    @SafeVarargs
-    @Contract(pure = true)
-    public final boolean isIn(@NotNull final S @NotNull ... array) {
-      return isInArray(array);
+    @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
+    static boolean areEqual(@Nullable final String a, @Nullable final String b) {
+      return Equalable.<@NotNull String>areEqual(a, b);
     }
 
-    @Contract(pure = true)
-    public boolean isNotInArray(@NotNull final S @NotNull [] array) {
-      return !isInArray(array);
+    @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
+    static boolean areNotEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
+      return !Equalable.EqualableString.areEqualIgnoreCase(a, b);
     }
 
-    @Contract(pure = true)
-    public boolean isInArray(@NotNull final S @NotNull [] array) {
-      return isIn(List.<@NotNull S>of(array));
+    @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
+    static boolean areEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
+      return Equalable.EqualableString.areTheSame(a, b) || Equalable.EqualableString.bothAreBlank(a, b) || (a != null && a.equalsIgnoreCase(b));
     }
 
-    @Contract(pure = true)
-    public boolean isNotIn(@NotNull final Collection<@NotNull S> elements) {
-      return !isIn(elements);
+    @Contract(value = "null, null -> true", pure = true)
+    static boolean bothAreNotBlank(@Nullable final String a, @Nullable final String b) {
+      return !Equalable.EqualableString.bothAreBlank(a, b);
     }
 
-    @Contract(pure = true)
-    public boolean isIn(@NotNull final Collection<@NotNull S> elements) {
-      return !elements.isEmpty() && isIn(EnumSet.<@NotNull S>copyOf(elements));
+    @Contract(value = "null, null -> false", pure = true)
+    static boolean bothAreBlank(@Nullable final String a, @Nullable final String b) {
+      return a != null && b != null && a.isBlank() && b.isBlank();
     }
 
     @Contract(pure = true)
-    public boolean isNotIn(@NotNull final EnumSet<@NotNull S> elements) {
-      return !isIn(elements);
+    static boolean areNotTheSame(@Nullable final String a, @Nullable final String b) {
+      return !Equalable.EqualableString.areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    public boolean isIn(@NotNull final Set<@NotNull S> elements) {
-      if (null == s) {
-        return false;
+    static boolean areTheSame(@Nullable final String a, @Nullable final String b) {
+      return Equalable.<@NotNull String>areTheSame(a, b);
+    }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    static Equalable.EqualableString.StringHolder element(@Nullable final String s) {
+      return EqualableString.StringHolder.builder().s(s).build();
+    }
+
+    @Value
+    @Builder
+    @Unmodifiable
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    class EnumHolder<S extends @NotNull Enum<@NotNull S>> {// extends EqualableHolder<S extends @NotNull Enum<@NotNull S>>
+
+      @Nullable S s;
+
+      @SafeVarargs
+      @Contract(pure = true)
+      public final boolean isNotIn(@NotNull final S @NotNull ... array) {
+        return !isIn(array);
       }
-      return elements.contains(s);
-    }
 
-    @Contract(value = "null -> true", pure = true)
-    public boolean isNotEqualTo(@Nullable final S other) {
-      return !isEqualTo(other);
-    }
+      @SafeVarargs
+      @Contract(pure = true)
+      public final boolean isIn(@NotNull final S @NotNull ... array) {
+        return isInArray(array);
+      }
 
-    @Contract(value = "null -> false", pure = true)
-    public boolean isEqualTo(@Nullable final S other) {
-      return Equalable.<@NotNull S>areEqual(s, other);
-    }
+      @Contract(pure = true)
+      public boolean isNotInArray(@NotNull final S @NotNull [] array) {
+        return !isInArray(array);
+      }
 
-    @Contract(value = "null -> true", pure = true)
-    public boolean isNotSameAs(@Nullable final S other) {
-      return !isSameAs(other);
-    }
+      @Contract(pure = true)
+      public boolean isInArray(@NotNull final S @NotNull [] array) {
+        return isIn(List.<@NotNull S>of(array));
+      }
 
-    @Contract(value = "null -> false", pure = true)
-    public boolean isSameAs(@Nullable final S other) {
-      return Equalable.<@NotNull S>areTheSame(s, other);
-    }
+      @Contract(pure = true)
+      public boolean isNotIn(@NotNull final Collection<@NotNull S> elements) {
+        return !isIn(elements);
+      }
 
-    @NotNull
-    @Contract(value = "_ -> new", pure = true)
-    public static <E extends @NotNull Enum<@NotNull E>> Equalable.EnumHolder<@NotNull E> of(@Nullable final E s) {
-      return EnumHolder.<@NotNull E>element(s);
-    }
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final Collection<@NotNull S> elements) {
+        return !elements.isEmpty() && isIn(EnumSet.<@NotNull S>copyOf(elements));
+      }
 
-    @NotNull
-    @Contract(value = "_ -> new", pure = true)
-    public static <E extends @NotNull Enum<@NotNull E>> Equalable.EnumHolder<@NotNull E> element(@Nullable final E s) {
-      return EnumHolder.<@NotNull E>builder().s(s).build();
+      @Contract(pure = true)
+      public boolean isNotIn(@NotNull final EnumSet<@NotNull S> elements) {
+        return !isIn(elements);
+      }
+
+      @Contract(pure = true)
+      public boolean isIn(@NotNull final Set<@NotNull S> elements) {
+        if (null == s) {
+          return false;
+        }
+        return elements.contains(s);
+      }
+
+      @Contract(value = "null -> true", pure = true)
+      public boolean isNotEqualTo(@Nullable final S other) {
+        return !isEqualTo(other);
+      }
+
+      @Contract(value = "null -> false", pure = true)
+      public boolean isEqualTo(@Nullable final S other) {
+        return Equalable.<@NotNull S>areEqual(s, other);
+      }
+
+      @Contract(value = "null -> true", pure = true)
+      public boolean isNotSameAs(@Nullable final S other) {
+        return !isSameAs(other);
+      }
+
+      @Contract(value = "null -> false", pure = true)
+      public boolean isSameAs(@Nullable final S other) {
+        return Equalable.<@NotNull S>areTheSame(s, other);
+      }
+
+      @NotNull
+      @Contract(value = "_ -> new", pure = true)
+      public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum.EnumHolder<@NotNull E> of(@Nullable final E s) {
+        return EnumHolder.<@NotNull E>element(s);
+      }
+
+      @NotNull
+      @Contract(value = "_ -> new", pure = true)
+      public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum.EnumHolder<@NotNull E> element(@Nullable final E s) {
+        return EnumHolder.<@NotNull E>builder().s(s).build();
+      }
     }
   }
 
@@ -481,15 +506,15 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableString.Holder element(@Nullable final String s) {
-      return EqualableString.Holder.builder().s(s).build();
+    static Equalable.EqualableString.StringHolder element(@Nullable final String s) {
+      return StringHolder.builder().s(s).build();
     }
 
     @Value
     @Builder
     @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class Holder {// implements Equalable<@NotNull String> {
+    class StringHolder {// extends EqualableHolder<@NotNull String> {
 
       @Nullable String s;
 
@@ -589,27 +614,27 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableInteger.@Unmodifiable Holder integer(final int s) {
+    static Equalable.EqualableInteger.@Unmodifiable IntHolder integer(final int s) {
       return element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableInteger.@Unmodifiable Holder of(final int s) {
+    static Equalable.EqualableInteger.@Unmodifiable IntHolder of(final int s) {
       return element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableInteger.@Unmodifiable Holder element(final int s) {
-      return EqualableInteger.Holder.builder().s(s).build();
+    static Equalable.EqualableInteger.@Unmodifiable IntHolder element(final int s) {
+      return IntHolder.builder().s(s).build();
     }
 
     @Value
     @Builder
     @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class Holder {// implements Equalable<@NotNull Integer> {
+    class IntHolder {// extends EqualableHolder<@NotNull Integer> {
 
       int s;
 
@@ -795,21 +820,21 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableLong.Holder of(final long s) {
+    static Equalable.EqualableLong.LongHolder of(final long s) {
       return element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableLong.Holder element(final long s) {
-      return EqualableLong.Holder.builder().s(s).build();
+    static Equalable.EqualableLong.LongHolder element(final long s) {
+      return LongHolder.builder().s(s).build();
     }
 
     @Value
     @Builder
     @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class Holder {// implements Equalable<@NotNull Long> {
+    class LongHolder {// extends EqualableHolder<@NotNull Long> {
 
       long s;
 
@@ -990,21 +1015,21 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableFloat.@Unmodifiable Holder of(final float s) {
+    static Equalable.EqualableFloat.@Unmodifiable FloatHolder of(final float s) {
       return element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableFloat.@Unmodifiable Holder element(final float s) {
-      return EqualableFloat.Holder.builder().s(s).build();
+    static Equalable.EqualableFloat.@Unmodifiable FloatHolder element(final float s) {
+      return FloatHolder.builder().s(s).build();
     }
 
     @Value
     @Builder
     @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class Holder { // implements Equalable<@NotNull Float> {
+    class FloatHolder { // extends EqualableHolder<@NotNull Float> {
 
       float s;
 
@@ -1176,21 +1201,21 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableDouble.@Unmodifiable Holder of(final double s) {
+    static Equalable.EqualableDouble.@Unmodifiable DoubleHolder of(final double s) {
       return element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableDouble.@Unmodifiable Holder element(final double s) {
-      return EqualableDouble.Holder.builder().s(s).build();
+    static Equalable.EqualableDouble.@Unmodifiable DoubleHolder element(final double s) {
+      return DoubleHolder.builder().s(s).build();
     }
 
     @Value
     @Builder
     @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class Holder { // implements Equalable<@NotNull Double> {
+    class DoubleHolder { // extends EqualableHolder<@NotNull Double> {
 
       double s;
 

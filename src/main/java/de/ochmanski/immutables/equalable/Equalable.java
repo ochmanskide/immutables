@@ -573,6 +573,16 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @Contract(pure = true)
+    public boolean isNotEqualTo(@Nullable final EqualableString other) {
+      return !isEqualTo(other);
+    }
+
+    @Contract(pure = true)
+    public boolean isEqualTo(@Nullable final EqualableString other) {
+      return EqualableString.areEqual(s, null == other ? null : other.getS());
+    }
+
+    @Contract(pure = true)
     public boolean isNotEqualToIgnoreCase(@Nullable final String other) {
       return !isEqualToIgnoreCase(other);
     }

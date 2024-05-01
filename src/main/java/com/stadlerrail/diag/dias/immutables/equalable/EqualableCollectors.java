@@ -25,24 +25,24 @@ public interface EqualableCollectors
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_CONCURRENT_NOID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
-      Collector.Characteristics.UNORDERED));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
+    Collector.Characteristics.UNORDERED));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_ID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_UNORDERED_ID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED,
-      Collector.Characteristics.IDENTITY_FINISH));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED,
+    Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_NOID = Collections.emptySet();
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_UNORDERED_NOID
-      = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED));
+    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED));
 
   /**
    * Returns a {@code Collector} that accumulates the input elements into a new {@code Set}. There are no guarantees on
@@ -63,8 +63,8 @@ public interface EqualableCollectors
       .supplier(HashSet::new)
       .accumulator(Set::add)
       .combiner(EqualableCollectors::combiner)
-        .characteristics(CH_UNORDERED_ID)
-        .build();
+      .characteristics(CH_UNORDERED_ID)
+      .build();
   }
 
   /**
@@ -156,7 +156,7 @@ public interface EqualableCollectors
   @RequiredArgsConstructor
   @Builder
   class CollectorImpl<T extends @NotNull Equalable<@NotNull T>, A, R>
-      implements Collector<@NotNull T, @NotNull A, @NotNull R>
+    implements Collector<@NotNull T, @NotNull A, @NotNull R>
   {
     @NotNull
     Supplier<@NotNull A> supplier;
@@ -217,5 +217,4 @@ public interface EqualableCollectors
   {
     return i -> (R)i;
   }
-
 }

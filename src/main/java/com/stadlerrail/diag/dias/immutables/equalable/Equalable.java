@@ -623,8 +623,13 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       int s;
 
       @Contract(pure = true)
+      public boolean isNotZero() {
+        return !isZero();
+      }
+
+      @Contract(pure = true)
       public boolean isZero() {
-        return Equalable.EqualableInteger.areTheSame(s, 0);
+        return EqualableInteger.areTheSame(s, 0);
       }
 
       @Contract(pure = true)
@@ -633,8 +638,23 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       }
 
       @Contract(pure = true)
+      public boolean isTwo() {
+        return EqualableInteger.areTheSame(s, 2);
+      }
+
+      @Contract(pure = true)
+      public boolean isNegativeOrZero() {
+        return isLessThanOrEqualToZero();
+      }
+
+      @Contract(pure = true)
       public boolean isNegative() {
         return isLessThanZero();
+      }
+
+      @Contract(pure = true)
+      public boolean isPositiveOrZero() {
+        return isGreaterThanOrEqualToZero();
       }
 
       @Contract(pure = true)
@@ -804,7 +824,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
       @Contract(pure = true)
       public boolean isZero() {
-        return Equalable.EqualableLong.areTheSame(s, 0);
+        return EqualableLong.areTheSame(s, 0);
       }
 
       @Contract(pure = true)
@@ -813,8 +833,23 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       }
 
       @Contract(pure = true)
+      public boolean isTwo() {
+        return EqualableLong.areTheSame(s, 2);
+      }
+
+      @Contract(pure = true)
+      public boolean isNegativeOrZero() {
+        return isLessThanOrEqualToZero();
+      }
+
+      @Contract(pure = true)
       public boolean isNegative() {
         return isLessThanZero();
+      }
+
+      @Contract(pure = true)
+      public boolean isPositiveOrZero() {
+        return isGreaterThanOrEqualToZero();
       }
 
       @Contract(pure = true)
@@ -993,8 +1028,23 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       }
 
       @Contract(pure = true)
+      public boolean isTwo() {
+        return EqualableFloat.areTheSame(s, 2);
+      }
+
+      @Contract(pure = true)
+      public boolean isNegativeOrZero() {
+        return isLessThanOrEqualToZero();
+      }
+
+      @Contract(pure = true)
       public boolean isNegative() {
         return isLessThanZero();
+      }
+
+      @Contract(pure = true)
+      public boolean isPositiveOrZero() {
+        return isGreaterThanOrEqualToZero();
       }
 
       @Contract(pure = true)
@@ -1164,8 +1214,23 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       }
 
       @Contract(pure = true)
+      public boolean isTwo() {
+        return EqualableDouble.areTheSame(s, 2);
+      }
+
+      @Contract(pure = true)
+      public boolean isNegativeOrZero() {
+        return isLessThanOrEqualToZero();
+      }
+
+      @Contract(pure = true)
       public boolean isNegative() {
         return isLessThanZero();
+      }
+
+      @Contract(pure = true)
+      public boolean isPositiveOrZero() {
+        return isGreaterThanOrEqualToZero();
       }
 
       @Contract(pure = true)

@@ -632,6 +632,11 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @Contract(pure = true)
+    public final boolean equalsIgnoreCase(@Nullable final String other) {
+      return isEqualToIgnoreCase(other);
+    }
+
+    @Contract(pure = true)
     public final boolean isEqualToIgnoreCase(@Nullable final String other) {
       return EqualableString.areEqualIgnoreCase(plain, other);
     }
@@ -639,6 +644,11 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     @Contract(pure = true)
     public final boolean isNotEqualToIgnoreCase(@Nullable final EqualableString other) {
       return !isEqualToIgnoreCase(other);
+    }
+
+    @Contract(pure = true)
+    public final boolean equalsIgnoreCase(@Nullable final EqualableString other) {
+      return isEqualToIgnoreCase(other);
     }
 
     @Contract(pure = true)

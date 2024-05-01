@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public interface EqualableHolder<S> {
+public interface Not<S> {
 
   @Contract(pure = true)
   default boolean isNotIn(@NotNull final S @NotNull ... array) {
@@ -71,10 +71,4 @@ public interface EqualableHolder<S> {
 
   @Contract(pure = true)
   boolean isSameAs(@Nullable final S other);
-
-  @NotNull
-  @Contract(value = "_ -> new", pure = true)
-  static <E extends @NotNull Enum<@NotNull E>> Equalable.EqualableEnum.EnumHolder<@NotNull E> element(@Nullable final E s) {
-    return Equalable.EqualableEnum.EnumHolder.<@NotNull E>of(s);
-  }
 }

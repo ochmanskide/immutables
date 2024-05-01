@@ -541,19 +541,19 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     @Override
     @Contract(pure = true)
     public final boolean isInArray(@NotNull final String @NotNull [] array) {
-      final List<java.lang.@NotNull String> list = Arrays.stream(array).toList();
+      final List<@NotNull String> list = Arrays.stream(array).toList();
       return isIn(list);
     }
 
     @Override
     @Contract(pure = true)
-    public boolean isIn(@NotNull final Collection<? extends java.lang.@NotNull String> elements) {
-      return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull String>copyOf(elements));
+    public boolean isIn(@NotNull final Collection<? extends @NotNull String> elements) {
+      return !elements.isEmpty() && isIn(Set.<@NotNull String>copyOf(elements));
     }
 
     @Override
     @Contract(pure = true)
-    public boolean isIn(@NotNull final Set<? extends java.lang.@NotNull String> elements) {
+    public boolean isIn(@NotNull final Set<? extends @NotNull String> elements) {
       if (null == s) {
         return false;
       }
@@ -568,13 +568,33 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Override
     @Contract(pure = true)
-    public boolean isEqualTo(final String other) {
+    public boolean isEqualTo(@Nullable final String other) {
       return EqualableString.areEqual(s, other);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotEqualToIgnoreCase(@Nullable final String other) {
+      return !isEqualToIgnoreCase(other);
+    }
+
+    @Contract(pure = true)
+    public boolean isEqualToIgnoreCase(@Nullable final String other) {
+      return EqualableString.areEqualIgnoreCase(s, other);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotEqualToIgnoreCase(@Nullable final EqualableString other) {
+      return !isEqualToIgnoreCase(other);
+    }
+
+    @Contract(pure = true)
+    public boolean isEqualToIgnoreCase(@Nullable final EqualableString other) {
+      return EqualableString.areEqualIgnoreCase(s, null == other ? null : other.getS());
     }
 
     @Override
     @Contract(pure = true)
-    public boolean isSameAs(final String other) {
+    public boolean isSameAs(@Nullable final String other) {
       return EqualableString.areTheSame(s, other);
     }
 

@@ -41,20 +41,20 @@ public interface EqualableHolder<S> {
   @Contract(pure = true)
   boolean isIn(@NotNull final Set<? extends @NotNull S> elements);
 
-  @Contract(value = "null -> true", pure = true)
+  @Contract(pure = true)
   default boolean isNotEqualTo(@Nullable final S other) {
-    return !isEqualTo();
+    return !isEqualTo(other);
   }
 
-  @Contract(value = "null -> false", pure = true)
+  @Contract(pure = true)
   boolean isEqualTo(@Nullable final S other);
 
-  @Contract(value = "null -> true", pure = true)
+  @Contract(pure = true)
   default boolean isNotSameAs(@Nullable final S other) {
-    return !isSameAs();
+    return !isSameAs(other);
   }
 
-  @Contract(value = "null -> false", pure = true)
+  @Contract(pure = true)
   boolean isSameAs(@Nullable final S other);
 
   @NotNull

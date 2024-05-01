@@ -138,8 +138,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <S> Equalable.EqualableHolder<@NotNull S> element(@Nullable final S s) {
-    return EqualableHolder.<@NotNull S>builder().s(s).build();
+  static <S> Equalable.GenericHolder<@NotNull S> element(@Nullable final S s) {
+    return GenericHolder.<@NotNull S>builder().s(s).build();
   }
 
   @NotNull
@@ -247,7 +247,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     return elements.contains(this);
   }
 
-  @Contract(value = "null -> true", pure = true)
+  @Contract(pure = true)
   default boolean isNotEqualTo(@Nullable final Equalable<@NotNull T> other) {
     return !isEqualTo(other);
   }
@@ -257,7 +257,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     return Equalable.<@NotNull Equalable<@NotNull T>>areEqual(this, other);
   }
 
-  @Contract(value = "null -> true", pure = true)
+  @Contract(pure = true)
   default boolean isNotSameAs(@Nullable final Equalable<@NotNull T> other) {
     return !isSameAs(other);
   }
@@ -303,13 +303,13 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @Override
-    @Contract(value = "null -> false", pure = true)
+    @Contract(pure = true)
     public boolean isEqualTo(@Nullable final S other) {
       return Equalable.<@NotNull S>areEqual(s, other);
     }
 
     @Override
-    @Contract(value = "null -> false", pure = true)
+    @Contract(pure = true)
     public boolean isSameAs(@Nullable final S other) {
       return Equalable.<@NotNull S>areTheSame(s, other);
     }
@@ -428,22 +428,22 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
         return elements.contains(s);
       }
 
-      @Contract(value = "null -> true", pure = true)
+      @Contract(pure = true)
       public boolean isNotEqualTo(@Nullable final S other) {
         return !isEqualTo(other);
       }
 
-      @Contract(value = "null -> false", pure = true)
+      @Contract(pure = true)
       public boolean isEqualTo(@Nullable final S other) {
         return Equalable.<@NotNull S>areEqual(s, other);
       }
 
-      @Contract(value = "null -> true", pure = true)
+      @Contract(pure = true)
       public boolean isNotSameAs(@Nullable final S other) {
         return !isSameAs(other);
       }
 
-      @Contract(value = "null -> false", pure = true)
+      @Contract(pure = true)
       public boolean isSameAs(@Nullable final S other) {
         return Equalable.<@NotNull S>areTheSame(s, other);
       }

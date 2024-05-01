@@ -1,7 +1,6 @@
 package com.stadlerrail.diag.dias.immutables.collection;
 
-import com.stadlerrail.diag.dias.immutables.equalable.Equalable;
-import com.stadlerrail.diag.dias.immutables.immutable.ImmutableMap;
+import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -33,7 +32,7 @@ public interface IMap<K extends @NotNull Comparable<? super @NotNull K>, V>
   static void of()
   {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-        + "For example: IMap.noneOf(String[]::new)");
+      + "For example: IMap.noneOf(String[]::new)");
   }
 
   @NotNull

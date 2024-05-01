@@ -3,6 +3,7 @@ package com.stadlerrail.diag.dias.immutables.collection;
 import com.stadlerrail.diag.dias.immutables.immutable.ImmutableSet;
 import org.jetbrains.annotations.*;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
@@ -55,6 +56,7 @@ public interface ISet<E> extends ICollection<@NotNull E>
    * @param o element whose presence in this set is to be tested
    * @return {@code true} if this set contains the specified element
    */
+  @Override
   default boolean contains(@NotNull final E o) {
     return getSet().contains(o);
   }
@@ -94,6 +96,7 @@ public interface ISet<E> extends ICollection<@NotNull E>
    *
    * @return an iterator over the elements in this set
    */
+  @Override
   @NotNull
   @Contract(pure = true)
   default Iterator<@NotNull E> iterator() {
@@ -108,6 +111,7 @@ public interface ISet<E> extends ICollection<@NotNull E>
    *   {@code Spliterator}.
    * @since 1.8
    */
+  @Override
   @NotNull
   @Unmodifiable
   @UnmodifiableView
@@ -166,6 +170,19 @@ public interface ISet<E> extends ICollection<@NotNull E>
     return getSet().findAny();
   }
 
+  @Override
+  @Contract(pure = true)
+  default void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer, @NotNull final Comparator<? super @NotNull E> comparator) {
+    getSet().forEachOrdered(consumer, comparator);
+  }
+
+  @Override
+  @Contract(pure = true)
+  default void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer) {
+    getSet().forEachOrdered(consumer);
+  }
+
+  @Override
   @Contract(pure = true)
   default void forEach(@NotNull final Consumer<? super @NotNull E> consumer) {
     getSet().forEach(consumer);

@@ -3,6 +3,7 @@ package com.stadlerrail.diag.dias.immutables.collection;
 import com.stadlerrail.diag.dias.immutables.immutable.ImmutableList;
 import org.jetbrains.annotations.*;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,7 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-public interface IList<E> extends ICollection<E>
+public interface IList<E> extends ICollection<@NotNull E>
 {
 
   /**
@@ -31,11 +32,16 @@ public interface IList<E> extends ICollection<E>
   static void of()
   {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-        + "For example: IList.noneOf(String[]::new)");
+      + "For example: IList.noneOf(String[]::new)");
   }
 
   default int size() {
     return getList().size();
+  }
+
+  @Override
+  default boolean isNotEmpty() {
+    return !isEmpty();
   }
 
   /**
@@ -43,6 +49,7 @@ public interface IList<E> extends ICollection<E>
    *
    * @return {@code true} if this list contains no elements
    */
+  @Override
   default boolean isEmpty() {
     return getList().isEmpty();
   }
@@ -54,6 +61,7 @@ public interface IList<E> extends ICollection<E>
    * @param o element whose presence in this list is to be tested
    * @return {@code true} if this list contains the specified element
    */
+  @Override
   default boolean contains(@NotNull final E o) {
     return getList().contains(o);
   }
@@ -117,7 +125,19 @@ public interface IList<E> extends ICollection<E>
     return getList().get(index);
   }
 
+  @Override
+  @Contract(pure = true)
+  default void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer, @NotNull final Comparator<? super @NotNull E> comparator) {
+    getList().forEachOrdered(consumer, comparator);
+  }
 
+  @Override
+  @Contract(pure = true)
+  default void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer) {
+    getList().forEachOrdered(consumer);
+  }
+
+  @Override
   @Contract(pure = true)
   default void forEach(@NotNull final Consumer<? super @NotNull E> consumer) {
     getList().forEach(consumer);
@@ -134,7 +154,9 @@ public interface IList<E> extends ICollection<E>
    *
    * @return an iterator over the elements in this set
    */
+
   @NotNull
+  @Override
   @Contract(pure = true)
   default Iterator<@NotNull E> iterator() {
     return getList().iterator();
@@ -149,6 +171,7 @@ public interface IList<E> extends ICollection<E>
    * @since 1.8
    */
   @NotNull
+  @Override
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   default Stream<@NotNull E> stream() {

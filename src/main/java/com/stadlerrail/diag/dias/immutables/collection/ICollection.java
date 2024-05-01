@@ -6,18 +6,21 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.lang.reflect.Array;
+import java.util.Comparator;
+import java.util.function.Consumer;
 import java.util.function.IntFunction;
+import java.util.stream.Stream;
 
 import static com.stadlerrail.diag.dias.immutables.constants.Constants.Warning.UNCHECKED;
 
-public interface ICollection<E> extends Checked<@NotNull E>
+public interface ICollection<E> extends Checked<@NotNull E>, Iterable<@NotNull E>
 {
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <E> Class<@NotNull E> getComponentType(@NotNull final ICollection<@NotNull E> collection)
+  static <@Unmodifiable E> Class<@NotNull E> getComponentType(@NotNull final ICollection<@NotNull E> collection)
   {
     return getComponentTypeFromConstructor(collection.getKey());
   }
@@ -35,7 +38,7 @@ public interface ICollection<E> extends Checked<@NotNull E>
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  static <S> Class<@NotNull S> getComponentTypeFromConstructor(
+  static <@Unmodifiable S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return Checked.<@NotNull S>getComponentTypeFromConstructor(constructor);
@@ -51,9 +54,53 @@ public interface ICollection<E> extends Checked<@NotNull E>
     return (@NotNull T @NotNull []) Array.newInstance(type, 0);
   }
 
+  @Contract(pure = true)
   default boolean isNotEmpty() {
     return !isEmpty();
   }
 
+  @Contract(pure = true)
   boolean isEmpty();
+
+  @Contract(pure = true)
+  default boolean doesNotContain(@NotNull E o) {
+    return !contains(o);
+  }
+
+  @Contract(pure = true)
+  boolean contains(@NotNull E o);
+
+  @Contract(pure = true)
+  void forEachOrdered(@NotNull Consumer<? super @NotNull E> consumer, @NotNull Comparator<? super @NotNull E> comparator);
+
+  @Contract(pure = true)
+  default void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer) {
+    sortedStream().forEachOrdered(consumer);
+  }
+
+  @Override
+  @Contract(pure = true)
+  void forEach(@NotNull final Consumer<? super @NotNull E> consumer);
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  default Stream<@NotNull E> sortedStream(@NotNull Comparator<? super @NotNull E> comparator) {
+    return stream().sorted(comparator);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  default Stream<@NotNull E> sortedStream() {
+    return stream().sorted();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " -> new", pure = true)
+  Stream<@NotNull E> stream();
 }

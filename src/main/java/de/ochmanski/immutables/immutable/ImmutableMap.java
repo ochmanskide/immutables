@@ -4,6 +4,7 @@ import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
+import de.ochmanski.immutables.fluent.Fluent;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -14,31 +15,26 @@ import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
-
 @Value
 @UnmodifiableView
 @ParametersAreNonnullByDefault
+@EqualsAndHashCode(doNotUseGetters = true)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
+public class ImmutableMap<K extends @NotNull Comparable<? super @NotNull K>, V> implements IMap<@NotNull K, @NotNull V> {
 
   @Unmodifiable
   @UnmodifiableView
-  @NonNull
   @NotNull("Given map cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given map cannot be null.")
   @Builder.Default
   Map<@NotNull K, @NotNull V> map = Map.of();
 
-  @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
   IntFunction<@NotNull K @NotNull []> key = defaultConstructor();
 
-  @NonNull
   @NotNull("Given valueType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given valueType cannot be null.")
   @Builder.Default
@@ -50,33 +46,20 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
   @UnmodifiableView
   @Contract(pure = true)
   @SuppressWarnings(Constants.Warning.UNCHECKED)
-  public static <K, V> ImmutableMap<@NotNull K, @NotNull V> empty() {
+  public static ImmutableMap<? extends @NotNull Comparable<?>, @NotNull Fluent<?>> empty() {
     return EMPTY;
   }
 
   @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @SuppressWarnings(RAWTYPES)
-  private static final ImmutableMap EMPTY = create();
+  @SuppressWarnings(Constants.Warning.RAWTYPES)
+  private static final ImmutableMap EMPTY = ImmutableMap.builder().build();
 
   @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "-> new", pure = true)
-  private static <K, V> ImmutableMap<@NotNull K, @NotNull V> create() {
-    return ImmutableMap.<@NotNull K, @NotNull V>builder().build();
-  }
-
-  @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   @Contract(value = "-> new", pure = true)
   private static <S> IntFunction<@NotNull S @NotNull []> defaultConstructor() {
-    return (IntFunction) DEFAULT_KEY;
+    return (IntFunction) Fluent @NotNull []::new;
   }
-
-  @NotNull
-  private static final IntFunction<@NotNull Object @NotNull []> DEFAULT_KEY = Object @NotNull []::new;
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
@@ -84,7 +67,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_,_ -> new", pure = true)
-  public static <K, V> ImmutableMap<@NotNull K, @NotNull V> noneOf(
+  public static <K extends @NotNull Comparable<? super @NotNull K>, V> ImmutableMap<@NotNull K, @NotNull V> noneOf(
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value) {
     return ImmutableMap.<@NotNull K, @NotNull V>of(Map.of(), key, value);
@@ -94,7 +77,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _, _ -> new", pure = true)
-  public static <K, V> ImmutableMap<@NotNull K, @NotNull V> of(
+  public static <K extends @NotNull Comparable<? super @NotNull K>, V> ImmutableMap<@NotNull K, @NotNull V> of(
     @NotNull final Map<@NotNull K, @NotNull V> map,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value) {
@@ -120,7 +103,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public ImmutableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entrySet() {
-    return ImmutableSet.<@NotNull K, @NotNull V>copyOfEntries(unwrap().entrySet(), Entry @NotNull []::new);
+    return ImmutableSet.<@NotNull K, @NotNull V>copyOfEntries(unwrap().entrySet(), Entry[]::new);
   }
 
   @NotNull
@@ -149,6 +132,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
    *
    * @return the number of elements in this map
    */
+  @Override
   public int size() {
     return map.size();
   }
@@ -158,6 +142,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
    *
    * @return {@code true} if this map contains no elements
    */
+  @Override
   public boolean isEmpty() {
     return map.isEmpty();
   }
@@ -169,6 +154,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
    * @param o element whose presence in this map is to be tested
    * @return {@code true} if this map contains the specified element
    */
+  @Override
   public boolean containsKey(@NotNull final K o) {
     return map.containsKey(o);
   }
@@ -192,13 +178,14 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> this", pure = true)
-  public IMap<@NotNull K, @NotNull V> getMap() {
+  public ImmutableMap<@NotNull K, @NotNull V> getMap() {
     return this;
   }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="4. Positional Access Operations">
   @NotNull
+  @Override
   public Optional<@Nullable V> get(@NotNull final K key) {
     return Optional.ofNullable(map.get(key));
   }

@@ -1,8 +1,13 @@
 package de.ochmanski.immutables.equalable;
 
 import de.ochmanski.immutables.collection.IMap;
+import de.ochmanski.immutables.constants.Constants;
+import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.immutable.ImmutableMap;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -11,31 +16,25 @@ import org.jetbrains.annotations.UnmodifiableView;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.IntFunction;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
-
 @Value
 @UnmodifiableView
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends @NotNull Equalable<@NotNull V>>
+public class EqualableMap<K extends @NotNull Equalable<@NotNull K> & @NotNull Comparable<? super @NotNull K>, V extends @NotNull Equalable<@NotNull V>>
   implements IMap<@NotNull K, @NotNull V> {
 
   @UnmodifiableView
-  @NonNull
   @NotNull("EqualableEnumMap::Builder 001 Given EqualableEnumMap::map cannot be null.")
   @javax.validation.constraints.NotNull(message = "EqualableEnumMap::Builder 001: Given map cannot be null.")
   @Builder.Default
-  ImmutableMap<@NonNull @NotNull K, @NotNull V> map = ImmutableMap.empty();
+  ImmutableMap<@NotNull K, @NotNull V> map = (ImmutableMap) ImmutableMap.empty();
 
-  @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
   IntFunction<@NotNull K @NotNull []> key = defaultConstructor();
 
-  @NonNull
   @NotNull("Given valueType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given valueType cannot be null.")
   @Builder.Default
@@ -43,14 +42,11 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends @N
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   @Contract(value = "-> new", pure = true)
   private static <S> IntFunction<@NotNull S @NotNull []> defaultConstructor() {
-    return (IntFunction) DEFAULT_KEY;
+    return (IntFunction) Fluent @NotNull []::new;
   }
-
-  @NotNull
-  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable @NotNull []::new;
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
@@ -71,6 +67,15 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K>, V extends @N
   @Contract(value = " -> new", pure = true)
   public EqualableMap<@NotNull K, @NotNull V> deepClone() {
     return toBuilder().build();
+  }
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  public ImmutableMap<@NotNull K, @NotNull V> getMap() {
+    return map;
   }
 
   @NotNull

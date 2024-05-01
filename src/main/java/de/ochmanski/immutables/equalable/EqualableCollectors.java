@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.equalable;
 
+import de.ochmanski.immutables.fluent.Fluent;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -147,11 +148,8 @@ public interface EqualableCollectors
   @Contract(pure = true)
   @SuppressWarnings({UNCHECKED, RAWTYPES})
   static <T> IntFunction<@NotNull T @NotNull []> tGenerator() {
-    return (IntFunction) DEFAULT_KEY;
+    return (IntFunction) Fluent @NotNull []::new;
   }
-
-  @NotNull
-  IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable @NotNull []::new;
 
   @Value
   @RequiredArgsConstructor
@@ -203,7 +201,6 @@ public interface EqualableCollectors
     public Set<@NotNull Characteristics> characteristics() {
       return characteristics;
     }
-
   }
 
   @NotNull
@@ -213,4 +210,5 @@ public interface EqualableCollectors
   {
     return i -> (R)i;
   }
+
 }

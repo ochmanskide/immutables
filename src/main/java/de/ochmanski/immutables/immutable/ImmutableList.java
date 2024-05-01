@@ -5,83 +5,65 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ochmanski.immutables.collection.Checked;
 import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.constants.Constants;
+import de.ochmanski.immutables.fluent.Fluent;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
-
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 @Value
 @Unmodifiable
 @UnmodifiableView
 @ParametersAreNonnullByDefault
+@EqualsAndHashCode(doNotUseGetters = true)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class ImmutableList<E> implements IList<@NotNull E> {
 
-  @NonNull
   @NotNull("Given list cannot be null.")
   @Unmodifiable
   @UnmodifiableView
   @javax.validation.constraints.NotNull(message = "Given list cannot be null.")
   @Builder.Default
-  List<@NonNull @NotNull E> list = List.of();
+  List<@NotNull E> list = List.of();
 
-  @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
+  IntFunction<@NotNull E @NotNull []> key = defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   @Contract(value = "-> new", pure = true)
   private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
     return (IntFunction) DEFAULT_KEY;
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Object @NotNull []> DEFAULT_KEY = Object @NotNull []::new;
+  @SuppressWarnings(Constants.Warning.RAWTYPES)
+  private static final IntFunction<@NotNull Fluent @NotNull []> DEFAULT_KEY = Fluent @NotNull []::new;
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
   @SuppressWarnings(Constants.Warning.UNCHECKED)
-  public static <E> ImmutableList<@NotNull E> empty() {
-    return EMPTY_SET;
+  public static ImmutableList<@NotNull Fluent<?>> empty() {
+    return EMPTY;
   }
 
   @NotNull
-  @Unmodifiable
-  @UnmodifiableView
   @SuppressWarnings(Constants.Warning.RAWTYPES)
-  private static final ImmutableList EMPTY_SET = create();
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  private static <E> ImmutableList<@NotNull E> create() {
-    return ImmutableList.<@NotNull E>builder().build();
-  }
+  private static final ImmutableList EMPTY = ImmutableList.builder().build();
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  public static <S> ImmutableList<@NotNull S> noneOf(
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return ImmutableList.<@NotNull S>of(List.of(), constructor);
-  }
 
   @NotNull
   @Unmodifiable
@@ -90,16 +72,6 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   public static ImmutableList<@NotNull String> of(
     @NotNull final String e1) {
     return ImmutableList.<@NotNull String>of(e1, String @NotNull []::new);
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_, _ -> new", pure = true)
-  public static <S> ImmutableList<@NotNull S> of(
-    @NotNull final S e1,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return ImmutableList.<@NotNull S>of(List.of(e1), constructor);
   }
 
   @NotNull
@@ -115,35 +87,12 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "_, _, _-> new", pure = true)
-  public static <S> ImmutableList<@NotNull S> of(
-    @NotNull final S e1,
-    @NotNull final S e2,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return ImmutableList.<@NotNull S>of(List.of(e1, e2), constructor);
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
   @Contract(value = "_, _, _ -> new", pure = true)
   public static ImmutableList<@NotNull String> of(
     @NotNull final String e1,
     @NotNull final String e2,
     @NotNull final String e3) {
     return ImmutableList.<@NotNull String>of(e1, e2, e3, String @NotNull []::new);
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "_, _, _, _ -> new", pure = true)
-  public static <S> ImmutableList<@NotNull S> of(
-    @NotNull final S e1,
-    @NotNull final S e2,
-    @NotNull final S e3,
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return ImmutableList.<@NotNull S>of(List.of(e1, e2, e3), constructor);
   }
 
   @NotNull
@@ -162,6 +111,106 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _, _, _, _ -> new", pure = true)
+  public static ImmutableList<@NotNull String> of(
+    @NotNull final String e1,
+    @NotNull final String e2,
+    @NotNull final String e3,
+    @NotNull final String e4,
+    @NotNull final String e5) {
+    return ImmutableList.<@NotNull String>of(e1, e2, e3, e4, e5, String @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _ -> new", pure = true)
+  public static ImmutableList<@NotNull String> of(
+    @NotNull final String e1,
+    @NotNull final String e2,
+    @NotNull final String e3,
+    @NotNull final String e4,
+    @NotNull final String e5,
+    @NotNull final String e6) {
+    return ImmutableList.<@NotNull String>of(e1, e2, e3, e4, e5, e6, String @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
+  public static ImmutableList<@NotNull String> of(
+    @NotNull final String e1,
+    @NotNull final String e2,
+    @NotNull final String e3,
+    @NotNull final String e4,
+    @NotNull final String e5,
+    @NotNull final String e6,
+    @NotNull final String e7) {
+    return ImmutableList.<@NotNull String>of(e1, e2, e3, e4, e5, e6, e7, String @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _ -> new", pure = true)
+  public static ImmutableList<@NotNull String> of(
+    @NotNull final String e1,
+    @NotNull final String e2,
+    @NotNull final String e3,
+    @NotNull final String e4,
+    @NotNull final String e5,
+    @NotNull final String e6,
+    @NotNull final String e7,
+    @NotNull final String e8) {
+    return ImmutableList.<@NotNull String>of(e1, e2, e3, e4, e5, e6, e7, e8, String @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> noneOf(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ImmutableList.<@NotNull S>of(List.of(), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ImmutableList.<@NotNull S>of(List.of(e1), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _-> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ImmutableList.<@NotNull S>of(List.of(e1, e2), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ImmutableList.<@NotNull S>of(List.of(e1, e2, e3), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _ -> new", pure = true)
   public static <S> ImmutableList<@NotNull S> of(
     @NotNull final S e1,
     @NotNull final S e2,
@@ -169,6 +218,68 @@ public class ImmutableList<E> implements IList<@NotNull E> {
     @NotNull final S e4,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ImmutableList.<@NotNull S>of(List.of(e1, e2, e3, e4), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ImmutableList.<@NotNull S>of(List.of(e1, e2, e3, e4, e5), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final S e6,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ImmutableList.<@NotNull S>of(List.of(e1, e2, e3, e4, e5, e6), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final S e6,
+    @NotNull final S e7,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ImmutableList.<@NotNull S>of(List.of(e1, e2, e3, e4, e5, e6, e7), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _, _ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final S e6,
+    @NotNull final S e7,
+    @NotNull final S e8,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    return ImmutableList.<@NotNull S>of(List.of(e1, e2, e3, e4, e5, e6, e7, e8), constructor);
   }
 
   @NotNull
@@ -201,6 +312,30 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   @NotNull
   @Unmodifiable
   @UnmodifiableView
+  @Contract(value = "_,_,_ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> merge(@NotNull final ImmutableList<@NotNull S> a,
+                                                    @NotNull final ImmutableList<@NotNull S> b,
+                                                    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    final Collection<@NotNull S> collection = new ArrayList<>(a.unwrap());
+    collection.addAll(b.unwrap());
+    final List<@NotNull S> checkedList = Collections.checkedList(List.copyOf(collection), getComponentTypeFromConstructor(constructor));
+    return ImmutableList.<@NotNull S>builder().list(checkedList).key(constructor).build();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static <S> ImmutableList<@NotNull S> ofCollection(
+    @NotNull final Collection<? extends @NotNull S> collection,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
+    final List<@NotNull S> checkedList = Collections.checkedList(List.copyOf(collection), getComponentTypeFromConstructor(constructor));
+    return ImmutableList.<@NotNull S>builder().list(checkedList).key(constructor).build();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S> ImmutableList<@NotNull S> of(
     @NotNull final Collection<? extends @NotNull S> collection,
@@ -220,6 +355,31 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="3. implementation of IList interface">
+  @Override
+  @Contract(pure = true)
+  public void forEach(@NotNull final Consumer<? super @NotNull E> consumer) {
+    list.forEach(consumer);
+  }
+
+  @Override
+  @Contract(pure = true)
+  public void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer) {
+    list.stream().sorted().forEachOrdered(consumer);
+  }
+
+  @Override
+  @Contract(pure = true)
+  public @NotNull Iterator<@NotNull E> iterator() {
+    return list.iterator();
+  }
+
+  @NotNull
+  @Override
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public <R> Stream<@NotNull R> map(final @NotNull Function<? super @NotNull E, ? extends @NotNull R> mapper) {
+    return list.stream().map(mapper);
+  }
 
   /**
    * @return the number of elements in this list
@@ -307,7 +467,7 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> this", pure = true)
-  public IList<@NotNull E> getList() {
+  public ImmutableList<@NotNull E> getList() {
     return this;
   }
   //</editor-fold>
@@ -372,6 +532,7 @@ public class ImmutableList<E> implements IList<@NotNull E> {
    * @since 1.8
    */
   @NotNull
+  @Override
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public Stream<@NotNull E> stream() {
@@ -405,7 +566,6 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   @NotNull
   @Unmodifiable
   @Contract(value = "_, _ -> new", pure = true)
-  @SuppressWarnings(Constants.Warning.ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME)
   private String limit(@NotNull final String s, int limit) {
     final int end = Math.min(s.length(), Math.abs(limit));
     return s.substring(0, end);

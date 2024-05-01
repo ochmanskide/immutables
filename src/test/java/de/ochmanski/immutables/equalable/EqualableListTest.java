@@ -194,7 +194,7 @@ class EqualableListTest {
 
   @Test
   void toStringTest02() {
-    EqualableList<? extends @NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull StringWrapper>empty();
+    EqualableList<? extends @NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull StringWrapper>noneOf(StringWrapper[]::new);
     final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[]");
   }

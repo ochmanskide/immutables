@@ -197,7 +197,7 @@ class ImmutableListTest {
 
   @Test
   void toStringTest02() {
-    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>empty();
+    ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>noneOf(String[]::new);
     final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[]");
   }

@@ -197,7 +197,7 @@ class ImmutableSetTest {
 
   @Test
   void toStringTest02() {
-    ImmutableSet<String> unitUnderTest = ImmutableSet.<@NotNull String>empty();
+    ImmutableSet<String> unitUnderTest = ImmutableSet.<@NotNull String>noneOf(String[]::new);
     final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[]");
   }

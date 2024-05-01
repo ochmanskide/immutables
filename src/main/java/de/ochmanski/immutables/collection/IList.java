@@ -3,6 +3,7 @@ package de.ochmanski.immutables.collection;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import org.jetbrains.annotations.*;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -36,13 +37,24 @@ public interface IList<E> extends ICollection<@NotNull E> {
     return getList().size();
   }
 
+  @Override
+  default boolean isNotEmpty() {
+    return !isEmpty();
+  }
+
   /**
    * Returns {@code true} if this list contains no elements.
    *
    * @return {@code true} if this list contains no elements
    */
+  @Override
   default boolean isEmpty() {
     return getList().isEmpty();
+  }
+
+  @Override
+  default boolean doesNotContain(@NotNull final E o) {
+    return !contains(o);
   }
 
   /**
@@ -52,6 +64,7 @@ public interface IList<E> extends ICollection<@NotNull E> {
    * @param o element whose presence in this list is to be tested
    * @return {@code true} if this list contains the specified element
    */
+  @Override
   default boolean contains(@NotNull final E o) {
     return getList().contains(o);
   }
@@ -115,7 +128,19 @@ public interface IList<E> extends ICollection<@NotNull E> {
     return getList().get(index);
   }
 
+  @Override
+  @Contract(pure = true)
+  default void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer, @NotNull final Comparator<? super @NotNull E> comparator) {
+    getList().forEachOrdered(consumer, comparator);
+  }
 
+  @Override
+  @Contract(pure = true)
+  default void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer) {
+    getList().forEachOrdered(consumer);
+  }
+
+  @Override
   @Contract(pure = true)
   default void forEach(@NotNull final Consumer<? super @NotNull E> consumer) {
     getList().forEach(consumer);
@@ -132,6 +157,7 @@ public interface IList<E> extends ICollection<@NotNull E> {
    *
    * @return an iterator over the elements in this set
    */
+  @Override
   @NotNull
   @Contract(pure = true)
   default Iterator<@NotNull E> iterator() {
@@ -146,6 +172,7 @@ public interface IList<E> extends ICollection<@NotNull E> {
    * {@code Spliterator}.
    * @since 1.8
    */
+  @Override
   @NotNull
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)

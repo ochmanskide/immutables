@@ -5,7 +5,10 @@ import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.immutable.ImmutableList;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -15,8 +18,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.IntFunction;
-
-import static de.ochmanski.immutables.constants.Constants.Warning.*;
 
 @Value
 @UnmodifiableView
@@ -31,7 +32,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @UnmodifiableView
   @javax.validation.constraints.NotNull(message = "Given list cannot be null.")
   @Builder.Default
-  ImmutableList<@NotNull E> list = ImmutableList.empty();
+  ImmutableList<@NotNull E> list = (ImmutableList) ImmutableList.empty();
 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")

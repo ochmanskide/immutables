@@ -245,17 +245,19 @@ public interface IMap<K extends @NotNull Comparable<? super @NotNull K>, V> {
      * == signum(y.compareTo(z))}, for all {@code z}.
      *
      * @param o the object to be compared.
+     *
      * @return a negative integer, zero, or a positive integer as this object
-     * is less than, equal to, or greater than the specified object.
+     *     is less than, equal to, or greater than the specified object.
+     *
      * @throws NullPointerException if the specified object is null
-     * @throws ClassCastException   if the specified object's type prevents it
-     *                              from being compared to this object.
+     * @throws ClassCastException if the specified object's type prevents it
+     *     from being compared to this object.
      * @apiNote It is strongly recommended, but <i>not</i> strictly required that
-     * {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any
-     * class that implements the {@code Comparable} interface and violates
-     * this condition should clearly indicate this fact.  The recommended
-     * language is "Note: this class has a natural ordering that is
-     * inconsistent with equals."
+     *     {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any
+     *     class that implements the {@code Comparable} interface and violates
+     *     this condition should clearly indicate this fact.  The recommended
+     *     language is "Note: this class has a natural ordering that is
+     *     inconsistent with equals."
      */
     @Override
     @Contract(pure = true)
@@ -267,7 +269,7 @@ public interface IMap<K extends @NotNull Comparable<? super @NotNull K>, V> {
       if (a == b) {
         return 0;
       }
-      return a != null ? b != null ? comparingByKey().compare((Entry) a.getKey(), (Entry) b.getKey()) : -1 : 1;
+      return a != null ? b != null ? comparingByKey().compare((Entry) a, (Entry) b) : -1 : 1;
     }
 
   }

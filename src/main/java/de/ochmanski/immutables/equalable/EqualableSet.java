@@ -3,8 +3,12 @@ package de.ochmanski.immutables.equalable;
 import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.collection.ISet;
 import de.ochmanski.immutables.constants.Constants;
+import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.immutable.ImmutableSet;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -16,9 +20,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.IntFunction;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
-
 @Value
 @UnmodifiableView
 @ParametersAreNonnullByDefault
@@ -28,53 +29,35 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
 
   @Unmodifiable
   @UnmodifiableView
-  @NonNull
   @NotNull("Given set cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given set cannot be null.")
   @Builder.Default
-  ImmutableSet<@NonNull @NotNull E> set = ImmutableSet.empty();
+  ImmutableSet<@NotNull E> set = (ImmutableSet) ImmutableSet.empty();
 
-  @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
+  IntFunction<@NotNull E @NotNull []> key = defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
-  public static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) DEFAULT_KEY;
-  }
-
-  @NotNull
-  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable @NotNull []::new;
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings(Constants.Warning.UNCHECKED)
-  public static <E extends @NotNull Equalable<@NotNull E>> EqualableSet<@NotNull E> empty() {
+  public static EqualableSet<? extends @NotNull Fluent<?>> empty() {
     return EMPTY_SET;
   }
 
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @SuppressWarnings(Constants.Warning.RAWTYPES)
-  private static final EqualableSet EMPTY_SET = create();
+  private static final EqualableSet EMPTY_SET = EqualableSet.builder().build();
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  private static <E extends @NotNull Equalable<@NotNull E>> EqualableSet<@NotNull E> create() {
-    return EqualableSet.<@NotNull E>builder().build();
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  public static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) Fluent @NotNull []::new;
   }
 
   //</editor-fold>
@@ -179,15 +162,6 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> noneOf(
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return EqualableSet.<@NotNull S>noneOf(constructor);
-  }
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> ofArray(
     @NotNull final S @NotNull [] array,
@@ -199,7 +173,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <K extends @NotNull Equalable<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> EqualableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
+  public static <K extends @NotNull Equalable<@NotNull K> & @NotNull Comparable<? super @NotNull K>, V extends @NotNull Equalable<@NotNull V>> EqualableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
     @NotNull final Set<Map.@NotNull Entry<@NotNull K, @NotNull V>> entries,
     @NotNull final IntFunction<IMap.@NotNull Entry<@NotNull K, @NotNull V> @NotNull []> entry) {
     return entries.stream().map(EqualableSet::toImmutableEntry).collect(EqualableCollectors.toSet(entry));
@@ -207,7 +181,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  private static <K, V> IMap.@Unmodifiable @UnmodifiableView @NotNull Entry<@NotNull K, @NotNull V> toImmutableEntry(
+  private static <K extends @NotNull Comparable<? super @NotNull K>, V> IMap.@Unmodifiable @UnmodifiableView @NotNull Entry<@NotNull K, @NotNull V> toImmutableEntry(
     @NotNull final Map.@NotNull Entry<@NotNull K, @NotNull V> entry) {
     return IMap.Entry.<@NotNull K, @NotNull V>of(entry);
   }
@@ -216,7 +190,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <K extends @NotNull Equalable<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> EqualableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
+  public static <K extends @NotNull Equalable<@NotNull K> & @NotNull Comparable<? super @NotNull K>, V extends @NotNull Equalable<@NotNull V>> EqualableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
     @NotNull final ImmutableSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> entries) {
     return entries.stream().map(IMap.Entry::deepClone).collect(EqualableCollectors.toSet(entries.getKey()));
   }
@@ -254,6 +228,7 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
    * @return a clone of this {@code ArraySet} instance
    */
   @NotNull
+  @Override
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
@@ -261,6 +236,14 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
     return toBuilder().key(key).build();
   }
 
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  public ImmutableSet<@NotNull E> getSet() {
+    return set;
+  }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="4. converters to family classes">

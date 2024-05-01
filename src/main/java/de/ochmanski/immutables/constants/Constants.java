@@ -59,7 +59,6 @@ public interface Constants {
    */
   @SuppressWarnings(UNUSED)
   interface Warning {
-
     /**
      * this is sort of a wildcard that suppresses all warnings.
      */
@@ -140,6 +139,9 @@ public interface Constants {
 
     @NonNls
     String SPELL_CHECKING_INSPECTION = "SpellCheckingInspection";
+
+    @NonNls
+    String SIMPLIFY_STREAM_API_CALL_CHAINS = "SimplifyStreamApiCallChains";
 
     /**
      * <b>boxing</b>: suppresses warnings related to boxing/unboxing operations

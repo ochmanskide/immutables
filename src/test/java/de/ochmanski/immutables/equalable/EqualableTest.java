@@ -92,11 +92,11 @@ class EqualableTest {
       EqualableString.of("C"),
       EqualableString.of("D"));
     final boolean actual = Equalable.<List<EqualableString>>anyMatchIgnoreCase(list,
-      p -> p.stream().map(EqualableString::getRaw).toList(), List.of("C"));
+      p -> p.stream().map(EqualableString::getPlain).toList(), List.of("C"));
     final boolean expected = true;
     assertThat(actual).isEqualTo(expected);
     final boolean actual2 = Equalable.<List<EqualableString>>anyMatchIgnoreCase(list,
-      p -> p.stream().map(EqualableString::getRaw).toList(), List.of("c"));
+      p -> p.stream().map(EqualableString::getPlain).toList(), List.of("c"));
     assertThat(actual2).isEqualTo(expected);
   }
 
@@ -107,10 +107,10 @@ class EqualableTest {
       EqualableString.of("b"),
       EqualableString.of("C"),
       EqualableString.of("D"));
-    final boolean actual = Equalable.<EqualableString>anyMatchIgnoreCase(list, EqualableString::getRaw, List.of("C"));
+    final boolean actual = Equalable.<EqualableString>anyMatchIgnoreCase(list, EqualableString::getPlain, List.of("C"));
     final boolean expected = true;
     assertThat(actual).isEqualTo(expected);
-    final boolean actual2 = Equalable.<EqualableString>anyMatchIgnoreCase(list, EqualableString::getRaw, List.of("c"));
+    final boolean actual2 = Equalable.<EqualableString>anyMatchIgnoreCase(list, EqualableString::getPlain, List.of("c"));
     assertThat(actual2).isEqualTo(expected);
   }
 

@@ -515,7 +515,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     @NotNull
     @Contract(value = "_ -> new", pure = true)
     static Equalable.EqualableString element(@Nullable final String s) {
-      return EqualableString.builder().s(s).build();
+      return EqualableString.builder().plain(s).build();
     }
 
     @Contract(value = "null -> false", pure = true)
@@ -530,7 +530,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     //<editor-fold defaultstate="collapsed" desc="3. implements EqualableHolder<String>">
 
-    @Nullable String s;
+    @Nullable String plain;
 
     @Override
     @Contract(pure = true)
@@ -572,25 +572,48 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       return !elements.isEmpty() && isIn(Set.<@NotNull String>copyOf(elements));
     }
 
+    @Contract(pure = true)
+    public final boolean isNotInIgnoreCase(@NotNull final Collection<? extends @NotNull String> elements) {
+      return !isInIgnoreCase(elements);
+    }
+
+    @Contract(pure = true)
+    public final boolean isInIgnoreCase(@NotNull final Collection<? extends @NotNull String> elements) {
+      return !elements.isEmpty() && isInIgnoreCase(Set.<@NotNull String>copyOf(elements));
+    }
+
     @Override
     @Contract(pure = true)
     public final boolean isIn(@NotNull final Set<? extends @NotNull String> elements) {
-      if (null == s) {
+      if (null == plain) {
         return false;
       }
-      return elements.contains(s);
+      return elements.contains(plain);
+    }
+
+    @Contract(pure = true)
+    public final boolean isNotInIgnoreCase(@NotNull final Set<? extends @NotNull String> elements) {
+      return !isInIgnoreCase(elements);
+    }
+
+    @Contract(pure = true)
+    public final boolean isInIgnoreCase(@NotNull final Set<? extends @NotNull String> elements) {
+      if (null == plain) {
+        return false;
+      }
+      return elements.stream().anyMatch(p -> p.equalsIgnoreCase(plain));
     }
 
     @Override
     @Contract(pure = true)
     public final boolean isIn(@NotNull final Stream<? extends @NotNull String> elements) {
-      return elements.anyMatch(p -> EqualableString.areTheSame(p, s));
+      return elements.anyMatch(p -> EqualableString.areTheSame(p, plain));
     }
 
     @Override
     @Contract(pure = true)
     public final boolean isEqualTo(@Nullable final String other) {
-      return EqualableString.areEqual(s, other);
+      return EqualableString.areEqual(plain, other);
     }
 
     @Contract(pure = true)
@@ -600,7 +623,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isEqualTo(@Nullable final EqualableString other) {
-      return EqualableString.areEqual(s, null == other ? null : other.getS());
+      return EqualableString.areEqual(plain, null == other ? null : other.getPlain());
     }
 
     @Contract(pure = true)
@@ -610,7 +633,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isEqualToIgnoreCase(@Nullable final String other) {
-      return EqualableString.areEqualIgnoreCase(s, other);
+      return EqualableString.areEqualIgnoreCase(plain, other);
     }
 
     @Contract(pure = true)
@@ -620,13 +643,13 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isEqualToIgnoreCase(@Nullable final EqualableString other) {
-      return EqualableString.areEqualIgnoreCase(s, null == other ? null : other.getS());
+      return EqualableString.areEqualIgnoreCase(plain, null == other ? null : other.getPlain());
     }
 
     @Override
     @Contract(pure = true)
     public final boolean isSameAs(@Nullable final String other) {
-      return EqualableString.areTheSame(s, other);
+      return EqualableString.areTheSame(plain, other);
     }
 
     @JsonIgnore
@@ -636,7 +659,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @JsonIgnore
     public final boolean isBlank() {
-      return Equalable.<@NotNull String>areTheSame(s, BLANK) || EqualableString.isNullOrBlank(s);
+      return Equalable.<@NotNull String>areTheSame(plain, BLANK) || EqualableString.isNullOrBlank(plain);
     }
     //</editor-fold>
   }

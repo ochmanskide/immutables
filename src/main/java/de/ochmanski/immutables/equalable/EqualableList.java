@@ -2,6 +2,7 @@ package de.ochmanski.immutables.equalable;
 
 import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.constants.Constants;
+import de.ochmanski.immutables.equalable.Equalable.EqualableString;
 import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.AccessLevel;
@@ -108,7 +109,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  public static EqualableList<@NotNull StringWrapper> of(
+  public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1) {
     return EqualableList.ofString(ImmutableList.of(s1));
   }
@@ -125,7 +126,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  public static EqualableList<@NotNull StringWrapper> of(
+  public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2) {
     return EqualableList.ofString(ImmutableList.of(s1, s2));
@@ -144,7 +145,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  public static EqualableList<@NotNull StringWrapper> of(
+  public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
     @NotNull final String s3) {
@@ -165,7 +166,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  public static EqualableList<@NotNull StringWrapper> of(
+  public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
     @NotNull final String s3,
@@ -188,9 +189,9 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static EqualableList<@NotNull StringWrapper> of(@NotNull final String @NotNull [] array) {
+  public static EqualableList<@NotNull EqualableString> of(@NotNull final String @NotNull [] array) {
     final List<@NotNull String> list = List.of(array);
-    return EqualableList.<@NotNull StringWrapper>of(list);
+    return EqualableList.<@NotNull EqualableString>of(list);
   }
 
   @NotNull
@@ -206,10 +207,10 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static EqualableList<@NotNull StringWrapper> of(
+  public static EqualableList<@NotNull EqualableString> of(
     @NotNull final Collection<@NotNull String> collection) {
     final ImmutableList<@NotNull String> list = ImmutableList.of(collection);
-    return EqualableList.<@NotNull StringWrapper>ofString(list);
+    return EqualableList.<@NotNull EqualableString>ofString(list);
   }
 
   @NotNull
@@ -226,11 +227,11 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  public static EqualableList<@NotNull StringWrapper> ofString(
+  public static EqualableList<@NotNull EqualableString> ofString(
     @NotNull final ImmutableList<@NotNull String> immutableList) {
-    final List<StringWrapper> list = immutableList.stream().map(StringWrapper::of).toList();
-    final ImmutableList<@NotNull StringWrapper> wrappers = ImmutableList.<@NotNull StringWrapper>of(list, StringWrapper @NotNull []::new);
-    return EqualableList.<@NotNull StringWrapper>builder().list(wrappers).key(StringWrapper[]::new).build();
+    final List<EqualableString> list = immutableList.stream().map(EqualableString::of).toList();
+    final ImmutableList<@NotNull EqualableString> wrappers = ImmutableList.<@NotNull EqualableString>of(list, EqualableString @NotNull []::new);
+    return EqualableList.<@NotNull EqualableString>builder().list(wrappers).key(EqualableString[]::new).build();
   }
 
   @NotNull

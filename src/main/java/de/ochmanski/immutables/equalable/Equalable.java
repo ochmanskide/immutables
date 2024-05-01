@@ -20,8 +20,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
   @Contract(pure = true)
   static <S> boolean anyMatchIgnoreCase(@NotNull final Collection<@NotNull S> s,
-                                        @NotNull final Function<? super @NotNull S,
-                                          @NotNull String> a, @NotNull final Collection<@NotNull String> b) {
+                                        @NotNull final Function<? super @NotNull S, @NotNull String> a,
+                                        @NotNull final Collection<@NotNull String> b) {
     return Equalable.<@NotNull S>anyMatchIgnoreCase(s.stream().map(a), b);
   }
 
@@ -1647,5 +1647,4 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     //</editor-fold>
   }
-
 }

@@ -203,56 +203,56 @@ class EqualableListTest {
   void toStringTest11() {
     EqualableList<@NotNull EqualableString> unitUnderTest = EqualableList.<@NotNull String>of("a");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[{\"raw\":\"a\"}]");
+    assertThat(actual).isEqualTo("[{\"plain\":\"a\"}]");
   }
 
   @Test
   void toStringTest12() {
     EqualableList<@NotNull EqualableString> unitUnderTest = EqualableList.<@NotNull EqualableString>of("a");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[{\"raw\":\"a\"}]");
+    assertThat(actual).isEqualTo("[{\"plain\":\"a\"}]");
   }
 
   @Test
   void toStringTest21() {
     EqualableList<@NotNull EqualableString> unitUnderTest = EqualableList.<@NotNull String>of("a", "b");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"}]");
+    assertThat(actual).isEqualTo("[{\"plain\":\"a\"},{\"plain\":\"b\"}]");
   }
 
   @Test
   void toStringTest22() {
     EqualableList<@NotNull EqualableString> unitUnderTest = EqualableList.<@NotNull EqualableString>of("a", "b");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"}]");
+    assertThat(actual).isEqualTo("[{\"plain\":\"a\"},{\"plain\":\"b\"}]");
   }
 
   @Test
   void toStringTest31() {
     EqualableList<@NotNull EqualableString> unitUnderTest = EqualableList.<@NotNull String>of("a", "b", "c");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"}]");
+    assertThat(actual).isEqualTo("[{\"plain\":\"a\"},{\"plain\":\"b\"},{\"plain\":\"c\"}]");
   }
 
   @Test
   void toStringTest32() {
     EqualableList<@NotNull EqualableString> unitUnderTest = EqualableList.<@NotNull EqualableString>of("a", "b", "c");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"}]");
+    assertThat(actual).isEqualTo("[{\"plain\":\"a\"},{\"plain\":\"b\"},{\"plain\":\"c\"}]");
   }
 
   @Test
   void toStringTest41() {
     EqualableList<@NotNull EqualableString> unitUnderTest = EqualableList.<@NotNull String>of("a", "b", "c", "d");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"},{\"raw\":\"d\"}]");
+    assertThat(actual).isEqualTo("[{\"plain\":\"a\"},{\"plain\":\"b\"},{\"plain\":\"c\"},{\"plain\":\"d\"}]");
   }
 
   @Test
   void toStringTest42() {
     EqualableList<@NotNull EqualableString> unitUnderTest = EqualableList.<@NotNull EqualableString>of("a", "b", "c", "d");
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"},{\"raw\":\"d\"}]");
+    assertThat(actual).isEqualTo("[{\"plain\":\"a\"},{\"plain\":\"b\"},{\"plain\":\"c\"},{\"plain\":\"d\"}]");
   }
 
   @Test
@@ -260,7 +260,7 @@ class EqualableListTest {
     final String[] array = {"a", "b", "c", "d"};
     EqualableList<@NotNull EqualableString> unitUnderTest = EqualableList.<@NotNull String>of(array);
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"},{\"raw\":\"d\"}]");
+    assertThat(actual).isEqualTo("[{\"plain\":\"a\"},{\"plain\":\"b\"},{\"plain\":\"c\"},{\"plain\":\"d\"}]");
   }
 
   @Test
@@ -268,7 +268,7 @@ class EqualableListTest {
     final String[] array = {"a", "b", "c", "d"};
     EqualableList<@NotNull EqualableString> unitUnderTest = EqualableList.<@NotNull EqualableString>of(array);
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"},{\"raw\":\"d\"}]");
+    assertThat(actual).isEqualTo("[{\"plain\":\"a\"},{\"plain\":\"b\"},{\"plain\":\"c\"},{\"plain\":\"d\"}]");
   }
 
   @Test
@@ -300,7 +300,7 @@ class EqualableListTest {
     final EqualableString[] array = {EqualableString.of("a"), EqualableString.of("b"), EqualableString.of("c")};
     final EqualableList<@NotNull EqualableString> unitUnderTest = EqualableList.<@NotNull EqualableString>of(array, EqualableString[]::new);
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"}]");
+    assertThat(actual).isEqualTo("[{\"plain\":\"a\"},{\"plain\":\"b\"},{\"plain\":\"c\"}]");
   }
 
   @Test
@@ -316,6 +316,6 @@ class EqualableListTest {
     final EqualableString[] array = {EqualableString.of("a"), EqualableString.of("b"), EqualableString.of("c")};
     final EqualableList<@NotNull EqualableString> unitUnderTest = EqualableList.<@NotNull EqualableString>of(array, EqualableString[]::new);
     final String actual = unitUnderTest.toString();
-    assertThat(actual).isEqualTo("[{\"raw\":\"a\"},{\"raw\":\"b\"},{\"raw\":\"c\"}]");
+    assertThat(actual).isEqualTo("[{\"plain\":\"a\"},{\"plain\":\"b\"},{\"plain\":\"c\"}]");
   }
 }

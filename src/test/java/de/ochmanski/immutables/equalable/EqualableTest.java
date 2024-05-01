@@ -317,10 +317,14 @@ class EqualableTest {
 
   @Test
   void element() {
-    final boolean actual = Equalable.element("String").isEqualTo("string");
+    final boolean actual = EqualableString.of("String").isEqualTo("string");
     assertThat(actual).isFalse();
-    final boolean actual2 = Equalable.element("String").isEqualTo("String");
+    final boolean actual2 = EqualableString.of("String").isNotEqualTo("string");
     assertThat(actual2).isTrue();
+    final boolean actual3 = EqualableString.of("String").isEqualTo("String");
+    assertThat(actual3).isTrue();
+    final boolean actual4 = EqualableString.of("String").isNotEqualTo("String");
+    assertThat(actual4).isFalse();
   }
 
   public enum State implements Fluent<@NotNull State> {

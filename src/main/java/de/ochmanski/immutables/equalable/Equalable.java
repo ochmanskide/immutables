@@ -140,20 +140,20 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <S> Equalable.GenericHolder<@NotNull S> element(@Nullable final S s) {
-    return GenericHolder.<@NotNull S>builder().s(s).build();
+  static <S extends @NotNull Equalable<@NotNull S>> Equalable.Holder<@NotNull S> element(@Nullable final S s) {
+    return Holder.<@NotNull S>builder().s(s).build();
   }
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum.EnumHolder<@NotNull E> of(@Nullable final E s) {
-    return EqualableHolder.<@NotNull E>element(s);
+  public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum<@NotNull E> of(@Nullable final E s) {
+    return EqualableEnum.<@NotNull E>element(s);
   }
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum.EnumHolder<@NotNull E> element(@Nullable final E s) {
-    return EqualableEnum.EnumHolder.<@NotNull E>of(s);
+  public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum<@NotNull E> element(@Nullable final E s) {
+    return EqualableEnum.<@NotNull E>of(s);
   }
 
   @Contract(pure = true)
@@ -269,10 +269,12 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     return Equalable.<@NotNull Equalable<@NotNull T>>areTheSame(this, other);
   }
 
+  //<editor-fold defaultstate="collapsed" desc="2. implements Holder<Equalable>">
   @Value
   @Builder
+  @Unmodifiable
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  class GenericHolder<S> implements EqualableHolder<@Nullable S> {
+  class Holder<S extends @NotNull Equalable<@NotNull S>> implements Not<@NotNull S> {
 
     @Nullable S s;
 
@@ -327,18 +329,23 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum.EnumHolder<@NotNull E> of(@Nullable final E s) {
-      return EqualableHolder.<@NotNull E>element(s);
+    public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum<@NotNull E> of(@Nullable final E s) {
+      return EqualableEnum.<@NotNull E>element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum.EnumHolder<@NotNull E> element(@Nullable final E s) {
-      return EqualableEnum.EnumHolder.<@NotNull E>of(s);
+    public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum<@NotNull E> element(@Nullable final E s) {
+      return EqualableEnum.<@NotNull E>of(s);
     }
   }
+  //</editor-fold>
 
-  interface EqualableEnum {
+  @Value
+  @Builder
+  @Unmodifiable
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  class EqualableEnum<S extends @NotNull Enum<@NotNull S>> {// implements Not<@NotNull S> { // & @NotNull Equalable<@NotNull S>> implements Equalable<S> {
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
     static <E extends @NotNull Enum<@NotNull E>> boolean areNotEqual(@Nullable final Enum<@NotNull E> a, @Nullable final Enum<@NotNull E> b) {
@@ -360,94 +367,104 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       return Equalable.<@NotNull Enum<@NotNull E>>areTheSame(a, b);
     }
 
-    @Value
-    @Builder
-    @Unmodifiable
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class EnumHolder<S extends @NotNull Enum<@NotNull S>> {// implements EqualableHolder<S extends @NotNull Enum<@NotNull S>>
+    //<editor-fold defaultstate="collapsed" desc="2. implements EqualableHolder<Enum>">
 
-      @Nullable S s;
+    @Nullable S s;
 
-      @SafeVarargs
-      @Contract(pure = true)
-      public final boolean isNotIn(@NotNull final S @NotNull ... array) {
-        return !isIn(array);
-      }
-
-      @SafeVarargs
-      @Contract(pure = true)
-      public final boolean isIn(@NotNull final S @NotNull ... array) {
-        return isInArray(array);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotInArray(@NotNull final S @NotNull [] array) {
-        return !isInArray(array);
-      }
-
-      @Contract(pure = true)
-      public boolean isInArray(@NotNull final S @NotNull [] array) {
-        return isIn(List.<@NotNull S>of(array));
-      }
-
-      @Contract(pure = true)
-      public boolean isNotIn(@NotNull final Collection<@NotNull S> elements) {
-        return !isIn(elements);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Collection<@NotNull S> elements) {
-        return !elements.isEmpty() && isIn(EnumSet.<@NotNull S>copyOf(elements));
-      }
-
-      @Contract(pure = true)
-      public boolean isNotIn(@NotNull final EnumSet<@NotNull S> elements) {
-        return !isIn(elements);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Set<@NotNull S> elements) {
-        if (null == s) {
-          return false;
-        }
-        return elements.contains(s);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotEqualTo(@Nullable final S other) {
-        return !isEqualTo(other);
-      }
-
-      @Contract(pure = true)
-      public boolean isEqualTo(@Nullable final S other) {
-        return Equalable.<@NotNull S>areEqual(s, other);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotSameAs(@Nullable final S other) {
-        return !isSameAs(other);
-      }
-
-      @Contract(pure = true)
-      public boolean isSameAs(@Nullable final S other) {
-        return Equalable.<@NotNull S>areTheSame(s, other);
-      }
-
-      @NotNull
-      @Contract(value = "_ -> new", pure = true)
-      public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum.EnumHolder<@NotNull E> of(@Nullable final E s) {
-        return EnumHolder.<@NotNull E>element(s);
-      }
-
-      @NotNull
-      @Contract(value = "_ -> new", pure = true)
-      public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum.EnumHolder<@NotNull E> element(@Nullable final E s) {
-        return EnumHolder.<@NotNull E>builder().s(s).build();
-      }
+    @SafeVarargs
+    @Contract(pure = true)
+    public final boolean isNotIn(@NotNull final S @NotNull ... array) {
+      return !isIn(array);
     }
+
+    @SafeVarargs
+    @Contract(pure = true)
+    public final boolean isIn(@NotNull final S @NotNull ... array) {
+      return isInArray(array);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotInArray(@NotNull final S @NotNull [] array) {
+      return !isInArray(array);
+    }
+
+    @Contract(pure = true)
+    public boolean isInArray(@NotNull final S @NotNull [] array) {
+      return isIn(List.<@NotNull S>of(array));
+    }
+
+    @Contract(pure = true)
+    public boolean isNotIn(final @NotNull Stream<? extends @NotNull S> elements) {
+      return !isIn(elements);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(final @NotNull Stream<? extends @NotNull S> elements) {
+      return elements.anyMatch(p -> EqualableEnum.areTheSame(p, s));
+    }
+
+    @Contract(pure = true)
+    public boolean isNotIn(@NotNull final Collection<@NotNull S> elements) {
+      return !isIn(elements);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Collection<@NotNull S> elements) {
+      return !elements.isEmpty() && isIn(EnumSet.<@NotNull S>copyOf(elements));
+    }
+
+    @Contract(pure = true)
+    public boolean isNotIn(@NotNull final EnumSet<@NotNull S> elements) {
+      return !isIn(elements);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Set<@NotNull S> elements) {
+      if (null == s) {
+        return false;
+      }
+      return elements.contains(s);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotEqualTo(@Nullable final S other) {
+      return !isEqualTo(other);
+    }
+
+    @Contract(pure = true)
+    public boolean isEqualTo(@Nullable final S other) {
+      return Equalable.<@NotNull S>areEqual(s, other);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotSameAs(@Nullable final S other) {
+      return !isSameAs(other);
+    }
+
+    @Contract(pure = true)
+    public boolean isSameAs(@Nullable final S other) {
+      return Equalable.<@NotNull S>areTheSame(s, other);
+    }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum<@NotNull E> of(@Nullable final E s) {
+      return EqualableEnum.<@NotNull E>element(s);
+    }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    public static <E extends @NotNull Enum<@NotNull E>> EqualableEnum<@NotNull E> element(@Nullable final E s) {
+      return EqualableEnum.<@NotNull E>builder().s(s).build();
+    }
+    //</editor-fold>
   }
 
-  interface EqualableString {
+  @Value
+  @Builder
+  @Unmodifiable
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  class EqualableString implements Not<@NotNull String> {
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
     static boolean areNotEqual(@Nullable final String a, @Nullable final String b) {
@@ -465,7 +482,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
-    static boolean areEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
+    public static boolean areEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
       return EqualableString.areTheSame(a, b) || EqualableString.bothAreBlank(a, b) || (a != null && a.equalsIgnoreCase(b));
     }
 
@@ -491,8 +508,14 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableString.StringHolder element(@Nullable final String s) {
-      return StringHolder.builder().s(s).build();
+    static Equalable.EqualableString of(@Nullable final String s) {
+      return EqualableString.element(s);
+    }
+
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    static Equalable.EqualableString element(@Nullable final String s) {
+      return EqualableString.builder().s(s).build();
     }
 
     @Contract(value = "null -> false", pure = true)
@@ -504,74 +527,74 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     static boolean isNullOrBlank(@Nullable final String s) {
       return null == s || s.isBlank();
     }
-    
-    @Value
-    @Builder
-    @Unmodifiable
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class StringHolder implements EqualableHolder<@NotNull String> {
 
-      @Nullable String s;
+    //<editor-fold defaultstate="collapsed" desc="3. implements EqualableHolder<String>">
 
-      @Override
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final String @NotNull ... array) {
-        return isInArray(array);
-      }
+    @Nullable String s;
 
-      @Override
-      @Contract(pure = true)
-      public final boolean isInArray(@NotNull final String @NotNull [] array) {
-        final List<java.lang.@NotNull String> list = Arrays.stream(array).toList();
-        return isIn(list);
-      }
-
-      @Override
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Collection<? extends java.lang.@NotNull String> elements) {
-        return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull String>copyOf(elements));
-      }
-
-      @Override
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Set<? extends java.lang.@NotNull String> elements) {
-        if (null == s) {
-          return false;
-        }
-        return elements.contains(s);
-      }
-
-      @Override
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Stream<? extends @NotNull String> elements) {
-        return elements.anyMatch(p -> EqualableString.areTheSame(p, s));
-      }
-
-      @Override
-      @Contract(pure = true)
-      public boolean isEqualTo(final String other) {
-        return EqualableString.areEqual(s, other);
-      }
-
-      @Override
-      @Contract(pure = true)
-      public boolean isSameAs(final String other) {
-        return EqualableString.areTheSame(s, other);
-      }
-
-      @JsonIgnore
-      public boolean isNotBlank() {
-        return !isBlank();
-      }
-
-      @JsonIgnore
-      public boolean isBlank() {
-        return Equalable.<@NotNull String>areTheSame(s, BLANK) || EqualableString.isNullOrBlank(s);
-      }
+    @Override
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final String @NotNull ... array) {
+      return isInArray(array);
     }
+
+    @Override
+    @Contract(pure = true)
+    public final boolean isInArray(@NotNull final String @NotNull [] array) {
+      final List<java.lang.@NotNull String> list = Arrays.stream(array).toList();
+      return isIn(list);
+    }
+
+    @Override
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Collection<? extends java.lang.@NotNull String> elements) {
+      return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull String>copyOf(elements));
+    }
+
+    @Override
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Set<? extends java.lang.@NotNull String> elements) {
+      if (null == s) {
+        return false;
+      }
+      return elements.contains(s);
+    }
+
+    @Override
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Stream<? extends @NotNull String> elements) {
+      return elements.anyMatch(p -> EqualableString.areTheSame(p, s));
+    }
+
+    @Override
+    @Contract(pure = true)
+    public boolean isEqualTo(final String other) {
+      return EqualableString.areEqual(s, other);
+    }
+
+    @Override
+    @Contract(pure = true)
+    public boolean isSameAs(final String other) {
+      return EqualableString.areTheSame(s, other);
+    }
+
+    @JsonIgnore
+    public boolean isNotBlank() {
+      return !isBlank();
+    }
+
+    @JsonIgnore
+    public boolean isBlank() {
+      return Equalable.<@NotNull String>areTheSame(s, BLANK) || EqualableString.isNullOrBlank(s);
+    }
+    //</editor-fold>
   }
 
-  interface EqualableInteger {
+  @Value
+  @Builder
+  @Unmodifiable
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  class EqualableInteger {
 
     @Contract(pure = true)
     static boolean areNotEqual(final int a, final int b) {
@@ -595,189 +618,189 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableInteger.@Unmodifiable IntHolder integer(final int s) {
+    static Equalable.EqualableInteger integer(final int s) {
       return element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableInteger.@Unmodifiable IntHolder of(final int s) {
-      return element(s);
+    static Equalable.EqualableInteger of(final int s) {
+      return EqualableInteger.element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableInteger.@Unmodifiable IntHolder element(final int s) {
-      return IntHolder.builder().s(s).build();
+    static Equalable.EqualableInteger element(final int s) {
+      return EqualableInteger.builder().s(s).build();
     }
 
-    @Value
-    @Builder
-    @Unmodifiable
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class IntHolder {// implements EqualableHolder<@NotNull Integer> {
+    //<editor-fold defaultstate="collapsed" desc="4. implements EqualableHolder<int>">
 
-      int s;
+    int s;
 
-      @Contract(pure = true)
-      public boolean isNotZero() {
-        return !isZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isZero() {
-        return EqualableInteger.areTheSame(s, 0);
-      }
-
-      @Contract(pure = true)
-      public boolean isOne() {
-        return EqualableInteger.areTheSame(s, 1);
-      }
-
-      @Contract(pure = true)
-      public boolean isTwo() {
-        return EqualableInteger.areTheSame(s, 2);
-      }
-
-      @Contract(pure = true)
-      public boolean isNegativeOrZero() {
-        return isLessThanOrEqualToZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isNegative() {
-        return isLessThanZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isPositiveOrZero() {
-        return isGreaterThanOrEqualToZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isPositive() {
-        return isGreaterThanZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThanZero() {
-        return isGreaterThan(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThanOrEqualToZero() {
-        return isGreaterThanOrEqualTo(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThanZero() {
-        return isLessThan(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThanOrEqualToZero() {
-        return isLessThanOrEqualTo(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThan(final int other) {
-        return s > other;
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThanOrEqualTo(final int other) {
-        return s >= other;
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThan(final int other) {
-        return s < other;
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThanOrEqualTo(final int other) {
-        return s <= other;
-      }
-
-      @Contract(pure = true)
-      public final boolean isNotIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final int @NotNull ... array) {
-        return !isIn(array);
-      }
-
-      @Contract(pure = true)
-      public final boolean isIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final int @NotNull ... array) {
-        return isInArray(array);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final int @NotNull [] array) {
-        return !isInArray(array);
-      }
-
-      @Contract(pure = true)
-      public boolean isInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final int @NotNull [] array) {
-        final List<java.lang.@NotNull Integer> list = IntStream.of(array).boxed().toList();
-        return isIn(list);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull Integer> elements) {
-        return !isIn(elements);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Collection<java.lang.@NotNull Integer> elements) {
-        return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull Integer>copyOf(elements));
-      }
-
-      @Contract(pure = true)
-      public boolean isNotIn(@NotNull final Set<java.lang.@NotNull Integer> elements) {
-        return !isIn(elements);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Set<java.lang.@NotNull Integer> elements) {
-        return elements.contains(s);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final IntStream elements) {
-        return elements.anyMatch(p -> EqualableInteger.areTheSame(p, s));
-      }
-
-      @Contract(pure = true)
-      public boolean isNotEqualTo(final int other) {
-        return !isEqualTo(other);
-      }
-
-      @Contract(pure = true)
-      public boolean isEqualTo(final int other) {
-        return Equalable.EqualableInteger.areEqual(s, other);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotSameAs(final int other) {
-        return !isSameAs(other);
-      }
-
-      @Contract(pure = true)
-      public boolean isSameAs(final int other) {
-        return Equalable.EqualableInteger.areTheSame(s, other);
-      }
-
-      @Contract(pure = true)
-      public boolean isBetweenInclusive(final int lowerBoundary, final int higherBoundary) {
-        return isGreaterThanOrEqualTo(lowerBoundary) && isLessThanOrEqualTo(higherBoundary);
-      }
-
-      @Contract(pure = true)
-      public boolean isBetweenExclusive(final int lowerBoundary, final int higherBoundary) {
-        return isGreaterThan(lowerBoundary) && isLessThan(higherBoundary);
-      }
+    @Contract(pure = true)
+    public boolean isNotZero() {
+      return !isZero();
     }
+
+    @Contract(pure = true)
+    public boolean isZero() {
+      return EqualableInteger.areTheSame(s, 0);
+    }
+
+    @Contract(pure = true)
+    public boolean isOne() {
+      return EqualableInteger.areTheSame(s, 1);
+    }
+
+    @Contract(pure = true)
+    public boolean isTwo() {
+      return EqualableInteger.areTheSame(s, 2);
+    }
+
+    @Contract(pure = true)
+    public boolean isNegativeOrZero() {
+      return isLessThanOrEqualToZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isNegative() {
+      return isLessThanZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isPositiveOrZero() {
+      return isGreaterThanOrEqualToZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isPositive() {
+      return isGreaterThanZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThanZero() {
+      return isGreaterThan(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThanOrEqualToZero() {
+      return isGreaterThanOrEqualTo(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThanZero() {
+      return isLessThan(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThanOrEqualToZero() {
+      return isLessThanOrEqualTo(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThan(final int other) {
+      return s > other;
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThanOrEqualTo(final int other) {
+      return s >= other;
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThan(final int other) {
+      return s < other;
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThanOrEqualTo(final int other) {
+      return s <= other;
+    }
+
+    @Contract(pure = true)
+    public final boolean isNotIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final int @NotNull ... array) {
+      return !isIn(array);
+    }
+
+    @Contract(pure = true)
+    public final boolean isIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final int @NotNull ... array) {
+      return isInArray(array);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final int @NotNull [] array) {
+      return !isInArray(array);
+    }
+
+    @Contract(pure = true)
+    public boolean isInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final int @NotNull [] array) {
+      final List<java.lang.@NotNull Integer> list = IntStream.of(array).boxed().toList();
+      return isIn(list);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull Integer> elements) {
+      return !isIn(elements);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Collection<java.lang.@NotNull Integer> elements) {
+      return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull Integer>copyOf(elements));
+    }
+
+    @Contract(pure = true)
+    public boolean isNotIn(@NotNull final Set<java.lang.@NotNull Integer> elements) {
+      return !isIn(elements);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Set<java.lang.@NotNull Integer> elements) {
+      return elements.contains(s);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final IntStream elements) {
+      return elements.anyMatch(p -> EqualableInteger.areTheSame(p, s));
+    }
+
+    @Contract(pure = true)
+    public boolean isNotEqualTo(final int other) {
+      return !isEqualTo(other);
+    }
+
+    @Contract(pure = true)
+    public boolean isEqualTo(final int other) {
+      return Equalable.EqualableInteger.areEqual(s, other);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotSameAs(final int other) {
+      return !isSameAs(other);
+    }
+
+    @Contract(pure = true)
+    public boolean isSameAs(final int other) {
+      return Equalable.EqualableInteger.areTheSame(s, other);
+    }
+
+    @Contract(pure = true)
+    public boolean isBetweenInclusive(final int lowerBoundary, final int higherBoundary) {
+      return isGreaterThanOrEqualTo(lowerBoundary) && isLessThanOrEqualTo(higherBoundary);
+    }
+
+    @Contract(pure = true)
+    public boolean isBetweenExclusive(final int lowerBoundary, final int higherBoundary) {
+      return isGreaterThan(lowerBoundary) && isLessThan(higherBoundary);
+    }
+    //</editor-fold>
   }
 
-  interface EqualableLong {
+  @Value
+  @Builder
+  @Unmodifiable
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  class EqualableLong {
 
     @Contract(pure = true)
     static boolean areNotEqual(final long a, final long b) {
@@ -801,178 +824,178 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableLong.LongHolder of(final long s) {
-      return element(s);
+    static Equalable.EqualableLong of(final long s) {
+      return EqualableLong.element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableLong.LongHolder element(final long s) {
-      return LongHolder.builder().s(s).build();
+    static Equalable.EqualableLong element(final long s) {
+      return EqualableLong.builder().s(s).build();
     }
 
-    @Value
-    @Builder
-    @Unmodifiable
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class LongHolder {// implements EqualableHolder<@NotNull Long> {
+    //<editor-fold defaultstate="collapsed" desc="5. implements EqualableHolder<long>">
 
-      long s;
+    long s;
 
-      @Contract(pure = true)
-      public boolean isZero() {
-        return EqualableLong.areTheSame(s, 0);
-      }
-
-      @Contract(pure = true)
-      public boolean isOne() {
-        return EqualableLong.areTheSame(s, 1);
-      }
-
-      @Contract(pure = true)
-      public boolean isTwo() {
-        return EqualableLong.areTheSame(s, 2);
-      }
-
-      @Contract(pure = true)
-      public boolean isNegativeOrZero() {
-        return isLessThanOrEqualToZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isNegative() {
-        return isLessThanZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isPositiveOrZero() {
-        return isGreaterThanOrEqualToZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isPositive() {
-        return isGreaterThanZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThanZero() {
-        return isGreaterThan(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThanOrEqualToZero() {
-        return isGreaterThanOrEqualTo(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThanZero() {
-        return isLessThan(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThanOrEqualToZero() {
-        return isLessThanOrEqualTo(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThan(final long other) {
-        return s > other;
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThanOrEqualTo(final long other) {
-        return s >= other;
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThan(final long other) {
-        return s < other;
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThanOrEqualTo(final long other) {
-        return s <= other;
-      }
-
-      @Contract(pure = true)
-      public final boolean isNotIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final long @NotNull ... array) {
-        return !isIn(array);
-      }
-
-      @Contract(pure = true)
-      public final boolean isIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final long @NotNull ... array) {
-        return isInArray(array);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final long @NotNull [] array) {
-        return !isInArray(array);
-      }
-
-      @Contract(pure = true)
-      public boolean isInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final long @NotNull [] array) {
-        final List<java.lang.Long> list = LongStream.of(array).boxed().toList();
-        return isIn(list);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull Long> elements) {
-        return !isIn(elements);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Collection<java.lang.@NotNull Long> elements) {
-        return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull Long>copyOf(elements));
-      }
-
-      @Contract(pure = true)
-      public boolean isNotIn(@NotNull final Set<java.lang.@NotNull Long> elements) {
-        return !isIn(elements);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Set<java.lang.@NotNull Long> elements) {
-        return elements.contains(s);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final LongStream elements) {
-        return elements.anyMatch(p -> EqualableLong.areTheSame(p, s));
-      }
-
-      @Contract(pure = true)
-      public boolean isNotEqualTo(final long other) {
-        return !isEqualTo(other);
-      }
-
-      @Contract(pure = true)
-      public boolean isEqualTo(final long other) {
-        return EqualableLong.areEqual(s, other);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotSameAs(final long other) {
-        return !isSameAs(other);
-      }
-
-      @Contract(pure = true)
-      public boolean isSameAs(final long other) {
-        return EqualableLong.areTheSame(s, other);
-      }
-
-      @Contract(pure = true)
-      public boolean isBetweenInclusive(final long lowerBoundary, final long higherBoundary) {
-        return isGreaterThanOrEqualTo(lowerBoundary) && isLessThanOrEqualTo(higherBoundary);
-      }
-
-      @Contract(pure = true)
-      public boolean isBetweenExclusive(final long lowerBoundary, final long higherBoundary) {
-        return isGreaterThan(lowerBoundary) && isLessThan(higherBoundary);
-      }
+    @Contract(pure = true)
+    public boolean isZero() {
+      return EqualableLong.areTheSame(s, 0);
     }
+
+    @Contract(pure = true)
+    public boolean isOne() {
+      return EqualableLong.areTheSame(s, 1);
+    }
+
+    @Contract(pure = true)
+    public boolean isTwo() {
+      return EqualableLong.areTheSame(s, 2);
+    }
+
+    @Contract(pure = true)
+    public boolean isNegativeOrZero() {
+      return isLessThanOrEqualToZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isNegative() {
+      return isLessThanZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isPositiveOrZero() {
+      return isGreaterThanOrEqualToZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isPositive() {
+      return isGreaterThanZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThanZero() {
+      return isGreaterThan(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThanOrEqualToZero() {
+      return isGreaterThanOrEqualTo(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThanZero() {
+      return isLessThan(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThanOrEqualToZero() {
+      return isLessThanOrEqualTo(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThan(final long other) {
+      return s > other;
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThanOrEqualTo(final long other) {
+      return s >= other;
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThan(final long other) {
+      return s < other;
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThanOrEqualTo(final long other) {
+      return s <= other;
+    }
+
+    @Contract(pure = true)
+    public final boolean isNotIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final long @NotNull ... array) {
+      return !isIn(array);
+    }
+
+    @Contract(pure = true)
+    public final boolean isIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final long @NotNull ... array) {
+      return isInArray(array);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final long @NotNull [] array) {
+      return !isInArray(array);
+    }
+
+    @Contract(pure = true)
+    public boolean isInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final long @NotNull [] array) {
+      final List<java.lang.Long> list = LongStream.of(array).boxed().toList();
+      return isIn(list);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull Long> elements) {
+      return !isIn(elements);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Collection<java.lang.@NotNull Long> elements) {
+      return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull Long>copyOf(elements));
+    }
+
+    @Contract(pure = true)
+    public boolean isNotIn(@NotNull final Set<java.lang.@NotNull Long> elements) {
+      return !isIn(elements);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Set<java.lang.@NotNull Long> elements) {
+      return elements.contains(s);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final LongStream elements) {
+      return elements.anyMatch(p -> EqualableLong.areTheSame(p, s));
+    }
+
+    @Contract(pure = true)
+    public boolean isNotEqualTo(final long other) {
+      return !isEqualTo(other);
+    }
+
+    @Contract(pure = true)
+    public boolean isEqualTo(final long other) {
+      return EqualableLong.areEqual(s, other);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotSameAs(final long other) {
+      return !isSameAs(other);
+    }
+
+    @Contract(pure = true)
+    public boolean isSameAs(final long other) {
+      return EqualableLong.areTheSame(s, other);
+    }
+
+    @Contract(pure = true)
+    public boolean isBetweenInclusive(final long lowerBoundary, final long higherBoundary) {
+      return isGreaterThanOrEqualTo(lowerBoundary) && isLessThanOrEqualTo(higherBoundary);
+    }
+
+    @Contract(pure = true)
+    public boolean isBetweenExclusive(final long lowerBoundary, final long higherBoundary) {
+      return isGreaterThan(lowerBoundary) && isLessThan(higherBoundary);
+    }
+    //</editor-fold>
   }
 
-  interface EqualableFloat {
+  @Value
+  @Builder
+  @Unmodifiable
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  class EqualableFloat {
 
     @Contract(pure = true)
     static boolean areNotEqual(final float a, final float b) {
@@ -996,169 +1019,169 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableFloat.@Unmodifiable FloatHolder of(final float s) {
-      return element(s);
+    static Equalable.EqualableFloat of(final float s) {
+      return EqualableFloat.element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableFloat.@Unmodifiable FloatHolder element(final float s) {
-      return FloatHolder.builder().s(s).build();
+    static Equalable.EqualableFloat element(final float s) {
+      return EqualableFloat.builder().s(s).build();
     }
 
-    @Value
-    @Builder
-    @Unmodifiable
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class FloatHolder { // implements EqualableHolder<@NotNull Float> {
+    //<editor-fold defaultstate="collapsed" desc="6. implements EqualableHolder<float>">
 
-      float s;
+    float s;
 
-      @Contract(pure = true)
-      public boolean isZero() {
-        return EqualableFloat.areTheSame(s, 0);
-      }
-
-      @Contract(pure = true)
-      public boolean isOne() {
-        return EqualableFloat.areTheSame(s, 1);
-      }
-
-      @Contract(pure = true)
-      public boolean isTwo() {
-        return EqualableFloat.areTheSame(s, 2);
-      }
-
-      @Contract(pure = true)
-      public boolean isNegativeOrZero() {
-        return isLessThanOrEqualToZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isNegative() {
-        return isLessThanZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isPositiveOrZero() {
-        return isGreaterThanOrEqualToZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isPositive() {
-        return isGreaterThanZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThanZero() {
-        return isGreaterThan(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThanOrEqualToZero() {
-        return isGreaterThanOrEqualTo(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThanZero() {
-        return isLessThan(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThanOrEqualToZero() {
-        return isLessThanOrEqualTo(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThan(final float other) {
-        return s > other;
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThanOrEqualTo(final float other) {
-        return s >= other;
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThan(final float other) {
-        return s < other;
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThanOrEqualTo(final float other) {
-        return s <= other;
-      }
-
-      @Contract(pure = true)
-      public final boolean isNotIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final float @NotNull ... array) {
-        return !isIn(array);
-      }
-
-      @Contract(pure = true)
-      public final boolean isIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final float @NotNull ... array) {
-        return isInArray(array);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final float @NotNull [] array) {
-        return !isInArray(array);
-      }
-
-      @Contract(pure = true)
-      public boolean isInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final float @NotNull [] floatArray) {
-        DoubleStream ds = IntStream.range(0, floatArray.length)
-          .mapToDouble(i -> floatArray[i]);
-        return isIn(ds);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull Float> elements) {
-        return !isIn(elements);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Collection<java.lang.@NotNull Float> elements) {
-        return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull Float>copyOf(elements));
-      }
-
-      @Contract(pure = true)
-      public boolean isNotIn(@NotNull final Set<java.lang.@NotNull Float> elements) {
-        return !isIn(elements);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Set<java.lang.@NotNull Float> elements) {
-        return elements.contains(s);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final DoubleStream elements) {
-        return elements.anyMatch(p -> EqualableDouble.areTheSame(p, s));
-      }
-
-      @Contract(pure = true)
-      public boolean isNotEqualTo(final float other) {
-        return !isEqualTo(other);
-      }
-
-      @Contract(pure = true)
-      public boolean isEqualTo(final float other) {
-        return EqualableFloat.areEqual(s, other);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotSameAs(final float other) {
-        return !isSameAs(other);
-      }
-
-      @Contract(pure = true)
-      public boolean isSameAs(final float other) {
-        return EqualableFloat.areTheSame(s, other);
-      }
+    @Contract(pure = true)
+    public boolean isZero() {
+      return EqualableFloat.areTheSame(s, 0);
     }
+
+    @Contract(pure = true)
+    public boolean isOne() {
+      return EqualableFloat.areTheSame(s, 1);
+    }
+
+    @Contract(pure = true)
+    public boolean isTwo() {
+      return EqualableFloat.areTheSame(s, 2);
+    }
+
+    @Contract(pure = true)
+    public boolean isNegativeOrZero() {
+      return isLessThanOrEqualToZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isNegative() {
+      return isLessThanZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isPositiveOrZero() {
+      return isGreaterThanOrEqualToZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isPositive() {
+      return isGreaterThanZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThanZero() {
+      return isGreaterThan(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThanOrEqualToZero() {
+      return isGreaterThanOrEqualTo(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThanZero() {
+      return isLessThan(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThanOrEqualToZero() {
+      return isLessThanOrEqualTo(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThan(final float other) {
+      return s > other;
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThanOrEqualTo(final float other) {
+      return s >= other;
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThan(final float other) {
+      return s < other;
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThanOrEqualTo(final float other) {
+      return s <= other;
+    }
+
+    @Contract(pure = true)
+    public final boolean isNotIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final float @NotNull ... array) {
+      return !isIn(array);
+    }
+
+    @Contract(pure = true)
+    public final boolean isIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final float @NotNull ... array) {
+      return isInArray(array);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final float @NotNull [] array) {
+      return !isInArray(array);
+    }
+
+    @Contract(pure = true)
+    public boolean isInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final float @NotNull [] floatArray) {
+      DoubleStream ds = IntStream.range(0, floatArray.length)
+        .mapToDouble(i -> floatArray[i]);
+      return isIn(ds);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull Float> elements) {
+      return !isIn(elements);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Collection<java.lang.@NotNull Float> elements) {
+      return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull Float>copyOf(elements));
+    }
+
+    @Contract(pure = true)
+    public boolean isNotIn(@NotNull final Set<java.lang.@NotNull Float> elements) {
+      return !isIn(elements);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Set<java.lang.@NotNull Float> elements) {
+      return elements.contains(s);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final DoubleStream elements) {
+      return elements.anyMatch(p -> EqualableDouble.areTheSame(p, s));
+    }
+
+    @Contract(pure = true)
+    public boolean isNotEqualTo(final float other) {
+      return !isEqualTo(other);
+    }
+
+    @Contract(pure = true)
+    public boolean isEqualTo(final float other) {
+      return EqualableFloat.areEqual(s, other);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotSameAs(final float other) {
+      return !isSameAs(other);
+    }
+
+    @Contract(pure = true)
+    public boolean isSameAs(final float other) {
+      return EqualableFloat.areTheSame(s, other);
+    }
+    //</editor-fold>
   }
 
-  interface EqualableDouble {
+  @Value
+  @Builder
+  @Unmodifiable
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  class EqualableDouble {
 
     @Contract(pure = true)
     static boolean areNotEqual(final double a, final double b) {
@@ -1182,164 +1205,162 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableDouble.@Unmodifiable DoubleHolder of(final double s) {
+    static EqualableDouble of(final double s) {
       return element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableDouble.@Unmodifiable DoubleHolder element(final double s) {
-      return DoubleHolder.builder().s(s).build();
+    static EqualableDouble element(final double s) {
+      return EqualableDouble.builder().s(s).build();
     }
 
-    @Value
-    @Builder
-    @Unmodifiable
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class DoubleHolder { // implements EqualableHolder<@NotNull Double> {
+    //<editor-fold defaultstate="collapsed" desc="7. implements EqualableHolder<double>">
 
-      double s;
+    double s;
 
-      @Contract(pure = true)
-      public boolean isZero() {
-        return EqualableDouble.areTheSame(s, 0);
-      }
-
-      @Contract(pure = true)
-      public boolean isOne() {
-        return EqualableDouble.areTheSame(s, 1);
-      }
-
-      @Contract(pure = true)
-      public boolean isTwo() {
-        return EqualableDouble.areTheSame(s, 2);
-      }
-
-      @Contract(pure = true)
-      public boolean isNegativeOrZero() {
-        return isLessThanOrEqualToZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isNegative() {
-        return isLessThanZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isPositiveOrZero() {
-        return isGreaterThanOrEqualToZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isPositive() {
-        return isGreaterThanZero();
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThanZero() {
-        return isGreaterThan(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThanOrEqualToZero() {
-        return isGreaterThanOrEqualTo(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThanZero() {
-        return isLessThan(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThanOrEqualToZero() {
-        return isLessThanOrEqualTo(0);
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThan(final double other) {
-        return s > other;
-      }
-
-      @Contract(pure = true)
-      public boolean isGreaterThanOrEqualTo(final double other) {
-        return s >= other;
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThan(final double other) {
-        return s < other;
-      }
-
-      @Contract(pure = true)
-      public boolean isLessThanOrEqualTo(final double other) {
-        return s <= other;
-      }
-
-      @Contract(pure = true)
-      public final boolean isNotIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final double @NotNull ... array) {
-        return !isIn(array);
-      }
-
-      @Contract(pure = true)
-      public final boolean isIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final double @NotNull ... array) {
-        return isInArray(array);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final double @NotNull [] array) {
-        return !isInArray(array);
-      }
-
-      @Contract(pure = true)
-      public boolean isInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final double @NotNull [] array) {
-        final List<java.lang.@NotNull Double> list = DoubleStream.of(array).boxed().toList();
-        return isIn(list);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull Double> elements) {
-        return !isIn(elements);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Collection<java.lang.@NotNull Double> elements) {
-        return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull Double>copyOf(elements));
-      }
-
-      @Contract(pure = true)
-      public boolean isNotIn(@NotNull final Set<java.lang.@NotNull Double> elements) {
-        return !isIn(elements);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Set<java.lang.@NotNull Double> elements) {
-        return elements.contains(s);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final DoubleStream elements) {
-        return elements.anyMatch(p -> EqualableDouble.areTheSame(p, s));
-      }
-
-      @Contract(pure = true)
-      public boolean isNotEqualTo(final double other) {
-        return !isEqualTo(other);
-      }
-
-      @Contract(pure = true)
-      public boolean isEqualTo(final double other) {
-        return EqualableDouble.areEqual(s, other);
-      }
-
-      @Contract(pure = true)
-      public boolean isNotSameAs(final double other) {
-        return !isSameAs(other);
-      }
-
-      @Contract(pure = true)
-      public boolean isSameAs(final double other) {
-        return EqualableDouble.areTheSame(s, other);
-      }
+    @Contract(pure = true)
+    public boolean isZero() {
+      return EqualableDouble.areTheSame(s, 0);
     }
+
+    @Contract(pure = true)
+    public boolean isOne() {
+      return EqualableDouble.areTheSame(s, 1);
+    }
+
+    @Contract(pure = true)
+    public boolean isTwo() {
+      return EqualableDouble.areTheSame(s, 2);
+    }
+
+    @Contract(pure = true)
+    public boolean isNegativeOrZero() {
+      return isLessThanOrEqualToZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isNegative() {
+      return isLessThanZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isPositiveOrZero() {
+      return isGreaterThanOrEqualToZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isPositive() {
+      return isGreaterThanZero();
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThanZero() {
+      return isGreaterThan(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThanOrEqualToZero() {
+      return isGreaterThanOrEqualTo(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThanZero() {
+      return isLessThan(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThanOrEqualToZero() {
+      return isLessThanOrEqualTo(0);
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThan(final double other) {
+      return s > other;
+    }
+
+    @Contract(pure = true)
+    public boolean isGreaterThanOrEqualTo(final double other) {
+      return s >= other;
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThan(final double other) {
+      return s < other;
+    }
+
+    @Contract(pure = true)
+    public boolean isLessThanOrEqualTo(final double other) {
+      return s <= other;
+    }
+
+    @Contract(pure = true)
+    public final boolean isNotIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final double @NotNull ... array) {
+      return !isIn(array);
+    }
+
+    @Contract(pure = true)
+    public final boolean isIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final double @NotNull ... array) {
+      return isInArray(array);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final double @NotNull [] array) {
+      return !isInArray(array);
+    }
+
+    @Contract(pure = true)
+    public boolean isInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final double @NotNull [] array) {
+      final List<java.lang.@NotNull Double> list = DoubleStream.of(array).boxed().toList();
+      return isIn(list);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull Double> elements) {
+      return !isIn(elements);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Collection<java.lang.@NotNull Double> elements) {
+      return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull Double>copyOf(elements));
+    }
+
+    @Contract(pure = true)
+    public boolean isNotIn(@NotNull final Set<java.lang.@NotNull Double> elements) {
+      return !isIn(elements);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final Set<java.lang.@NotNull Double> elements) {
+      return elements.contains(s);
+    }
+
+    @Contract(pure = true)
+    public boolean isIn(@NotNull final DoubleStream elements) {
+      return elements.anyMatch(p -> EqualableDouble.areTheSame(p, s));
+    }
+
+    @Contract(pure = true)
+    public boolean isNotEqualTo(final double other) {
+      return !isEqualTo(other);
+    }
+
+    @Contract(pure = true)
+    public boolean isEqualTo(final double other) {
+      return EqualableDouble.areEqual(s, other);
+    }
+
+    @Contract(pure = true)
+    public boolean isNotSameAs(final double other) {
+      return !isSameAs(other);
+    }
+
+    @Contract(pure = true)
+    public boolean isSameAs(final double other) {
+      return EqualableDouble.areTheSame(s, other);
+    }
+
+    //</editor-fold>
   }
+
 }

@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.equalable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.*;
 
+import static de.ochmanski.immutables.constants.Constants.BLANK;
 import static de.ochmanski.immutables.constants.Constants.Warning.NULLABLE_PROBLEMS;
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
@@ -304,6 +306,15 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Override
     @Contract(pure = true)
+    public boolean isIn(@NotNull final Stream<? extends @NotNull S> elements) {
+      if (null == s) {
+        return false;
+      }
+      return elements.anyMatch(p -> areEqual(p, s));
+    }
+
+    @Override
+    @Contract(pure = true)
     public boolean isEqualTo(@Nullable final S other) {
       return Equalable.<@NotNull S>areEqual(s, other);
     }
@@ -330,56 +341,30 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   interface EqualableEnum {
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
-    static boolean areNotEqual(@Nullable final String a, @Nullable final String b) {
-      return !Equalable.EqualableString.areEqual(a, b);
+    static <E extends @NotNull Enum<@NotNull E>> boolean areNotEqual(@Nullable final Enum<@NotNull E> a, @Nullable final Enum<@NotNull E> b) {
+      return !EqualableEnum.<@NotNull E>areEqual(a, b);
     }
 
     @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
-    static boolean areEqual(@Nullable final String a, @Nullable final String b) {
-      return Equalable.<@NotNull String>areEqual(a, b);
-    }
-
-    @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
-    static boolean areNotEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
-      return !Equalable.EqualableString.areEqualIgnoreCase(a, b);
-    }
-
-    @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
-    static boolean areEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
-      return Equalable.EqualableString.areTheSame(a, b) || Equalable.EqualableString.bothAreBlank(a, b) || (a != null && a.equalsIgnoreCase(b));
-    }
-
-    @Contract(value = "null, null -> true", pure = true)
-    static boolean bothAreNotBlank(@Nullable final String a, @Nullable final String b) {
-      return !Equalable.EqualableString.bothAreBlank(a, b);
-    }
-
-    @Contract(value = "null, null -> false", pure = true)
-    static boolean bothAreBlank(@Nullable final String a, @Nullable final String b) {
-      return a != null && b != null && a.isBlank() && b.isBlank();
+    static <E extends @NotNull Enum<@NotNull E>> boolean areEqual(@Nullable final Enum<@NotNull E> a, @Nullable final Enum<@NotNull E> b) {
+      return EqualableEnum.<@NotNull E>areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areNotTheSame(@Nullable final String a, @Nullable final String b) {
-      return !Equalable.EqualableString.areTheSame(a, b);
+    static <E extends @NotNull Enum<@NotNull E>> boolean areNotTheSame(@Nullable final Enum<@NotNull E> a, @Nullable final Enum<@NotNull E> b) {
+      return !EqualableEnum.<@NotNull E>areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areTheSame(@Nullable final String a, @Nullable final String b) {
-      return Equalable.<@NotNull String>areTheSame(a, b);
-    }
-
-    @NotNull
-    @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableString.StringHolder element(@Nullable final String s) {
-      return EqualableString.StringHolder.builder().s(s).build();
+    static <E extends @NotNull Enum<@NotNull E>> boolean areTheSame(@Nullable final Enum<@NotNull E> a, @Nullable final Enum<@NotNull E> b) {
+      return Equalable.<@NotNull Enum<@NotNull E>>areTheSame(a, b);
     }
 
     @Value
     @Builder
     @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class EnumHolder<S extends @NotNull Enum<@NotNull S>> {// extends EqualableHolder<S extends @NotNull Enum<@NotNull S>>
+    class EnumHolder<S extends @NotNull Enum<@NotNull S>> {// implements EqualableHolder<S extends @NotNull Enum<@NotNull S>>
 
       @Nullable S s;
 
@@ -510,83 +495,79 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       return StringHolder.builder().s(s).build();
     }
 
+    @Contract(value = "null -> false", pure = true)
+    static boolean isNotNullAndNotBlank(@Nullable final String s) {
+      return !isNullOrBlank(s);
+    }
+
+    @Contract(value = "null -> true", pure = true)
+    static boolean isNullOrBlank(@Nullable final String s) {
+      return null == s || s.isBlank();
+    }
+    
     @Value
     @Builder
     @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class StringHolder {// extends EqualableHolder<@NotNull String> {
+    class StringHolder implements EqualableHolder<@NotNull String> {
 
       @Nullable String s;
 
-      @Contract(pure = true)
-      public boolean isNotIn(@NotNull final String @NotNull ... array) {
-        return !isIn(array);
-      }
-
+      @Override
       @Contract(pure = true)
       public boolean isIn(@NotNull final String @NotNull ... array) {
         return isInArray(array);
       }
 
-      @Contract(pure = true)
-      public boolean isNotInArray(@NotNull final String @NotNull [] array) {
-        return !isInArray(array);
-      }
-
+      @Override
       @Contract(pure = true)
       public final boolean isInArray(@NotNull final String @NotNull [] array) {
         final List<java.lang.@NotNull String> list = Arrays.stream(array).toList();
         return isIn(list);
       }
 
+      @Override
       @Contract(pure = true)
-      public boolean isNotIn(@NotNull final Collection<java.lang.@NotNull String> elements) {
-        return !isIn(elements);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Collection<java.lang.@NotNull String> elements) {
+      public boolean isIn(@NotNull final Collection<? extends java.lang.@NotNull String> elements) {
         return !elements.isEmpty() && isIn(Set.<java.lang.@NotNull String>copyOf(elements));
       }
 
+      @Override
       @Contract(pure = true)
-      public boolean isNotIn(@NotNull final Set<java.lang.@NotNull String> elements) {
-        return !isIn(elements);
-      }
-
-      @Contract(pure = true)
-      public boolean isIn(@NotNull final Set<java.lang.@NotNull String> elements) {
+      public boolean isIn(@NotNull final Set<? extends java.lang.@NotNull String> elements) {
         if (null == s) {
           return false;
         }
         return elements.contains(s);
       }
 
+      @Override
       @Contract(pure = true)
-      public boolean isIn(@NotNull final Stream<@NotNull String> elements) {
+      public boolean isIn(@NotNull final Stream<? extends @NotNull String> elements) {
         return elements.anyMatch(p -> EqualableString.areTheSame(p, s));
       }
 
-      @Contract(pure = true)
-      public boolean isNotEqualTo(final String other) {
-        return !isEqualTo(other);
-      }
-
+      @Override
       @Contract(pure = true)
       public boolean isEqualTo(final String other) {
         return EqualableString.areEqual(s, other);
       }
 
-      @Contract(pure = true)
-      public boolean isNotSameAs(final String other) {
-        return !isSameAs(other);
-      }
-
+      @Override
       @Contract(pure = true)
       public boolean isSameAs(final String other) {
         return EqualableString.areTheSame(s, other);
       }
 
+      @JsonIgnore
+      public boolean isNotBlank() {
+        return !isBlank();
+      }
+
+      @JsonIgnore
+      public boolean isBlank() {
+        return Equalable.<@NotNull String>areTheSame(s, BLANK) || EqualableString.isNullOrBlank(s);
+      }
     }
   }
 
@@ -634,7 +615,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     @Builder
     @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class IntHolder {// extends EqualableHolder<@NotNull Integer> {
+    class IntHolder {// implements EqualableHolder<@NotNull Integer> {
 
       int s;
 
@@ -834,7 +815,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     @Builder
     @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class LongHolder {// extends EqualableHolder<@NotNull Long> {
+    class LongHolder {// implements EqualableHolder<@NotNull Long> {
 
       long s;
 
@@ -1029,7 +1010,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     @Builder
     @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class FloatHolder { // extends EqualableHolder<@NotNull Float> {
+    class FloatHolder { // implements EqualableHolder<@NotNull Float> {
 
       float s;
 
@@ -1215,7 +1196,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     @Builder
     @Unmodifiable
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    class DoubleHolder { // extends EqualableHolder<@NotNull Double> {
+    class DoubleHolder { // implements EqualableHolder<@NotNull Double> {
 
       double s;
 

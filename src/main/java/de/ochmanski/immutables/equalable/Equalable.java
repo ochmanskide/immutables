@@ -467,8 +467,18 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   class EqualableString implements Not<@NotNull String> {
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
+    static boolean areNotEqual(@Nullable final EqualableString a, @Nullable final EqualableString b) {
+      return !EqualableString.<@NotNull EqualableString>areEqual(a, b);
+    }
+
+    @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
     static boolean areNotEqual(@Nullable final String a, @Nullable final String b) {
       return !EqualableString.areEqual(a, b);
+    }
+
+    @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
+    static boolean areEqual(@Nullable final EqualableString a, @Nullable final EqualableString b) {
+      return Equalable.<@NotNull EqualableString>areEqual(a, b);
     }
 
     @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
@@ -477,8 +487,18 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
+    static boolean areNotEqualIgnoreCase(@Nullable final EqualableString a, @Nullable final EqualableString b) {
+      return !EqualableString.<@NotNull EqualableString>areEqualIgnoreCase(a, b);
+    }
+
+    @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
     static boolean areNotEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
       return !EqualableString.areEqualIgnoreCase(a, b);
+    }
+
+    @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
+    public static boolean areEqualIgnoreCase(@Nullable final EqualableString a, @Nullable final EqualableString b) {
+      return EqualableString.<@NotNull EqualableString>areTheSame(a, b) || EqualableString.<@NotNull EqualableString>bothAreBlank(a, b) || (a != null && a.isEqualToIgnoreCase(b));
     }
 
     @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
@@ -487,8 +507,18 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @Contract(value = "null, null -> true", pure = true)
+    static boolean bothAreNotBlank(@Nullable final EqualableString a, @Nullable final EqualableString b) {
+      return !EqualableString.<@NotNull EqualableString>bothAreBlank(a, b);
+    }
+
+    @Contract(value = "null, null -> true", pure = true)
     static boolean bothAreNotBlank(@Nullable final String a, @Nullable final String b) {
       return !EqualableString.bothAreBlank(a, b);
+    }
+
+    @Contract(value = "null, null -> false", pure = true)
+    static boolean bothAreBlank(@Nullable final EqualableString a, @Nullable final EqualableString b) {
+      return a != null && b != null && a.isBlank() && b.isBlank();
     }
 
     @Contract(value = "null, null -> false", pure = true)
@@ -497,8 +527,18 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @Contract(pure = true)
+    static boolean areNotTheSame(@Nullable final EqualableString a, @Nullable final EqualableString b) {
+      return !EqualableString.<@NotNull EqualableString>areTheSame(a, b);
+    }
+
+    @Contract(pure = true)
     static boolean areNotTheSame(@Nullable final String a, @Nullable final String b) {
       return !EqualableString.areTheSame(a, b);
+    }
+
+    @Contract(pure = true)
+    static boolean areTheSame(@Nullable final EqualableString a, @Nullable final EqualableString b) {
+      return Equalable.<@NotNull EqualableString>areTheSame(a, b);
     }
 
     @Contract(pure = true)
@@ -519,8 +559,18 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @Contract(value = "null -> false", pure = true)
+    static boolean isNotNullAndNotBlank(@Nullable final EqualableString s) {
+      return !EqualableString.<@NotNull EqualableString>isNullOrBlank(s);
+    }
+
+    @Contract(value = "null -> false", pure = true)
     static boolean isNotNullAndNotBlank(@Nullable final String s) {
-      return !isNullOrBlank(s);
+      return !EqualableString.<@NotNull String>isNullOrBlank(s);
+    }
+
+    @Contract(value = "null -> true", pure = true)
+    static boolean isNullOrBlank(@Nullable final EqualableString s) {
+      return null == s || s.isBlank();
     }
 
     @Contract(value = "null -> true", pure = true)

@@ -140,8 +140,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> Equalable.GenericHolder<@NotNull S> element(@Nullable final S s) {
-    return GenericHolder.<@NotNull S>builder().s(s).build();
+  static <S extends @NotNull Equalable<@NotNull S>> Equalable.Holder<@NotNull S> element(@Nullable final S s) {
+    return Holder.<@NotNull S>builder().s(s).build();
   }
 
   @NotNull
@@ -269,10 +269,12 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     return Equalable.<@NotNull Equalable<@NotNull T>>areTheSame(this, other);
   }
 
+  //<editor-fold defaultstate="collapsed" desc="2. implements Holder<Equalable>">
   @Value
   @Builder
+  @Unmodifiable
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  class GenericHolder<S extends @NotNull Equalable<@NotNull S>> implements Not<@NotNull S> {
+  class Holder<S extends @NotNull Equalable<@NotNull S>> implements Not<@NotNull S> {
 
     @Nullable S s;
 
@@ -337,6 +339,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       return EqualableEnum.<@NotNull E>of(s);
     }
   }
+  //</editor-fold>
 
   @Value
   @Builder
@@ -1171,9 +1174,8 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     public boolean isSameAs(final float other) {
       return EqualableFloat.areTheSame(s, other);
     }
+    //</editor-fold>
   }
-
-  //</editor-fold>
 
   @Value
   @Builder

@@ -610,12 +610,6 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       return elements.anyMatch(p -> EqualableString.areTheSame(p, plain));
     }
 
-    @Override
-    @Contract(pure = true)
-    public final boolean isEqualTo(@Nullable final String other) {
-      return EqualableString.areEqual(plain, other);
-    }
-
     @Contract(pure = true)
     public final boolean isNotEqualTo(@Nullable final EqualableString other) {
       return !isEqualTo(other);
@@ -623,7 +617,28 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Contract(pure = true)
     public final boolean isEqualTo(@Nullable final EqualableString other) {
-      return EqualableString.areEqual(plain, null == other ? null : other.getPlain());
+      return isEqualTo(null == other ? null : other.getPlain());
+    }
+
+    @Override
+    @Contract(pure = true)
+    public final boolean isEqualTo(@Nullable final String other) {
+      return EqualableString.areEqual(plain, other);
+    }
+
+    @Contract(pure = true)
+    public final boolean isNotEqualToIgnoreCase(@Nullable final EqualableString other) {
+      return !isEqualToIgnoreCase(other);
+    }
+
+    @Contract(pure = true)
+    public final boolean equalsIgnoreCase(@Nullable final EqualableString other) {
+      return isEqualToIgnoreCase(other);
+    }
+
+    @Contract(pure = true)
+    public final boolean isEqualToIgnoreCase(@Nullable final EqualableString other) {
+      return isEqualToIgnoreCase(null == other ? null : other.getPlain());
     }
 
     @Contract(pure = true)
@@ -639,21 +654,6 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     @Contract(pure = true)
     public final boolean isEqualToIgnoreCase(@Nullable final String other) {
       return EqualableString.areEqualIgnoreCase(plain, other);
-    }
-
-    @Contract(pure = true)
-    public final boolean isNotEqualToIgnoreCase(@Nullable final EqualableString other) {
-      return !isEqualToIgnoreCase(other);
-    }
-
-    @Contract(pure = true)
-    public final boolean equalsIgnoreCase(@Nullable final EqualableString other) {
-      return isEqualToIgnoreCase(other);
-    }
-
-    @Contract(pure = true)
-    public final boolean isEqualToIgnoreCase(@Nullable final EqualableString other) {
-      return EqualableString.areEqualIgnoreCase(plain, null == other ? null : other.getPlain());
     }
 
     @Override

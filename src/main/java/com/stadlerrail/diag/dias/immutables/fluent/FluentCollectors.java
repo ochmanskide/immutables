@@ -1,4 +1,4 @@
-package de.ochmanski.immutables.equalable;
+package com.stadlerrail.diag.dias.immutables.fluent;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +10,9 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
-
-public interface EqualableCollectors
+import static com.stadlerrail.diag.dias.immutables.constants.Constants.Warning.RAWTYPES;
+import static com.stadlerrail.diag.dias.immutables.constants.Constants.Warning.UNCHECKED;
+public interface FluentCollectors
 {
 
   @NotNull
@@ -56,12 +55,24 @@ public interface EqualableCollectors
    */
   @NotNull
   @Contract(value = " -> new", pure = true)
-  static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
+  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
   {
     return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
       .supplier(HashSet::new)
       .accumulator(Set::add)
-      .combiner(EqualableCollectors::combiner)
+      .combiner((left, right) ->
+      {
+        if(left.size() < right.size())
+        {
+          right.addAll(left);
+          return right;
+        }
+        else
+        {
+          left.addAll(right);
+          return left;
+        }
+      })
       .characteristics(CH_UNORDERED_ID)
       .build();
   }
@@ -82,82 +93,71 @@ public interface EqualableCollectors
    */
   @NotNull
   @Contract(value = " _ -> new", pure = true)
-  static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSet<@NotNull T>> toSet(
+  static <T extends @NotNull Enum<@NotNull T> & Fluent<? extends @NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<@NotNull T>> toSet(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
   {
-    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSet<@NotNull T>>builder()
+    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull FluentEnumSet<@NotNull T>>builder()
       .supplier(HashSet::new)
       .accumulator(Set::add)
-      .combiner(EqualableCollectors::combiner)
-      .finisher(set -> EqualableSet.of(set, constructor))
+      .combiner((left, right) ->
+      {
+        if(left.size() < right.size())
+        {
+          right.addAll(left);
+          return right;
+        }
+        else
+        {
+          left.addAll(right);
+          return left;
+        }
+      })
+      .finisher(set -> FluentEnumSet.ofCollection(set, constructor))
       .characteristics(CH_UNORDERED_NOID)
       .build();
   }
 
   @NotNull
-  private static <T extends @NotNull Equalable<@NotNull T>> HashSet<@NotNull T> combiner(
-    @NotNull final HashSet<@NotNull T> left,
-    @NotNull final HashSet<@NotNull T> right)
-  {
-    if(left.size() < right.size())
-    {
-      right.addAll(left);
-      return right;
-    }
-    else
-    {
-      left.addAll(right);
-      return left;
-    }
-  }
-
-  @NotNull
-  @Contract(value = " _ -> new", pure = true)
-  static <T extends @NotNull Equalable<@NotNull T>> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>> toList(
+  @Contract(value = " -> new", pure = true)
+  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull FluentEnumList<@NotNull T>> toList(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor
   )
   {
-    return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>>builder()
+    return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull FluentEnumList<@NotNull T>>builder()
       .supplier(ArrayList::new)
       .accumulator(List::add)
-      .combiner(EqualableCollectors::combiner)
-      .finisher(set -> EqualableList.of(set, constructor))
+      .combiner((left, right) ->
+      {
+        if(left.size() < right.size())
+        {
+          right.addAll(left);
+          return right;
+        }
+        else
+        {
+          left.addAll(right);
+          return left;
+        }
+      })
+      .finisher(set -> FluentEnumList.of(set, constructor))
       .characteristics(CH_UNORDERED_NOID)
       .build();
-  }
-
-  @NotNull
-  private static <T extends @NotNull Equalable<@NotNull T>> ArrayList<@NotNull T> combiner(
-    @NotNull final ArrayList<@NotNull T> left,
-    @NotNull final ArrayList<@NotNull T> right)
-  {
-    if(left.size() < right.size())
-    {
-      right.addAll(left);
-      return right;
-    }
-    else
-    {
-      left.addAll(right);
-      return left;
-    }
   }
 
   @NotNull
   @Contract(pure = true)
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
-  static <T> IntFunction<@NotNull T @NotNull []> tGenerator() {
-    return (IntFunction) DEFAULT_KEY;
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> IntFunction<@NotNull T @NotNull []> tGenerator()
+  {
+    return (IntFunction)Enum @NotNull []::new;
   }
-
-  @NotNull
-  IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable @NotNull []::new;
 
   @Value
   @RequiredArgsConstructor
   @Builder
-  class CollectorImpl<T extends @NotNull Equalable<@NotNull T>, A, R>
-    implements Collector<@NotNull T, @NotNull A, @NotNull R> {
+  class CollectorImpl<T extends @NotNull Enum<@NotNull T> & Fluent<? extends @NotNull T>, A, R>
+    implements Collector<@NotNull T, @NotNull A, @NotNull R>
+  {
     @NotNull
     Supplier<@NotNull A> supplier;
 
@@ -176,34 +176,38 @@ public interface EqualableCollectors
 
     @NotNull
     @Override
-    public BiConsumer<@NotNull A, @NotNull T> accumulator() {
+    public BiConsumer<@NotNull A, @NotNull T> accumulator()
+    {
       return accumulator;
     }
 
     @NotNull
     @Override
-    public Supplier<@NotNull A> supplier() {
+    public Supplier<@NotNull A> supplier()
+    {
       return supplier;
     }
 
     @NotNull
     @Override
-    public BinaryOperator<@NotNull A> combiner() {
+    public BinaryOperator<@NotNull A> combiner()
+    {
       return combiner;
     }
 
     @NotNull
     @Override
-    public Function<@NotNull A, @NotNull R> finisher() {
+    public Function<@NotNull A, @NotNull R> finisher()
+    {
       return finisher;
     }
 
     @NotNull
     @Override
-    public Set<@NotNull Characteristics> characteristics() {
+    public Set<@NotNull Characteristics> characteristics()
+    {
       return characteristics;
     }
-
   }
 
   @NotNull
@@ -213,4 +217,5 @@ public interface EqualableCollectors
   {
     return i -> (R)i;
   }
+
 }

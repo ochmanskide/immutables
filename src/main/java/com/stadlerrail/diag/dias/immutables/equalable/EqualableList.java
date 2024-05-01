@@ -1,11 +1,14 @@
-package de.ochmanski.immutables.equalable;
+package com.stadlerrail.diag.dias.immutables.equalable;
 
-import de.ochmanski.immutables.StringWrapper;
-import de.ochmanski.immutables.collection.IList;
-import de.ochmanski.immutables.constants.Constants;
-import de.ochmanski.immutables.fluent.Fluent;
-import de.ochmanski.immutables.immutable.ImmutableList;
-import lombok.*;
+import com.stadlerrail.diag.dias.immutables.StringWrapper;
+import com.stadlerrail.diag.dias.immutables.collection.IList;
+import com.stadlerrail.diag.dias.immutables.constants.Constants;
+import com.stadlerrail.diag.dias.immutables.fluent.Fluent;
+import com.stadlerrail.diag.dias.immutables.immutable.ImmutableList;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -15,8 +18,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.IntFunction;
-
-import static de.ochmanski.immutables.constants.Constants.Warning.*;
 
 @Value
 @UnmodifiableView
@@ -31,7 +32,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @UnmodifiableView
   @javax.validation.constraints.NotNull(message = "Given list cannot be null.")
   @Builder.Default
-  ImmutableList<@NotNull E> list = ImmutableList.empty();
+  ImmutableList<@NotNull E> list = (ImmutableList)ImmutableList.empty();
 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")

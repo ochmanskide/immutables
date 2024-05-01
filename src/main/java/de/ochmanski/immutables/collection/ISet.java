@@ -3,6 +3,7 @@ package de.ochmanski.immutables.collection;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import org.jetbrains.annotations.*;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
@@ -16,20 +17,20 @@ public interface ISet<E> extends ICollection<@NotNull E> {
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link ImmutableSet#ofGenerator(IntFunction)} instead.
+   * <p>use method: {@link ImmutableSet#noneOf(IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = ISet.ofGenerator(Dummy[]::new);
-   *   final ISet<String> actual = ISet.ofGenerator(String[]::new);
-   *   final ISet<Integer> actual = ISet.ofGenerator(Integer[]::new);
+   *   final ISet<Dummy> actual = ISet.noneOf(Dummy[]::new);
+   *   final ISet<String> actual = ISet.noneOf(String[]::new);
+   *   final ISet<Integer> actual = ISet.noneOf(Integer[]::new);
    *   }
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
   private static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: ISet.ofGenerator(String[]::new)");
+      + "For example: ISet.noneOf(String[]::new)");
   }
 
   default int size() {
@@ -41,6 +42,7 @@ public interface ISet<E> extends ICollection<@NotNull E> {
    *
    * @return {@code true} if this set contains no elements
    */
+  @Override
   default boolean isEmpty() {
     return getSet().isEmpty();
   }
@@ -52,6 +54,7 @@ public interface ISet<E> extends ICollection<@NotNull E> {
    * @param o element whose presence in this set is to be tested
    * @return {@code true} if this set contains the specified element
    */
+  @Override
   default boolean contains(@NotNull final E o) {
     return getSet().contains(o);
   }
@@ -91,6 +94,7 @@ public interface ISet<E> extends ICollection<@NotNull E> {
    *
    * @return an iterator over the elements in this set
    */
+  @Override
   @NotNull
   @Contract(pure = true)
   default Iterator<@NotNull E> iterator() {
@@ -102,9 +106,10 @@ public interface ISet<E> extends ICollection<@NotNull E> {
    *
    * @return a sequential {@code Stream} over the elements in this collection
    * @implSpec The default implementation creates a sequential {@code Stream} from the collection's
-   * {@code Spliterator}.
+   *   {@code Spliterator}.
    * @since 1.8
    */
+  @Override
   @NotNull
   @Unmodifiable
   @UnmodifiableView
@@ -160,6 +165,19 @@ public interface ISet<E> extends ICollection<@NotNull E> {
     return getSet().findAny();
   }
 
+  @Override
+  @Contract(pure = true)
+  default void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer, @NotNull final Comparator<? super @NotNull E> comparator) {
+    getSet().forEachOrdered(consumer, comparator);
+  }
+
+  @Override
+  @Contract(pure = true)
+  default void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer) {
+    getSet().forEachOrdered(consumer);
+  }
+
+  @Override
   @Contract(pure = true)
   default void forEach(@NotNull final Consumer<? super @NotNull E> consumer) {
     getSet().forEach(consumer);

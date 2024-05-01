@@ -1,16 +1,23 @@
 package de.ochmanski.immutables.constants;
 
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.UNUSED;
 
 public interface Constants {
 
   @NonNls
+  @NotNull
+  @Unmodifiable
   String BLANK = "";
 
   @SuppressWarnings(UNUSED)
   interface Language {
+    @NonNls
+    @NotNull
+    @Unmodifiable
     String REGEX = "RegExp",
       JAVA = "Java",
       SQL = "SQL",
@@ -53,7 +60,6 @@ public interface Constants {
    */
   @SuppressWarnings(UNUSED)
   interface Warning {
-
     /**
      * this is sort of a wildcard that suppresses all warnings.
      */
@@ -116,6 +122,27 @@ public interface Constants {
 
     @NonNls
     String LAMBDA_PARAMETER_TYPE_CAN_BE_SPECIFIED = "LambdaParameterTypeCanBeSpecified";
+
+    @NonNls
+    String FIELD_CAN_BE_LOCAL = "FieldCanBeLocal";
+
+    @NonNls
+    String REDUNDANT_SUPPRESSION = "RedundantSuppression";
+
+    @NonNls
+    String REDUNDANT_METHOD_OVERRIDE = "RedundantMethodOverride";
+
+    @NonNls
+    String UNRESOLVED_PROPERTY_KEY = "UnresolvedPropertyKey";
+
+    @NonNls
+    String FUNCTIONAL_EXPRESSION_CAN_BE_FOLDED = "FunctionalExpressionCanBeFolded";
+
+    @NonNls
+    String SPELL_CHECKING_INSPECTION = "SpellCheckingInspection";
+
+    @NonNls
+    String SIMPLIFY_STREAM_API_CALL_CHAINS = "SimplifyStreamApiCallChains";
 
     /**
      * <b>boxing</b>: suppresses warnings related to boxing/unboxing operations

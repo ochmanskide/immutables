@@ -23,7 +23,7 @@ class FluentEnumSetTest {
     assertThatThrownBy(FluentEnumSet::of)
       .isExactlyInstanceOf(UnsupportedOperationException.class)
       .hasMessage("Please pass array generator type to the method. "
-        + "For example: FluentEnumSet.ofGenerator(Day[]::new)");
+        + "For example: FluentEnumSet.noneOf(Day[]::new)");
   }
 
   @Test
@@ -40,7 +40,7 @@ class FluentEnumSetTest {
 
   @Test
   void ofGivenClass() {
-    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.<@NotNull FluentExample>ofGenerator(
+    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.<@NotNull FluentExample>noneOf(
       FluentExample[]::new);
     assertThat(actual.unwrap()).isEmpty();
     assertThat(actual.isEmpty()).isTrue();
@@ -82,7 +82,7 @@ class FluentEnumSetTest {
 
   @Test
   void of0() {
-    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.<@NotNull FluentExample>ofGenerator(
+    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.<@NotNull FluentExample>noneOf(
       FluentExample[]::new);
     assertThat(actual.getClass()).isSameAs(FluentEnumSet.class);
     assertThat(actual.unwrap()).isEmpty();
@@ -151,9 +151,9 @@ class FluentEnumSetTest {
   }
 
   @Test
-  void ofGenerator() {
+  void noneOf() {
     final @NotNull IntFunction<@NotNull FluentExample[]> constructor = FluentExample[]::new;
-    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.ofGenerator(constructor);
+    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.noneOf(constructor);
     assertThat(actual.isEmpty()).isTrue();
     assertThat(actual.size()).isZero();
     assertThat(actual.getSet().unwrap()).isEmpty();
@@ -246,7 +246,7 @@ class FluentEnumSetTest {
   @Test
   void toArrayEmpty() {
     final FluentExample s1 = FluentExample.A;
-    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.ofGenerator(FluentExample[]::new);
+    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.noneOf(FluentExample[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 
@@ -285,12 +285,12 @@ class FluentEnumSetTest {
 
   @Test
   void toArrayNullClass() {
-    Assertions.assertThatThrownBy(() -> FluentEnumSet.ofGenerator(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
+    Assertions.assertThatThrownBy(() -> FluentEnumSet.noneOf(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
   }
 
   @Test
   void toArrayClass() {
-    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.ofGenerator(FluentExample[]::new);
+    final FluentEnumSet<@NotNull FluentExample> actual = FluentEnumSet.noneOf(FluentExample[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 

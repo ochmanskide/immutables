@@ -16,7 +16,7 @@ class EqualableListTest {
 
   @Test
   void ofNullClass() {
-    assertThatThrownBy(() -> EqualableList.ofGenerator(null))
+    assertThatThrownBy(() -> EqualableList.noneOf(null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
         npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
@@ -26,7 +26,7 @@ class EqualableListTest {
 
   @Test
   void of0() {
-    @NotNull EqualableList<@NotNull StringWrapper> actual = EqualableList.ofGenerator(StringWrapper[]::new);
+    @NotNull EqualableList<@NotNull StringWrapper> actual = EqualableList.noneOf(StringWrapper[]::new);
     assertThat(actual).isInstanceOf(EqualableList.class);
     assertThat(actual.unwrap()).isEmpty();
     assertThat(actual.isEmpty()).isTrue();
@@ -126,12 +126,12 @@ class EqualableListTest {
 
   @Test
   void toArrayNullClass() {
-    assertThatThrownBy(() -> EqualableList.ofGenerator(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
+    assertThatThrownBy(() -> EqualableList.noneOf(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
   }
 
   @Test
   void toArrayClass() {
-    EqualableList<? extends @NotNull StringWrapper> actual = EqualableList.ofGenerator(StringWrapper[]::new);
+    EqualableList<? extends @NotNull StringWrapper> actual = EqualableList.noneOf(StringWrapper[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 
@@ -187,14 +187,14 @@ class EqualableListTest {
 
   @Test
   void toStringTest01() {
-    EqualableList<? extends @NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull StringWrapper>ofGenerator(StringWrapper[]::new);
+    EqualableList<? extends @NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull StringWrapper>noneOf(StringWrapper[]::new);
     final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[]");
   }
 
   @Test
   void toStringTest02() {
-    EqualableList<? extends @NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull StringWrapper>empty();
+    EqualableList<? extends @NotNull StringWrapper> unitUnderTest = EqualableList.<@NotNull StringWrapper>noneOf(StringWrapper[]::new);
     final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[]");
   }

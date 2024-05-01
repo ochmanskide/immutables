@@ -1,10 +1,12 @@
 package de.ochmanski.immutables;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,36 +20,24 @@ import java.util.List;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class StringWrapper implements Equalable<@NotNull StringWrapper> {
-
-  @NonNull
   @NotNull
   @Builder.Default
   String raw = Constants.BLANK;
 
   @NotNull
-  @Unmodifiable
   @Contract(value = "_ -> new", pure = true)
   public static StringWrapper of(@NotNull final String raw) {
     return StringWrapper.builder().raw(raw).build();
   }
 
   @NotNull
-  @Unmodifiable
   @Contract(pure = true)
   public static StringWrapper blank() {
     return BLANK;
   }
 
   @NotNull
-  @Unmodifiable
-  private static final StringWrapper BLANK = create();
-
-  @NotNull
-  @Unmodifiable
-  @Contract(value = "-> new", pure = true)
-  private static StringWrapper create() {
-    return StringWrapper.builder().build();
-  }
+  private static final StringWrapper BLANK = StringWrapper.builder().build();
 
   @Contract(value = "null -> true", pure = true)
   public boolean isNotEqualToIgnoreCase(@Nullable final StringWrapper other) {

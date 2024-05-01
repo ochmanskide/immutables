@@ -3,7 +3,10 @@ package de.ochmanski.immutables.fluent;
 import de.ochmanski.immutables.collection.ISet;
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -13,9 +16,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.function.IntFunction;
-
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 /**
  * Immutable wrapper of <pre>{@code java.util.EnumSet<K,V>}</pre>
@@ -35,50 +35,47 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
 
   @Unmodifiable
   @UnmodifiableView
-  @NonNull
   @NotNull("Given set cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given set cannot be null.")
   @Builder.Default
-  ImmutableEnumSet<@NonNull @NotNull E> set = ImmutableEnumSet.<@NotNull E>empty();
+  ImmutableEnumSet<@NotNull E> set = (ImmutableEnumSet) ImmutableEnumSet.empty();
 
-  @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given constructor cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
+  IntFunction<@NotNull E @NotNull []> key = defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
-  @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
-  @Contract(value = "-> new", pure = true)
-  private static <S extends @NotNull Enum<@NotNull S> & @NotNull Fluent<? extends @NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) DEFAULT_KEY;
-  }
-
-  @NotNull
-  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = Fluent @NotNull []::new;
-
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings(Constants.Warning.UNCHECKED)
-  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> empty() {
-    return EMPTY_SET;
+  public static FluentEnumSet<? extends @NotNull Fluent<?>> empty() {
+    return EMPTY;
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @SuppressWarnings(Constants.Warning.RAWTYPES)
-  private static final FluentEnumSet EMPTY_SET = create();
+  private static final FluentEnumSet<@NotNull Dummy> EMPTY = createConstant();
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
+  @Contract(value = "-> new", pure = true)
+  private static FluentEnumSet<@NotNull Dummy> createConstant() {
+    return FluentEnumSet.<@NotNull Dummy>builder().key(Dummy[]::new).build();
+  }
+
+  public enum Dummy implements Fluent<@NotNull Dummy> {
+    A
+  }
+
+  @NotNull
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   @Contract(value = " -> new", pure = true)
-  private static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> create() {
-    return FluentEnumSet.<@NotNull S>builder().build();
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) Fluent @NotNull []::new;
   }
   //</editor-fold>
 
@@ -87,29 +84,29 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(IntFunction)} instead.
+   * <p>use method: {@link #noneOf(IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = FluentEnumSet.ofGenerator(Dummy[]::new);
-   *   final ISet<DayOfWeek> actual = FluentEnumSet.ofGenerator(DayOfWeek[]::new);
-   *   final ISet<Month> actual = FluentEnumSet.ofGenerator(Month[]::new);
+   *   final ISet<Dummy> actual = FluentEnumSet.noneOf(Dummy[]::new);
+   *   final ISet<DayOfWeek> actual = FluentEnumSet.noneOf(DayOfWeek[]::new);
+   *   final ISet<Month> actual = FluentEnumSet.noneOf(Month[]::new);
    *   }
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
-  static void of() {
+  public static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: FluentEnumSet.ofGenerator(Day[]::new)");
+      + "For example: FluentEnumSet.noneOf(Day[]::new)");
   }
 
   /**
    * Example usage:
    * <pre>
    *   {@code
-   *   final ISet<Dummy> actual = FluentEnumSet.ofGenerator(Dummy[]::new);
-   *   final ISet<DayOfWeek> actual = FluentEnumSet.ofGenerator(DayOfWeek[]::new);
-   *   final ISet<Month> actual = FluentEnumSet.ofGenerator(Month[]::new);
+   *   final ISet<Dummy> actual = FluentEnumSet.noneOf(Dummy[]::new);
+   *   final ISet<DayOfWeek> actual = FluentEnumSet.noneOf(DayOfWeek[]::new);
+   *   final ISet<Month> actual = FluentEnumSet.noneOf(Month[]::new);
    *   }
    * </pre>
    */
@@ -117,7 +114,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> ofGenerator(
+  public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> noneOf(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return FluentEnumSet.<@NotNull S>of(ImmutableEnumSet.<@NotNull S>noneOf(constructor));
   }
@@ -241,11 +238,21 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
    * @return a clone of this {@code ArraySet} instance
    */
   @NotNull
+  @Override
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
   public FluentEnumSet<? extends @NotNull E> deepClone() {
     return toBuilder().build();
+  }
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  public ImmutableEnumSet<@NotNull E> getSet() {
+    return set;
   }
 
   @NotNull

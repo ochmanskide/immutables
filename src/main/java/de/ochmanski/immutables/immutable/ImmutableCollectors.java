@@ -1,5 +1,7 @@
 package de.ochmanski.immutables.immutable;
 
+import de.ochmanski.immutables.constants.Constants;
+import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -11,37 +13,25 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
-
 public interface ImmutableCollectors {
 
   @NotNull
-  Set<Collector.@NotNull Characteristics> CH_CONCURRENT_ID
-    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
-    Collector.Characteristics.UNORDERED,
-    Collector.Characteristics.IDENTITY_FINISH));
+  Set<Collector.@NotNull Characteristics> CH_CONCURRENT_ID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT, Collector.Characteristics.UNORDERED, Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
-  Set<Collector.@NotNull Characteristics> CH_CONCURRENT_NOID
-    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
-    Collector.Characteristics.UNORDERED));
+  Set<Collector.@NotNull Characteristics> CH_CONCURRENT_NOID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT, Collector.Characteristics.UNORDERED));
 
   @NotNull
-  Set<Collector.@NotNull Characteristics> CH_ID
-    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
+  Set<Collector.@NotNull Characteristics> CH_ID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
-  Set<Collector.@NotNull Characteristics> CH_UNORDERED_ID
-    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED,
-    Collector.Characteristics.IDENTITY_FINISH));
+  Set<Collector.@NotNull Characteristics> CH_UNORDERED_ID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED, Collector.Characteristics.IDENTITY_FINISH));
 
   @NotNull
   Set<Collector.@NotNull Characteristics> CH_NOID = Collections.emptySet();
 
   @NotNull
-  Set<Collector.@NotNull Characteristics> CH_UNORDERED_NOID
-    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED));
+  Set<Collector.@NotNull Characteristics> CH_UNORDERED_NOID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED));
 
   /**
    * Returns a {@code Collector} that accumulates the input elements into a new {@code Set}. There are no guarantees on
@@ -74,6 +64,29 @@ public interface ImmutableCollectors {
       .build();
   }
 
+  @NotNull
+  @Contract(value = "_ -> new", pure = true)
+  static <T extends Comparable<@NotNull T>> Collector<@NotNull T, @NotNull TreeSet<@NotNull T>, @NotNull ImmutableSortedSet<@NotNull T>> toSortedSet(
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor
+  ) {
+    return CollectorImpl.<@NotNull T, @NotNull TreeSet<@NotNull T>, @NotNull ImmutableSortedSet<@NotNull T>>builder()
+      .supplier(TreeSet::new)
+      .accumulator(SortedSet::add)
+      .combiner((left, right) ->
+      {
+        if (left.size() < right.size()) {
+          right.addAll(left);
+          return right;
+        } else {
+          left.addAll(right);
+          return left;
+        }
+      })
+      .finisher(set -> ImmutableSortedSet.<@NotNull T>of(set, constructor))
+      .characteristics(CH_UNORDERED_NOID)
+      .build();
+  }
+
   /**
    * Returns a {@code Collector} that accumulates the input elements into an
    * <a href="../Set.html#unmodifiable">unmodifiable Set</a>. The returned
@@ -85,7 +98,7 @@ public interface ImmutableCollectors {
    *
    * @param <T> the type of the input elements
    * @return a {@code Collector} that accumulates the input elements into an
-   * <a href="../Set.html#unmodifiable">unmodifiable Set</a>
+   *     <a href="../Set.html#unmodifiable">unmodifiable Set</a>
    * @since 10
    */
   @NotNull
@@ -134,7 +147,7 @@ public interface ImmutableCollectors {
   }
 
   @NotNull
-  @Contract(value = " -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   static <T> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull ImmutableList<@NotNull T>> toList(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor) {
     return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull ImmutableList<@NotNull T>>builder()
@@ -157,9 +170,9 @@ public interface ImmutableCollectors {
 
   @NotNull
   @Contract(pure = true)
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   static <T> IntFunction<@NotNull T @NotNull []> tGenerator() {
-    return (IntFunction) Object @NotNull []::new;
+    return (IntFunction) Fluent @NotNull []::new;
   }
 
   @Value
@@ -212,12 +225,11 @@ public interface ImmutableCollectors {
     public Set<@NotNull Characteristics> characteristics() {
       return characteristics;
     }
-
   }
 
   @NotNull
   @Contract(pure = true)
-  @SuppressWarnings(UNCHECKED)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   private static <I, R> Function<@NotNull I, @NotNull R> castingIdentity() {
     return i -> (R) i;
   }

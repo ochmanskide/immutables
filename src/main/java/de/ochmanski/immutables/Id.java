@@ -1,10 +1,12 @@
 package de.ochmanski.immutables;
 
-
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -15,36 +17,23 @@ import java.util.List;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class Id implements Equalable<@NotNull Id>, Comparable<@NotNull Id> {
-
-  @NonNull
   @NotNull
   @Builder.Default
   String id = Constants.BLANK;
 
   @NotNull
-  @Unmodifiable
   @Contract(value = "_ -> new", pure = true)
   public static Id of(@NotNull final String raw) {
     return Id.builder().id(raw).build();
   }
 
   @NotNull
-  @Unmodifiable
-  @Contract(pure = true)
+  @Contract(value = "-> new", pure = true)
   public static Id blank() {
     return BLANK;
   }
 
-  @NotNull
-  @Unmodifiable
-  public static final Id BLANK = create();
-
-  @NotNull
-  @Unmodifiable
-  @Contract(value = "-> new", pure = true)
-  private static Id create() {
-    return Id.builder().build();
-  }
+  public static final Id BLANK = Id.builder().build();
 
   @Contract(value = "null -> true", pure = true)
   public boolean isNotEqualToIgnoreCase(@Nullable final String other) {
@@ -110,7 +99,6 @@ public class Id implements Equalable<@NotNull Id>, Comparable<@NotNull Id> {
   }
 
   //<editor-fold defaultstate="collapsed" desc="implementation of Comparable<Id> interface">
-  @NonNull
   @NotNull
   @javax.validation.constraints.NotNull
   private static Comparator<@NonNull @NotNull

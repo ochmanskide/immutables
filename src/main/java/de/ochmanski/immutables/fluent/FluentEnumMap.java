@@ -1,13 +1,16 @@
 package de.ochmanski.immutables.fluent;
 
-
 import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.collection.IMap;
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumMap;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -18,9 +21,6 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.IntFunction;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
-
 @Value
 @UnmodifiableView
 @ParametersAreNonnullByDefault
@@ -30,44 +30,35 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   implements IMap<@NotNull K, @NotNull V> {
 
   @UnmodifiableView
-  @NonNull
   @NotNull("FluentEnumMap::Builder 001: Given FluentEnumMap::map cannot be null.")
   @javax.validation.constraints.NotNull(message = "FluentEnumMap::Builder 001: Given FluentEnumMap::map cannot be null.")
   @Builder.Default
-  ImmutableEnumMap<@NonNull @NotNull K, @NonNull @NotNull V> map = ImmutableEnumMap.<@NotNull K, @NotNull V>empty();
+  ImmutableEnumMap<@NotNull K, @NotNull V> map = (ImmutableEnumMap) ImmutableEnumMap.empty();
 
-  @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull K @NonNull @NotNull []> key = defaultKey();
+  IntFunction<@NotNull K @NotNull []> key = defaultKey();
 
-  @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull V @NonNull @NotNull []> value = defaultValue();
+  IntFunction<@NotNull V @NotNull []> value = defaultValue();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   @Contract(value = " -> new", pure = true)
-  private static <S extends Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) DEFAULT_KEY;
+  private static <S extends @NotNull Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) Fluent @NotNull []::new;
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = Fluent @NotNull []::new;
-
-  @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   @Contract(value = " -> new", pure = true)
   private static <S> IntFunction<@NotNull S @NotNull []> defaultValue() {
-    return (IntFunction) DEFAULT_VALUE;
+    return (IntFunction) Fluent @NotNull []::new;
   }
-
-  @NotNull
-  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_VALUE = Equalable @NotNull []::new;
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
@@ -75,29 +66,29 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(IntFunction, IntFunction)} instead.
+   * <p>use method: {@link #noneOf(IntFunction, IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final IMap<Dummy> actual = IMap.ofGenerator(Dummy[]::new);
-   *   final IMap<String> actual = IMap.ofGenerator(String[]::new);
-   *   final IMap<Integer> actual = IMap.ofGenerator(Integer[]::new);
+   *   final IMap<Dummy> actual = IMap.noneOf(Dummy[]::new);
+   *   final IMap<String> actual = IMap.noneOf(String[]::new);
+   *   final IMap<Integer> actual = IMap.noneOf(Integer[]::new);
    *   }
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
   static void of() {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: IMap.ofGenerator(String[]::new)");
+      + "For example: IMap.noneOf(String[]::new)");
   }
 
   /**
    * Example usage:
    * <pre>
    *   {@code
-   *   final IMap<Dummy> actual = IMap.ofGenerator(Dummy[]::new);
-   *   final IMap<String> actual = IMap.ofGenerator(String[]::new);
-   *   final IMap<Integer> actual = IMap.ofGenerator(Integer[]::new);
+   *   final IMap<Dummy> actual = IMap.noneOf(Dummy[]::new);
+   *   final IMap<String> actual = IMap.noneOf(String[]::new);
+   *   final IMap<Integer> actual = IMap.noneOf(Integer[]::new);
    *   }
    * </pre>
    */
@@ -105,10 +96,10 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> FluentEnumMap<@NotNull K, @NotNull V>
-  ofGenerator(
+  noneOf(
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value) {
-    final ImmutableEnumMap<@NotNull K, @NotNull V> enumMap = ImmutableEnumMap.<@NotNull K, @NotNull V>ofGenerator(key,
+    final ImmutableEnumMap<@NotNull K, @NotNull V> enumMap = ImmutableEnumMap.<@NotNull K, @NotNull V>noneOf(key,
       value);
     return FluentEnumMap.ofEnumMap(enumMap, key, value);
   }
@@ -189,11 +180,11 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> FluentEnumMap<@NotNull K, @NotNull V> of(
-    @NotNull final Map<@NonNull @NotNull K, @NonNull @NotNull V> map,
+    @NotNull final Map<@NotNull K, @NotNull V> map,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value) {
     if (map.isEmpty()) {
-      return FluentEnumMap.ofGenerator(key, value);
+      return FluentEnumMap.noneOf(key, value);
     }
     final ImmutableEnumMap<@NotNull K, @NotNull V> enumMap = ImmutableEnumMap.<@NotNull K, @NotNull V>ofEnumMap(
       new EnumMap<@NotNull K, @NotNull V>(map), key, value);
@@ -204,10 +195,10 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @UnmodifiableView
   @Contract(value = " _, _, _-> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<? extends @NotNull K>, V extends @NotNull Equalable<@NotNull V>> FluentEnumMap<@NotNull K, @NotNull V> ofEnumMap(
-    @NotNull final ImmutableEnumMap<@NonNull @NotNull K, @NonNull @NotNull V> map,
+    @NotNull final ImmutableEnumMap<@NotNull K, @NotNull V> map,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value) {
-    return FluentEnumMap.<@NonNull @NotNull K, @NonNull @NotNull V>builder()
+    return FluentEnumMap.<@NotNull K, @NotNull V>builder()
       .key(key)
       .map(map)
       .value(value)
@@ -251,6 +242,15 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @Contract(value = " -> new", pure = true)
   public FluentEnumMap<@NotNull K, @NotNull V> deepClone() {
     return toBuilder().build();
+  }
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  public ImmutableEnumMap<@NotNull K, @NotNull V> getMap() {
+    return map;
   }
 
   @NotNull

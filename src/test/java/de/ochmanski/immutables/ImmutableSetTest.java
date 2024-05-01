@@ -22,7 +22,7 @@ class ImmutableSetTest {
 
   @Test
   void ofNullClass() {
-    assertThatThrownBy(() -> ImmutableSet.ofGenerator(null))
+    assertThatThrownBy(() -> ImmutableSet.noneOf(null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
         npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
@@ -32,7 +32,7 @@ class ImmutableSetTest {
 
   @Test
   void of0() {
-    @NotNull final ISet<Dummy> actual = ImmutableSet.ofGenerator(Dummy[]::new);
+    @NotNull final ISet<Dummy> actual = ImmutableSet.noneOf(Dummy[]::new);
     assertThat(actual).isInstanceOf(ImmutableSet.class);
     assertThat(actual.unwrap()).isEmpty();
     assertThat(actual.isEmpty()).isTrue();
@@ -132,12 +132,12 @@ class ImmutableSetTest {
 
   @Test
   void toArrayNullClass() {
-    assertThatThrownBy(() -> ImmutableSet.ofGenerator(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
+    assertThatThrownBy(() -> ImmutableSet.noneOf(null)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
   }
 
   @Test
   void toArrayClass() {
-    final ISet<Dummy> actual = ImmutableSet.ofGenerator(Dummy[]::new);
+    final ISet<Dummy> actual = ImmutableSet.noneOf(Dummy[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 
@@ -190,14 +190,14 @@ class ImmutableSetTest {
 
   @Test
   void toStringTest01() {
-    ImmutableSet<String> unitUnderTest = ImmutableSet.<@NotNull String>ofGenerator(String[]::new);
+    ImmutableSet<String> unitUnderTest = ImmutableSet.<@NotNull String>noneOf(String[]::new);
     final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[]");
   }
 
   @Test
   void toStringTest02() {
-    ImmutableSet<String> unitUnderTest = ImmutableSet.<@NotNull String>empty();
+    ImmutableSet<String> unitUnderTest = ImmutableSet.<@NotNull String>noneOf(String[]::new);
     final String actual = unitUnderTest.toString();
     assertThat(actual).isEqualTo("[]");
   }

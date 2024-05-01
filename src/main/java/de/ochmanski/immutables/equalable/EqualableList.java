@@ -3,8 +3,12 @@ package de.ochmanski.immutables.equalable;
 import de.ochmanski.immutables.StringWrapper;
 import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.constants.Constants;
+import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.immutable.ImmutableList;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -15,110 +19,97 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.IntFunction;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.*;
-
 @Value
 @UnmodifiableView
 @ParametersAreNonnullByDefault
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements IList<@NotNull E> {
+public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements IList<@NotNull E>
+{
 
-  @NonNull
   @NotNull("Given list cannot be null.")
   @Unmodifiable
   @UnmodifiableView
   @javax.validation.constraints.NotNull(message = "Given list cannot be null.")
   @Builder.Default
-  ImmutableList<@NonNull @NotNull E> list = ImmutableList.<@NotNull E>empty();
+  ImmutableList<@NotNull E> list = (ImmutableList) ImmutableList.empty();
 
-  @NonNull
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NonNull @NotNull E @NonNull @NotNull []> key = defaultKey();
+  IntFunction<@NotNull E @NotNull []> key = defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
 
   @NotNull
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @SuppressWarnings({ Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES })
   @Contract(value = "-> new", pure = true)
   private static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
     return (IntFunction) DEFAULT_KEY;
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Equalable<?> @NotNull []> DEFAULT_KEY = Equalable @NotNull []::new;
+  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = Fluent @NotNull []::new;
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings(Constants.Warning.UNCHECKED)
-  public static <E extends @NotNull Equalable<@NotNull E>> EqualableList<@NotNull E> empty() {
-    return EMPTY_SET;
+  @SuppressWarnings({ Constants.Warning.UNCHECKED })
+  public static EqualableList<? extends @NotNull Fluent<?>> empty()
+  {
+    return EMPTY;
   }
 
   @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @SuppressWarnings(Constants.Warning.RAWTYPES)
-  private static final EqualableList EMPTY_SET = create();
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = " -> new", pure = true)
-  private static <E extends @NotNull Equalable<@NotNull E>> EqualableList<@NotNull E> create() {
-    return EqualableList.<@NotNull E>builder().build();
-  }
+  @SuppressWarnings({ Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES })
+  private static final EqualableList EMPTY = EqualableList.builder().build();
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">
-
   /**
    * This method is not supported.
    * <p>You must provide a generic type for an empty collection.
-   * <p>use method: {@link #ofGenerator(IntFunction)} instead.
+   * <p>use method: {@link #noneOf(IntFunction)} instead.
    * <p>Example usage:
    * <pre>
    *   {@code
-   *   final IList<Dummy> actual = EqualableList.ofGenerator(Dummy[]::new);
-   *   final IList<DayOfWeek> actual = EqualableList.ofGenerator(DayOfWeek[]::new);
-   *   final IList<Month> actual = EqualableList.ofGenerator(Month[]::new);
+   *   final IList<Dummy> actual = EqualableList.noneOf(Dummy[]::new);
+   *   final IList<DayOfWeek> actual = EqualableList.noneOf(DayOfWeek[]::new);
+   *   final IList<Month> actual = EqualableList.noneOf(Month[]::new);
    *   }
    * </pre>
    */
-  @SuppressWarnings(UNUSED)
   @Contract(value = "-> fail", pure = true)
-  static void of() {
+  public static void of()
+  {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: EqualableList.ofGenerator(Day[]::new)");
+      + "For example: EqualableList.noneOf(Day[]::new)");
   }
 
   /**
    * Example usage:
    * <pre>
    *   {@code
-   *   final IList<Dummy> actual = EqualableList.ofGenerator(Dummy[]::new);
-   *   final IList<DayOfWeek> actual = EqualableList.ofGenerator(DayOfWeek[]::new);
-   *   final IList<Month> actual = EqualableList.ofGenerator(Month[]::new);
+   *   final IList<Dummy> actual = EqualableList.noneOf(Dummy[]::new);
+   *   final IList<DayOfWeek> actual = EqualableList.noneOf(DayOfWeek[]::new);
+   *   final IList<Month> actual = EqualableList.noneOf(Month[]::new);
    *   }
    * </pre>
    */
   @NotNull
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> ofGenerator(
-    @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
-    return EqualableList.<@NotNull S>of(ImmutableList.ofGenerator(constructor));
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> noneOf(
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableList.<@NotNull S>of(ImmutableList.noneOf(constructor));
   }
 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _ -> new", pure = true)
-  @SuppressWarnings(Constants.Warning.ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME)
-  static EqualableList<@NotNull StringWrapper> of(
+  public static EqualableList<@NotNull StringWrapper> of(
     @NotNull final String s1) {
     return EqualableList.ofString(ImmutableList.of(s1));
   }
@@ -126,7 +117,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return EqualableList.<@NotNull S>of(ImmutableList.of(s1, constructor));
@@ -135,8 +126,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _ -> new", pure = true)
-  @SuppressWarnings(Constants.Warning.ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME)
-  static EqualableList<@NotNull StringWrapper> of(
+  public static EqualableList<@NotNull StringWrapper> of(
     @NotNull final String s1,
     @NotNull final String s2) {
     return EqualableList.ofString(ImmutableList.of(s1, s2));
@@ -145,7 +135,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
@@ -155,8 +145,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _ -> new", pure = true)
-  @SuppressWarnings(Constants.Warning.ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME)
-  static EqualableList<@NotNull StringWrapper> of(
+  public static EqualableList<@NotNull StringWrapper> of(
     @NotNull final String s1,
     @NotNull final String s2,
     @NotNull final String s3) {
@@ -166,7 +155,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
@@ -177,8 +166,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _ -> new", pure = true)
-  @SuppressWarnings(Constants.Warning.ACTUAL_VALUE_OF_PARAMETER_IS_ALWAYS_THE_SAME)
-  static EqualableList<@NotNull StringWrapper> of(
+  public static EqualableList<@NotNull StringWrapper> of(
     @NotNull final String s1,
     @NotNull final String s2,
     @NotNull final String s3,
@@ -189,7 +177,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @UnmodifiableView
   @Contract(value = " _, _, _, _, _ -> new", pure = true)
-  static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
+  public static <S extends @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
     @NotNull final S s3,
@@ -270,6 +258,15 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @Contract(value = " -> new", pure = true)
   public EqualableList<@NotNull E> deepClone() {
     return toBuilder().build();
+  }
+
+  @NotNull
+  @Override
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  public ImmutableList<@NotNull E> getList() {
+    return list;
   }
   //</editor-fold>
 

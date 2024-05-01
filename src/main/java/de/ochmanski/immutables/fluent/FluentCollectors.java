@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.fluent;
 
+import de.ochmanski.immutables.constants.Constants;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -9,9 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
-
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 public interface FluentCollectors {
 
@@ -84,7 +82,7 @@ public interface FluentCollectors {
    *
    * @param <T> the type of the input elements
    * @return a {@code Collector} that accumulates the input elements into an
-   * <a href="../Set.html#unmodifiable">unmodifiable Set</a>
+   *     <a href="../Set.html#unmodifiable">unmodifiable Set</a>
    * @since 10
    */
   @NotNull
@@ -134,7 +132,7 @@ public interface FluentCollectors {
 
   @NotNull
   @Contract(pure = true)
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> IntFunction<@NotNull T @NotNull []> tGenerator() {
     return (IntFunction) Enum @NotNull []::new;
   }
@@ -189,12 +187,11 @@ public interface FluentCollectors {
     public Set<@NotNull Characteristics> characteristics() {
       return characteristics;
     }
-
   }
 
   @NotNull
   @Contract(pure = true)
-  @SuppressWarnings(UNCHECKED)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   private static <I, R> Function<@NotNull I, @NotNull R> castingIdentity() {
     return i -> (R) i;
   }

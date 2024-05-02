@@ -2,6 +2,7 @@ package de.ochmanski.immutables.equalable;
 
 import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.equalable.Equalable.Dummy;
+import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.immutable.ImmutableMap;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -52,20 +52,20 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  public static FluentEnumList<? extends @NotNull Fluent<?>> empty() {
+  public static FluentEnumList<? extends @NotNull Fluent<? extends @NotNull Enum<?>>> empty() {
     return EMPTY;
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  private static final FluentEnumList<@NotNull Dummy> EMPTY = createConstant();
+  private static final FluentEnumList<? extends @NotNull Fluent<? extends @NotNull Enum<?>>> EMPTY = createConstant();
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "-> new", pure = true)
-  private static FluentEnumList<@NotNull Dummy> createConstant() {
+  private static FluentEnumList<? extends @NotNull Fluent<? extends @NotNull Enum<?>>> createConstant() {
     return FluentEnumList.<@NotNull Dummy>builder().build();
   }
   //</editor-fold>

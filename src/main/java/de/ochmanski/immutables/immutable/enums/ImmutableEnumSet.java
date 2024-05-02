@@ -3,6 +3,7 @@ package de.ochmanski.immutables.immutable.enums;
 import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.collection.ISet;
 import de.ochmanski.immutables.constants.Constants;
+import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.fluent.Fluent.Dummy;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.AccessLevel;

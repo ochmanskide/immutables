@@ -345,22 +345,22 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   class EqualableEnum<S extends @NotNull Enum<@NotNull S>> {// implements Not<@NotNull S> { // & @NotNull Equalable<@NotNull S>> implements Equalable<S> {
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
-    static <E extends @NotNull Enum<@NotNull E>> boolean areNotEqual(@Nullable final Enum<@NotNull E> a, @Nullable final Enum<@NotNull E> b) {
+    public static <E extends @NotNull Enum<@NotNull E>> boolean areNotEqual(@Nullable final Enum<@NotNull E> a, @Nullable final Enum<@NotNull E> b) {
       return !EqualableEnum.<@NotNull E>areEqual(a, b);
     }
 
     @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
-    static <E extends @NotNull Enum<@NotNull E>> boolean areEqual(@Nullable final Enum<@NotNull E> a, @Nullable final Enum<@NotNull E> b) {
+    public static <E extends @NotNull Enum<@NotNull E>> boolean areEqual(@Nullable final Enum<@NotNull E> a, @Nullable final Enum<@NotNull E> b) {
       return EqualableEnum.<@NotNull E>areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static <E extends @NotNull Enum<@NotNull E>> boolean areNotTheSame(@Nullable final Enum<@NotNull E> a, @Nullable final Enum<@NotNull E> b) {
+    public static <E extends @NotNull Enum<@NotNull E>> boolean areNotTheSame(@Nullable final Enum<@NotNull E> a, @Nullable final Enum<@NotNull E> b) {
       return !EqualableEnum.<@NotNull E>areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static <E extends @NotNull Enum<@NotNull E>> boolean areTheSame(@Nullable final Enum<@NotNull E> a, @Nullable final Enum<@NotNull E> b) {
+    public static <E extends @NotNull Enum<@NotNull E>> boolean areTheSame(@Nullable final Enum<@NotNull E> a, @Nullable final Enum<@NotNull E> b) {
       return Equalable.<@NotNull Enum<@NotNull E>>areTheSame(a, b);
     }
 
@@ -464,27 +464,27 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   class EqualableString implements Equalable<@NotNull EqualableString>, Not<@NotNull Equalable<@NotNull EqualableString>> {
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
-    static boolean areNotEqual(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
+    public static boolean areNotEqual(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
       return !EqualableString.<@NotNull EqualableString>areEqual(a, b);
     }
 
     @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
-    static boolean areEqual(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
+    public static boolean areEqual(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
       return Equalable.<@NotNull EqualableString>areEqual(a, b);
     }
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
-    static boolean areNotEqual(@Nullable final String a, @Nullable final String b) {
+    public static boolean areNotEqual(@Nullable final String a, @Nullable final String b) {
       return !EqualableString.<@NotNull String>areEqual(a, b);
     }
 
     @Contract(value = "null, !null -> false; !null, null -> false; null, null -> true", pure = true)
-    static boolean areEqual(@Nullable final String a, @Nullable final String b) {
+    public static boolean areEqual(@Nullable final String a, @Nullable final String b) {
       return Equalable.<@NotNull String>areEqual(a, b);
     }
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
-    static boolean areNotEqualIgnoreCase(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
+    public static boolean areNotEqualIgnoreCase(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
       return !EqualableString.<@NotNull EqualableString>areEqualIgnoreCase(a, b);
     }
 
@@ -494,7 +494,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @Contract(value = "null, !null -> true; !null, null -> true; null, null -> false", pure = true)
-    static boolean areNotEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
+    public static boolean areNotEqualIgnoreCase(@Nullable final String a, @Nullable final String b) {
       return !EqualableString.<@NotNull String>areEqualIgnoreCase(a, b);
     }
 
@@ -504,74 +504,74 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @Contract(value = "null, null -> true", pure = true)
-    static boolean bothAreNotBlank(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
+    public static boolean bothAreNotBlank(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
       return !EqualableString.<@NotNull EqualableString>bothAreBlank(a, b);
     }
 
     @Contract(value = "null, null -> false", pure = true)
-    static boolean bothAreBlank(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
+    public static boolean bothAreBlank(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
       return a != null && b != null && ((EqualableString) a).isBlank() && ((EqualableString) b).isBlank();
     }
 
     @Contract(value = "null, null -> true", pure = true)
-    static boolean bothAreNotBlank(@Nullable final String a, @Nullable final String b) {
+    public static boolean bothAreNotBlank(@Nullable final String a, @Nullable final String b) {
       return !EqualableString.<@NotNull String>bothAreBlank(a, b);
     }
 
     @Contract(value = "null, null -> false", pure = true)
-    static boolean bothAreBlank(@Nullable final String a, @Nullable final String b) {
+    public static boolean bothAreBlank(@Nullable final String a, @Nullable final String b) {
       return a != null && b != null && a.isBlank() && b.isBlank();
     }
 
     @Contract(pure = true)
-    static boolean areNotTheSame(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
+    public static boolean areNotTheSame(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
       return !EqualableString.<@NotNull EqualableString>areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areTheSame(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
+    public static boolean areTheSame(@Nullable final Equalable<@NotNull EqualableString> a, @Nullable final Equalable<@NotNull EqualableString> b) {
       return Equalable.<@NotNull EqualableString>areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areNotTheSame(@Nullable final String a, @Nullable final String b) {
+    public static boolean areNotTheSame(@Nullable final String a, @Nullable final String b) {
       return !EqualableString.<@NotNull String>areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areTheSame(@Nullable final String a, @Nullable final String b) {
+    public static boolean areTheSame(@Nullable final String a, @Nullable final String b) {
       return Equalable.<@NotNull String>areTheSame(a, b);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableString of(@Nullable final String s) {
+    public static Equalable.EqualableString of(@Nullable final String s) {
       return EqualableString.element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableString element(@Nullable final String s) {
+    public static Equalable.EqualableString element(@Nullable final String s) {
       return EqualableString.builder().plain(s).build();
     }
 
     @Contract(value = "null -> false", pure = true)
-    static boolean isNotNullAndNotBlank(@Nullable final Equalable<@NotNull EqualableString> s) {
+    public static boolean isNotNullAndNotBlank(@Nullable final Equalable<@NotNull EqualableString> s) {
       return !EqualableString.<@NotNull EqualableString>isNullOrBlank(s);
     }
 
     @Contract(value = "null -> true", pure = true)
-    static boolean isNullOrBlank(@Nullable final Equalable<@NotNull EqualableString> s) {
+    public static boolean isNullOrBlank(@Nullable final Equalable<@NotNull EqualableString> s) {
       return null == s || ((EqualableString) s).isBlank();
     }
 
     @Contract(value = "null -> false", pure = true)
-    static boolean isNotNullAndNotBlank(@Nullable final String s) {
+    public static boolean isNotNullAndNotBlank(@Nullable final String s) {
       return !EqualableString.<@NotNull String>isNullOrBlank(s);
     }
 
     @Contract(value = "null -> true", pure = true)
-    static boolean isNullOrBlank(@Nullable final String s) {
+    public static boolean isNullOrBlank(@Nullable final String s) {
       return null == s || s.isBlank();
     }
 
@@ -882,40 +882,40 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   class EqualableInteger {
 
     @Contract(pure = true)
-    static boolean areNotEqual(final int a, final int b) {
+    public static boolean areNotEqual(final int a, final int b) {
       return !Equalable.EqualableInteger.areEqual(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areEqual(final int a, final int b) {
+    public static boolean areEqual(final int a, final int b) {
       return Equalable.EqualableInteger.areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areNotTheSame(final int a, final int b) {
+    public static boolean areNotTheSame(final int a, final int b) {
       return !Equalable.EqualableInteger.areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areTheSame(final int a, final int b) {
+    public static boolean areTheSame(final int a, final int b) {
       return a == b;
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableInteger integer(final int s) {
+    public static Equalable.EqualableInteger integer(final int s) {
       return element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableInteger of(final int s) {
+    public static Equalable.EqualableInteger of(final int s) {
       return EqualableInteger.element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableInteger element(final int s) {
+    public static Equalable.EqualableInteger element(final int s) {
       return EqualableInteger.builder().s(s).build();
     }
 
@@ -1088,34 +1088,34 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   class EqualableLong {
 
     @Contract(pure = true)
-    static boolean areNotEqual(final long a, final long b) {
+    public static boolean areNotEqual(final long a, final long b) {
       return !EqualableLong.areEqual(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areEqual(final long a, final long b) {
+    public static boolean areEqual(final long a, final long b) {
       return EqualableLong.areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areNotTheSame(final long a, final long b) {
+    public static boolean areNotTheSame(final long a, final long b) {
       return !EqualableLong.areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areTheSame(final long a, final long b) {
+    public static boolean areTheSame(final long a, final long b) {
       return a == b;
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableLong of(final long s) {
+    public static Equalable.EqualableLong of(final long s) {
       return EqualableLong.element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableLong element(final long s) {
+    public static Equalable.EqualableLong element(final long s) {
       return EqualableLong.builder().s(s).build();
     }
 
@@ -1283,34 +1283,34 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   class EqualableFloat {
 
     @Contract(pure = true)
-    static boolean areNotEqual(final float a, final float b) {
+    public static boolean areNotEqual(final float a, final float b) {
       return !EqualableFloat.areEqual(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areEqual(final float a, final float b) {
+    public static boolean areEqual(final float a, final float b) {
       return EqualableFloat.areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areNotTheSame(final float a, final float b) {
+    public static boolean areNotTheSame(final float a, final float b) {
       return !EqualableFloat.areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areTheSame(final float a, final float b) {
+    public static boolean areTheSame(final float a, final float b) {
       return a == b;
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableFloat of(final float s) {
+    public static Equalable.EqualableFloat of(final float s) {
       return EqualableFloat.element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static Equalable.EqualableFloat element(final float s) {
+    public static Equalable.EqualableFloat element(final float s) {
       return EqualableFloat.builder().s(s).build();
     }
 
@@ -1469,34 +1469,34 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   class EqualableDouble {
 
     @Contract(pure = true)
-    static boolean areNotEqual(final double a, final double b) {
+    public static boolean areNotEqual(final double a, final double b) {
       return !EqualableDouble.areEqual(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areEqual(final double a, final double b) {
+    public static boolean areEqual(final double a, final double b) {
       return EqualableDouble.areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areNotTheSame(final double a, final double b) {
+    public static boolean areNotTheSame(final double a, final double b) {
       return !EqualableDouble.areTheSame(a, b);
     }
 
     @Contract(pure = true)
-    static boolean areTheSame(final double a, final double b) {
+    public static boolean areTheSame(final double a, final double b) {
       return a == b;
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static EqualableDouble of(final double s) {
+    public static EqualableDouble of(final double s) {
       return element(s);
     }
 
     @NotNull
     @Contract(value = "_ -> new", pure = true)
-    static EqualableDouble element(final double s) {
+    public static EqualableDouble element(final double s) {
       return EqualableDouble.builder().s(s).build();
     }
 

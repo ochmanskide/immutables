@@ -43,21 +43,50 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull V @NotNull []> value = defaultValue();
+  IntFunction<@NotNull V @NotNull []> value = defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   @Contract(value = " -> new", pure = true)
-  private static <S extends @NotNull Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Fluent @NotNull []::new;
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) EMPTY_KEY;
   }
 
   @NotNull
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  @Contract(value = " -> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultValue() {
-    return (IntFunction) Fluent @NotNull []::new;
+  @Unmodifiable
+  private static final IntFunction<@NotNull Dummy @NotNull []> EMPTY_KEY = createConstantKey();
+
+  @NotNull
+  @Unmodifiable
+  @Contract(pure = true)
+  private static IntFunction<@NotNull Dummy @NotNull []> createConstantKey() {
+    return Dummy @NotNull []::new;
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  public static FluentEnumMap<? extends @NotNull Fluent<?>, ? extends @NotNull Fluent<?>> empty() {
+    return EMPTY;
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  private static final FluentEnumMap<? extends @NotNull Fluent<?>, ? extends @NotNull Fluent<?>> EMPTY = createConstant();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "-> new", pure = true)
+  private static FluentEnumMap<@NotNull Dummy, ? extends @NotNull Fluent<?>> createConstant() {
+    return FluentEnumMap.<@NotNull Dummy, @NotNull Fluent<?>>builder().key(defaultKey()).build();
+  }
+
+  public enum Dummy implements Fluent<@NotNull Dummy> {
+    A
   }
   //</editor-fold>
 

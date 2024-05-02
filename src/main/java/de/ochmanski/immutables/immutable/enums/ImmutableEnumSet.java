@@ -51,7 +51,18 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @Contract(value = " -> new", pure = true)
   @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Fluent @NotNull []::new;
+    return (IntFunction) EMPTY_KEY;
+  }
+
+  @NotNull
+  @Unmodifiable
+  private static final IntFunction<@NotNull Dummy @NotNull []> EMPTY_KEY = createConstantKey();
+
+  @NotNull
+  @Unmodifiable
+  @Contract(pure = true)
+  private static IntFunction<@NotNull Dummy @NotNull []> createConstantKey() {
+    return Dummy @NotNull []::new;
   }
 
   @NotNull
@@ -72,7 +83,7 @@ public class ImmutableEnumSet<E extends @NotNull Enum<@NotNull E>> implements IS
   @UnmodifiableView
   @Contract(value = "-> new", pure = true)
   private static ImmutableEnumSet<@NotNull Dummy> createConstant() {
-    return ImmutableEnumSet.<@NotNull Dummy>builder().key(Dummy[]::new).build();
+    return ImmutableEnumSet.<@NotNull Dummy>builder().key(defaultKey()).build();
   }
 
   public enum Dummy implements Fluent<@NotNull Dummy> {

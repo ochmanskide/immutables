@@ -47,6 +47,24 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
+  @Contract(value = " -> new", pure = true)
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) EMPTY_KEY;
+  }
+
+  @NotNull
+  @Unmodifiable
+  private static final IntFunction<@NotNull Dummy @NotNull []> EMPTY_KEY = createConstantKey();
+
+  @NotNull
+  @Unmodifiable
+  @Contract(pure = true)
+  private static IntFunction<@NotNull Dummy @NotNull []> createConstantKey() {
+    return Dummy @NotNull []::new;
+  }
+
+  @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
@@ -64,18 +82,11 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @UnmodifiableView
   @Contract(value = "-> new", pure = true)
   private static FluentEnumSet<@NotNull Dummy> createConstant() {
-    return FluentEnumSet.<@NotNull Dummy>builder().key(Dummy[]::new).build();
+    return FluentEnumSet.<@NotNull Dummy>builder().key(defaultKey()).build();
   }
 
   public enum Dummy implements Fluent<@NotNull Dummy> {
     A
-  }
-
-  @NotNull
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  @Contract(value = " -> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Fluent @NotNull []::new;
   }
   //</editor-fold>
 

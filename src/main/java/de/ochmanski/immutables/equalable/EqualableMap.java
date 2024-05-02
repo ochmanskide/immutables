@@ -1,9 +1,9 @@
 package de.ochmanski.immutables.equalable;
 
 import de.ochmanski.immutables.collection.IMap;
-import de.ochmanski.immutables.constants.Constants;
-import de.ochmanski.immutables.fluent.Fluent;
+import de.ochmanski.immutables.equalable.Equalable.Dummy;
 import de.ochmanski.immutables.immutable.ImmutableMap;
+import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -33,19 +33,33 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K> & @NotNull Co
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull K @NotNull []> key = defaultConstructor();
+  IntFunction<@NotNull K @NotNull []> key = ImmutableSet.defaultKey();
 
   @NotNull("Given valueType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given valueType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull V @NotNull []> value = defaultConstructor();
+  IntFunction<@NotNull V @NotNull []> value = ImmutableSet.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(pure = true)
+  public static EqualableMap<? extends @NotNull Equalable<?>, ? extends @NotNull Equalable<?>> empty() {
+    return EMPTY;
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  private static final EqualableMap<? extends @NotNull Equalable<?>, ? extends @NotNull Equalable<?>> EMPTY = createConstant();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = "-> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultConstructor() {
-    return (IntFunction) Fluent @NotNull []::new;
+  private static EqualableMap<? extends @NotNull Equalable<?>, ? extends @NotNull Equalable<?>> createConstant() {
+    return EqualableMap.<@NotNull Dummy, @NotNull Dummy>builder().build();
   }
   //</editor-fold>
 

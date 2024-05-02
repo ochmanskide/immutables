@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ochmanski.immutables.collection.Checked;
 import de.ochmanski.immutables.collection.IList;
-import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.fluent.Fluent;
 import lombok.*;
 import org.jetbrains.annotations.*;
@@ -35,25 +34,9 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E @NotNull []> key = defaultKey();
+  IntFunction<@NotNull E @NotNull []> key = ImmutableSet.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
-  @NotNull
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  @Contract(value = "-> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) DEFAULT_KEY;
-  }
-
-  @NotNull
-  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = createDefaultKey();
-
-  @NotNull
-  @Contract(pure = true)
-  private static IntFunction<@NotNull Fluent<?> @NotNull []> createDefaultKey() {
-    return Fluent @NotNull []::new;
-  }
-
   @NotNull
   @Unmodifiable
   @UnmodifiableView

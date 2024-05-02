@@ -84,10 +84,6 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   private static FluentEnumMap<@NotNull Dummy, ? extends @NotNull Fluent<?>> createConstant() {
     return FluentEnumMap.<@NotNull Dummy, @NotNull Fluent<?>>builder().key(defaultKey()).build();
   }
-
-  public enum Dummy implements Fluent<@NotNull Dummy> {
-    A
-  }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="2. static factory methods">

@@ -45,34 +45,46 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull V @NotNull []> value = defaultValue();
+  IntFunction<@NotNull V @NotNull []> value = defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
+  @NotNull
+  @Contract(value = " -> new", pure = true)
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) EMPTY_KEY;
+  }
+
+  @NotNull
+  @Unmodifiable
+  private static final IntFunction<@NotNull Dummy @NotNull []> EMPTY_KEY = createConstantKey();
+
+  @NotNull
+  @Unmodifiable
+  @Contract(pure = true)
+  private static IntFunction<@NotNull Dummy @NotNull []> createConstantKey() {
+    return Dummy @NotNull []::new;
+  }
+
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings(Constants.Warning.UNCHECKED)
-  public static ImmutableEnumMap<? extends @NotNull Fluent<?>, @NotNull Fluent<?>> empty() {
+  public static ImmutableEnumMap<? extends @NotNull Fluent<?>, ? extends @NotNull Fluent<?>> empty() {
     return EMPTY;
   }
 
   @NotNull
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  private static final ImmutableEnumMap EMPTY = ImmutableEnumMap.builder().build();
+  @Unmodifiable
+  @UnmodifiableView
+  private static final ImmutableEnumMap<? extends @NotNull Fluent<?>, ? extends @NotNull Fluent<?>> EMPTY = createConstant();
 
   @NotNull
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  @Contract(value = " -> new", pure = true)
-  private static <S extends @NotNull Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) Fluent @NotNull []::new;
-  }
-
-  @NotNull
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  @Contract(value = " -> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultValue() {
-    return (IntFunction) Fluent @NotNull []::new;
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "-> new", pure = true)
+  private static ImmutableEnumMap<@NotNull Dummy, ? extends @NotNull Fluent<?>> createConstant() {
+    return ImmutableEnumMap.<@NotNull Dummy, @NotNull Fluent<?>>builder().key(defaultKey()).build();
   }
   //</editor-fold>
 

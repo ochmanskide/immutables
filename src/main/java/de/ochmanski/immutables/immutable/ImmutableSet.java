@@ -37,19 +37,24 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
   IntFunction<@NotNull E @NotNull []> key = defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
+
   @NotNull
+  @Unmodifiable
   @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  @Contract(value = "-> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
+  @Contract(pure = true)
+  public static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
     return (IntFunction) DEFAULT_KEY;
   }
 
   @NotNull
-  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = createDefaultKey();
+  @Unmodifiable
+  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = createConstantKey();
 
   @NotNull
-  @Contract(pure = true)
-  private static IntFunction<@NotNull Fluent<?> @NotNull []> createDefaultKey() {
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "-> new", pure = true)
+  private static IntFunction<@NotNull Fluent<?> @NotNull []> createConstantKey() {
     return Fluent @NotNull []::new;
   }
 

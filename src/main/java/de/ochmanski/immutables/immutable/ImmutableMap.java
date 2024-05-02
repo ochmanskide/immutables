@@ -33,32 +33,51 @@ public class ImmutableMap<K extends @NotNull Comparable<? super @NotNull K>, V> 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull K @NotNull []> key = defaultConstructor();
+  IntFunction<@NotNull K @NotNull []> key = defaultKey();
 
   @NotNull("Given valueType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given valueType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull V @NotNull []> value = defaultConstructor();
+  IntFunction<@NotNull V @NotNull []> value = defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
+  @NotNull
+  @Contract(value = " -> new", pure = true)
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) EMPTY_KEY;
+  }
+
+  @NotNull
+  @Unmodifiable
+  private static final IntFunction<@NotNull Dummy @NotNull []> EMPTY_KEY = createConstantKey();
+
+  @NotNull
+  @Unmodifiable
+  @Contract(pure = true)
+  private static IntFunction<@NotNull Dummy @NotNull []> createConstantKey() {
+    return Dummy @NotNull []::new;
+  }
+
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings(Constants.Warning.UNCHECKED)
-  public static ImmutableMap<? extends @NotNull Comparable<?>, @NotNull Fluent<?>> empty() {
+  public static ImmutableMap<? extends @NotNull Fluent<?>, ? extends @NotNull Fluent<?>> empty() {
     return EMPTY;
   }
 
   @NotNull
-  @SuppressWarnings(Constants.Warning.RAWTYPES)
-  private static final ImmutableMap EMPTY = ImmutableMap.builder().build();
+  @Unmodifiable
+  @UnmodifiableView
+  private static final ImmutableMap<? extends @NotNull Fluent<?>, ? extends @NotNull Fluent<?>> EMPTY = createConstant();
 
   @NotNull
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = "-> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultConstructor() {
-    return (IntFunction) Fluent @NotNull []::new;
+  private static ImmutableMap<@NotNull Dummy, ? extends @NotNull Fluent<?>> createConstant() {
+    return ImmutableMap.<@NotNull Dummy, @NotNull Fluent<?>>builder().key(defaultKey()).build();
   }
   //</editor-fold>
 

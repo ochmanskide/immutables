@@ -51,20 +51,22 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  public static FluentEnumSet<? extends @NotNull Fluent<?>> empty() {
+  public static FluentEnumSet<? extends @NotNull Fluent<? extends @NotNull Enum<?>>> empty()
+  {
     return EMPTY;
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  private static final FluentEnumSet<? extends @NotNull Fluent<?>> EMPTY = createConstant();
+  private static final FluentEnumSet<? extends @NotNull Fluent<? extends @NotNull Enum<?>>> EMPTY = createConstant();
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "-> new", pure = true)
-  private static FluentEnumSet<? extends @NotNull Fluent<?>> createConstant() {
+  private static FluentEnumSet<? extends @NotNull Fluent<? extends @NotNull Enum<?>>> createConstant()
+  {
     return FluentEnumSet.<@NotNull Dummy>builder().build();
   }
   //</editor-fold>

@@ -1,6 +1,7 @@
 package de.ochmanski.immutables.equalable;
 
 import de.ochmanski.immutables.collection.IList;
+import de.ochmanski.immutables.equalable.Equalable.Dummy;
 import de.ochmanski.immutables.equalable.Equalable.EqualableString;
 import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.immutable.ImmutableList;
@@ -44,7 +45,7 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  public static EqualableList<? extends @NotNull Fluent<?>> empty()
+  public static EqualableList<? extends @NotNull Equalable<?>> empty()
   {
     return EMPTY;
   }
@@ -52,14 +53,14 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  private static final EqualableList<? extends @NotNull Fluent<?>> EMPTY = createConstant();
+  private static final EqualableList<? extends @NotNull Equalable<?>> EMPTY = createConstant();
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "-> new", pure = true)
-  private static EqualableList<? extends @NotNull Fluent<? extends @NotNull Equalable<?>>> createConstant() {
-    return (EqualableList) EqualableList.<@NotNull Fluent>builder().build();
+  private static EqualableList<? extends @NotNull Equalable<?>> createConstant() {
+    return EqualableList.<@NotNull Dummy>builder().build();
   }
   //</editor-fold>
 

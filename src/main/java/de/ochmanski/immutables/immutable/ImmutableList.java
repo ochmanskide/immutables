@@ -37,6 +37,7 @@ public class ImmutableList<E> implements IList<@NotNull E> {
   IntFunction<@NotNull E @NotNull []> key = Fluent.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
+
   @NotNull
   @Unmodifiable
   @UnmodifiableView

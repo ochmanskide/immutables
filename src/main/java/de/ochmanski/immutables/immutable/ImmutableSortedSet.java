@@ -6,6 +6,7 @@ import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.collection.ISet;
 import de.ochmanski.immutables.constants.Constants;
+import de.ochmanski.immutables.fluent.Fluent;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -39,23 +40,32 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
   IntFunction<@NotNull E @NotNull []> key = Fluent.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
+
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  public static ImmutableSortedSet<?> empty()
-  {
+  public static ImmutableSortedSet<? extends @NotNull Comparable<?>> empty() {
     return EMPTY_SET;
   }
 
-  private static final ImmutableSortedSet<?> EMPTY_SET = ImmutableSortedSet.<@NotNull Comparable>builder().build();
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  private static final ImmutableSortedSet<? extends @NotNull Comparable<?>> EMPTY_SET = createConstant();
 
   @NotNull
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  @Contract(value = " -> new", pure = true)
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey()
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "-> new", pure = true)
+  private static ImmutableSortedSet<? extends @NotNull Comparable<?>> createConstant() {
+    return ImmutableSortedSet.<@NotNull Dummy>builder().build();
+  }
+
+  @Unmodifiable
+  private enum Dummy implements Comparable<@NotNull Dummy>
   {
-    return (IntFunction)Comparable @NotNull []::new;
+    DUMMY_ENUM_ITEM
   }
   //</editor-fold>
 

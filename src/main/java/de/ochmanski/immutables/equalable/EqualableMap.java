@@ -40,6 +40,7 @@ public class EqualableMap<K extends @NotNull Equalable<@NotNull K> & @NotNull Co
   IntFunction<@NotNull V @NotNull []> value = Fluent.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
+
   @NotNull
   @Unmodifiable
   @UnmodifiableView

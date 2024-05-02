@@ -242,7 +242,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   @UnmodifiableView
   @Contract(value = "-> new", pure = true)
   private static IntFunction<@NotNull Fluent<?> @NotNull []> createConstantKey() {
-    return Fluent @NotNull []::new;
+    return Dummy @NotNull []::new;
   }
 
   @Unmodifiable

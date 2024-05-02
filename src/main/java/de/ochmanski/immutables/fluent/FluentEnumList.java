@@ -2,7 +2,6 @@ package de.ochmanski.immutables.fluent;
 
 import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.fluent.Fluent.Dummy;
-import de.ochmanski.immutables.immutable.ImmutableSet;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumList;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.AccessLevel;
@@ -45,7 +44,7 @@ public class FluentEnumList<E extends @NotNull Enum<@NotNull E> & @NotNull Fluen
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E @NotNull []> key = ImmutableSet.defaultKey();
+  IntFunction<@NotNull E @NotNull []> key = Fluent.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
 

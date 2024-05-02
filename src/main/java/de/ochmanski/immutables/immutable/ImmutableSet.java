@@ -34,29 +34,9 @@ public class ImmutableSet<E> implements ISet<@NotNull E> {
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E @NotNull []> key = ImmutableSet.defaultKey();
+  IntFunction<@NotNull E @NotNull []> key = Fluent.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
-
-  @NotNull
-  @Unmodifiable
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  @Contract(pure = true)
-  public static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) DEFAULT_KEY;
-  }
-
-  @NotNull
-  @Unmodifiable
-  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = createConstantKey();
-
-  @NotNull
-  @Unmodifiable
-  @UnmodifiableView
-  @Contract(value = "-> new", pure = true)
-  private static IntFunction<@NotNull Fluent<?> @NotNull []> createConstantKey() {
-    return Fluent @NotNull []::new;
-  }
 
   @NotNull
   @Unmodifiable

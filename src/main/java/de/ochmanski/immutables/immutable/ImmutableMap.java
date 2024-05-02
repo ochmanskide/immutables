@@ -33,12 +33,12 @@ public class ImmutableMap<K extends @NotNull Comparable<? super @NotNull K>, V> 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull K @NotNull []> key = ImmutableSet.defaultKey();
+  IntFunction<@NotNull K @NotNull []> key = Fluent.defaultKey();
 
   @NotNull("Given valueType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given valueType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull V @NotNull []> value = ImmutableSet.defaultKey();
+  IntFunction<@NotNull V @NotNull []> value = Fluent.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
   @NotNull

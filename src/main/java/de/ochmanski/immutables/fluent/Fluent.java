@@ -2,16 +2,14 @@ package de.ochmanski.immutables.fluent;
 
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.*;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
 public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
@@ -225,6 +223,26 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
     @Nullable final F a,
     @Nullable final F b) {
     return Equalable.<@Nullable F>areTheSame(a, b);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  @Contract(pure = true)
+  static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
+    return (IntFunction) DEFAULT_KEY;
+  }
+
+  @NotNull
+  @Unmodifiable
+  IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = createConstantKey();
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "-> new", pure = true)
+  private static IntFunction<@NotNull Fluent<?> @NotNull []> createConstantKey() {
+    return Fluent @NotNull []::new;
   }
 
   @Unmodifiable

@@ -2,7 +2,6 @@ package de.ochmanski.immutables.fluent;
 
 import de.ochmanski.immutables.collection.ISet;
 import de.ochmanski.immutables.fluent.Fluent.Dummy;
-import de.ochmanski.immutables.immutable.ImmutableSet;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -44,7 +43,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given constructor cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E @NotNull []> key = ImmutableSet.defaultKey();
+  IntFunction<@NotNull E @NotNull []> key = Fluent.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
 

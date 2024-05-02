@@ -49,7 +49,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E @NotNull []> key = ImmutableSet.defaultKey();
+  IntFunction<@NotNull E @NotNull []> key = Fluent.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
 

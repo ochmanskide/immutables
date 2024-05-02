@@ -4,6 +4,7 @@ import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.collection.IList;
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.fluent.Fluent;
+import de.ochmanski.immutables.fluent.Fluent.Dummy;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.AccessLevel;
@@ -48,18 +49,9 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E @NotNull []> key = defaultKey();
+  IntFunction<@NotNull E @NotNull []> key = ImmutableSet.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
-  @NotNull
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  @Contract(value = "-> new", pure = true)
-  private static <S extends @NotNull Enum<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) DEFAULT_KEY;
-  }
-
-  @NotNull
-  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = Fluent @NotNull []::new;
 
   @NotNull
   @Unmodifiable
@@ -79,11 +71,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @UnmodifiableView
   @Contract(value = "-> new", pure = true)
   private static ImmutableEnumList<@NotNull Dummy> createConstant() {
-    return ImmutableEnumList.<@NotNull Dummy>builder().key(Dummy[]::new).build();
-  }
-
-  public enum Dummy implements Fluent<@NotNull Dummy> {
-    A
+    return ImmutableEnumList.<@NotNull Dummy>builder().build();
   }
   //</editor-fold>
 

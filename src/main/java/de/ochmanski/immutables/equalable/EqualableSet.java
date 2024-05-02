@@ -2,8 +2,6 @@ package de.ochmanski.immutables.equalable;
 
 import de.ochmanski.immutables.collection.IMap;
 import de.ochmanski.immutables.collection.ISet;
-import de.ochmanski.immutables.constants.Constants;
-import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -37,44 +35,29 @@ public class EqualableSet<E extends @NotNull Equalable<@NotNull E>> implements I
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E @NotNull []> key = defaultKey();
+  IntFunction<@NotNull E @NotNull []> key = ImmutableSet.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
-  @NotNull
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  @Contract(value = "-> new", pure = true)
-  private static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) DEFAULT_KEY;
-  }
-
-  @NotNull
-  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = createDefaultKey();
-
-  @NotNull
-  @Contract(pure = true)
-  private static IntFunction<@NotNull Fluent<?> @NotNull []> createDefaultKey() {
-    return Fluent @NotNull []::new;
-  }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  public static EqualableSet<? extends @NotNull Fluent<?>> empty() {
+  public static EqualableSet<? extends @NotNull Equalable<?>> empty() {
     return EMPTY;
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  private static final EqualableSet<? extends @NotNull Fluent<?>> EMPTY = createConstant();
+  private static final EqualableSet<? extends @NotNull Equalable<?>> EMPTY = createConstant();
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "-> new", pure = true)
-  private static EqualableSet<? extends @NotNull Fluent<? extends @NotNull Equalable<?>>> createConstant() {
-    return (EqualableSet) EqualableSet.<@NotNull Fluent>builder().build();
+  private static EqualableSet<? extends @NotNull Equalable<?>> createConstant() {
+    return EqualableSet.<Equalable.@NotNull Dummy>builder().build();
   }
   //</editor-fold>
 

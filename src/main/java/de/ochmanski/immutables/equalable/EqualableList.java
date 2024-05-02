@@ -1,10 +1,10 @@
 package de.ochmanski.immutables.equalable;
 
 import de.ochmanski.immutables.collection.IList;
-import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable.EqualableString;
 import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.immutable.ImmutableList;
+import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -37,24 +37,9 @@ public class EqualableList<E extends @NotNull Equalable<@NotNull E>> implements 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E @NotNull []> key = defaultKey();
+  IntFunction<@NotNull E @NotNull []> key = ImmutableSet.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
-  @NotNull
-  @SuppressWarnings({ Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES })
-  @Contract(value = "-> new", pure = true)
-  private static <S extends @NotNull Equalable<@NotNull S>> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) DEFAULT_KEY;
-  }
-
-  @NotNull
-  private static final IntFunction<@NotNull Fluent<?> @NotNull []> DEFAULT_KEY = createDefaultKey();
-
-  @NotNull
-  @Contract(pure = true)
-  private static IntFunction<@NotNull Fluent<?> @NotNull []> createDefaultKey() {
-    return Fluent @NotNull []::new;
-  }
 
   @NotNull
   @Unmodifiable

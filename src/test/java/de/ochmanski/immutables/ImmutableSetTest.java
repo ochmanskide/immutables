@@ -4,7 +4,6 @@ import annotations.UnitTest;
 import de.ochmanski.immutables.collection.ISet;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.ImmutableSet;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -32,7 +31,7 @@ class ImmutableSetTest {
 
   @Test
   void of0() {
-    @NotNull final ISet<Dummy> actual = ImmutableSet.noneOf(Dummy[]::new);
+    @NotNull final ISet<Dummy2> actual = ImmutableSet.noneOf(Dummy2[]::new);
     assertThat(actual).isInstanceOf(ImmutableSet.class);
     assertThat(actual.unwrap()).isEmpty();
     assertThat(actual.isEmpty()).isTrue();
@@ -41,45 +40,45 @@ class ImmutableSetTest {
 
   @Test
   void of1() {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    final ISet<Dummy> actual = ImmutableSet.of(s1, Dummy[]::new);
+    final Dummy2 s1 = Dummy2.builder().s("a").build();
+    final ISet<Dummy2> actual = ImmutableSet.of(s1, Dummy2[]::new);
     assertThat(actual).isInstanceOf(ImmutableSet.class);
-    assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactly("a");
+    assertThat(actual.unwrap()).extracting(Dummy2::getS).containsExactly("a");
   }
 
   @Test
   void of2() {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    final Dummy s2 = Dummy.builder().s("b").build();
-    final ISet<Dummy> actual = ImmutableSet.of(s1, s2, Dummy[]::new);
+    final Dummy2 s1 = Dummy2.builder().s("a").build();
+    final Dummy2 s2 = Dummy2.builder().s("b").build();
+    final ISet<Dummy2> actual = ImmutableSet.of(s1, s2, Dummy2[]::new);
     assertThat(actual).isInstanceOf(ImmutableSet.class);
-    assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactlyInAnyOrder("a", "b");
+    assertThat(actual.unwrap()).extracting(Dummy2::getS).containsExactlyInAnyOrder("a", "b");
   }
 
   @Test
   void of3() {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    final Dummy s2 = Dummy.builder().s("b").build();
-    final Dummy s3 = Dummy.builder().s("c").build();
-    final ISet<Dummy> actual = ImmutableSet.of(s1, s2, s3, Dummy[]::new);
+    final Dummy2 s1 = Dummy2.builder().s("a").build();
+    final Dummy2 s2 = Dummy2.builder().s("b").build();
+    final Dummy2 s3 = Dummy2.builder().s("c").build();
+    final ISet<Dummy2> actual = ImmutableSet.of(s1, s2, s3, Dummy2[]::new);
     assertThat(actual).isInstanceOf(ImmutableSet.class);
-    assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactlyInAnyOrder("a", "b", "c");
+    assertThat(actual.unwrap()).extracting(Dummy2::getS).containsExactlyInAnyOrder("a", "b", "c");
   }
 
   @Test
   void ofArray3() {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    final Dummy s2 = Dummy.builder().s("b").build();
-    final Dummy s3 = Dummy.builder().s("c").build();
-    final ISet<Dummy> actual = ImmutableSet.of(s1, s1, s2, s3, Dummy[]::new);
+    final Dummy2 s1 = Dummy2.builder().s("a").build();
+    final Dummy2 s2 = Dummy2.builder().s("b").build();
+    final Dummy2 s3 = Dummy2.builder().s("c").build();
+    final ISet<Dummy2> actual = ImmutableSet.of(s1, s1, s2, s3, Dummy2[]::new);
     assertThat(actual).isInstanceOf(ImmutableSet.class);
-    assertThat(actual.unwrap()).extracting(Dummy::getS).containsExactlyInAnyOrder("a", "b", "c");
+    assertThat(actual.unwrap()).extracting(Dummy2::getS).containsExactlyInAnyOrder("a", "b", "c");
   }
 
   @Test
   void toArrayNull() {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    assertThatThrownBy(() -> ImmutableSet.of((Dummy) null, Dummy[]::new))
+    final Dummy2 s1 = Dummy2.builder().s("a").build();
+    assertThatThrownBy(() -> ImmutableSet.of((Dummy2) null, Dummy2[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
         npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
@@ -89,15 +88,15 @@ class ImmutableSetTest {
 
   @Test
   void toArrayEmpty() {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    final ISet<Dummy> actual = ImmutableSet.of(s1, Dummy[]::new);
+    final Dummy2 s1 = Dummy2.builder().s("a").build();
+    final ISet<Dummy2> actual = ImmutableSet.of(s1, Dummy2[]::new);
     assertThat(actual.toArray()).containsExactly(s1);
   }
 
   @Test
   void toArrayEmpty1() {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    assertThatThrownBy(() -> ImmutableSet.of(s1, null, Dummy[]::new))
+    final Dummy2 s1 = Dummy2.builder().s("a").build();
+    assertThatThrownBy(() -> ImmutableSet.of(s1, null, Dummy2[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
         npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
@@ -107,8 +106,8 @@ class ImmutableSetTest {
 
   @Test
   void toArrayEmpty2() {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    assertThatThrownBy(() -> ImmutableSet.of(s1, null, null, Dummy[]::new))
+    final Dummy2 s1 = Dummy2.builder().s("a").build();
+    assertThatThrownBy(() -> ImmutableSet.of(s1, null, null, Dummy2[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
         npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
@@ -119,7 +118,7 @@ class ImmutableSetTest {
 
   @Test
   void toArrayEmpty3() {
-    final Dummy s1 = Dummy.builder().s("a").build();
+    final Dummy2 s1 = Dummy2.builder().s("a").build();
     assertThatThrownBy(() -> ImmutableSet.of(s1, null, null, null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
@@ -137,13 +136,13 @@ class ImmutableSetTest {
 
   @Test
   void toArrayClass() {
-    final ISet<Dummy> actual = ImmutableSet.noneOf(Dummy[]::new);
+    final ISet<Dummy2> actual = ImmutableSet.noneOf(Dummy2[]::new);
     assertThat(actual.toArray()).isEmpty();
   }
 
   @Test
   void toArray0() {
-    assertThatThrownBy(() -> ImmutableSet.of((Dummy) null, Dummy[]::new))
+    assertThatThrownBy(() -> ImmutableSet.of((Dummy2) null, Dummy2[]::new))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
         npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),
@@ -153,36 +152,36 @@ class ImmutableSetTest {
 
   @Test
   void toArray1() {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    final ISet<Dummy> actual = ImmutableSet.of(s1, Dummy[]::new);
+    final Dummy2 s1 = Dummy2.builder().s("a").build();
+    final ISet<Dummy2> actual = ImmutableSet.of(s1, Dummy2[]::new);
     assertThat(actual.toArray()).containsExactly(s1);
   }
 
   @Test
   void toArray2() {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    final Dummy s2 = Dummy.builder().s("b").build();
-    final ISet<Dummy> actual = ImmutableSet.of(s1, s2, Dummy[]::new);
+    final Dummy2 s1 = Dummy2.builder().s("a").build();
+    final Dummy2 s2 = Dummy2.builder().s("b").build();
+    final ISet<Dummy2> actual = ImmutableSet.of(s1, s2, Dummy2[]::new);
     assertThat(actual.toArray()).containsExactlyInAnyOrder(s1, s2);
   }
 
   @Test
   void toArray3() {
-    final Dummy s1 = Dummy.builder().s("a").build();
-    final Dummy s2 = Dummy.builder().s("b").build();
-    final Dummy s3 = Dummy.builder().s("c").build();
-    final ISet<Dummy> actual = ImmutableSet.of(s1, s1, s2, s3, Dummy[]::new);
+    final Dummy2 s1 = Dummy2.builder().s("a").build();
+    final Dummy2 s2 = Dummy2.builder().s("b").build();
+    final Dummy2 s3 = Dummy2.builder().s("c").build();
+    final ISet<Dummy2> actual = ImmutableSet.of(s1, s1, s2, s3, Dummy2[]::new);
     assertThat(actual.toArray()).containsExactlyInAnyOrder(s1, s2, s3);
   }
 
   @Test
   void equalable() {
-    final Dummy a = Dummy.builder().s("a").build();
-    final Dummy b = Dummy.builder().s("a").build();
+    final Dummy2 a = Dummy2.builder().s("a").build();
+    final Dummy2 b = Dummy2.builder().s("a").build();
     assertThat(a).isEqualTo(b);
     assertThat(a.isEqualTo(b)).isTrue();
     assertThat(a.equals(b)).isTrue();
-    final Dummy c = Dummy.builder().s("c").build();
+    final Dummy2 c = Dummy2.builder().s("c").build();
     assertThat(a).isNotEqualTo(c);
     assertThat(a.isEqualTo(c)).isFalse();
     assertThat(a.equals(c)).isFalse();
@@ -291,9 +290,9 @@ class ImmutableSetTest {
   }
 
   @Value
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-  private static class Dummy implements Equalable<@NotNull Dummy> {
+  @RequiredArgsConstructor
+  @Builder(toBuilder = true)
+  private static class Dummy2 implements Equalable<@NotNull Dummy2> {
     @Builder.Default
     String s = "dummy";
   }

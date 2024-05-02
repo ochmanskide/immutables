@@ -1647,4 +1647,9 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     //</editor-fold>
   }
+
+  @Unmodifiable
+  enum Dummy implements Equalable<@NotNull Dummy> {
+    DUMMY_ENUM_ITEM
+  }
 }

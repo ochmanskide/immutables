@@ -1,7 +1,8 @@
 package de.ochmanski.immutables.fluent;
 
 import de.ochmanski.immutables.collection.ISet;
-import de.ochmanski.immutables.constants.Constants;
+import de.ochmanski.immutables.fluent.Fluent.Dummy;
+import de.ochmanski.immutables.immutable.ImmutableSet;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -43,26 +44,9 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given constructor cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull E @NotNull []> key = defaultKey();
+  IntFunction<@NotNull E @NotNull []> key = ImmutableSet.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
-  @NotNull
-  @Contract(value = " -> new", pure = true)
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) EMPTY_KEY;
-  }
-
-  @NotNull
-  @Unmodifiable
-  private static final IntFunction<@NotNull Dummy @NotNull []> EMPTY_KEY = createConstantKey();
-
-  @NotNull
-  @Unmodifiable
-  @Contract(pure = true)
-  private static IntFunction<@NotNull Dummy @NotNull []> createConstantKey() {
-    return Dummy @NotNull []::new;
-  }
 
   @NotNull
   @Unmodifiable
@@ -75,18 +59,14 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  private static final FluentEnumSet<@NotNull Dummy> EMPTY = createConstant();
+  private static final FluentEnumSet<? extends @NotNull Fluent<?>> EMPTY = createConstant();
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "-> new", pure = true)
-  private static FluentEnumSet<@NotNull Dummy> createConstant() {
-    return FluentEnumSet.<@NotNull Dummy>builder().key(defaultKey()).build();
-  }
-
-  public enum Dummy implements Fluent<@NotNull Dummy> {
-    A
+  private static FluentEnumSet<? extends @NotNull Fluent<?>> createConstant() {
+    return FluentEnumSet.<@NotNull Dummy>builder().build();
   }
   //</editor-fold>
 

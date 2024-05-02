@@ -2,9 +2,9 @@ package de.ochmanski.immutables.immutable;
 
 import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.collection.IMap;
-import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.fluent.Fluent;
+import de.ochmanski.immutables.fluent.Fluent.Dummy;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -33,32 +33,14 @@ public class ImmutableMap<K extends @NotNull Comparable<? super @NotNull K>, V> 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull K @NotNull []> key = defaultKey();
+  IntFunction<@NotNull K @NotNull []> key = ImmutableSet.defaultKey();
 
   @NotNull("Given valueType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given valueType cannot be null.")
   @Builder.Default
-  IntFunction<@NotNull V @NotNull []> value = defaultKey();
+  IntFunction<@NotNull V @NotNull []> value = ImmutableSet.defaultKey();
 
   //<editor-fold defaultstate="collapsed" desc="1. eager static initializers">
-  @NotNull
-  @Contract(value = " -> new", pure = true)
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  private static <S> IntFunction<@NotNull S @NotNull []> defaultKey() {
-    return (IntFunction) EMPTY_KEY;
-  }
-
-  @NotNull
-  @Unmodifiable
-  private static final IntFunction<@NotNull Dummy @NotNull []> EMPTY_KEY = createConstantKey();
-
-  @NotNull
-  @Unmodifiable
-  @Contract(pure = true)
-  private static IntFunction<@NotNull Dummy @NotNull []> createConstantKey() {
-    return Dummy @NotNull []::new;
-  }
-
   @NotNull
   @Unmodifiable
   @UnmodifiableView
@@ -76,8 +58,8 @@ public class ImmutableMap<K extends @NotNull Comparable<? super @NotNull K>, V> 
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "-> new", pure = true)
-  private static ImmutableMap<@NotNull Dummy, ? extends @NotNull Fluent<?>> createConstant() {
-    return ImmutableMap.<@NotNull Dummy, @NotNull Fluent<?>>builder().key(defaultKey()).build();
+  private static ImmutableMap<? extends @NotNull Fluent<?>, ? extends @NotNull Fluent<?>> createConstant() {
+    return ImmutableMap.<@NotNull Dummy, @NotNull Fluent<?>>builder().build();
   }
   //</editor-fold>
 

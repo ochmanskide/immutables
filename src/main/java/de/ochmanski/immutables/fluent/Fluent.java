@@ -5,6 +5,7 @@ import de.ochmanski.immutables.equalable.Equalable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -224,5 +225,10 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
     @Nullable final F a,
     @Nullable final F b) {
     return Equalable.<@Nullable F>areTheSame(a, b);
+  }
+
+  @Unmodifiable
+  enum Dummy implements Fluent<@NotNull Dummy> {
+    DUMMY_ENUM_ITEM
   }
 }

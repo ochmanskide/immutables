@@ -187,6 +187,18 @@ new immutable interface definitions of Java `Collections`, such as `List<T>`, `S
 - [ ] add `Optional.empty()` "-like" API, and delegate calls to `.of()` methods, so that both are available.
 - [ ] add `.map()` method to shorten the `.stream().map()` syntax.
 - [ ] create a Collector for advanced `Set`/`Map`/`List` for example:
+- [ ] add polymorphism hierarchy:
+
+```
+--> ICollection --> CheckedCollection, ImmutableCollection
+```
+
+and in addition:
+
+```
+--> ICollection --> ImmutableCollection --> Immutable
+--> ICollection --> CheckedCollection --> Checked
+```
 
 ```java
 @NotNull

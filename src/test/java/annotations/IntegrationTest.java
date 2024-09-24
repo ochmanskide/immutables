@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 
 @TestOnly
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.ANNOTATION_TYPE, ElementType.METHOD, ElementType.TYPE})
+@Target({ ElementType.ANNOTATION_TYPE, ElementType.METHOD, ElementType.TYPE })
 @Tag("IntegrationTest")
 @Test
 public @interface IntegrationTest {

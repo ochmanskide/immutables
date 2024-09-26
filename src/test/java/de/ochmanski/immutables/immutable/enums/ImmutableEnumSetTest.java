@@ -1,11 +1,9 @@
-package de.ochmanski.immutables.enums;
+package de.ochmanski.immutables.immutable.enums;
 
 import annotations.UnitTest;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.immutable.ImmutableSet;
-import de.ochmanski.immutables.immutable.enums.ImmutableEnumList;
-import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;

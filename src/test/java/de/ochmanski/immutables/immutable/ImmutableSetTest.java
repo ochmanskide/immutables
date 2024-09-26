@@ -1,9 +1,7 @@
-package de.ochmanski.immutables;
+package de.ochmanski.immutables.immutable;
 
 import annotations.UnitTest;
 import de.ochmanski.immutables.equalable.Equalable;
-import de.ochmanski.immutables.immutable.ISet;
-import de.ochmanski.immutables.immutable.ImmutableSet;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;

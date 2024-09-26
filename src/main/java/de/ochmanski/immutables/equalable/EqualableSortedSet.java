@@ -26,6 +26,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.*;
 public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@NotNull E>> implements ESet<@NotNull E>
 {
 
+
   @Unmodifiable
   @UnmodifiableView
   @NotNull("Given set cannot be null.")
@@ -175,10 +176,43 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
   }
 
   @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final Collection<@NotNull String> collection) {
+    final IntFunction<String[]> constructor = String[]::new;
+    ImmutableSortedSet<@NotNull String> set = ImmutableSortedSet.of(collection, constructor);
+    return EqualableSortedSet.<@NotNull EqualableString>ofString(set);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = " _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> ofString(
+    @NotNull final ImmutableSortedSet<@NotNull String> immutableSet) {
+    final List<EqualableString> list = immutableSet.map(EqualableString::of).toList();
+    final ImmutableSortedSet<@NotNull EqualableString> wrappers = ImmutableSortedSet.<@NotNull EqualableString>of(list, EqualableString @NotNull []::new);
+    return EqualableSortedSet.<@NotNull EqualableString>of(wrappers);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  private static <K extends @NotNull Comparable<? super @NotNull K>, V> IMap.@Unmodifiable @UnmodifiableView @NotNull Entry<@NotNull K, @NotNull V> toImmutableEntry(
-    @NotNull final Map.@NotNull Entry<@NotNull K, @NotNull V> entry) {
-    return IMap.Entry.<@NotNull K, @NotNull V>of(entry);
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+    @NotNull final EqualableCollection<@NotNull S> collection) {
+    return EqualableSortedSet.<@NotNull S>of(collection.unwrap(), collection.getKey());
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+    @NotNull final ImmutableSortedSet<@NotNull S> immutableSet) {
+    return EqualableSortedSet.<@NotNull S>builder().set(immutableSet).build();
   }
 
   @NotNull
@@ -210,6 +244,13 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return EqualableSortedSet.<@NotNull S>builder().set(ImmutableSortedSet.of(collection, constructor)).build();
+  }
+
+  @NotNull
+  @Contract(value = "_ -> new", pure = true)
+  private static <K extends @NotNull Comparable<? super @NotNull K>, V> IMap.@Unmodifiable @UnmodifiableView @NotNull Entry<@NotNull K, @NotNull V> toImmutableEntry(
+    @NotNull final Map.@NotNull Entry<@NotNull K, @NotNull V> entry) {
+    return IMap.Entry.<@NotNull K, @NotNull V>of(entry);
   }
 
   @NotNull
@@ -466,8 +507,8 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public ImmutableList<@NotNull E> toList() {
-    return ImmutableList.<@NotNull E>of(unwrap(), getKey());
+  public EqualableList<@NotNull E> toList() {
+    return EqualableList.<@NotNull E>of(this);
   }
 
   @NotNull

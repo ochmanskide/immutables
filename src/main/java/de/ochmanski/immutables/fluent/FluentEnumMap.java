@@ -1,6 +1,7 @@
 package de.ochmanski.immutables.fluent;
 
 import de.ochmanski.immutables.collection.ICollection;
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.fluent.Fluent.Dummy;
 import de.ochmanski.immutables.immutable.ImmutableList;
@@ -19,9 +20,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.IntFunction;
-
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 @Value
 @UnmodifiableView
@@ -45,7 +43,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   public static <K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<? extends @NotNull K>, V extends @NotNull Equalable<? extends @NotNull V>> ImmutableEnumMap<@NotNull K, @NotNull V> emptyEnumMap()
   {
     return (ImmutableEnumMap) EMPTY_MAP;

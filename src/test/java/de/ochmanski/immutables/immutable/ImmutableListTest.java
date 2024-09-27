@@ -23,7 +23,7 @@ class ImmutableListTest
   @Test
   void ofNullClass()
   {
-    assertThatThrownBy(() -> de.ochmanski.immutables.immutable.ImmutableList.noneOf(null))
+    assertThatThrownBy(() -> ImmutableList.noneOf(null))
       .isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class)
       .satisfiesAnyOf(
         npe -> assertThat(npe).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class),

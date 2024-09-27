@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.fluent;
 
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.fluent.Fluent.Dummy;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.AccessLevel;
@@ -15,9 +16,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.function.IntFunction;
-
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 /**
  * Immutable wrapper of <pre>{@code java.util.EnumSet<K,V>}</pre>
@@ -47,7 +45,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   public static <E extends @NotNull Enum<@NotNull E> & @NotNull Fluent<? extends @NotNull E>> ImmutableEnumSet<@NotNull E> emptyEnumSet()
   {
     return (ImmutableEnumSet) EMPTY_SET;

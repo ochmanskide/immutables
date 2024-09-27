@@ -1,4 +1,4 @@
-package de.ochmanski.immutables.immutable;
+package de.ochmanski.immutables;
 
 import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
@@ -17,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
 public class Id implements Equalable<@NotNull Id>, Comparable<@NotNull Id> {
-
   @NotNull
   @Builder.Default
   String id = Constants.BLANK;

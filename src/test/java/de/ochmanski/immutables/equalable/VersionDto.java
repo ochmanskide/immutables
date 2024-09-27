@@ -11,7 +11,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.NotBlank;
 import java.util.Comparator;
 
-import static com.stadlerrail.diag.dias.immutables.equalable.Equalable.EqualableString.blank;
+import static de.ochmanski.immutables.equalable.Equalable.EqualableString.blank;
 
 @Value
 @Unmodifiable
@@ -21,7 +21,6 @@ import static com.stadlerrail.diag.dias.immutables.equalable.Equalable.Equalable
 @Builder(toBuilder = true)
 @FieldNameConstants
 public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@NotNull VersionDto> {
-
   @Builder.Default
   int id = 0;
 
@@ -117,14 +116,16 @@ public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@N
    * x.compareTo(y)==0} implies that {@code signum(x.compareTo(z)) == signum(y.compareTo(z))}, for all {@code z}.
    *
    * @param o the object to be compared.
+   *
    * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the
-   * specified object.
+   *   specified object.
+   *
    * @throws NullPointerException if the specified object is null
-   * @throws ClassCastException   if the specified object's type prevents it from being compared to this object.
+   * @throws ClassCastException if the specified object's type prevents it from being compared to this object.
    * @apiNote It is strongly recommended, but <i>not</i> strictly required that
-   * {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any class that implements the
-   * {@code Comparable} interface and violates this condition should clearly indicate this fact.  The recommended
-   * language is "Note: this class has a natural ordering that is inconsistent with equals."
+   *   {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any class that implements the
+   *   {@code Comparable} interface and violates this condition should clearly indicate this fact.  The recommended
+   *   language is "Note: this class has a natural ordering that is inconsistent with equals."
    */
   @Override
   public int compareTo(@NotNull final VersionDto o) {
@@ -152,6 +153,7 @@ public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@N
    *
    * @param a the first object.
    * @param b the second object.
+   *
    * @return an integer value.
    */
   @Contract(pure = true)
@@ -180,6 +182,7 @@ public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@N
    *
    * @param a the first object.
    * @param b the second object.
+   *
    * @return an integer value.
    */
   @Contract(pure = true)
@@ -248,7 +251,6 @@ public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@N
 
   //<editor-fold defaultstate="collapsed" desc="Constants">
   interface Constants {
-
   }
   //</editor-fold>
 }

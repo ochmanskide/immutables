@@ -29,7 +29,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   @NotNull("Given map cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given map cannot be null.")
   @Builder.Default
-  Map<@NotNull K, @NotNull V> map = Map.of();
+  Map<@NotNull K, @NotNull V> map = (Map) Collections.checkedMap(Map.of(), Equalable.Dummy.class, Equalable.Dummy.class);
 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")

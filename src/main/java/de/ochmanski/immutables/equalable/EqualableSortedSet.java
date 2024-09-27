@@ -26,7 +26,6 @@ import static de.ochmanski.immutables.constants.Constants.Warning.*;
 public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@NotNull E>> implements ESet<@NotNull E>
 {
 
-
   @Unmodifiable
   @UnmodifiableView
   @NotNull("Given set cannot be null.")
@@ -69,7 +68,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
   @Contract(value = "_ -> new", pure = true)
   public static <S extends Comparable<@NotNull S> & Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> noneOf(@NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableSortedSet.of(Set.of(), constructor);
+    return of(Set.of(), constructor);
   }
 
   @NotNull
@@ -89,7 +88,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
     @NotNull final S e1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableSortedSet.of(Set.of(e1), constructor);
+    return of(Set.of(e1), constructor);
   }
 
   @NotNull
@@ -111,7 +110,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
     @NotNull final S e2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableSortedSet.of(Set.of(e1, e2), constructor);
+    return of(Set.of(e1, e2), constructor);
   }
 
   @NotNull
@@ -135,7 +134,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
     @NotNull final S e3,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableSortedSet.of(Set.of(e1, e2, e3), constructor);
+    return of(Set.of(e1, e2, e3), constructor);
   }
 
   @NotNull
@@ -161,7 +160,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
     @NotNull final S e4,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return EqualableSortedSet.of(Set.of(e1, e2, e3, e4), constructor);
+    return of(Set.of(e1, e2, e3, e4), constructor);
   }
 
   @NotNull

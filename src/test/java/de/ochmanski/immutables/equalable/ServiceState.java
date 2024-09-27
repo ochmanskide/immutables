@@ -21,7 +21,7 @@ import static de.ochmanski.immutables.equalable.ServiceState.Constants.State.*;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public enum ServiceState implements Fluent<@NotNull ServiceState>, Comparable<@NotNull ServiceState>
+public enum ServiceState implements Comparable<@NotNull ServiceState>, Fluent<@NotNull ServiceState>
 {
 
   UNKNOWN(0, UNKNOWN_DEFAULT),

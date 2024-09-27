@@ -16,8 +16,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.*;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.*;
-
 public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
   //<editor-fold defaultstate="collapsed" desc="1. static utility methods of Equalable<T> interface">
@@ -144,7 +142,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   }
 
   @Contract(pure = true)
-  @SuppressWarnings(UNCHECKED)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   default boolean anyMatch(@NotNull final Equalable<@NotNull T> @NotNull ... array) {
     return isInArray(array);
   }
@@ -168,7 +166,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   }
 
   @Contract(pure = true)
-  @SuppressWarnings(UNCHECKED)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   default boolean allMatch(@NotNull final Equalable<@NotNull T> @NotNull ... array) {
     return allMatchArray(array);
   }
@@ -184,7 +182,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   }
 
   @Contract(pure = true)
-  @SuppressWarnings(UNCHECKED)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   default boolean noneMatchElements(@NotNull final Equalable<@NotNull T> @NotNull ... array) {
     return isNotInArray(array);
   }
@@ -195,7 +193,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   }
 
   @Contract(pure = true)
-  @SuppressWarnings(UNCHECKED)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   default boolean isNotIn(@NotNull final Equalable<@NotNull T> @NotNull ... array) {
     return isNotInArray(array);
   }
@@ -216,7 +214,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   }
 
   @Contract(pure = true)
-  @SuppressWarnings(UNCHECKED)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   default boolean isIn(@NotNull final Equalable<@NotNull T> @NotNull ... array) {
     return isInArray(array);
   }
@@ -379,7 +377,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     @NotNull
     @Unmodifiable
     @Contract(pure = true)
-    @SuppressWarnings({ UNCHECKED, RAWTYPES })
+    @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
     public static <S extends Equalable<@NotNull S>> Holder<@NotNull S> empty() {
       return (Holder) EMPTY;
     }
@@ -432,7 +430,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @Nullable
     @Unmodifiable
-    @SuppressWarnings(DATA_FLOW_ISSUE)
+    @SuppressWarnings(Constants.Warning.DATA_FLOW_ISSUE)
     @Contract(value = "-> new", pure = true)
     public S orElseNull()
     {
@@ -442,7 +440,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     @NotNull
     @Unmodifiable
     @Contract(value = "_ -> new", pure = true)
-    public S orElse(@SuppressWarnings(ALL) @NotNull final S other)
+    public S orElse(@SuppressWarnings(Constants.Warning.ALL) @NotNull final S other)
     {
       return ofNullable().orElse(other);
     }
@@ -1570,7 +1568,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     }
 
     @Contract(pure = true)
-    @SuppressWarnings(NULL)
+    @SuppressWarnings(Constants.Warning.NULL)
     private int length()
     {
       return null == plain ? 0 : getPlain().length();
@@ -1629,6 +1627,26 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Unmodifiable
+    public static final EqualableInteger ZERO = EqualableInteger.of(0);
+
+    @NotNull
+    @Unmodifiable
+    public static final EqualableInteger ONE = EqualableInteger.of(1);
+
+    @NotNull
+    @Unmodifiable
+    public static final EqualableInteger TWO = EqualableInteger.of(2);
+
+    @NotNull
+    @Unmodifiable
+    public static final EqualableInteger THREE = EqualableInteger.of(3);
+
+    @NotNull
+    @Unmodifiable
+    public static final EqualableInteger TEN = EqualableInteger.of(10);
+
+    @NotNull
+    @Unmodifiable
     public static final EqualableInteger EMPTY = createConstant();
 
     @NotNull
@@ -1636,7 +1654,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     @Contract(value = "-> new", pure = true)
     private static EqualableInteger createConstant()
     {
-      return EqualableInteger.of(0);
+      return EqualableInteger.ZERO;
     }
 
     //<editor-fold defaultstate="collapsed" desc="5.1. static utility methods">
@@ -1855,22 +1873,22 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     //<editor-fold defaultstate="collapsed" desc="5.3. old Java Collection API">
     @Contract(pure = true)
-    public final boolean isNotIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final int @NotNull ... array) {
+    public final boolean isNotIn(@SuppressWarnings(Constants.Warning.NULLABLE_PROBLEMS) @NotNull final int @NotNull ... array) {
       return !isIn(array);
     }
 
     @Contract(pure = true)
-    public final boolean isIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final int @NotNull ... array) {
+    public final boolean isIn(@SuppressWarnings(Constants.Warning.NULLABLE_PROBLEMS) @NotNull final int @NotNull ... array) {
       return isInArray(array);
     }
 
     @Contract(pure = true)
-    public final boolean isNotInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final int @NotNull [] array) {
+    public final boolean isNotInArray(@SuppressWarnings(Constants.Warning.NULLABLE_PROBLEMS) @NotNull final int @NotNull [] array) {
       return !isInArray(array);
     }
 
     @Contract(pure = true)
-    public final boolean isInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final int @NotNull [] array) {
+    public final boolean isInArray(@SuppressWarnings(Constants.Warning.NULLABLE_PROBLEMS) @NotNull final int @NotNull [] array) {
       final List<java.lang.@NotNull Integer> list = IntStream.of(array).boxed().toList();
       return isInCollection(list);
     }
@@ -1957,6 +1975,26 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     @NotNull
     @Unmodifiable
+    public static final EqualableLong ZERO = EqualableLong.of(0L);
+
+    @NotNull
+    @Unmodifiable
+    public static final EqualableLong ONE = EqualableLong.of(1L);
+
+    @NotNull
+    @Unmodifiable
+    public static final EqualableLong TWO = EqualableLong.of(2L);
+
+    @NotNull
+    @Unmodifiable
+    public static final EqualableLong THREE = EqualableLong.of(3L);
+
+    @NotNull
+    @Unmodifiable
+    public static final EqualableLong TEN = EqualableLong.of(10L);
+
+    @NotNull
+    @Unmodifiable
     public static final EqualableLong EMPTY = createConstant();
 
     @NotNull
@@ -1964,7 +2002,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     @Contract(value = "-> new", pure = true)
     private static EqualableLong createConstant()
     {
-      return EqualableLong.of(0L);
+      return EqualableLong.ZERO;
     }
 
     //<editor-fold defaultstate="collapsed" desc="6.1. static utility methods">
@@ -2015,13 +2053,28 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
     long s;
 
     @Contract(pure = true)
+    public final boolean isNotZero() {
+      return !isZero();
+    }
+
+    @Contract(pure = true)
     public final boolean isZero() {
       return EqualableLong.areTheSame(s, 0);
     }
 
     @Contract(pure = true)
+    public final boolean isNotOne() {
+      return !isOne();
+    }
+
+    @Contract(pure = true)
     public final boolean isOne() {
       return EqualableLong.areTheSame(s, 1);
+    }
+
+    @Contract(pure = true)
+    public final boolean isNotTwo() {
+      return !isTwo();
     }
 
     @Contract(pure = true)
@@ -2369,22 +2422,22 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
     //<editor-fold defaultstate="collapsed" desc="7.3. old Java Collection API">
     @Contract(pure = true)
-    public final boolean isNotIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final float @NotNull ... array) {
+    public final boolean isNotIn(@SuppressWarnings(Constants.Warning.NULLABLE_PROBLEMS) @NotNull final float @NotNull ... array) {
       return !isIn(array);
     }
 
     @Contract(pure = true)
-    public final boolean isIn(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final float @NotNull ... array) {
+    public final boolean isIn(@SuppressWarnings(Constants.Warning.NULLABLE_PROBLEMS) @NotNull final float @NotNull ... array) {
       return isInArray(array);
     }
 
     @Contract(pure = true)
-    public final boolean isNotInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final float @NotNull [] array) {
+    public final boolean isNotInArray(@SuppressWarnings(Constants.Warning.NULLABLE_PROBLEMS) @NotNull final float @NotNull [] array) {
       return !isInArray(array);
     }
 
     @Contract(pure = true)
-    public final boolean isInArray(@SuppressWarnings(NULLABLE_PROBLEMS) @NotNull final float @NotNull [] floatArray) {
+    public final boolean isInArray(@SuppressWarnings(Constants.Warning.NULLABLE_PROBLEMS) @NotNull final float @NotNull [] floatArray) {
       DoubleStream ds = IntStream.range(0, floatArray.length)
         .mapToDouble(i -> floatArray[i]);
       return isIn(ds);
@@ -2753,7 +2806,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
   //<editor-fold defaultstate="collapsed" desc="9. enum Dummy">
   @NotNull
   @Unmodifiable
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   @Contract(pure = true)
   static <S> IntFunction<@NotNull S @NotNull []> defaultKey()
   {

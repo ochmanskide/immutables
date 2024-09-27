@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.equalable;
 
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.immutable.IList;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.AccessLevel;
@@ -14,8 +15,6 @@ import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 import static java.util.function.Predicate.not;
 
 @Value
@@ -39,7 +38,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   public static <S extends Comparable<@NotNull S> & Equalable<@NotNull S>> EqualableList<@NotNull S> empty()
   {
     return (EqualableList) EMPTY;

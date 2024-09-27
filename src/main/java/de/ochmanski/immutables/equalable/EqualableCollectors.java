@@ -72,11 +72,11 @@ public interface EqualableCollectors
   @NotNull
   @Unmodifiable
   @Contract(value = " -> new", pure = true)
-  static Collector<@NotNull String, @NotNull TreeSet<@NotNull String>, @NotNull EqualableSortedSet<@NotNull EqualableString>> toSortedSet()
+  static Collector<@NotNull String, @NotNull HashSet<@NotNull String>, @NotNull EqualableSortedSet<@NotNull EqualableString>> toSortedSet()
   {
-    return CollectorImpl.<@NotNull String, @NotNull TreeSet<@NotNull String>, @NotNull EqualableSortedSet<@NotNull EqualableString>>builder()
-      .supplier(TreeSet::new)
-      .accumulator(TreeSet::add)
+    return CollectorImpl.<@NotNull String, @NotNull HashSet<@NotNull String>, @NotNull EqualableSortedSet<@NotNull EqualableString>>builder()
+      .supplier(HashSet::new)
+      .accumulator(Set::add)
       .combiner((left, right) ->
       {
         if(left.size() < right.size())
@@ -91,14 +91,14 @@ public interface EqualableCollectors
         }
       })
       .finisher(EqualableSortedSet::of)
-      .characteristics(CH_ID)
+      .characteristics(CH_UNORDERED_NOID)
       .build();
   }
 
   @NotNull
   @Unmodifiable
   @Contract(value = " -> new", pure = true)
-  static Collector<@NotNull EqualableString, @NotNull TreeSet<@NotNull EqualableString>, @NotNull EqualableSortedSet<@NotNull EqualableString>> toSortedSetOfStrings() {
+  static Collector<@NotNull EqualableString, @NotNull HashSet<@NotNull EqualableString>, @NotNull EqualableSortedSet<@NotNull EqualableString>> toSortedSetOfStrings() {
     return toSortedSet(EqualableString[]::new);
   }
 
@@ -106,26 +106,26 @@ public interface EqualableCollectors
   @Unmodifiable
   @Contract(value = "_ -> new", pure = true)
   static <T extends Comparable<@NotNull T> & Equalable<@NotNull T>>
-  Collector<@NotNull T, @NotNull TreeSet<@NotNull T>, @NotNull EqualableSortedSet<@NotNull T>> toSortedSet(
+  Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSortedSet<@NotNull T>> toSortedSet(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor
   ) {
-    return toSortedSet(constructor, TreeSet::add);
+    return toSortedSet(constructor, HashSet::add);
   }
 
   @NotNull
   @Unmodifiable
   @Contract(value = " _,_ -> new", pure = true)
   static <T extends @NotNull Comparable<@NotNull T> & @NotNull Equalable<@NotNull T>>
-  Collector<@NotNull T, @NotNull TreeSet<@NotNull T>, @NotNull EqualableSortedSet<@NotNull T>> toSortedSet(
+  Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSortedSet<@NotNull T>> toSortedSet(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor,
-    @NotNull final BiConsumer<@NotNull TreeSet<@NotNull T>, @NotNull T> accumulator)
+    @NotNull final BiConsumer<@NotNull HashSet<@NotNull T>, @NotNull T> accumulator)
   {
-    return CollectorImpl.<@NotNull T, @NotNull TreeSet<@NotNull T>, @NotNull EqualableSortedSet<@NotNull T>>builder()
-      .supplier(TreeSet::new)
+    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSortedSet<@NotNull T>>builder()
+      .supplier(HashSet::new)
       .accumulator(accumulator)
-      .combiner(EqualableCollectors::treeSetCombiner)
+      .combiner(EqualableCollectors::comparableSetCombiner)
       .finisher(set -> EqualableSortedSet.of(set, constructor))
-      .characteristics(CH_ID)
+      .characteristics(CH_UNORDERED_NOID)
       .build();
   }
 
@@ -136,7 +136,7 @@ public interface EqualableCollectors
   {
     return CollectorImpl.<@NotNull String, @NotNull HashSet<@NotNull String>, @NotNull EqualableSet<@NotNull EqualableString>>builder()
       .supplier(HashSet::new)
-      .accumulator(HashSet::add)
+      .accumulator(Set::add)
       .combiner((left, right) ->
       {
         if(left.size() < right.size())
@@ -174,7 +174,7 @@ public interface EqualableCollectors
    *
    * @param <T> the type of the input elements
    * @return a {@code Collector} that accumulates the input elements into an
-   * <a href="../Set.html#unmodifiable">unmodifiable Set</a>
+   *     <a href="../Set.html#unmodifiable">unmodifiable Set</a>
    * @since 10
    */
   @NotNull
@@ -205,9 +205,9 @@ public interface EqualableCollectors
 
   @NotNull
   private static <T extends @NotNull Comparable<@NotNull T> & @NotNull Equalable<@NotNull T>>
-  TreeSet<@NotNull T> treeSetCombiner(
-    @NotNull final TreeSet<@NotNull T> left,
-    @NotNull final TreeSet<@NotNull T> right) {
+  HashSet<@NotNull T> comparableSetCombiner(
+    @NotNull final HashSet<@NotNull T> left,
+    @NotNull final HashSet<@NotNull T> right) {
     if (left.size() < right.size()) {
       right.addAll(left);
       return right;

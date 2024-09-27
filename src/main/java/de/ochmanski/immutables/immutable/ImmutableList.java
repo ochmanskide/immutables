@@ -34,7 +34,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @UnmodifiableView
   @javax.validation.constraints.NotNull(message = "Given list cannot be null.")
   @Builder.Default
-  List<@NotNull E> list = List.of();
+  List<@NotNull E> list = (List) Collections.checkedList(List.of(), Equalable.Dummy.class);
 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")

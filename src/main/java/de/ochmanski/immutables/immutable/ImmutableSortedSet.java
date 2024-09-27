@@ -3,6 +3,7 @@ package de.ochmanski.immutables.immutable;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ochmanski.immutables.collection.ICollection;
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.equalable.EqualableCollection;
 import lombok.*;
@@ -13,9 +14,6 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
-
-import static de.ochmanski.immutables.constants.Constants.Warning.*;
-import static java.util.Collections.emptySortedSet;
 
 @Value
 @UnmodifiableView
@@ -31,7 +29,7 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
   @NotNull("Given set cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given set cannot be null.")
   @Builder.Default
-  SortedSet<@NotNull E> set = emptySortedSet();
+  SortedSet<@NotNull E> set = (SortedSet) Collections.checkedSortedSet(Collections.emptySortedSet(), Equalable.Dummy.class);
 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
@@ -44,7 +42,7 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   public static <S extends Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> empty()
   {
     return (ImmutableSortedSet) EMPTY_SET;
@@ -310,7 +308,7 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
 
   @Override
   @Contract(pure = true)
-  @SuppressWarnings(SIMPLIFY_STREAM_API_CALL_CHAINS)
+  @SuppressWarnings(Constants.Warning.SIMPLIFY_STREAM_API_CALL_CHAINS)
   public void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer)
   {
     set.stream().forEachOrdered(consumer);
@@ -496,7 +494,7 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
 
   @NotNull
   @Unmodifiable
-  @SuppressWarnings(SAME_PARAMETER_VALUE)
+  @SuppressWarnings(Constants.Warning.SAME_PARAMETER_VALUE)
   @Contract(value = "_, _ -> new", pure = true)
   private String limit(@NotNull final String s, final int limit)
   {

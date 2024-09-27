@@ -2,6 +2,7 @@ package de.ochmanski.immutables.equalable;
 
 import annotations.UnitTest;
 import de.ochmanski.immutables.fluent.Fluent;
+import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -71,15 +72,15 @@ class EqualableTest
   @Test
   void anyMatchIgnoreCase1()
   {
-    List<EqualableString> list = List.of(
-      EqualableString.of("a"),
-      EqualableString.of("b"),
-      EqualableString.of("C"),
-      EqualableString.of("D"));
-    final boolean actual = Equalable.<EqualableString>anyMatchT(list, p -> p.equalsIgnoreCase("C"));
+    List<Equalable.EqualableString> list = List.of(
+      Equalable.EqualableString.of("a"),
+      Equalable.EqualableString.of("b"),
+      Equalable.EqualableString.of("C"),
+      Equalable.EqualableString.of("D"));
+    final boolean actual = Equalable.<Equalable.EqualableString>anyMatchT(list, p -> p.equalsIgnoreCase("C"));
     final boolean expected = true;
     assertThat(actual).isEqualTo(expected);
-    final boolean actual2 = Equalable.<EqualableString>anyMatchT(list, p -> p.equalsIgnoreCase("c"));
+    final boolean actual2 = Equalable.<Equalable.EqualableString>anyMatchT(list, p -> p.equalsIgnoreCase("c"));
     assertThat(actual2).isEqualTo(expected);
   }
 
@@ -108,50 +109,50 @@ class EqualableTest
   @Test
   void anyMatchIgnoreCase5()
   {
-    List<EqualableString> list = List.of(
-      EqualableString.of("a"),
-      EqualableString.of("b"),
-      EqualableString.of("C"),
-      EqualableString.of("D"));
-    final boolean actual = Equalable.<List<EqualableString>>anyMatchIgnoreCase(list,
+    List<Equalable.EqualableString> list = List.of(
+      Equalable.EqualableString.of("a"),
+      Equalable.EqualableString.of("b"),
+      Equalable.EqualableString.of("C"),
+      Equalable.EqualableString.of("D"));
+    final boolean actual = Equalable.<List<Equalable.EqualableString>>anyMatchIgnoreCase(list,
       p -> p.stream().map(o -> o.orElse(BLANK)).toList(), List.of("C"));
     final boolean expected = true;
     assertThat(actual).isEqualTo(expected);
-    final boolean actual2 = Equalable.<List<EqualableString>>anyMatchIgnoreCase(list,
-      p -> p.stream().map(EqualableString::orElseBlank).toList(), List.of("c"));
+    final boolean actual2 = Equalable.<List<Equalable.EqualableString>>anyMatchIgnoreCase(list,
+      p -> p.stream().map(Equalable.EqualableString::orElseBlank).toList(), List.of("c"));
     assertThat(actual2).isEqualTo(expected);
   }
 
   @Test
   void anyMatchIgnoreCase6()
   {
-    List<EqualableString> list = List.of(
-      EqualableString.of("a"),
-      EqualableString.of("b"),
-      EqualableString.of("C"),
-      EqualableString.of("D"));
-    final boolean actual = Equalable.<EqualableString>anyMatchIgnoreCase(list, EqualableString::orElseBlank, List.of("C"));
+    List<Equalable.EqualableString> list = List.of(
+      Equalable.EqualableString.of("a"),
+      Equalable.EqualableString.of("b"),
+      Equalable.EqualableString.of("C"),
+      Equalable.EqualableString.of("D"));
+    final boolean actual = Equalable.<Equalable.EqualableString>anyMatchIgnoreCase(list, Equalable.EqualableString::orElseBlank, List.of("C"));
     final boolean expected = true;
     assertThat(actual).isEqualTo(expected);
-    final boolean actual2 = Equalable.<EqualableString>anyMatchIgnoreCase(list, EqualableString::orElseBlank, List.of("c"));
+    final boolean actual2 = Equalable.<Equalable.EqualableString>anyMatchIgnoreCase(list, Equalable.EqualableString::orElseBlank, List.of("c"));
     assertThat(actual2).isEqualTo(expected);
   }
 
   @Test
   void isNotIn()
   {
-    final boolean actual = EqualableString.of("a").isNotIn("A", "B");
+    final boolean actual = Equalable.EqualableString.of("a").isNotIn("A", "B");
     assertThat(actual).isTrue();
-    final boolean actual2 = EqualableString.of("a").isNotIn("a", "b");
+    final boolean actual2 = Equalable.EqualableString.of("a").isNotIn("a", "b");
     assertThat(actual2).isFalse();
   }
 
   @Test
   void isNotInIgnoreCase()
   {
-    final boolean actual = EqualableString.of("a").isNotInIgnoreCase("A", "B");
+    final boolean actual = Equalable.EqualableString.of("a").isNotInIgnoreCase("A", "B");
     assertThat(actual).isFalse();
-    final boolean actual2 = EqualableString.of("a").isNotInIgnoreCase("a", "b");
+    final boolean actual2 = Equalable.EqualableString.of("a").isNotInIgnoreCase("a", "b");
     assertThat(actual2).isFalse();
   }
 
@@ -167,18 +168,18 @@ class EqualableTest
   @Test
   void isIn()
   {
-    final boolean actual = EqualableString.of("a").isIn("A", "B");
+    final boolean actual = Equalable.EqualableString.of("a").isIn("A", "B");
     assertThat(actual).isFalse();
-    final boolean actual2 = EqualableString.of("a").isIn("a", "b");
+    final boolean actual2 = Equalable.EqualableString.of("a").isIn("a", "b");
     assertThat(actual2).isTrue();
   }
 
   @Test
   void isInIgnoreCase()
   {
-    final boolean actual = EqualableString.of("a").isInIgnoreCase("A", "B");
+    final boolean actual = Equalable.EqualableString.of("a").isInIgnoreCase("A", "B");
     assertThat(actual).isTrue();
-    final boolean actual2 = EqualableString.of("a").isInIgnoreCase("a", "b");
+    final boolean actual2 = Equalable.EqualableString.of("a").isInIgnoreCase("a", "b");
     assertThat(actual2).isTrue();
   }
 
@@ -194,171 +195,171 @@ class EqualableTest
   @Test
   void isNotEqualTo()
   {
-    boolean actual = EqualableString.of("a").isNotEqualTo(EqualableString.of("A"));
+    boolean actual = Equalable.EqualableString.of("a").isNotEqualTo(Equalable.EqualableString.of("A"));
     assertThat(actual).isTrue();
-    boolean actual2 = EqualableString.of("a").isNotEqualTo("A");
+    boolean actual2 = Equalable.EqualableString.of("a").isNotEqualTo("A");
     assertThat(actual2).isTrue();
-    boolean actual3 = EqualableString.of("a").isNotEqualTo(EqualableString.of("a"));
+    boolean actual3 = Equalable.EqualableString.of("a").isNotEqualTo(Equalable.EqualableString.of("a"));
     assertThat(actual3).isFalse();
-    boolean actual4 = EqualableString.of("a").isNotEqualTo("a");
+    boolean actual4 = Equalable.EqualableString.of("a").isNotEqualTo("a");
     assertThat(actual4).isFalse();
   }
 
   @Test
   void isEqualTo()
   {
-    boolean actual = EqualableString.of("a").isEqualTo(EqualableString.of("A"));
+    boolean actual = Equalable.EqualableString.of("a").isEqualTo(Equalable.EqualableString.of("A"));
     assertThat(actual).isFalse();
-    boolean actual2 = EqualableString.of("a").isEqualTo("A");
+    boolean actual2 = Equalable.EqualableString.of("a").isEqualTo("A");
     assertThat(actual2).isFalse();
-    boolean actual3 = EqualableString.of("a").isEqualTo(EqualableString.of("a"));
+    boolean actual3 = Equalable.EqualableString.of("a").isEqualTo(Equalable.EqualableString.of("a"));
     assertThat(actual3).isTrue();
-    boolean actual4 = EqualableString.of("a").isEqualTo("a");
+    boolean actual4 = Equalable.EqualableString.of("a").isEqualTo("a");
     assertThat(actual4).isTrue();
   }
 
   @Test
   void isNotEqualToIgnoreCase()
   {
-    boolean actual = EqualableString.of("a").isNotEqualToIgnoreCase(EqualableString.of("A"));
+    boolean actual = Equalable.EqualableString.of("a").isNotEqualToIgnoreCase(Equalable.EqualableString.of("A"));
     assertThat(actual).isFalse();
-    boolean actual2 = EqualableString.of("a").isNotEqualToIgnoreCase("A");
+    boolean actual2 = Equalable.EqualableString.of("a").isNotEqualToIgnoreCase("A");
     assertThat(actual2).isFalse();
-    boolean actual3 = EqualableString.of("a").isNotEqualToIgnoreCase(EqualableString.of("a"));
+    boolean actual3 = Equalable.EqualableString.of("a").isNotEqualToIgnoreCase(Equalable.EqualableString.of("a"));
     assertThat(actual3).isFalse();
-    boolean actual4 = EqualableString.of("a").isNotEqualToIgnoreCase("a");
+    boolean actual4 = Equalable.EqualableString.of("a").isNotEqualToIgnoreCase("a");
     assertThat(actual4).isFalse();
   }
 
   @Test
   void isEqualToIgnoreCase()
   {
-    boolean actual = EqualableString.of("a").isEqualToIgnoreCase(EqualableString.of("A"));
+    boolean actual = Equalable.EqualableString.of("a").isEqualToIgnoreCase(Equalable.EqualableString.of("A"));
     assertThat(actual).isTrue();
-    boolean actual2 = EqualableString.of("a").isEqualToIgnoreCase("A");
+    boolean actual2 = Equalable.EqualableString.of("a").isEqualToIgnoreCase("A");
     assertThat(actual2).isTrue();
-    boolean actual3 = EqualableString.of("a").isEqualToIgnoreCase(EqualableString.of("a"));
+    boolean actual3 = Equalable.EqualableString.of("a").isEqualToIgnoreCase(Equalable.EqualableString.of("a"));
     assertThat(actual3).isTrue();
-    boolean actual4 = EqualableString.of("a").isEqualToIgnoreCase("a");
+    boolean actual4 = Equalable.EqualableString.of("a").isEqualToIgnoreCase("a");
     assertThat(actual4).isTrue();
   }
 
   @Test
   void areNotEqual()
   {
-    final boolean actual = Equalable.<EqualableString>areNotEqual(EqualableString.of("a"), EqualableString.of("A"));
+    final boolean actual = Equalable.<Equalable.EqualableString>areNotEqual(Equalable.EqualableString.of("a"), Equalable.EqualableString.of("A"));
     assertThat(actual).isTrue();
-    final boolean actual2 = Equalable.<EqualableString>areNotEqual(EqualableString.of("a"), EqualableString.of("a"));
+    final boolean actual2 = Equalable.<Equalable.EqualableString>areNotEqual(Equalable.EqualableString.of("a"), Equalable.EqualableString.of("a"));
     assertThat(actual2).isFalse();
   }
 
   @Test
   void areEqual()
   {
-    final boolean actual = Equalable.<EqualableString>areEqual(EqualableString.of("a"), EqualableString.of("A"));
+    final boolean actual = Equalable.<Equalable.EqualableString>areEqual(Equalable.EqualableString.of("a"), Equalable.EqualableString.of("A"));
     assertThat(actual).isFalse();
-    final boolean actual2 = Equalable.<EqualableString>areEqual(EqualableString.of("a"), EqualableString.of("a"));
+    final boolean actual2 = Equalable.<Equalable.EqualableString>areEqual(Equalable.EqualableString.of("a"), Equalable.EqualableString.of("a"));
     assertThat(actual2).isTrue();
   }
 
   @Test
   void testAreNotEqual()
   {
-    final boolean actual = EqualableString.areNotEqual("a", "A");
+    final boolean actual = Equalable.EqualableString.areNotEqual("a", "A");
     assertThat(actual).isTrue();
-    final boolean actual2 = EqualableString.areNotEqual("a", "a");
+    final boolean actual2 = Equalable.EqualableString.areNotEqual("a", "a");
     assertThat(actual2).isFalse();
   }
 
   @Test
   void testAreEqual()
   {
-    final boolean actual = EqualableString.areEqual("a", "A");
+    final boolean actual = Equalable.EqualableString.areEqual("a", "A");
     assertThat(actual).isFalse();
-    final boolean actual2 = EqualableString.areEqual("a", "a");
+    final boolean actual2 = Equalable.EqualableString.areEqual("a", "a");
     assertThat(actual2).isTrue();
   }
 
   @Test
   void areNotEqualIgnoreCase()
   {
-    final boolean actual = EqualableString.areNotEqualIgnoreCase("a", "A");
+    final boolean actual = Equalable.EqualableString.areNotEqualIgnoreCase("a", "A");
     assertThat(actual).isFalse();
-    final boolean actual2 = EqualableString.areNotEqualIgnoreCase("a", "a");
+    final boolean actual2 = Equalable.EqualableString.areNotEqualIgnoreCase("a", "a");
     assertThat(actual2).isFalse();
   }
 
   @Test
   void areEqualIgnoreCase()
   {
-    final boolean actual = EqualableString.areEqualIgnoreCase("a", "A");
+    final boolean actual = Equalable.EqualableString.areEqualIgnoreCase("a", "A");
     assertThat(actual).isTrue();
-    final boolean actual2 = EqualableString.areEqualIgnoreCase("a", "a");
+    final boolean actual2 = Equalable.EqualableString.areEqualIgnoreCase("a", "a");
     assertThat(actual2).isTrue();
   }
 
   @Test
   void bothAreNotBlank()
   {
-    final boolean actual = EqualableString.bothAreNotBlank(" ", "A");
+    final boolean actual = Equalable.EqualableString.bothAreNotBlank(" ", "A");
     assertThat(actual).isTrue();
-    final boolean actual2 = EqualableString.bothAreNotBlank("", " ");
+    final boolean actual2 = Equalable.EqualableString.bothAreNotBlank("", " ");
     assertThat(actual2).isFalse();
   }
 
   @Test
   void bothAreBlank()
   {
-    final boolean actual = EqualableString.bothAreBlank(" ", "A");
+    final boolean actual = Equalable.EqualableString.bothAreBlank(" ", "A");
     assertThat(actual).isFalse();
-    final boolean actual2 = EqualableString.bothAreBlank("", " ");
+    final boolean actual2 = Equalable.EqualableString.bothAreBlank("", " ");
     assertThat(actual2).isTrue();
   }
 
   @Test
   void areNotTheSame()
   {
-    final boolean actual = EqualableString.areNotTheSame("", "A");
+    final boolean actual = Equalable.EqualableString.areNotTheSame("", "A");
     assertThat(actual).isTrue();
-    final boolean actual2 = EqualableString.areNotTheSame("", "");
+    final boolean actual2 = Equalable.EqualableString.areNotTheSame("", "");
     assertThat(actual2).isFalse();
-    final boolean actual3 = EqualableString.areNotTheSame(BLANK, BLANK);
+    final boolean actual3 = Equalable.EqualableString.areNotTheSame(BLANK, BLANK);
     assertThat(actual3).isFalse();
   }
 
   @Test
   void areTheSame()
   {
-    final boolean actual = EqualableString.areTheSame("", "A");
+    final boolean actual = Equalable.EqualableString.areTheSame("", "A");
     assertThat(actual).isFalse();
-    final boolean actual2 = EqualableString.areTheSame("", "");
+    final boolean actual2 = Equalable.EqualableString.areTheSame("", "");
     assertThat(actual2).isTrue();
-    final boolean actual3 = EqualableString.areTheSame(BLANK, BLANK);
+    final boolean actual3 = Equalable.EqualableString.areTheSame(BLANK, BLANK);
     assertThat(actual3).isTrue();
   }
 
   @Test
   void element()
   {
-    final boolean actual = EqualableString.of("String").isEqualTo("string");
+    final boolean actual = Equalable.EqualableString.of("String").isEqualTo("string");
     assertThat(actual).isFalse();
-    final boolean actual2 = EqualableString.of("String").isEqualTo("String");
+    final boolean actual2 = Equalable.EqualableString.of("String").isEqualTo("String");
     assertThat(actual2).isTrue();
   }
 
   @Test
   void equalableOfLong() {
-    EqualableLong actual = Equalable.ofLong(23L);
+    Equalable.EqualableLong actual = Equalable.ofLong(23L);
     assertThat(actual).isEqualTo(actual);
     assertThat(actual).isSameAs(actual);
-    assertThat(actual).isEqualTo(EqualableLong.of(23L));
-    assertThat(actual).isNotSameAs(EqualableLong.of(23L));
-    assertThat(actual).isNotEqualTo(EqualableLong.of(24L));
-    assertThat(actual).isNotSameAs(EqualableLong.of(23L));
+    assertThat(actual).isEqualTo(Equalable.EqualableLong.of(23L));
+    assertThat(actual).isNotSameAs(Equalable.EqualableLong.of(23L));
+    assertThat(actual).isNotEqualTo(Equalable.EqualableLong.of(24L));
+    assertThat(actual).isNotSameAs(Equalable.EqualableLong.of(23L));
     assertThat(actual.isEqualTo(23L)).isTrue();
     assertThat(actual.isSameAs(23L)).isTrue();
-    assertThat(actual.isSameAs(EqualableLong.of(23L))).isFalse();
-    assertThat(actual.isEqualTo(EqualableLong.of(23L))).isTrue();
+    Assertions.assertThat(actual.isSameAs(Equalable.EqualableLong.of(23L))).isFalse();
+    Assertions.assertThat(actual.isEqualTo(Equalable.EqualableLong.of(23L))).isTrue();
   }
 
   public enum State implements Fluent<@NotNull State>

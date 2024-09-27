@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.fluent;
 
+import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import org.jetbrains.annotations.*;
 
@@ -10,9 +11,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
-
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
   extends Equalable<@NotNull Fluent<@NotNull F>>
@@ -81,7 +79,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
 
   @Override
   @Contract(pure = true)
-  @SuppressWarnings(UNCHECKED)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   default boolean isNotIn(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull ... array)
   {
     return isNotInArray(array);
@@ -106,7 +104,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
 
   @Override
   @Contract(pure = true)
-  @SuppressWarnings(UNCHECKED)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   default boolean isIn(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull ... array)
   {
     return isInArray(array);
@@ -269,7 +267,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   @NotNull
   @Unmodifiable
   @Contract(pure = true)
-  @SuppressWarnings({UNCHECKED, RAWTYPES})
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   static <S> IntFunction<@NotNull S @NotNull []> defaultKey()
   {
     return (IntFunction) DEFAULT_KEY;

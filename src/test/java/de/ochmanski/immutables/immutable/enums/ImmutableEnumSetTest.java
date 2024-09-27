@@ -109,11 +109,11 @@ class ImmutableEnumSetTest
       .satisfiesAnyOf(
         p -> assertThat(p).hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 's1' of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null"),
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null"),
         p -> assertThat(p).hasMessage("NotNull annotated argument 0 of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null"),
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null"),
         p -> assertThat(p).hasMessage("NotNull annotated argument 0 (parameter 's1') of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null")
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null")
       );
   }
 
@@ -135,11 +135,11 @@ class ImmutableEnumSetTest
         p -> assertThat(p).hasMessage(
           "Cannot invoke \"java.util.function.IntFunction.apply(int)\" because \"constructor\" is null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 'constructor' of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null"),
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null"),
         p -> assertThat(p).hasMessage("NotNull annotated argument 1 of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null"),
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null"),
         p -> assertThat(p).hasMessage("NotNull annotated argument 1 (parameter 'constructor') of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null")
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null")
       );
   }
 
@@ -152,11 +152,11 @@ class ImmutableEnumSetTest
       .satisfiesAnyOf(
         p -> assertThat(p).hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 's2' of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null"),
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null"),
         p -> assertThat(p).hasMessage("NotNull annotated argument 1 of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null"),
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null"),
         p -> assertThat(p).hasMessage("NotNull annotated argument 1 (parameter 's2') of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null")
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null")
       );
   }
 
@@ -169,15 +169,15 @@ class ImmutableEnumSetTest
       .satisfiesAnyOf(
         p -> assertThat(p).hasMessage("Cannot invoke \"Object.getClass()\" because \"e\" is null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 's2' of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null"),
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null"),
         p -> assertThat(p).hasMessage("NotNull annotated argument 1 of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null"),
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null"),
         p -> assertThat(p).hasMessage("NotNull annotated argument 1 (parameter 's2') of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null"),
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null"),
         p -> assertThat(p).hasMessage("NotNull annotated argument 2 (parameter 's3') of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null"),
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null"),
         p -> assertThat(p).hasMessage("NotNull annotated argument 3 (parameter 'constructor') of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null")
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null")
       );
   }
 
@@ -203,11 +203,11 @@ class ImmutableEnumSetTest
       .satisfiesAnyOf(
         p -> assertThat(p).hasMessage("Cannot invoke \"java.lang.Enum.getDeclaringClass()\" because \"e\" is null"),
         p -> assertThat(p).hasMessage("Argument for @NotNull parameter 's1' of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null"),
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null"),
         p -> assertThat(p).hasMessage("NotNull annotated argument 0 of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null"),
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null"),
         p -> assertThat(p).hasMessage("NotNull annotated argument 0 (parameter 's1') of "
-          + "com/stadlerrail/diag/dias/immutables/immutable/enums/ImmutableEnumSet.of must not be null")
+          + "de/ochmanski/immutable/enums/ImmutableEnumSet.of must not be null")
       );
   }
 

@@ -1,5 +1,6 @@
 package de.ochmanski.immutables.fluent;
 
+import de.ochmanski.immutables.constants.Constants;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -10,8 +11,6 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 public interface FluentCollectors
 {
 
@@ -146,7 +145,7 @@ public interface FluentCollectors
 
   @NotNull
   @Contract(pure = true)
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
+  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
   static <T extends @NotNull Enum<@NotNull T> & Fluent<@NotNull T>> IntFunction<@NotNull T @NotNull []> tGenerator()
   {
     return (IntFunction)Enum @NotNull []::new;
@@ -212,7 +211,7 @@ public interface FluentCollectors
 
   @NotNull
   @Contract(pure = true)
-  @SuppressWarnings(UNCHECKED)
+  @SuppressWarnings(Constants.Warning.UNCHECKED)
   private static <I, R> Function<@NotNull I, @NotNull R> castingIdentity()
   {
     return i -> (R)i;

@@ -8,8 +8,7 @@ import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
@@ -72,7 +71,7 @@ public interface ImmutableCollectors
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <T extends Comparable<@NotNull T>> Collector<@NotNull T, @NotNull TreeSet<@NotNull T>, @NotNull ImmutableSortedSet<@NotNull T>> toSortedSet(
+  static <T extends @NotNull Comparable<@NotNull T>> Collector<@NotNull T, @NotNull TreeSet<@NotNull T>, @NotNull ImmutableSortedSet<@NotNull T>> toSortedSet(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor
   )
   {

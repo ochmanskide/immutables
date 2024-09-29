@@ -9,7 +9,6 @@ import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.NotBlank;
-import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntFunction;
@@ -23,7 +22,7 @@ import static de.ochmanski.immutables.constants.Constants.Warning.*;
 @EqualsAndHashCode(doNotUseGetters = true)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@NotNull E>> implements ESet<@NotNull E>
+public class EqualableSortedSet<E extends @NotNull Comparable<@NotNull E> & @NotNull Equalable<@NotNull E>> implements ESet<@NotNull E>
 {
 
   @Unmodifiable
@@ -40,7 +39,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
   @UnmodifiableView
   @Contract(pure = true)
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  public static <S extends Comparable<@NotNull S> & Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> empty()
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> empty()
   {
     return (EqualableSortedSet) EMPTY_SET;
   }
@@ -66,7 +65,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S> & Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> noneOf(@NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> noneOf(@NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return of(Set.of(), constructor);
   }
@@ -84,7 +83,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S> & Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
     @NotNull final S e1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
@@ -105,7 +104,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _, _ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S> & Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
     @NotNull final S e1,
     @NotNull final S e2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
@@ -128,7 +127,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _, _, _ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S> & Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
     @NotNull final S e1,
     @NotNull final S e2,
     @NotNull final S e3,
@@ -153,7 +152,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _, _, _, _ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S> & Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
     @NotNull final S e1,
     @NotNull final S e2,
     @NotNull final S e3,
@@ -167,7 +166,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <K extends @NotNull Comparable<? super @NotNull K> & Equalable<? super @NotNull K>, V> EqualableSortedSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
+  public static <K extends @NotNull Comparable<? super @NotNull K> & @NotNull Equalable<? super @NotNull K>, V> EqualableSortedSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
     @NotNull final Set<Map.@NotNull Entry<@NotNull K, @NotNull V>> entries,
     @NotNull final IntFunction<IMap.@NotNull Entry<@NotNull K, @NotNull V> @NotNull []> entry)
   {
@@ -227,7 +226,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S> & Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> ofArray(
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> ofArray(
     @NotNull final S @NotNull [] array,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
@@ -238,7 +237,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S> & Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
     @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
@@ -265,7 +264,7 @@ public class EqualableSortedSet<E extends Comparable<@NotNull E> & Equalable<@No
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S> & Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
     @NotNull final ImmutableList<@NotNull S> immutableList)
   {
     return EqualableSortedSet.<@NotNull S>of(immutableList.unwrap(), immutableList.getKey());

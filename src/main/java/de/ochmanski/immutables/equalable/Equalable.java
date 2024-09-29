@@ -9,12 +9,10 @@ import lombok.*;
 import org.jetbrains.annotations.*;
 
 import javax.validation.constraints.NotBlank;
-import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.*;
 
 public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
 
@@ -1916,7 +1914,7 @@ public interface Equalable<T extends @NotNull Equalable<@NotNull T>> {
       if (null == elements) {
         return false;
       }
-      return elements.anyMatch(p -> p instanceof EqualableInteger equalableInteger && equalableInteger.isEqualTo(s));
+      return elements.anyMatch(p -> p instanceof EqualableInteger equalableInteger && @NotNull EqualableInteger.isEqualTo(s));
     }
 
     @Contract(pure = true)

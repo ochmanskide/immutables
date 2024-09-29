@@ -10,7 +10,6 @@ import lombok.*;
 import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
@@ -21,7 +20,7 @@ import java.util.stream.Stream;
 @EqualsAndHashCode(doNotUseGetters = true)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISet<@NotNull E>
+public class ImmutableSortedSet<E extends @NotNull Comparable<@NotNull E>> implements ISet<@NotNull E>
 {
 
   @Unmodifiable
@@ -43,7 +42,7 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
   @UnmodifiableView
   @Contract(pure = true)
   @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  public static <S extends Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> empty()
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> empty()
   {
     return (ImmutableSortedSet) EMPTY_SET;
   }
@@ -69,7 +68,7 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> noneOf(@NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> noneOf(@NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
     return ImmutableSortedSet.of(Set.of(), constructor);
   }
@@ -87,7 +86,7 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
     @NotNull final S e1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
@@ -108,7 +107,7 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _, _ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
     @NotNull final S e1,
     @NotNull final S e2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
@@ -131,7 +130,7 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _, _, _ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
     @NotNull final S e1,
     @NotNull final S e2,
     @NotNull final S e3,
@@ -156,7 +155,7 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _, _, _, _ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
     @NotNull final S e1,
     @NotNull final S e2,
     @NotNull final S e3,
@@ -197,7 +196,7 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> ofArray(
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> ofArray(
     @NotNull final S @NotNull [] array,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
@@ -208,7 +207,7 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
     @NotNull final Collection<@NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
@@ -229,7 +228,7 @@ public class ImmutableSortedSet<E extends Comparable<@NotNull E>> implements ISe
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public static <S extends Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(ImmutableList<@NotNull S> immutableList) {
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(ImmutableList<@NotNull S> immutableList) {
     return ImmutableSortedSet.<@NotNull S>of(immutableList.unwrap(), immutableList.getKey());
   }
   //</editor-fold>

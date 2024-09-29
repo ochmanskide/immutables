@@ -44,7 +44,7 @@ public class EqualableMap<K extends @NotNull Comparable<@NotNull K> & @NotNull E
   @UnmodifiableView
   @Contract(pure = true)
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  public static <K extends Comparable<@NotNull K> & Equalable<@NotNull K>, V extends Comparable<@NotNull V> & Equalable<@NotNull V>> EqualableMap<@NotNull K, @NotNull V> empty()
+  public static <K extends @NotNull Comparable<@NotNull K> & @NotNull Equalable<@NotNull K>, V extends @NotNull Comparable<@NotNull V> & @NotNull Equalable<@NotNull V>> EqualableMap<@NotNull K, @NotNull V> empty()
   {
     return (EqualableMap) EMPTY;
   }

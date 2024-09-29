@@ -8,8 +8,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
@@ -105,7 +104,7 @@ public interface EqualableCollectors
   @NotNull
   @Unmodifiable
   @Contract(value = "_ -> new", pure = true)
-  static <T extends Comparable<@NotNull T> & Equalable<@NotNull T>>
+  static <T extends @NotNull Comparable<@NotNull T> & @NotNull Equalable<@NotNull T>>
   Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSortedSet<@NotNull T>> toSortedSet(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor
   ) {

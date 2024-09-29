@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-public interface EMap<K extends Comparable<@NotNull K> & @NotNull Equalable<@NotNull K>, V extends @NotNull Comparable<@NotNull V> & @NotNull Equalable<@NotNull V>> extends IMap<@NotNull K, @NotNull V>
+public interface EMap<K extends @NotNull Comparable<@NotNull K> & @NotNull Equalable<@NotNull K>, V extends @NotNull Comparable<@NotNull V> & @NotNull Equalable<@NotNull V>> extends IMap<@NotNull K, @NotNull V>
 {
 
   /**

@@ -11,7 +11,6 @@ import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.NotBlank;
-import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
@@ -39,7 +38,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @UnmodifiableView
   @Contract(pure = true)
   @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
-  public static <S extends Comparable<@NotNull S> & Equalable<@NotNull S>> EqualableList<@NotNull S> empty()
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> empty()
   {
     return (EqualableList) EMPTY;
   }

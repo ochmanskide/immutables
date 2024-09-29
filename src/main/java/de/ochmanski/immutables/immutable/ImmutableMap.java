@@ -48,7 +48,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   @UnmodifiableView
   @Contract(pure = true)
   @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  public static <K extends Comparable<? super @NotNull K>, V> ImmutableMap<@NotNull K, @NotNull V> empty()
+  public static <K extends @NotNull Comparable<? super @NotNull K>, V> ImmutableMap<@NotNull K, @NotNull V> empty()
   {
     return (ImmutableMap) EMPTY;
   }

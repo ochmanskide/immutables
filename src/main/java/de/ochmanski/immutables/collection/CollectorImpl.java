@@ -7,6 +7,8 @@ import de.ochmanski.immutables.fluent.FluentList;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import de.ochmanski.immutables.immutable.ImmutableSet;
 import de.ochmanski.immutables.immutable.ImmutableSortedSet;
+import de.ochmanski.immutables.immutable.enums.ImmutableEnumList;
+import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -125,22 +127,6 @@ public class CollectorImpl<T, A, R> implements Collector<@NotNull T, @NotNull A,
   @NotNull
   @Unmodifiable
   @Contract(value = "_ -> new", pure = true)
-  public static <T extends @NotNull Comparable<@NotNull T> & @NotNull Equalable<@NotNull T>>
-  CollectorImpl<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>> toEqualableListCollector(
-    @NotNull final Function<@NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>> finisher)
-  {
-    return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>>builder()
-      .supplier(ArrayList::new)
-      .accumulator(List::add)
-      .combiner(CollectorImpl::arrayListCombiner)
-      .finisher(finisher)
-      .characteristics(CH_UNORDERED_NOID)
-      .build();
-  }
-
-  @NotNull
-  @Unmodifiable
-  @Contract(value = "_ -> new", pure = true)
   public static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
   CollectorImpl<@NotNull F, @NotNull HashSet<@NotNull F>, @NotNull FluentEnumSet<@NotNull F>> toFluentSetCollector(
     @NotNull final Function<@NotNull HashSet<@NotNull F>, @NotNull FluentEnumSet<@NotNull F>> finisher)
@@ -172,6 +158,22 @@ public class CollectorImpl<T, A, R> implements Collector<@NotNull T, @NotNull A,
 
   @NotNull
   @Unmodifiable
+  @Contract(value = "_ -> new", pure = true)
+  public static <E extends @NotNull Enum<@NotNull E>>
+  CollectorImpl<@NotNull E, @NotNull HashSet<@NotNull E>, @NotNull ImmutableEnumSet<@NotNull E>> toImmutableEnumSetCollector(
+    @NotNull final Function<@NotNull HashSet<@NotNull E>, @NotNull ImmutableEnumSet<@NotNull E>> finisher)
+  {
+    return CollectorImpl.<@NotNull E, @NotNull HashSet<@NotNull E>, @NotNull ImmutableEnumSet<@NotNull E>>builder()
+      .supplier(HashSet::new)
+      .accumulator(Set::add)
+      .combiner(CollectorImpl::hashSetCombiner)
+      .finisher(finisher)
+      .characteristics(CH_UNORDERED_NOID)
+      .build();
+  }
+
+  @NotNull
+  @Unmodifiable
   @Contract(value = "_, _ -> new", pure = true)
   public static <E extends @NotNull Comparable<@NotNull E>>
   CollectorImpl<@NotNull E, @NotNull HashSet<@NotNull E>, @NotNull ImmutableSortedSet<@NotNull E>> toImmutableSortedSetCollector(
@@ -190,11 +192,11 @@ public class CollectorImpl<T, A, R> implements Collector<@NotNull T, @NotNull A,
   @NotNull
   @Unmodifiable
   @Contract(value = "_ -> new", pure = true)
-  public static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
-  CollectorImpl<@NotNull F, @NotNull ArrayList<@NotNull F>, @NotNull FluentList<@NotNull F>> toFluentListCollector(
-    @NotNull final Function<@NotNull ArrayList<@NotNull F>, @NotNull FluentList<@NotNull F>> finisher)
+  public static <T extends @NotNull Comparable<@NotNull T> & @NotNull Equalable<@NotNull T>>
+  CollectorImpl<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>> toEqualableListCollector(
+    @NotNull final Function<@NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>> finisher)
   {
-    return CollectorImpl.<@NotNull F, @NotNull ArrayList<@NotNull F>, @NotNull FluentList<@NotNull F>>builder()
+    return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>>builder()
       .supplier(ArrayList::new)
       .accumulator(List::add)
       .combiner(CollectorImpl::arrayListCombiner)
@@ -211,6 +213,38 @@ public class CollectorImpl<T, A, R> implements Collector<@NotNull T, @NotNull A,
     @NotNull final Function<@NotNull ArrayList<@NotNull E>, @NotNull ImmutableList<@NotNull E>> finisher)
   {
     return CollectorImpl.<@NotNull E, @NotNull ArrayList<@NotNull E>, @NotNull ImmutableList<@NotNull E>>builder()
+      .supplier(ArrayList::new)
+      .accumulator(List::add)
+      .combiner(CollectorImpl::arrayListCombiner)
+      .finisher(finisher)
+      .characteristics(CH_UNORDERED_NOID)
+      .build();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @Contract(value = "_ -> new", pure = true)
+  public static <E extends @NotNull Enum<@NotNull E>>
+  CollectorImpl<@NotNull E, @NotNull ArrayList<@NotNull E>, @NotNull ImmutableEnumList<@NotNull E>> toImmutableEnumListCollector(
+    @NotNull final Function<@NotNull ArrayList<@NotNull E>, @NotNull ImmutableEnumList<@NotNull E>> finisher)
+  {
+    return CollectorImpl.<@NotNull E, @NotNull ArrayList<@NotNull E>, @NotNull ImmutableEnumList<@NotNull E>>builder()
+      .supplier(ArrayList::new)
+      .accumulator(List::add)
+      .combiner(CollectorImpl::arrayListCombiner)
+      .finisher(finisher)
+      .characteristics(CH_UNORDERED_NOID)
+      .build();
+  }
+
+  @NotNull
+  @Unmodifiable
+  @Contract(value = "_ -> new", pure = true)
+  public static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
+  CollectorImpl<@NotNull F, @NotNull ArrayList<@NotNull F>, @NotNull FluentList<@NotNull F>> toFluentListCollector(
+    @NotNull final Function<@NotNull ArrayList<@NotNull F>, @NotNull FluentList<@NotNull F>> finisher)
+  {
+    return CollectorImpl.<@NotNull F, @NotNull ArrayList<@NotNull F>, @NotNull FluentList<@NotNull F>>builder()
       .supplier(ArrayList::new)
       .accumulator(List::add)
       .combiner(CollectorImpl::arrayListCombiner)

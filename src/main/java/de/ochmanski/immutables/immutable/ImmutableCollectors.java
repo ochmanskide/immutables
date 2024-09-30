@@ -1,6 +1,8 @@
 package de.ochmanski.immutables.immutable;
 
 import de.ochmanski.immutables.collection.CollectorImpl;
+import de.ochmanski.immutables.immutable.enums.ImmutableEnumList;
+import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -92,7 +94,16 @@ public interface ImmutableCollectors
   CollectorImpl<@NotNull E, @NotNull HashSet<@NotNull E>, @NotNull ImmutableSet<@NotNull E>> toSet(
     @NotNull final IntFunction<@NotNull E @NotNull []> constructor)
   {
-    return CollectorImpl.toImmutableSetCollector(set -> ImmutableSet.of(set, constructor));
+    return CollectorImpl.toImmutableSetCollector(set -> ImmutableSet.<@NotNull E>of(set, constructor));
+  }
+
+  @NotNull
+  @Unmodifiable
+  @Contract(value = " _ -> new", pure = true)
+  static <E extends @NotNull Enum<@NotNull E>> Collector<@NotNull E, @NotNull HashSet<@NotNull E>, @NotNull ImmutableEnumSet<@NotNull E>> toEnumSet(
+    @NotNull final IntFunction<@NotNull E @NotNull []> constructor)
+  {
+    return CollectorImpl.toImmutableEnumSetCollector(set -> ImmutableEnumSet.<@NotNull E>of(set, constructor));
   }
 
   //</editor-fold>
@@ -150,6 +161,16 @@ public interface ImmutableCollectors
   )
   {
     return CollectorImpl.toImmutableListCollector(set -> ImmutableList.of(set, constructor));
+  }
+
+  @NotNull
+  @Unmodifiable
+  @Contract(value = " _ -> new", pure = true)
+  static <E extends @NotNull Enum<@NotNull E>>
+  CollectorImpl<@NotNull E, @NotNull ArrayList<@NotNull E>, @NotNull ImmutableEnumList<@NotNull E>> toEnumList(
+    @NotNull final IntFunction<@NotNull E @NotNull []> constructor)
+  {
+    return CollectorImpl.toImmutableEnumListCollector(set -> ImmutableEnumList.<@NotNull E>of(set, constructor));
   }
   //</editor-fold>
 }

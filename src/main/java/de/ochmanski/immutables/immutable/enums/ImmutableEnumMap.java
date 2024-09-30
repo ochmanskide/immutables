@@ -3,7 +3,6 @@ package de.ochmanski.immutables.immutable.enums;
 import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.equalable.Equalable.Dummy;
-import com.stadlerrail.diag.dias.immutables.immutable.*;
 import de.ochmanski.immutables.immutable.*;
 import lombok.AccessLevel;
 import lombok.Builder;

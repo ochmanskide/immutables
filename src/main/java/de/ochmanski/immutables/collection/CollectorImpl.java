@@ -1,6 +1,5 @@
 package de.ochmanski.immutables.collection;
 
-import com.stadlerrail.diag.dias.immutables.equalable.*;
 import de.ochmanski.immutables.equalable.*;
 import de.ochmanski.immutables.fluent.Fluent;
 import de.ochmanski.immutables.fluent.FluentEnumSet;

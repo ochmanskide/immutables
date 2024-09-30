@@ -3,6 +3,7 @@ package de.ochmanski.immutables.immutable.enums;
 import de.ochmanski.immutables.collection.ICollection;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.equalable.Equalable.Dummy;
+import com.stadlerrail.diag.dias.immutables.immutable.*;
 import de.ochmanski.immutables.immutable.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -109,7 +110,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _ , _, _ -> new", pure = true)
+  @Contract(value = "_, _ , _, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final K k1, @NotNull final V v1,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
@@ -123,7 +124,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _ , _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _ , _, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final K k1, @NotNull final V v1,
     @NotNull final K k2, @NotNull final V v2,
@@ -140,7 +141,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _ , _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _ , _, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final K k1, @NotNull final V v1,
     @NotNull final K k2, @NotNull final V v2,
@@ -159,7 +160,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _ , _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _ , _, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final K k1, @NotNull final V v1,
     @NotNull final K k2, @NotNull final V v2,
@@ -180,7 +181,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final Map<@NotNull K, @NotNull V> map,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
@@ -198,7 +199,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _-> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K>, V> ImmutableEnumMap<@NotNull K, @NotNull V> ofEnumMap(
     @NotNull final EnumMap<@NotNull K, @NotNull V> map,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
@@ -217,11 +218,11 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  public ImmutableEnumSet<@NotNull K> findByValue(@NotNull final V value) {
+  public ImmutableSet<@NotNull K> findByValue(@NotNull final V value) {
     return stream()
       .filter(p -> Equalable.<@NotNull V>areTheSame(p.getValue(), value))
       .map(Entry::getKey)
-      .collect(ImmutableCollectors.toEnumSet(getKey()));
+      .collect(ImmutableCollectors.toSet(getKey()));
   }
 
   /**
@@ -285,7 +286,7 @@ public class ImmutableEnumMap<K extends @NotNull Enum<@NotNull K>, V> implements
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   private static <S extends @NotNull Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {

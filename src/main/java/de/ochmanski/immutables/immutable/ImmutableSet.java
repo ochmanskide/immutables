@@ -3,7 +3,6 @@ package de.ochmanski.immutables.immutable;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ochmanski.immutables.collection.ICollection;
-import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import lombok.*;
 import org.jetbrains.annotations.*;
@@ -13,6 +12,8 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
+
+import static de.ochmanski.immutables.constants.Constants.Warning.*;
 
 @Value
 @UnmodifiableView
@@ -28,7 +29,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @NotNull("Given set cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given set cannot be null.")
   @Builder.Default
-  Set<@NotNull E> set = (Set) Collections.checkedSet(Set.of(), Equalable.Dummy.class);
+  Set<@NotNull E> set = (Set)Collections.checkedSet(Set.of(), Equalable.Dummy.class);
 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
@@ -41,7 +42,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
   public static <E> ImmutableSet<@NotNull E> empty()
   {
     return (ImmutableSet) EMPTY_SET;
@@ -412,7 +413,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "_,_,_ -> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static <S> ImmutableSet<@NotNull S> merge(
     @NotNull final ImmutableSet<@NotNull S> a,
     @NotNull final ImmutableSet<@NotNull S> b,
@@ -439,7 +440,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   private static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
@@ -530,7 +531,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
 
   @Override
   @Contract(pure = true)
-  @SuppressWarnings(Constants.Warning.SIMPLIFY_STREAM_API_CALL_CHAINS)
+  @SuppressWarnings(SIMPLIFY_STREAM_API_CALL_CHAINS)
   public void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer)
   {
     Collections.unmodifiableSortedSet(new TreeSet<>(set)).stream().forEachOrdered(consumer);
@@ -725,7 +726,7 @@ public class ImmutableSet<E> implements ISet<@NotNull E>
 
   @NotNull
   @Unmodifiable
-  @SuppressWarnings(Constants.Warning.SAME_PARAMETER_VALUE)
+  @SuppressWarnings(SAME_PARAMETER_VALUE)
   @Contract(value = "_, _ -> new", pure = true)
   private String limit(@NotNull final String s, final int limit)
   {

@@ -40,7 +40,7 @@ public interface ICollection<E> extends Checked<@NotNull E>, Iterable<@NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   static <@Unmodifiable S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {

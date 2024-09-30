@@ -12,7 +12,7 @@ public interface Checked<E> {
 
   @NotNull
   @Unmodifiable
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   @SuppressWarnings(UNCHECKED)
   static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {

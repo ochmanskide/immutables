@@ -11,7 +11,7 @@ import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public interface ECollection<E extends @NotNull Comparable<@NotNull E> & @NotNull Equalable<@NotNull E>> extends @NotNull Comparable<@NotNull ECollection<@NotNull E>>, Equalable<@NotNull ECollection<@NotNull E>>, ImmutableCollection<@NotNull E>
+public interface ECollection<E extends @NotNull Comparable<@NotNull E> & @NotNull Equalable<@NotNull E>> extends Comparable<@NotNull ECollection<@NotNull E>>, Equalable<@NotNull ECollection<@NotNull E>>, ImmutableCollection<@NotNull E>
 {
 
   @Override

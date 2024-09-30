@@ -20,7 +20,8 @@ import static de.ochmanski.immutables.equalable.Equalable.EqualableString.blank;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
 @FieldNameConstants
-public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@NotNull VersionDto> {
+public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@NotNull VersionDto>
+{
   @Builder.Default
   int id = 0;
 
@@ -52,31 +53,36 @@ public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@N
 
   //<editor-fold defaultstate="collapsed" desc="helper methods">
   @Contract(pure = true)
-  public boolean nameDoesNotStartWith(@NotNull final String prefix) {
+  public boolean nameDoesNotStartWith(@NotNull final String prefix)
+  {
     return getName().mapToObj(p -> !p.startsWith(prefix)).orElse(false);
   }
   //</editor-fold>
 
   //<editor-fold defaultstate="collapsed" desc="VersionDto.empty()">
   @Contract(pure = true)
-  public boolean isNotEmpty() {
+  public boolean isNotEmpty()
+  {
     return !isEmpty();
   }
 
   @Contract(pure = true)
-  public boolean isEmpty() {
+  public boolean isEmpty()
+  {
     return isEqualTo(EMPTY);
   }
 
   @Contract(value = "null -> false", pure = true)
-  public static boolean isEmpty(@Nullable final VersionDto other) {
+  public static boolean isEmpty(@Nullable final VersionDto other)
+  {
     return VersionDto.empty().isEqualTo(other);
   }
 
   @NotNull
   @Unmodifiable
   @Contract(pure = true)
-  public static VersionDto empty() {
+  public static VersionDto empty()
+  {
     return EMPTY;
   }
 
@@ -90,7 +96,8 @@ public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@N
   @NotNull
   @Unmodifiable
   @Contract(value = "-> new", pure = true)
-  private static VersionDto createConstant() {
+  private static VersionDto createConstant()
+  {
     return VersionDto.builder().build();
   }
   //</editor-fold>
@@ -128,7 +135,8 @@ public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@N
    *   language is "Note: this class has a natural ordering that is inconsistent with equals."
    */
   @Override
-  public int compareTo(@NotNull final VersionDto o) {
+  public int compareTo(@NotNull final VersionDto o)
+  {
     return orderAsc(this, o);
   }
 
@@ -157,7 +165,8 @@ public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@N
    * @return an integer value.
    */
   @Contract(pure = true)
-  public static int orderAsc(@Nullable final VersionDto a, @Nullable final VersionDto b) {
+  public static int orderAsc(@Nullable final VersionDto a, @Nullable final VersionDto b)
+  {
     return a == b ? 0 : a != null ? b != null ? orderAsc().compare(a, b) : -1 : 1;
   }
 
@@ -186,19 +195,22 @@ public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@N
    * @return an integer value.
    */
   @Contract(pure = true)
-  public static int orderDesc(@Nullable final VersionDto a, @Nullable final VersionDto b) {
+  public static int orderDesc(@Nullable final VersionDto a, @Nullable final VersionDto b)
+  {
     return a == b ? 0 : a != null ? b != null ? orderDesc().compare(a, b) : 1 : -1;
   }
 
   @NotNull
   @Contract(pure = true)
-  public static Comparator<@NotNull VersionDto> orderAsc() {
+  public static Comparator<@NotNull VersionDto> orderAsc()
+  {
     return ORDER_BY_ID_COMPARATOR_ASCENDING;
   }
 
   @NotNull
   @Contract(pure = true)
-  public static Comparator<@NotNull VersionDto> orderDesc() {
+  public static Comparator<@NotNull VersionDto> orderDesc()
+  {
     return ORDER_BY_ID_COMPARATOR_DESCENDING;
   }
 
@@ -210,7 +222,8 @@ public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@N
 
   @NotNull
   @Contract(value = "-> new", pure = true)
-  private static Comparator<@NotNull VersionDto> createComparatorAsc() {
+  private static Comparator<@NotNull VersionDto> createComparatorAsc()
+  {
     return Comparator.nullsLast(
       Comparator.comparingInt(VersionDto::getId)
         .thenComparing(VersionDto::getName, Comparator.nullsLast(Comparator.naturalOrder()))
@@ -225,7 +238,8 @@ public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@N
 
   @NotNull
   @Contract(value = "-> new", pure = true)
-  private static Comparator<@NotNull VersionDto> createComparatorDesc() {
+  private static Comparator<@NotNull VersionDto> createComparatorDesc()
+  {
     return Comparator.nullsFirst(
       Comparator.comparingInt(VersionDto::getId)
         .thenComparing(VersionDto::getName, Comparator.nullsFirst(Comparator.naturalOrder()))
@@ -243,14 +257,16 @@ public class VersionDto implements Comparable<@NotNull VersionDto>, Equalable<@N
   @NotBlank
   @Unmodifiable
   @Contract(pure = true)
-  public String getClassName() {
+  public String getClassName()
+  {
     return this.getClass().getName();
   }
   //</editor-fold>
 
 
   //<editor-fold defaultstate="collapsed" desc="Constants">
-  interface Constants {
+  interface Constants
+  {
   }
   //</editor-fold>
 }

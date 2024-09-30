@@ -1,6 +1,5 @@
 package de.ochmanski.immutables.fluent;
 
-import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import org.jetbrains.annotations.*;
 
@@ -11,6 +10,9 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
+
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
   extends Equalable<@NotNull Fluent<@NotNull F>>
@@ -79,7 +81,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
 
   @Override
   @Contract(pure = true)
-  @SuppressWarnings(Constants.Warning.UNCHECKED)
+  @SuppressWarnings(UNCHECKED)
   default boolean isNotIn(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull ... array)
   {
     return isNotInArray(array);
@@ -104,7 +106,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
 
   @Override
   @Contract(pure = true)
-  @SuppressWarnings(Constants.Warning.UNCHECKED)
+  @SuppressWarnings(UNCHECKED)
   default boolean isIn(@NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull ... array)
   {
     return isInArray(array);
@@ -152,7 +154,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
    * @throws NullPointerException if {@code c} is null
    */
   @NotNull
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   private static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
   EnumSet<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> toEnumSet(
     @NotNull final Equalable<@NotNull Fluent<@NotNull F>> @NotNull [] array)
@@ -175,7 +177,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
    * @throws NullPointerException if {@code c} is null
    */
   @NotNull
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   private static <F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? extends @NotNull F>>
   EnumSet<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> toEnumSet(
     @NotNull final Collection<? extends @NotNull Equalable<@NotNull Fluent<@NotNull F>>> collection)
@@ -267,7 +269,7 @@ public interface Fluent<F extends @NotNull Enum<@NotNull F> & @NotNull Fluent<? 
   @NotNull
   @Unmodifiable
   @Contract(pure = true)
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
   static <S> IntFunction<@NotNull S @NotNull []> defaultKey()
   {
     return (IntFunction) DEFAULT_KEY;

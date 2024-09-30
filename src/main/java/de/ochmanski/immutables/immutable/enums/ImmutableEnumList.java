@@ -119,7 +119,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
@@ -128,7 +128,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
@@ -138,7 +138,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -149,7 +149,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -161,7 +161,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _  -> new", pure = true)
+  @Contract(value = "_, _, _, _, _  -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -174,7 +174,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _  -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _  -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -188,7 +188,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _  -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _  -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -203,7 +203,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _  -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _  -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -219,7 +219,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _, _  -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _  -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -247,7 +247,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
     @NotNull final Collection<? extends @NotNull S> collection,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
@@ -261,7 +261,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> ofEnumSet(
     @NotNull final EnumSet<@NotNull S> enumSet,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
@@ -272,7 +272,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   private static <S extends @NotNull Enum<@NotNull S>> ImmutableEnumList<@NotNull S> of(
     @NotNull final ImmutableList<@NotNull S> immutableList) {
     return ImmutableEnumList.<@NotNull S>builder().list(immutableList).build();
@@ -354,7 +354,7 @@ public class ImmutableEnumList<E extends @NotNull Enum<@NotNull E>> implements I
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _,_ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public ImmutableEnumList<? extends @NotNull E> range(@NotNull final E from, @NotNull final E to) {
     return ImmutableEnumList.<@NotNull E>ofEnumSet(EnumSet.<@NotNull E>range(from, to), getKey());
   }

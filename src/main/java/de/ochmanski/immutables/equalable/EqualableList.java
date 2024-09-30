@@ -1,6 +1,5 @@
 package de.ochmanski.immutables.equalable;
 
-import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.immutable.IList;
 import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.AccessLevel;
@@ -11,9 +10,12 @@ import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.NotBlank;
+import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 import static java.util.function.Predicate.not;
 
 @Value
@@ -37,7 +39,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> empty()
   {
     return (EqualableList) EMPTY;
@@ -102,7 +104,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1) {
     return EqualableList.<@NotNull EqualableString>of(Equalable.of(s1));
@@ -111,7 +113,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _-> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final EqualableString s1)
   {
@@ -121,7 +123,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
@@ -131,7 +133,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2) {
@@ -141,7 +143,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2)
@@ -152,7 +154,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -163,7 +165,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -174,7 +176,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -186,7 +188,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -198,7 +200,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -210,7 +212,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -223,7 +225,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -236,7 +238,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -249,7 +251,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -263,7 +265,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -277,7 +279,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -291,7 +293,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -306,7 +308,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -321,7 +323,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -336,7 +338,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -352,7 +354,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -368,7 +370,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -384,7 +386,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -401,7 +403,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -418,7 +420,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -435,7 +437,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -453,7 +455,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -471,7 +473,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -489,7 +491,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -508,7 +510,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -568,7 +570,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   public static EqualableList<@NotNull EqualableString> ofString(
     @NotNull final ImmutableList<@NotNull String> immutableList) {
     final List<EqualableString> list = immutableList.map(EqualableString::of).toList();
@@ -579,7 +581,7 @@ public class EqualableList<E extends @NotNull Comparable<@NotNull E> & @NotNull 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableList<@NotNull S> of(
     @NotNull final ImmutableList<@NotNull S> immutableList) {
     return EqualableList.<@NotNull S>builder().list(immutableList).build();

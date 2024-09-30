@@ -9,6 +9,7 @@ import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.NotBlank;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntFunction;
@@ -67,7 +68,16 @@ public class EqualableSortedSet<E extends @NotNull Comparable<@NotNull E> & @Not
   @Contract(value = "_ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> noneOf(@NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return of(Set.of(), constructor);
+    return EqualableSortedSet.of(Set.of(), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final String s1) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(Equalable.of(s1));
   }
 
   @NotNull
@@ -87,7 +97,17 @@ public class EqualableSortedSet<E extends @NotNull Comparable<@NotNull E> & @Not
     @NotNull final S e1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return of(Set.of(e1), constructor);
+    return EqualableSortedSet.of(Set.of(e1), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final String s1,
+    @NotNull final String s2) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(Equalable.of(s1), Equalable.of(s2));
   }
 
   @NotNull
@@ -109,7 +129,18 @@ public class EqualableSortedSet<E extends @NotNull Comparable<@NotNull E> & @Not
     @NotNull final S e2,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return of(Set.of(e1, e2), constructor);
+    return EqualableSortedSet.of(Set.of(e1, e2), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final String s1,
+    @NotNull final String s2,
+    @NotNull final String s3) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(Equalable.of(s1), Equalable.of(s2), Equalable.of(s3));
   }
 
   @NotNull
@@ -133,7 +164,19 @@ public class EqualableSortedSet<E extends @NotNull Comparable<@NotNull E> & @Not
     @NotNull final S e3,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return of(Set.of(e1, e2, e3), constructor);
+    return EqualableSortedSet.of(Set.of(e1, e2, e3), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final String s1,
+    @NotNull final String s2,
+    @NotNull final String s3,
+    @NotNull final String s4) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(Equalable.of(s1), Equalable.of(s2), Equalable.of(s3), Equalable.of(s4));
   }
 
   @NotNull
@@ -159,7 +202,298 @@ public class EqualableSortedSet<E extends @NotNull Comparable<@NotNull E> & @Not
     @NotNull final S e4,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {
-    return of(Set.of(e1, e2, e3, e4), constructor);
+    return EqualableSortedSet.of(Set.of(e1, e2, e3, e4), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final String s1,
+    @NotNull final String s2,
+    @NotNull final String s3,
+    @NotNull final String s4,
+    @NotNull final String s5) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(Equalable.of(s1), Equalable.of(s2), Equalable.of(s3), Equalable.of(s4), Equalable.of(s5));
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final EqualableString e1,
+    @NotNull final EqualableString e2,
+    @NotNull final EqualableString e3,
+    @NotNull final EqualableString e4,
+    @NotNull final EqualableString e5) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(e1, e2, e3, e4, e5, EqualableString @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSortedSet.of(Set.copyOf(List.of(e1, e2, e3, e4, e5)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final String s1,
+    @NotNull final String s2,
+    @NotNull final String s3,
+    @NotNull final String s4,
+    @NotNull final String s5,
+    @NotNull final String s6) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(Equalable.of(s1), Equalable.of(s2), Equalable.of(s3), Equalable.of(s4), Equalable.of(s5), Equalable.of(s6));
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final EqualableString e1,
+    @NotNull final EqualableString e2,
+    @NotNull final EqualableString e3,
+    @NotNull final EqualableString e4,
+    @NotNull final EqualableString e5,
+    @NotNull final EqualableString e6) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(e1, e2, e3, e4, e5, e6, EqualableString @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final S e6,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSortedSet.of(Set.copyOf(List.of(e1, e2, e3, e4, e5, e6)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final String s1,
+    @NotNull final String s2,
+    @NotNull final String s3,
+    @NotNull final String s4,
+    @NotNull final String s5,
+    @NotNull final String s6,
+    @NotNull final String s7) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(Equalable.of(s1), Equalable.of(s2), Equalable.of(s3), Equalable.of(s4), Equalable.of(s5), Equalable.of(s6), Equalable.of(s7));
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final EqualableString e1,
+    @NotNull final EqualableString e2,
+    @NotNull final EqualableString e3,
+    @NotNull final EqualableString e4,
+    @NotNull final EqualableString e5,
+    @NotNull final EqualableString e6,
+    @NotNull final EqualableString e7) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(e1, e2, e3, e4, e5, e6, e7, EqualableString @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final S e6,
+    @NotNull final S e7,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSortedSet.of(Set.copyOf(List.of(e1, e2, e3, e4, e5, e6, e7)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final String s1,
+    @NotNull final String s2,
+    @NotNull final String s3,
+    @NotNull final String s4,
+    @NotNull final String s5,
+    @NotNull final String s6,
+    @NotNull final String s7,
+    @NotNull final String s8) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(Equalable.of(s1), Equalable.of(s2), Equalable.of(s3), Equalable.of(s4), Equalable.of(s5), Equalable.of(s6), Equalable.of(s7), Equalable.of(s8));
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final EqualableString e1,
+    @NotNull final EqualableString e2,
+    @NotNull final EqualableString e3,
+    @NotNull final EqualableString e4,
+    @NotNull final EqualableString e5,
+    @NotNull final EqualableString e6,
+    @NotNull final EqualableString e7,
+    @NotNull final EqualableString e8) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(e1, e2, e3, e4, e5, e6, e7, e8, EqualableString @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final S e6,
+    @NotNull final S e7,
+    @NotNull final S e8,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSortedSet.of(Set.copyOf(List.of(e1, e2, e3, e4, e5, e6, e7, e8)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final String s1,
+    @NotNull final String s2,
+    @NotNull final String s3,
+    @NotNull final String s4,
+    @NotNull final String s5,
+    @NotNull final String s6,
+    @NotNull final String s7,
+    @NotNull final String s8,
+    @NotNull final String s9) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(Equalable.of(s1), Equalable.of(s2), Equalable.of(s3), Equalable.of(s4), Equalable.of(s5), Equalable.of(s6), Equalable.of(s7), Equalable.of(s8), Equalable.of(s9));
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final EqualableString e1,
+    @NotNull final EqualableString e2,
+    @NotNull final EqualableString e3,
+    @NotNull final EqualableString e4,
+    @NotNull final EqualableString e5,
+    @NotNull final EqualableString e6,
+    @NotNull final EqualableString e7,
+    @NotNull final EqualableString e8,
+    @NotNull final EqualableString e9) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(e1, e2, e3, e4, e5, e6, e7, e8, e9, EqualableString @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final S e6,
+    @NotNull final S e7,
+    @NotNull final S e8,
+    @NotNull final S e9,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSortedSet.of(Set.copyOf(List.of(e1, e2, e3, e4, e5, e6, e7, e8, e9)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final String s1,
+    @NotNull final String s2,
+    @NotNull final String s3,
+    @NotNull final String s4,
+    @NotNull final String s5,
+    @NotNull final String s6,
+    @NotNull final String s7,
+    @NotNull final String s8,
+    @NotNull final String s9,
+    @NotNull final String s10) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(Equalable.of(s1), Equalable.of(s2), Equalable.of(s3), Equalable.of(s4), Equalable.of(s5), Equalable.of(s6), Equalable.of(s7), Equalable.of(s8), Equalable.of(s9), Equalable.of(s10));
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  public static EqualableSortedSet<@NotNull EqualableString> of(
+    @NotNull final EqualableString e1,
+    @NotNull final EqualableString e2,
+    @NotNull final EqualableString e3,
+    @NotNull final EqualableString e4,
+    @NotNull final EqualableString e5,
+    @NotNull final EqualableString e6,
+    @NotNull final EqualableString e7,
+    @NotNull final EqualableString e8,
+    @NotNull final EqualableString e9,
+    @NotNull final EqualableString e10) {
+    return EqualableSortedSet.<@NotNull EqualableString>of(e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, EqualableString @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _ , _ -> new", pure = true)
+  public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final S e6,
+    @NotNull final S e7,
+    @NotNull final S e8,
+    @NotNull final S e9,
+    @NotNull final S e10,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return EqualableSortedSet.of(Set.copyOf(List.of(e1, e2, e3, e4, e5, e6, e7, e8, e9, e10)), constructor);
   }
 
   @NotNull
@@ -176,7 +510,7 @@ public class EqualableSortedSet<E extends @NotNull Comparable<@NotNull E> & @Not
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   public static EqualableSortedSet<@NotNull EqualableString> of(
     @NotNull final Collection<@NotNull String> collection) {
     final IntFunction<String[]> constructor = String[]::new;
@@ -187,7 +521,7 @@ public class EqualableSortedSet<E extends @NotNull Comparable<@NotNull E> & @Not
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   public static EqualableSortedSet<@NotNull EqualableString> ofString(
     @NotNull final ImmutableSortedSet<@NotNull String> immutableSet) {
     final List<EqualableString> list = immutableSet.map(EqualableString::of).toList();
@@ -200,7 +534,8 @@ public class EqualableSortedSet<E extends @NotNull Comparable<@NotNull E> & @Not
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSortedSet<@NotNull S> of(
-    @NotNull final EqualableCollection<@NotNull S> collection) {
+    @NotNull final EqualableCollection<@NotNull S> collection)
+  {
     return EqualableSortedSet.<@NotNull S>of(collection.unwrap(), collection.getKey());
   }
 
@@ -247,14 +582,15 @@ public class EqualableSortedSet<E extends @NotNull Comparable<@NotNull E> & @Not
   @NotNull
   @Contract(value = "_ -> new", pure = true)
   private static <K extends @NotNull Comparable<? super @NotNull K>, V> IMap.@Unmodifiable @UnmodifiableView @NotNull Entry<@NotNull K, @NotNull V> toImmutableEntry(
-    @NotNull final Map.@NotNull Entry<@NotNull K, @NotNull V> entry) {
+    @NotNull final Map.@NotNull Entry<@NotNull K, @NotNull V> entry)
+  {
     return IMap.Entry.<@NotNull K, @NotNull V>of(entry);
   }
 
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   private static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
@@ -505,7 +841,8 @@ public class EqualableSortedSet<E extends @NotNull Comparable<@NotNull E> & @Not
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = " -> new", pure = true)
-  public EqualableList<@NotNull E> toList() {
+  public EqualableList<@NotNull E> toList()
+  {
     return EqualableList.<@NotNull E>of(this);
   }
 

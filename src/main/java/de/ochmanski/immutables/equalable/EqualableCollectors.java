@@ -1,48 +1,26 @@
 package de.ochmanski.immutables.equalable;
 
+import de.ochmanski.immutables.collection.CollectorImpl;
 import de.ochmanski.immutables.equalable.Equalable.EqualableString;
-import lombok.Builder;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.IntFunction;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+import static de.ochmanski.immutables.collection.CollectorImpl.Constants.CH_UNORDERED_ID;
+import static de.ochmanski.immutables.collection.CollectorImpl.Constants.CH_UNORDERED_NOID;
 
 public interface EqualableCollectors
 {
 
-  @NotNull
-  Set<Collector.@NotNull Characteristics> CH_CONCURRENT_ID
-    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
-    Collector.Characteristics.UNORDERED,
-    Collector.Characteristics.IDENTITY_FINISH));
-
-  @NotNull
-  Set<Collector.@NotNull Characteristics> CH_CONCURRENT_NOID
-    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT,
-    Collector.Characteristics.UNORDERED));
-
-  @NotNull
-  Set<Collector.@NotNull Characteristics> CH_ID
-    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
-
-  @NotNull
-  Set<Collector.@NotNull Characteristics> CH_UNORDERED_ID
-    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED,
-    Collector.Characteristics.IDENTITY_FINISH));
-
-  @NotNull
-  Set<Collector.@NotNull Characteristics> CH_NOID = Collections.emptySet();
-
-  @NotNull
-  Set<Collector.@NotNull Characteristics> CH_UNORDERED_NOID
-    = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED));
-
+  //<editor-fold defaultstate="collapsed" desc="1. Mutable Set">
   /**
    * Returns a {@code Collector} that accumulates the input elements into a new {@code Set}. There are no guarantees on
    * the type, mutability, serializability, or thread-safety of the {@code Set} returned; if more control over the
@@ -67,7 +45,33 @@ public interface EqualableCollectors
       .characteristics(CH_UNORDERED_ID)
       .build();
   }
+  //</editor-fold>
 
+  //<editor-fold defaultstate="collapsed" desc="2. Sorted Set">
+  @NotNull
+  @Unmodifiable
+  @Contract(value = "_ -> new", pure = true)
+  static <T extends @NotNull Comparable<@NotNull T> & @NotNull Equalable<@NotNull T>>
+  Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSortedSet<@NotNull T>> toSortedSet(
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor
+  )
+  {
+    return toSortedSet(constructor, HashSet::add);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @Contract(value = "_, _ -> new", pure = true)
+  static <T extends @NotNull Comparable<@NotNull T> & @NotNull Equalable<@NotNull T>>
+  Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSortedSet<@NotNull T>> toSortedSet(
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor,
+    @NotNull final BiConsumer<@NotNull HashSet<@NotNull T>, @NotNull T> accumulator)
+  {
+    return CollectorImpl.toEqualableSortedSetCollector(accumulator, set -> EqualableSortedSet.of(set, constructor));
+  }
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="3. Sorted Set of Strings">
   @NotNull
   @Unmodifiable
   @Contract(value = " -> new", pure = true)
@@ -97,37 +101,13 @@ public interface EqualableCollectors
   @NotNull
   @Unmodifiable
   @Contract(value = " -> new", pure = true)
-  static Collector<@NotNull EqualableString, @NotNull HashSet<@NotNull EqualableString>, @NotNull EqualableSortedSet<@NotNull EqualableString>> toSortedSetOfStrings() {
+  static Collector<@NotNull EqualableString, @NotNull HashSet<@NotNull EqualableString>, @NotNull EqualableSortedSet<@NotNull EqualableString>> toSortedSetOfStrings()
+  {
     return toSortedSet(EqualableString[]::new);
   }
+  //</editor-fold>
 
-  @NotNull
-  @Unmodifiable
-  @Contract(value = "_ -> new", pure = true)
-  static <T extends @NotNull Comparable<@NotNull T> & @NotNull Equalable<@NotNull T>>
-  Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSortedSet<@NotNull T>> toSortedSet(
-    @NotNull final IntFunction<@NotNull T @NotNull []> constructor
-  ) {
-    return toSortedSet(constructor, HashSet::add);
-  }
-
-  @NotNull
-  @Unmodifiable
-  @Contract(value = " _,_ -> new", pure = true)
-  static <T extends @NotNull Comparable<@NotNull T> & @NotNull Equalable<@NotNull T>>
-  Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSortedSet<@NotNull T>> toSortedSet(
-    @NotNull final IntFunction<@NotNull T @NotNull []> constructor,
-    @NotNull final BiConsumer<@NotNull HashSet<@NotNull T>, @NotNull T> accumulator)
-  {
-    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSortedSet<@NotNull T>>builder()
-      .supplier(HashSet::new)
-      .accumulator(accumulator)
-      .combiner(EqualableCollectors::comparableSetCombiner)
-      .finisher(set -> EqualableSortedSet.of(set, constructor))
-      .characteristics(CH_UNORDERED_NOID)
-      .build();
-  }
-
+  //<editor-fold defaultstate="collapsed" desc="4. Set of Strings">
   @NotNull
   @Unmodifiable
   @Contract(value = " -> new", pure = true)
@@ -162,6 +142,10 @@ public interface EqualableCollectors
     return toSet(EqualableString[]::new);
   }
 
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="5. Set">
+
   /**
    * Returns a {@code Collector} that accumulates the input elements into an
    * <a href="../Set.html#unmodifiable">unmodifiable Set</a>. The returned
@@ -178,42 +162,68 @@ public interface EqualableCollectors
    */
   @NotNull
   @Unmodifiable
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   static <T extends @NotNull Comparable<@NotNull T> & @NotNull Equalable<@NotNull T>>
   Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSet<@NotNull T>> toSet(
-    @NotNull final IntFunction<@NotNull T @NotNull []> constructor) {
+    @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
+  {
     return toSet(constructor, HashSet::add);
   }
 
   @NotNull
   @Unmodifiable
-  @Contract(value = " _,_ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   static <T extends @NotNull Comparable<@NotNull T> & @NotNull Equalable<@NotNull T>>
-  Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSet<@NotNull T>> toSet(
+  Collector<@NotNull T, @NotNull HashSet<@NotNull T>, EqualableSet<@NotNull T>> toSet(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor,
     @NotNull final BiConsumer<@NotNull HashSet<@NotNull T>, @NotNull T> accumulator)
   {
-    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull EqualableSet<@NotNull T>>builder()
-      .supplier(HashSet::new)
-      .accumulator(accumulator)
-      .combiner(EqualableCollectors::hashSetCombiner)
-      .finisher(set -> EqualableSet.of(set, constructor))
-      .characteristics(CH_UNORDERED_NOID)
-      .build();
+    return CollectorImpl.toEqualableSetCollector(accumulator, set -> EqualableSet.of(set, constructor));
   }
+
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="6. Set accumulators">
+  static <T extends @NotNull Equalable<@NotNull T>>
+  void defaultAction(@NotNull final Set<@NotNull T> ts, @NotNull final T e)
+  {
+    CollectorImpl.defaultAction(ts, e);
+  }
+
+  static <T extends @NotNull Equalable<@NotNull T>>
+  void takeFirst(@NotNull final Set<@NotNull T> ts, @NotNull final T e)
+  {
+    CollectorImpl.takeFirst(ts, e);
+  }
+
+  static <T extends @NotNull Equalable<@NotNull T>>
+  void takeSecond(@NotNull final Set<@NotNull T> ts, @NotNull final T e)
+  {
+    CollectorImpl.takeSecond(ts, e);
+  }
+
+  static <T extends @NotNull Equalable<@NotNull T>>
+  void replace(@NotNull final Set<@NotNull T> ts, @NotNull final T e)
+  {
+    CollectorImpl.replace(ts, e);
+  }
+
+  static <T extends @NotNull Equalable<@NotNull T>>
+  void replaceDuplicates(@NotNull final Set<@NotNull T> ts, @NotNull final T e)
+  {
+    CollectorImpl.replaceDuplicates(ts, e);
+  }
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="7. Set combiners">
 
   @NotNull
   private static <T extends @NotNull Comparable<@NotNull T> & @NotNull Equalable<@NotNull T>>
   HashSet<@NotNull T> comparableSetCombiner(
     @NotNull final HashSet<@NotNull T> left,
-    @NotNull final HashSet<@NotNull T> right) {
-    if (left.size() < right.size()) {
-      right.addAll(left);
-      return right;
-    } else {
-      left.addAll(right);
-      return left;
-    }
+    @NotNull final HashSet<@NotNull T> right)
+  {
+    return EqualableCollectors.<@NotNull T>hashSetCombiner(left, right);
   }
 
   @NotNull
@@ -222,18 +232,12 @@ public interface EqualableCollectors
     @NotNull final HashSet<@NotNull T> left,
     @NotNull final HashSet<@NotNull T> right)
   {
-    if(left.size() < right.size())
-    {
-      right.addAll(left);
-      return right;
-    }
-    else
-    {
-      left.addAll(right);
-      return left;
-    }
+    return CollectorImpl.<@NotNull T>hashSetCombiner(left, right);
   }
 
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="8. List of String">
   @NotNull
   @Unmodifiable
   @Contract(value = " -> new", pure = true)
@@ -268,133 +272,18 @@ public interface EqualableCollectors
     return toList(EqualableString[]::new);
   }
 
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="9. List">
   @NotNull
   @Unmodifiable
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   static <T extends @NotNull Comparable<@NotNull T> & @NotNull Equalable<@NotNull T>>
   Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>> toList(
     @NotNull final IntFunction<@NotNull T @NotNull []> constructor
   )
   {
-    return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull EqualableList<@NotNull T>>builder()
-      .supplier(ArrayList::new)
-      .accumulator(List::add)
-      .combiner(EqualableCollectors::arrayListCombiner)
-      .finisher(list -> EqualableList.of(list, constructor))
-      .characteristics(CH_UNORDERED_NOID)
-      .build();
+    return CollectorImpl.toEqualableListCollector(set -> EqualableList.of(set, constructor));
   }
-
-  @NotNull
-  private static <T extends @NotNull Equalable<@NotNull T>>
-  ArrayList<@NotNull T> arrayListCombiner(
-    @NotNull final ArrayList<@NotNull T> left,
-    @NotNull final ArrayList<@NotNull T> right)
-  {
-    if(left.size() < right.size())
-    {
-      right.addAll(left);
-      return right;
-    }
-    else
-    {
-      left.addAll(right);
-      return left;
-    }
-  }
-
-  static <T extends @NotNull Equalable<@NotNull T>>
-  void defaultAction(@NotNull final Set<@NotNull T> ts, @NotNull final T e) {
-    takeFirst(ts, e);
-  }
-
-  static <T extends @NotNull Equalable<@NotNull T>>
-  void takeFirst(@NotNull final Set<@NotNull T> ts, @NotNull final T e) {
-    ts.add(e);
-  }
-
-  static <T extends @NotNull Equalable<@NotNull T>>
-  void takeSecond(@NotNull final Set<@NotNull T> ts, @NotNull final T e) {
-    replace(ts, e);
-  }
-
-  static <T extends @NotNull Equalable<@NotNull T>>
-  void replace(@NotNull final Set<@NotNull T> ts, @NotNull final T e) {
-    replaceDuplicates(ts, e);
-  }
-
-  static <T extends @NotNull Equalable<@NotNull T>>
-  void replaceDuplicates(@NotNull final Set<@NotNull T> ts, @NotNull final T e) {
-    if (ts.add(e)) {
-      return;
-    }
-    ts.remove(e);
-    ts.add(e);
-  }
-
-  @Value
-  @Unmodifiable
-  @RequiredArgsConstructor
-  @Builder
-  class CollectorImpl<T, A, R>
-    implements Collector<@NotNull T, @NotNull A, @NotNull R> {
-    @NotNull
-    Supplier<@NotNull A> supplier;
-
-    @NotNull
-    BiConsumer<@NotNull A, @NotNull T> accumulator;
-
-    @NotNull
-    BinaryOperator<@NotNull A> combiner;
-
-    @NotNull
-    @Builder.Default
-    Function<@NotNull A, @NotNull R> finisher = castingIdentity();
-
-    @NotNull
-    Set<@NotNull Characteristics> characteristics;
-
-    @NotNull
-    @Override
-    public BiConsumer<@NotNull A, @NotNull T> accumulator()
-    {
-      return accumulator;
-    }
-
-    @NotNull
-    @Override
-    public Supplier<@NotNull A> supplier()
-    {
-      return supplier;
-    }
-
-    @NotNull
-    @Override
-    public BinaryOperator<@NotNull A> combiner()
-    {
-      return combiner;
-    }
-
-    @NotNull
-    @Override
-    public Function<@NotNull A, @NotNull R> finisher()
-    {
-      return finisher;
-    }
-
-    @NotNull
-    @Override
-    public Set<@NotNull Characteristics> characteristics()
-    {
-      return characteristics;
-    }
-
-    @NotNull
-    @Contract(pure = true)
-    @SuppressWarnings(UNCHECKED)
-    private static <I, R> Function<@NotNull I, @NotNull R> castingIdentity()
-    {
-      return i -> (R)i;
-    }
-  }
+  //</editor-fold>
 }

@@ -16,85 +16,103 @@ import java.util.List;
 @UnmodifiableView
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, access = AccessLevel.PRIVATE)
-public class Id implements Equalable<@NotNull Id>, Comparable<@NotNull Id> {
+public class Id implements Equalable<@NotNull Id>, Comparable<@NotNull Id>
+{
   @NotNull
   @Builder.Default
   String id = Constants.BLANK;
 
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  public static Id of(@NotNull final String raw) {
+  public static Id of(@NotNull final String raw)
+  {
     return Id.builder().id(raw).build();
   }
 
   @NotNull
   @Contract(value = "-> new", pure = true)
-  public static Id blank() {
+  public static Id blank()
+  {
     return BLANK;
   }
 
   public static final Id BLANK = Id.builder().build();
 
   @Contract(value = "null -> true", pure = true)
-  public boolean isNotEqualToIgnoreCase(@Nullable final String other) {
+  public boolean isNotEqualToIgnoreCase(@Nullable final String other)
+  {
     return !isEqualToIgnoreCase(other);
   }
 
   @Contract(value = "null -> false", pure = true)
-  public boolean isEqualToIgnoreCase(@Nullable final String other) {
+  public boolean isEqualToIgnoreCase(@Nullable final String other)
+  {
     return id.equalsIgnoreCase(other);
   }
 
-  public boolean anyMatch(@NotNull final Id @NotNull ... array) {
+  public boolean anyMatch(@NotNull final Id @NotNull ... array)
+  {
     return isIn(array);
   }
 
-  public boolean anyMatch(@NotNull final List<? extends @NotNull Id> elements) {
+  public boolean anyMatch(@NotNull final List<? extends @NotNull Id> elements)
+  {
     return isIn(elements);
   }
 
-  public boolean allMatch(@NotNull final Id @NotNull ... array) {
+  public boolean allMatch(@NotNull final Id @NotNull ... array)
+  {
     return allMatch(Arrays.asList(array));
   }
 
-  public boolean allMatch(@NotNull final List<? extends @NotNull Id> elements) {
+  public boolean allMatch(@NotNull final List<? extends @NotNull Id> elements)
+  {
     return elements.stream().allMatch(this::isEqualTo);
   }
 
-  public boolean noneMatch(@NotNull final Id @NotNull ... array) {
+  public boolean noneMatch(@NotNull final Id @NotNull ... array)
+  {
     return isNotIn(array);
   }
 
-  public boolean noneMatch(@NotNull final List<? extends @NotNull Id> elements) {
+  public boolean noneMatch(@NotNull final List<? extends @NotNull Id> elements)
+  {
     return isNotIn(elements);
   }
 
-  public boolean isNotIn(@NotNull final Id @NotNull ... array) {
+  public boolean isNotIn(@NotNull final Id @NotNull ... array)
+  {
     return !isIn(array);
   }
 
-  public boolean isNotIn(@NotNull final List<? extends @NotNull Id> elements) {
+  public boolean isNotIn(@NotNull final List<? extends @NotNull Id> elements)
+  {
     return !isIn(elements);
   }
 
-  public boolean isIn(@NotNull final Id @NotNull ... array) {
+  public boolean isIn(@NotNull final Id @NotNull ... array)
+  {
     return isIn(Arrays.asList(array));
   }
 
-  public boolean isIn(@NotNull final List<? extends @NotNull Id> elements) {
+  public boolean isIn(@NotNull final List<? extends @NotNull Id> elements)
+  {
     return elements.contains(this);
   }
 
   @NotNull
-  public String orElse(@NotNull final String s) {
+  public String orElse(@NotNull final String s)
+  {
     return isBlank() ? s : id;
   }
 
-  public boolean isNotBlank() {
+  public boolean isNotBlank()
+  {
     return !isBlank();
   }
 
-  public boolean isBlank() {
+  public boolean isBlank()
+  {
     return null == id || id.isBlank();
   }
 
@@ -106,13 +124,15 @@ public class Id implements Equalable<@NotNull Id>, Comparable<@NotNull Id> {
 
   @NotNull
   @Contract(pure = true)
-  static Comparator<@NotNull Id> orderAsc() {
+  static Comparator<@NotNull Id> orderAsc()
+  {
     return ORDER_ASC;
   }
 
   @NotNull
   @Contract(value = "-> new", pure = true)
-  private static Comparator<@NotNull Id> createOrderAscComparator() {
+  private static Comparator<@NotNull Id> createOrderAscComparator()
+  {
     return Comparator.nullsLast(
       Comparator.comparing(Id::getId, Comparator.nullsLast(Comparator.naturalOrder()))
         .thenComparing(t -> t.getClass().getName(), Comparator.nullsLast(Comparator.naturalOrder()))
@@ -120,7 +140,8 @@ public class Id implements Equalable<@NotNull Id>, Comparable<@NotNull Id> {
   }
 
   @Override
-  public int compareTo(@Nullable final Id o) {
+  public int compareTo(@Nullable final Id o)
+  {
     return orderAsc(this, o);
   }
 
@@ -149,8 +170,10 @@ public class Id implements Equalable<@NotNull Id>, Comparable<@NotNull Id> {
    * @param b the second object.
    * @return an integer value.
    */
-  public static int orderAsc(@Nullable final Id a, @Nullable final Id b) {
-    if (a == b) {
+  public static int orderAsc(@Nullable final Id a, @Nullable final Id b)
+  {
+    if(a == b)
+    {
       return 0;
     }
     return a != null ? b != null ? Id.orderAsc().compare(a, b) : -1 : 1;

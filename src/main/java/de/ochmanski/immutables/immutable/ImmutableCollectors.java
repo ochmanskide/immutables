@@ -1,39 +1,24 @@
 package de.ochmanski.immutables.immutable;
 
-import de.ochmanski.immutables.fluent.Fluent;
-import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
-import lombok.Builder;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import de.ochmanski.immutables.collection.CollectorImpl;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.IntFunction;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
-import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
+import static de.ochmanski.immutables.collection.CollectorImpl.Constants.CH_UNORDERED_ID;
+
 public interface ImmutableCollectors
 {
 
-  @NotNull
-  Set<Collector.@NotNull Characteristics> CH_CONCURRENT_ID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT, Collector.Characteristics.UNORDERED, Collector.Characteristics.IDENTITY_FINISH));
-
-  @NotNull
-  Set<Collector.@NotNull Characteristics> CH_CONCURRENT_NOID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.CONCURRENT, Collector.Characteristics.UNORDERED));
-
-  @NotNull
-  Set<Collector.@NotNull Characteristics> CH_ID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
-
-  @NotNull
-  Set<Collector.@NotNull Characteristics> CH_UNORDERED_ID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED, Collector.Characteristics.IDENTITY_FINISH));
-
-  @NotNull
-  Set<Collector.@NotNull Characteristics> CH_NOID = Collections.emptySet();
-
-  @NotNull
-  Set<Collector.@NotNull Characteristics> CH_UNORDERED_NOID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED));
-
+  //<editor-fold defaultstate="collapsed" desc="1. Mutable Set">
   /**
    * Returns a {@code Collector} that accumulates the input elements into a new {@code Set}. There are no guarantees on
    * the type, mutability, serializability, or thread-safety of the {@code Set} returned; if more control over the
@@ -42,59 +27,49 @@ public interface ImmutableCollectors
    * <p>This is an {@link Collector.Characteristics#UNORDERED unordered}
    * Collector.
    *
-   * @param <T> the type of the input elements
+   * @param <E> the type of the input elements
    * @return a {@code Collector} which collects all the input elements into a {@code Set}
    */
   @NotNull
+  @Unmodifiable
   @Contract(value = " -> new", pure = true)
-  static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>> toMutableSet()
+  static <E>
+  Collector<@NotNull E, @NotNull HashSet<@NotNull E>, @NotNull Set<@NotNull E>> toMutableSet()
   {
-    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull Set<@NotNull T>>builder()
+    return CollectorImpl.<@NotNull E, @NotNull HashSet<@NotNull E>, @NotNull Set<@NotNull E>>builder()
       .supplier(HashSet::new)
-      .accumulator(Set::add)
-      .combiner((left, right) ->
-      {
-        if(left.size() < right.size())
-        {
-          right.addAll(left);
-          return right;
-        }
-        else
-        {
-          left.addAll(right);
-          return left;
-        }
-      })
+      .accumulator(HashSet::add)
+      .combiner(ImmutableCollectors::hashSetCombiner)
       .characteristics(CH_UNORDERED_ID)
       .build();
   }
+  //</editor-fold>
 
+  //<editor-fold defaultstate="collapsed" desc="2. Sorted Set">
   @NotNull
+  @Unmodifiable
   @Contract(value = "_ -> new", pure = true)
-  static <T extends @NotNull Comparable<@NotNull T>> Collector<@NotNull T, @NotNull TreeSet<@NotNull T>, @NotNull ImmutableSortedSet<@NotNull T>> toSortedSet(
-    @NotNull final IntFunction<@NotNull T @NotNull []> constructor
+  static <E extends @NotNull Comparable<@NotNull E>>
+  Collector<@NotNull E, @NotNull HashSet<@NotNull E>, @NotNull ImmutableSortedSet<@NotNull E>> toSortedSet(
+    @NotNull final IntFunction<@NotNull E @NotNull []> constructor
   )
   {
-    return CollectorImpl.<@NotNull T, @NotNull TreeSet<@NotNull T>, @NotNull ImmutableSortedSet<@NotNull T>>builder()
-      .supplier(TreeSet::new)
-      .accumulator(SortedSet::add)
-      .combiner((left, right) ->
-      {
-        if(left.size() < right.size())
-        {
-          right.addAll(left);
-          return right;
-        }
-        else
-        {
-          left.addAll(right);
-          return left;
-        }
-      })
-      .finisher(set -> ImmutableSortedSet.<@NotNull T>of(set, constructor))
-      .characteristics(CH_UNORDERED_NOID)
-      .build();
+    return toSortedSet(constructor, HashSet::add);
   }
+
+  @NotNull
+  @Unmodifiable
+  @Contract(value = "_, _ -> new", pure = true)
+  static <E extends @NotNull Comparable<@NotNull E>>
+  Collector<@NotNull E, @NotNull HashSet<@NotNull E>, @NotNull ImmutableSortedSet<@NotNull E>> toSortedSet(
+    @NotNull final IntFunction<@NotNull E @NotNull []> constructor,
+    @NotNull final BiConsumer<@NotNull HashSet<@NotNull E>, @NotNull E> accumulator)
+  {
+    return CollectorImpl.toImmutableSortedSetCollector(accumulator, set -> ImmutableSortedSet.of(set, constructor));
+  }
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="5. Set">
 
   /**
    * Returns a {@code Collector} that accumulates the input elements into an
@@ -105,162 +80,76 @@ public interface ImmutableCollectors
    * <p>This is an {@link Collector.Characteristics#UNORDERED unordered}
    * Collector.
    *
-   * @param <T> the type of the input elements
+   * @param <E> the type of the input elements
    * @return a {@code Collector} that accumulates the input elements into an
    *     <a href="../Set.html#unmodifiable">unmodifiable Set</a>
    * @since 10
    */
   @NotNull
+  @Unmodifiable
   @Contract(value = "_ -> new", pure = true)
-  static <T> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableSet<@NotNull T>> toSet(
-    @NotNull final IntFunction<@NotNull T @NotNull []> constructor
+  static <E>
+  CollectorImpl<@NotNull E, @NotNull HashSet<@NotNull E>, @NotNull ImmutableSet<@NotNull E>> toSet(
+    @NotNull final IntFunction<@NotNull E @NotNull []> constructor)
+  {
+    return CollectorImpl.toImmutableSetCollector(set -> ImmutableSet.of(set, constructor));
+  }
+
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="6. Set accumulators">
+  static <E>
+  void defaultAction(@NotNull final Set<@NotNull E> ts, @NotNull final E e)
+  {
+    CollectorImpl.defaultAction(ts, e);
+  }
+
+  static <E>
+  void takeFirst(@NotNull final Set<@NotNull E> ts, @NotNull final E e)
+  {
+    CollectorImpl.takeFirst(ts, e);
+  }
+
+  static <E>
+  void takeSecond(@NotNull final Set<@NotNull E> ts, @NotNull final E e)
+  {
+    CollectorImpl.takeSecond(ts, e);
+  }
+
+  static <E>
+  void replace(@NotNull final Set<@NotNull E> ts, @NotNull final E e)
+  {
+    CollectorImpl.replace(ts, e);
+  }
+
+  static <E>
+  void replaceDuplicates(@NotNull final Set<@NotNull E> ts, @NotNull final E e)
+  {
+    CollectorImpl.replaceDuplicates(ts, e);
+  }
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="7. Set combiners">
+  @NotNull
+  private static <E>
+  HashSet<@NotNull E> hashSetCombiner(
+    @NotNull final HashSet<@NotNull E> left,
+    @NotNull final HashSet<@NotNull E> right)
+  {
+    return CollectorImpl.<@NotNull E>hashSetCombiner(left, right);
+  }
+  //</editor-fold>
+
+  //<editor-fold defaultstate="collapsed" desc="9. List">
+  @NotNull
+  @Unmodifiable
+  @Contract(value = "_ -> new", pure = true)
+  static <E>
+  Collector<@NotNull E, @NotNull ArrayList<@NotNull E>, @NotNull ImmutableList<@NotNull E>> toList(
+    @NotNull final IntFunction<@NotNull E @NotNull []> constructor
   )
   {
-    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableSet<@NotNull T>>builder()
-      .supplier(HashSet::new)
-      .accumulator(Set::add)
-      .combiner((left, right) ->
-      {
-        if(left.size() < right.size())
-        {
-          right.addAll(left);
-          return right;
-        }
-        else
-        {
-          left.addAll(right);
-          return left;
-        }
-      })
-      .finisher(set -> ImmutableSet.<@NotNull T>of(set, constructor))
-      .characteristics(CH_UNORDERED_NOID)
-      .build();
+    return CollectorImpl.toImmutableListCollector(set -> ImmutableList.of(set, constructor));
   }
-
-  @NotNull
-  @Contract(value = " _ -> new", pure = true)
-  static <T extends @NotNull Enum<@NotNull T>> Collector<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>> toEnumSet(
-    @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
-  {
-    return CollectorImpl.<@NotNull T, @NotNull HashSet<@NotNull T>, @NotNull ImmutableEnumSet<@NotNull T>>builder()
-      .supplier(HashSet::new)
-      .accumulator(Set::add)
-      .combiner((left, right) ->
-      {
-        if(left.size() < right.size())
-        {
-          right.addAll(left);
-          return right;
-        }
-        else
-        {
-          left.addAll(right);
-          return left;
-        }
-      })
-      .finisher(set -> ImmutableEnumSet.<@NotNull T>of(set, constructor))
-      .characteristics(CH_UNORDERED_NOID)
-      .build();
-  }
-
-  @NotNull
-  @Contract(value = "_ -> new", pure = true)
-  static <T> Collector<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull ImmutableList<@NotNull T>> toList(
-    @NotNull final IntFunction<@NotNull T @NotNull []> constructor)
-  {
-    return CollectorImpl.<@NotNull T, @NotNull ArrayList<@NotNull T>, @NotNull ImmutableList<@NotNull T>>builder()
-      .supplier(ArrayList::new)
-      .accumulator(List::add)
-      .combiner((left, right) ->
-      {
-        if(left.size() < right.size())
-        {
-          right.addAll(left);
-          return right;
-        }
-        else
-        {
-          left.addAll(right);
-          return left;
-        }
-      })
-      .finisher(set -> ImmutableList.<@NotNull T>of(set, constructor))
-      .characteristics(CH_UNORDERED_NOID)
-      .build();
-  }
-
-  @NotNull
-  @Contract(pure = true)
-  @SuppressWarnings({ UNCHECKED, RAWTYPES })
-  static <T> IntFunction<@NotNull T @NotNull []> tGenerator()
-  {
-    return (IntFunction)Fluent @NotNull []::new;
-  }
-
-  @Value
-  @RequiredArgsConstructor
-  @Builder
-  class CollectorImpl<T, A, R>
-    implements Collector<@NotNull T, @NotNull A, @NotNull R>
-  {
-    @NotNull
-    Supplier<@NotNull A> supplier;
-
-    @NotNull
-    BiConsumer<@NotNull A, @NotNull T> accumulator;
-
-    @NotNull
-    BinaryOperator<@NotNull A> combiner;
-
-    @NotNull
-    @Builder.Default
-    Function<@NotNull A, @NotNull R> finisher = castingIdentity();
-
-    @NotNull
-    Set<@NotNull Characteristics> characteristics;
-
-    @NotNull
-    @Override
-    public BiConsumer<@NotNull A, @NotNull T> accumulator()
-    {
-      return accumulator;
-    }
-
-    @NotNull
-    @Override
-    public Supplier<@NotNull A> supplier()
-    {
-      return supplier;
-    }
-
-    @NotNull
-    @Override
-    public BinaryOperator<@NotNull A> combiner()
-    {
-      return combiner;
-    }
-
-    @NotNull
-    @Override
-    public Function<@NotNull A, @NotNull R> finisher()
-    {
-      return finisher;
-    }
-
-    @NotNull
-    @Override
-    public Set<@NotNull Characteristics> characteristics()
-    {
-      return characteristics;
-    }
-  }
-
-  @NotNull
-  @Contract(pure = true)
-  @SuppressWarnings(UNCHECKED)
-  private static <I, R> Function<@NotNull I, @NotNull R> castingIdentity()
-  {
-    return i -> (R)i;
-  }
-
+  //</editor-fold>
 }

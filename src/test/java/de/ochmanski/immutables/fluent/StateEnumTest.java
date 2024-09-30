@@ -1,8 +1,8 @@
 package de.ochmanski.immutables.fluent;
 
 import annotations.UnitTest;
-import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.fluent.FluentTest.State;
+import de.ochmanski.immutables.equalable.Equalable;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 

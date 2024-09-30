@@ -10,6 +10,7 @@ import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.NotBlank;
+import java.util.*;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
@@ -101,7 +102,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final String s1) {
     return EqualableSet.<@NotNull EqualableString>of(Equalable.of(s1));
@@ -110,7 +111,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _-> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final EqualableString s1)
   {
@@ -120,7 +121,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
@@ -130,7 +131,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2) {
@@ -140,7 +141,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2)
@@ -151,7 +152,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -162,7 +163,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -173,7 +174,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -185,7 +186,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -197,7 +198,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -209,7 +210,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -222,7 +223,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -235,7 +236,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -248,7 +249,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -262,7 +263,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -276,7 +277,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -290,7 +291,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -305,7 +306,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -320,7 +321,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -335,7 +336,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -351,7 +352,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -367,7 +368,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -383,7 +384,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -400,7 +401,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -417,7 +418,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -434,7 +435,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -452,7 +453,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -470,7 +471,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "  _, _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final String s1,
     @NotNull final String s2,
@@ -488,7 +489,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final EqualableString s1,
     @NotNull final EqualableString s2,
@@ -507,7 +508,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -545,7 +546,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "_-> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   private static EqualableString @NotNull [] toEqualable(@NotNull final String @NotNull [] array)
   {
     return EqualableString.ofArray(array);
@@ -582,7 +583,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> of(
     @NotNull final Collection<@NotNull String> collection) {
     final IntFunction<String[]> constructor = String[]::new;
@@ -593,7 +594,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Comparable<@NotNull S> & @NotNull Equalable<@NotNull S>> EqualableSet<@NotNull S> of(
     @NotNull final Collection<@NotNull S> keySet,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
@@ -604,7 +605,7 @@ public class EqualableSet<E extends @NotNull Comparable<@NotNull E> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   public static EqualableSet<@NotNull EqualableString> ofString(
     @NotNull final ImmutableSet<@NotNull String> immutableSet) {
     final List<EqualableString> list = immutableSet.map(EqualableString::of).toList();

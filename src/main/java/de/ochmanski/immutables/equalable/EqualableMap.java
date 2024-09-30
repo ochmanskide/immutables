@@ -68,7 +68,7 @@ public class EqualableMap<K extends @NotNull Comparable<@NotNull K> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "_,_ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static <K extends @NotNull Comparable<@NotNull K> & @NotNull Equalable<@NotNull K>, V extends @NotNull Comparable<@NotNull V> & @NotNull Equalable<@NotNull V>> EqualableMap<@NotNull K, @NotNull V> noneOf(
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value)
@@ -101,7 +101,7 @@ public class EqualableMap<K extends @NotNull Comparable<@NotNull K> & @NotNull E
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   private static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {

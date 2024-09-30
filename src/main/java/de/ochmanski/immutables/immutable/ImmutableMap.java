@@ -29,7 +29,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   @NotNull("Given map cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given map cannot be null.")
   @Builder.Default
-  Map<@NotNull K, @NotNull V> map = (Map) Collections.checkedMap(Map.of(), Equalable.Dummy.class, Equalable.Dummy.class);
+  Map<@NotNull K, @NotNull V> map = (Map)Collections.checkedMap(Map.of(), Equalable.Dummy.class, Equalable.Dummy.class);
 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
@@ -72,7 +72,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "_,_ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static <K extends @NotNull Comparable<? super @NotNull K>, V> ImmutableMap<@NotNull K, @NotNull V> noneOf(
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
     @NotNull final IntFunction<@NotNull V @NotNull []> value) {
@@ -94,7 +94,7 @@ public class ImmutableMap<K, V> implements IMap<@NotNull K, @NotNull V>
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   private static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);

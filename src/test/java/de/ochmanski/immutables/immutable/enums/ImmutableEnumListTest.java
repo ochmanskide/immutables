@@ -3,6 +3,7 @@ package de.ochmanski.immutables.immutable.enums;
 import annotations.UnitTest;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.immutable.IList;
+import de.ochmanski.immutables.immutable.enums.ImmutableEnumList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,6 @@
 package de.ochmanski.immutables.fluent;
 
 import de.ochmanski.immutables.collection.ICollection;
-import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.fluent.Fluent.Dummy;
 import de.ochmanski.immutables.immutable.ImmutableList;
@@ -20,6 +19,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.IntFunction;
+
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 @Value
 @UnmodifiableView
@@ -43,7 +45,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
   public static <K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<? extends @NotNull K>, V extends @NotNull Equalable<? extends @NotNull V>> ImmutableEnumMap<@NotNull K, @NotNull V> emptyEnumMap()
   {
     return (ImmutableEnumMap) EMPTY_MAP;
@@ -130,7 +132,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> FluentEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final K k1, @NotNull final V v1,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
@@ -146,7 +148,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _ , _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _ , _, _, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> FluentEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final K k1, @NotNull final V v1,
     @NotNull final K k2, @NotNull final V v2,
@@ -163,7 +165,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _ , _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _ , _, _, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> FluentEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final K k1, @NotNull final V v1,
     @NotNull final K k2, @NotNull final V v2,
@@ -182,7 +184,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _, _, _ , _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _, _, _ , _, _, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> FluentEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final K k1, @NotNull final V v1,
     @NotNull final K k2, @NotNull final V v2,
@@ -203,7 +205,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<@NotNull K>, V extends @NotNull Equalable<@NotNull V>> FluentEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final Map<@NotNull K, @NotNull V> map,
     @NotNull final IntFunction<@NotNull K @NotNull []> key,
@@ -219,7 +221,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   public static <K extends @NotNull Enum<@NotNull K> & @NotNull Fluent<? extends @NotNull K>, V extends @NotNull Equalable<@NotNull V>> FluentEnumMap<@NotNull K, @NotNull V> of(
     @NotNull final ImmutableEnumMap<@NotNull K, @NotNull V> map) {
     return FluentEnumMap.<@NotNull K, @NotNull V>builder()
@@ -230,7 +232,7 @@ public class FluentEnumMap<K extends @NotNull Enum<@NotNull K> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   private static <S extends @NotNull Enum<@NotNull S>> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
   {

@@ -1,7 +1,10 @@
 package de.ochmanski.immutables.equalable;
 
 import annotations.UnitTest;
+import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.equalable.Equalable.EqualableString;
+import de.ochmanski.immutables.equalable.EqualableList;
+import de.ochmanski.immutables.equalable.EqualableSet;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -8,7 +8,8 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-public interface IList<E> extends ImmutableCollection<@NotNull E> {
+public interface IList<E> extends ImmutableCollection<@NotNull E>
+{
 
   /**
    * This method is not supported.
@@ -24,9 +25,10 @@ public interface IList<E> extends ImmutableCollection<@NotNull E> {
    * </pre>
    */
   @Contract(value = "-> fail", pure = true)
-  static void of() {
+  static void of()
+  {
     throw new UnsupportedOperationException("Please pass array generator type to the method. "
-      + "For example: IList.noneOf(String[]::new)");
+        + "For example: IList.noneOf(String[]::new)");
   }
 
   default int size() {
@@ -34,7 +36,8 @@ public interface IList<E> extends ImmutableCollection<@NotNull E> {
   }
 
   @Override
-  default boolean isNotEmpty() {
+  default boolean isNotEmpty()
+  {
     return !isEmpty();
   }
 
@@ -49,7 +52,8 @@ public interface IList<E> extends ImmutableCollection<@NotNull E> {
   }
 
   @Override
-  default boolean doesNotContain(@NotNull final E o) {
+  default boolean doesNotContain(@NotNull final E o)
+  {
     return !contains(o);
   }
 
@@ -126,7 +130,8 @@ public interface IList<E> extends ImmutableCollection<@NotNull E> {
 
   @Override
   @Contract(pure = true)
-  default void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer, @NotNull final Comparator<? super @NotNull E> comparator) {
+  default void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer, @NotNull final Comparator<? super @NotNull E> comparator)
+  {
     getList().forEachOrdered(consumer, comparator);
   }
 
@@ -209,7 +214,8 @@ public interface IList<E> extends ImmutableCollection<@NotNull E> {
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  default Optional<@Nullable E> findFirst() {
+  default Optional<@Nullable E> findFirst()
+  {
     return getList().findFirst();
   }
 
@@ -221,7 +227,8 @@ public interface IList<E> extends ImmutableCollection<@NotNull E> {
 
   @NotNull
   @Contract(value = " -> new", pure = true)
-  default Optional<@Nullable E> findAny() {
+  default Optional<@Nullable E> findAny()
+  {
     return getList().findAny();
   }
 
@@ -229,7 +236,8 @@ public interface IList<E> extends ImmutableCollection<@NotNull E> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  default IList<@NotNull E> add(@NotNull final E c) {
+  default IList<@NotNull E> add(@NotNull final E c)
+  {
     return addAll(c);
   }
 
@@ -237,7 +245,8 @@ public interface IList<E> extends ImmutableCollection<@NotNull E> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  default IList<@NotNull E> addAll(@NotNull final E c) {
+  default IList<@NotNull E> addAll(@NotNull final E c)
+  {
     return addAll(Stream.of(c));
   }
 
@@ -245,7 +254,8 @@ public interface IList<E> extends ImmutableCollection<@NotNull E> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  default IList<@NotNull E> addAll(@NotNull final ImmutableCollection<? extends @NotNull E> c) {
+  default IList<@NotNull E> addAll(@NotNull final ImmutableCollection<? extends @NotNull E> c)
+  {
     return addAll(c.stream());
   }
 
@@ -253,7 +263,8 @@ public interface IList<E> extends ImmutableCollection<@NotNull E> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  default IList<@NotNull E> addAll(@NotNull final Collection<? extends @NotNull E> c) {
+  default IList<@NotNull E> addAll(@NotNull final Collection<? extends @NotNull E> c)
+  {
     return addAll(c.stream());
   }
 
@@ -261,7 +272,8 @@ public interface IList<E> extends ImmutableCollection<@NotNull E> {
   @Unmodifiable
   @UnmodifiableView
   @Contract(value = "_ -> new", pure = true)
-  default IList<@NotNull E> addAll(@NotNull final Stream<? extends @NotNull E> c) {
+  default IList<@NotNull E> addAll(@NotNull final Stream<? extends @NotNull E> c)
+  {
     return Stream.concat(stream(), c).collect(ImmutableCollectors.toList(getKey()));
   }
 

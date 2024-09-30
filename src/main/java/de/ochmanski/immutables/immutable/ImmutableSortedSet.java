@@ -3,16 +3,18 @@ package de.ochmanski.immutables.immutable;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.ochmanski.immutables.collection.ICollection;
-import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.equalable.EqualableCollection;
 import lombok.*;
 import org.jetbrains.annotations.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
+
+import static de.ochmanski.immutables.constants.Constants.Warning.*;
 
 @Value
 @UnmodifiableView
@@ -28,7 +30,7 @@ public class ImmutableSortedSet<E extends @NotNull Comparable<@NotNull E>> imple
   @NotNull("Given set cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given set cannot be null.")
   @Builder.Default
-  SortedSet<@NotNull E> set = (SortedSet) Collections.checkedSortedSet(Collections.emptySortedSet(), Equalable.Dummy.class);
+  SortedSet<@NotNull E> set = (SortedSet)Collections.checkedSortedSet(Collections.emptySortedSet(), Equalable.Dummy.class);
 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
@@ -41,7 +43,7 @@ public class ImmutableSortedSet<E extends @NotNull Comparable<@NotNull E>> imple
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  @SuppressWarnings({ UNCHECKED, RAWTYPES })
   public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> empty()
   {
     return (ImmutableSortedSet) EMPTY_SET;
@@ -168,6 +170,204 @@ public class ImmutableSortedSet<E extends @NotNull Comparable<@NotNull E>> imple
   @NotNull
   @Unmodifiable
   @UnmodifiableView
+  @Contract(value = "_, _, _, _, _ -> new", pure = true)
+  public static ImmutableSortedSet<@NotNull String> of(
+    @NotNull final String e1,
+    @NotNull final String e2,
+    @NotNull final String e3,
+    @NotNull final String e4,
+    @NotNull final String e5) {
+    return ImmutableSortedSet.<@NotNull String>of(e1, e2, e3, e4, e5, String @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableSortedSet.of(Set.copyOf(List.of(e1, e2, e3, e4, e5)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _ -> new", pure = true)
+  public static ImmutableSortedSet<@NotNull String> of(
+    @NotNull final String e1,
+    @NotNull final String e2,
+    @NotNull final String e3,
+    @NotNull final String e4,
+    @NotNull final String e5,
+    @NotNull final String e6) {
+    return ImmutableSortedSet.<@NotNull String>of(e1, e2, e3, e4, e5, e6, String @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final S e6,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableSortedSet.of(Set.copyOf(List.of(e1, e2, e3, e4, e5, e6)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _ -> new", pure = true)
+  public static ImmutableSortedSet<@NotNull String> of(
+    @NotNull final String e1,
+    @NotNull final String e2,
+    @NotNull final String e3,
+    @NotNull final String e4,
+    @NotNull final String e5,
+    @NotNull final String e6,
+    @NotNull final String e7) {
+    return ImmutableSortedSet.<@NotNull String>of(e1, e2, e3, e4, e5, e6, e7, String @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final S e6,
+    @NotNull final S e7,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableSortedSet.of(Set.copyOf(List.of(e1, e2, e3, e4, e5, e6, e7)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _ -> new", pure = true)
+  public static ImmutableSortedSet<@NotNull String> of(
+    @NotNull final String e1,
+    @NotNull final String e2,
+    @NotNull final String e3,
+    @NotNull final String e4,
+    @NotNull final String e5,
+    @NotNull final String e6,
+    @NotNull final String e7,
+    @NotNull final String e8) {
+    return ImmutableSortedSet.<@NotNull String>of(e1, e2, e3, e4, e5, e6, e7, e8, String @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final S e6,
+    @NotNull final S e7,
+    @NotNull final S e8,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableSortedSet.of(Set.copyOf(List.of(e1, e2, e3, e4, e5, e6, e7, e8)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _, _ -> new", pure = true)
+  public static ImmutableSortedSet<@NotNull String> of(
+    @NotNull final String e1,
+    @NotNull final String e2,
+    @NotNull final String e3,
+    @NotNull final String e4,
+    @NotNull final String e5,
+    @NotNull final String e6,
+    @NotNull final String e7,
+    @NotNull final String e8,
+    @NotNull final String e9) {
+    return ImmutableSortedSet.<@NotNull String>of(e1, e2, e3, e4, e5, e6, e7, e8, e9, String @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final S e6,
+    @NotNull final S e7,
+    @NotNull final S e8,
+    @NotNull final S e9,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableSortedSet.of(Set.copyOf(List.of(e1, e2, e3, e4, e5, e6, e7, e8, e9)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _ -> new", pure = true)
+  public static ImmutableSortedSet<@NotNull String> of(
+    @NotNull final String e1,
+    @NotNull final String e2,
+    @NotNull final String e3,
+    @NotNull final String e4,
+    @NotNull final String e5,
+    @NotNull final String e6,
+    @NotNull final String e7,
+    @NotNull final String e8,
+    @NotNull final String e9,
+    @NotNull final String e10) {
+    return ImmutableSortedSet.<@NotNull String>of(e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, String @NotNull []::new);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
+  @Contract(value = "_, _, _, _, _, _, _, _, _, _ , _ -> new", pure = true)
+  public static <S extends @NotNull Comparable<@NotNull S>> ImmutableSortedSet<@NotNull S> of(
+    @NotNull final S e1,
+    @NotNull final S e2,
+    @NotNull final S e3,
+    @NotNull final S e4,
+    @NotNull final S e5,
+    @NotNull final S e6,
+    @NotNull final S e7,
+    @NotNull final S e8,
+    @NotNull final S e9,
+    @NotNull final S e10,
+    @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
+  {
+    return ImmutableSortedSet.of(Set.copyOf(List.of(e1, e2, e3, e4, e5, e6, e7, e8, e9, e10)), constructor);
+  }
+
+  @NotNull
+  @Unmodifiable
+  @UnmodifiableView
   @Contract(value = "_, _ -> new", pure = true)
   public static <K extends @NotNull Comparable<? super @NotNull K>, V> ImmutableSortedSet<IMap.@NotNull Entry<@NotNull K, @NotNull V>> copyOfEntries(
     @NotNull final Set<Map.@NotNull Entry<@NotNull K, @NotNull V>> entries,
@@ -218,7 +418,7 @@ public class ImmutableSortedSet<E extends @NotNull Comparable<@NotNull E>> imple
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   private static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return ICollection.<@NotNull S>getComponentTypeFromConstructor(constructor);
@@ -307,7 +507,7 @@ public class ImmutableSortedSet<E extends @NotNull Comparable<@NotNull E>> imple
 
   @Override
   @Contract(pure = true)
-  @SuppressWarnings(Constants.Warning.SIMPLIFY_STREAM_API_CALL_CHAINS)
+  @SuppressWarnings(SIMPLIFY_STREAM_API_CALL_CHAINS)
   public void forEachOrdered(@NotNull final Consumer<? super @NotNull E> consumer)
   {
     set.stream().forEachOrdered(consumer);
@@ -493,7 +693,7 @@ public class ImmutableSortedSet<E extends @NotNull Comparable<@NotNull E>> imple
 
   @NotNull
   @Unmodifiable
-  @SuppressWarnings(Constants.Warning.SAME_PARAMETER_VALUE)
+  @SuppressWarnings(SAME_PARAMETER_VALUE)
   @Contract(value = "_, _ -> new", pure = true)
   private String limit(@NotNull final String s, final int limit)
   {

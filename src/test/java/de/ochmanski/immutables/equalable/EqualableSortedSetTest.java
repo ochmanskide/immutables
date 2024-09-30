@@ -12,16 +12,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @UnitTest
 @ExtendWith(MockitoExtension.class)
-class EqualableSortedSetTest {
+class EqualableSortedSetTest
+{
 
   @Test
-  void of1() {
+  void of1()
+  {
     final Iterable<Equalable.@NotNull Dummy> actual = EqualableSortedSet.of(Equalable.Dummy.DUMMY_ENUM_ITEM, Equalable.Dummy[]::new);
     assertThat(actual).containsExactly(Equalable.Dummy.DUMMY_ENUM_ITEM);
   }
 
   @Test
-  void ofStream() {
+  void ofStream()
+  {
     final Iterable<Equalable.@NotNull Dummy> actual = Stream.of(
         Equalable.Dummy.DUMMY_ENUM_ITEM,
         Equalable.Dummy.DUMMY_ENUM_ITEM,
@@ -32,7 +35,8 @@ class EqualableSortedSetTest {
   }
 
   @Test
-  void ofStream2() {
+  void ofStream2()
+  {
     final Iterable<VersionDto> actual = Stream.of(
         VersionDto.builder()
           .name(Equalable.of("Version 3"))

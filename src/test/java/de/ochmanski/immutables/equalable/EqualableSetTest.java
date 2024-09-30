@@ -1,7 +1,11 @@
 package de.ochmanski.immutables.equalable;
 
 import annotations.UnitTest;
+import de.ochmanski.immutables.equalable.ESet;
+import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.equalable.Equalable.EqualableString;
+import de.ochmanski.immutables.equalable.EqualableList;
+import de.ochmanski.immutables.equalable.EqualableSet;
 import de.ochmanski.immutables.immutable.ISet;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -34,7 +34,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @UnmodifiableView
   @javax.validation.constraints.NotNull(message = "Given list cannot be null.")
   @Builder.Default
-  List<@NotNull E> list = (List) Collections.checkedList(List.of(), Equalable.Dummy.class);
+  List<@NotNull E> list = (List)Collections.checkedList(List.of(), Equalable.Dummy.class);
 
   @NotNull("Given keyType cannot be null.")
   @javax.validation.constraints.NotNull(message = "Given keyType cannot be null.")
@@ -237,7 +237,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "_, _, _-> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static <S> ImmutableList<@NotNull S> of(
     @NotNull final S e1,
     @NotNull final S e2,
@@ -408,7 +408,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = "_,_,_ -> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static <S> ImmutableList<@NotNull S> merge(@NotNull final ImmutableList<@NotNull S> a,
                                                     @NotNull final ImmutableList<@NotNull S> b,
                                                     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
@@ -446,7 +446,7 @@ public class ImmutableList<E> implements IList<@NotNull E>
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   static <S> Class<@NotNull S> getComponentTypeFromConstructor(
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
     return Checked.<@NotNull S>getComponentTypeFromConstructor(constructor);

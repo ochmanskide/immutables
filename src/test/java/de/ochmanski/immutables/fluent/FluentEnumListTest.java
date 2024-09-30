@@ -1,6 +1,8 @@
 package de.ochmanski.immutables.fluent;
 
 import annotations.UnitTest;
+import de.ochmanski.immutables.fluent.Fluent;
+import de.ochmanski.immutables.fluent.FluentEnumList;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -3,6 +3,8 @@ package de.ochmanski.immutables.immutable;
 import annotations.UnitTest;
 import de.ochmanski.immutables.equalable.Equalable;
 import de.ochmanski.immutables.fluent.Fluent;
+import de.ochmanski.immutables.immutable.IList;
+import de.ochmanski.immutables.immutable.ImmutableList;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -294,7 +296,7 @@ class ImmutableListTest
   {
     ImmutableList<String> unitUnderTest = ImmutableList.<@NotNull String>of("a", "b", "c");
     final int actual = unitUnderTest.hashCode();
-    assertThat(actual).isGreaterThan(0);
+    assertThat(actual).isNotZero();
   }
 
   @Test

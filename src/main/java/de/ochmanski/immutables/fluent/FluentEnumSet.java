@@ -1,6 +1,5 @@
 package de.ochmanski.immutables.fluent;
 
-import de.ochmanski.immutables.constants.Constants;
 import de.ochmanski.immutables.fluent.Fluent.Dummy;
 import de.ochmanski.immutables.immutable.enums.ImmutableEnumSet;
 import lombok.AccessLevel;
@@ -16,6 +15,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.function.IntFunction;
+
+import static de.ochmanski.immutables.constants.Constants.Warning.RAWTYPES;
+import static de.ochmanski.immutables.constants.Constants.Warning.UNCHECKED;
 
 /**
  * Immutable wrapper of <pre>{@code java.util.EnumSet<K,V>}</pre>
@@ -45,7 +47,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @Unmodifiable
   @UnmodifiableView
   @Contract(pure = true)
-  @SuppressWarnings({Constants.Warning.UNCHECKED, Constants.Warning.RAWTYPES})
+  @SuppressWarnings({UNCHECKED, RAWTYPES})
   public static <E extends @NotNull Enum<@NotNull E> & @NotNull Fluent<? extends @NotNull E>> ImmutableEnumSet<@NotNull E> emptyEnumSet()
   {
     return (ImmutableEnumSet) EMPTY_SET;
@@ -133,7 +135,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor) {
@@ -144,7 +146,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -156,7 +158,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -170,7 +172,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _, _, _, _ -> new", pure = true)
+  @Contract(value = "_, _, _, _, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> of(
     @NotNull final S s1,
     @NotNull final S s2,
@@ -228,7 +230,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _, _ -> new", pure = true)
+  @Contract(value = "_, _ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> ofEnumSet(
     @NotNull final EnumSet<@NotNull S> enumSet,
     @NotNull final IntFunction<@NotNull S @NotNull []> constructor)
@@ -240,7 +242,7 @@ public class FluentEnumSet<E extends @NotNull Enum<@NotNull E> & @NotNull Fluent
   @NotNull
   @Unmodifiable
   @UnmodifiableView
-  @Contract(value = " _ -> new", pure = true)
+  @Contract(value = "_ -> new", pure = true)
   public static <S extends @NotNull Enum<@NotNull S> & Fluent<? extends @NotNull S>> FluentEnumSet<@NotNull S> of(
     @NotNull final FluentEnumList<@NotNull S> enumList) {
     return FluentEnumSet.<@NotNull S>of(enumList.getList().toSet());
